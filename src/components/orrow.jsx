@@ -1,6 +1,6 @@
 import React from 'react';
 
-const SignUpForm = () => {
+const SignUpFormBorrow = () => {
 
     const handleSignUp = (event) => {
         event.preventDefault();
@@ -77,4 +77,4 @@ const SignUpForm = () => {
     );
 };
 
-export default SignUpForm;
+export default SignUpFormBorrow;
