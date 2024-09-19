@@ -38,6 +38,41 @@ export default function LenderDashboard() {
         </div>
         <button className="reset-filters">Reset Filters</button>
       </div>
+
+      <table className="loans-table">
+        <thead>
+          <tr>
+            <th>Borrower(s)</th>
+            <th>Email</th>
+            <th>Tasks</th>
+            <th>Docs to Review</th>
+            <th>Created Date</th>
+            <th>Team Members</th>
+            <th>Last Logged In</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {loanData.map((loan, index) => (
+            <tr key={index}>
+              <td>{loan.borrowers}</td>
+              <td>{loan.email}</td>
+              <td>{loan.tasks.incomplete} Incomplete / {loan.tasks.complete} Complete</td>
+              <td>{loan.docsToReview ? `${loan.docsToReview} Doc` : '—'}</td>
+              <td>{loan.createdDate}</td>
+              <td>{loan.teamMembers}</td>
+              <td>{loan.lastLoggedIn}</td>
+              <td>
+                {loan.status === 'invite' ? (
+                  <button className="resend-invite-btn">Resend Invite</button>
+                ) : (
+                  <button className="start-btn">Start</button>
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }
