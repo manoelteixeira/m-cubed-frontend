@@ -13,12 +13,12 @@ export default function LenderDashboard() {
       .then(data => setUserLoanData(data))
       .catch(err => console.error(err));
   }, []);
-
+// Map information when received.
   return (
     <div className="lender-dashboard">
       <header className="dashboard-header">
         <img src="" alt="Logo" className="logo" />
-        <h1>Hi, User</h1>
+        <h1>Hi, User{/* map information */}</h1>
         <p>Here are the loans you have in flight.</p>
         <div className="total-loan-volume">
           <h2>Total Loan Volume: <span>{/* helper function to add the sum of total Loan volumes here  */}</span></h2>
