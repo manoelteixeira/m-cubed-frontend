@@ -1,6 +1,16 @@
-import '/Users/eliwills/Desktop/Pursuit/MMM/m-cubed-frontend/src/components/LenderDashboard/LenderDashboard.scss'
+import "./LenderDashboard.scss";
 
-export default function LenderDashboard({userlenderData}) {
+export default function LenderDashboard() {
+  const { id } = useParams();
+  const [loanData, setLoanData] = useState([]);
+
+  useEffect(() => {
+    fetch(`${API}/lenders/${id}}`)
+      .then((res) => res.json())
+      .then((data) => setLoanData(data))
+      .catch((err) => console.error(err));
+  }, []);
+
   return (
     <div className="lender-dashboard">
       <header className="dashboard-header">
@@ -8,7 +18,12 @@ export default function LenderDashboard({userlenderData}) {
         <h1>Hi, User{/* map information */}</h1>
         <p>Here are the loans you have in flight.</p>
         <div className="total-loan-volume">
-          <h2>Total Loan Volume: <span>{/* helper function to add the sum of total Loan volumes here  */}</span></h2>
+          <h2>
+            Total Loan Volume:{" "}
+            <span>
+              {/* helper function to add the sum of total Loan volumes here  */}
+            </span>
+          </h2>
           <button className="new-loan-file-btn">+ New Loan File</button>
         </div>
       </header>
@@ -44,13 +59,16 @@ export default function LenderDashboard({userlenderData}) {
             <tr key={index}>
               <td>{loan.borrowers}</td>
               <td>{loan.email}</td>
-              <td>{loan.tasks.incomplete} Incomplete / {loan.tasks.complete} Complete</td>
-              <td>{loan.docsToReview ? `${loan.docsToReview} Doc` : '—'}</td>
+              <td>
+                {loan.tasks.incomplete} Incomplete / {loan.tasks.complete}{" "}
+                Complete
+              </td>
+              <td>{loan.docsToReview ? `${loan.docsToReview} Doc` : "—"}</td>
               <td>{loan.createdDate}</td>
               <td>{loan.teamMembers}</td>
               <td>{loan.lastLoggedIn}</td>
               <td>
-                {loan.status === 'invite' ? (
+                {loan.status === "invite" ? (
                   <button className="resend-invite-btn">Resend Invite</button>
                 ) : (
                   <button className="start-btn">Start</button>
