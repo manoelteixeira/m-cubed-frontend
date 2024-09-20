@@ -1,6 +1,16 @@
-import "/Users/eliwills/Desktop/Pursuit/MMM/m-cubed-frontend/src/components/LenderDashboard/LenderDashboard.scss";
+import "./LenderDashboard.scss";
 
-export default function LenderDashboard({ userlenderData }) {
+export default function LenderDashboard() {
+  const { id } = useParams();
+  const [userloanData, setUserLoanData] = useState([]);
+
+  useEffect(() => {
+    fetch(`${API}/lenders/${id}}`)
+      .then((res) => res.json())
+      .then((data) => setUserLoanData(data))
+      .catch((err) => console.error(err));
+  }, []);
+
   return (
     <div className="lender-dashboard">
       <header className="dashboard-header">
@@ -8,6 +18,12 @@ export default function LenderDashboard({ userlenderData }) {
         <h1>Hi, User{/* map information */}</h1>
         <p>Here are the loans you have in flight.</p>
         <div className="total-loan-volume">
+          <h2>
+            Total Loan Volume:{" "}
+            <span>
+              {/* helper function to add the sum of total Loan volumes here  */}
+            </span>
+          </h2>
           <h2>
             Total Loan Volume:{" "}
             <span>
@@ -25,7 +41,7 @@ export default function LenderDashboard({ userlenderData }) {
         <div className="loan-status">
           <select>
             <option value="11">Loans Selected</option>
-            {/* Organize loans will add additional options when they come as options and advice from Manoel/Rizel */}
+            {/* Organize loan selection here*/}
           </select>
         </div>
         <button className="reset-filters">Reset Filters</button>
@@ -45,7 +61,7 @@ export default function LenderDashboard({ userlenderData }) {
           </tr>
         </thead>
         <tbody>
-          {userlenderData.map((loan, index) => (
+          {userloanData.map((loan, index) => (
             <tr key={index}>
               <td>{loan.borrowers}</td>
               <td>{loan.email}</td>
