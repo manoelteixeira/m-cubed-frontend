@@ -10,7 +10,7 @@ export default function LenderDashboard() {
       .then((data) => setLoanData(data))
       .catch((err) => console.error(err));
   }, []);
-
+// Map information when received.
   return (
     <div className="lender-dashboard">
       <header className="dashboard-header">

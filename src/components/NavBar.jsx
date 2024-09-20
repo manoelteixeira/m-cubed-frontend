@@ -8,11 +8,11 @@ export default function NavBar() {
             <img src="" alt="MMM Logo" />
           </div>
           <ul className="navbar-links">
-            <li><Link to="/online-banking">Home</Link></li>
-            <li><Link to="/manage-money">Services</Link></li>
-            <li><Link to="/who-we-are">Listings</Link></li>
+            <li><Link to="/">Home</Link></li>
+            <li><Link to="/services">Services</Link></li>
+            <li><Link to="/listings">Listings</Link></li>
             <li><Link to="/about">About</Link></li>
-            <li><Link to="/for-employers">For Employers</Link></li>
+            <li><Link to="/employees">For Employers</Link></li>
           </ul>
           <div className="navbar-actions">
             <a href="/login" className="navbar-login">Log In</a>
