@@ -1,19 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router";
-import "./LenderDashboard.scss";
-const API = import.meta.env.VITE_BASE_URL;
+import "/Users/eliwills/Desktop/Pursuit/MMM/m-cubed-frontend/src/components/LenderDashboard/LenderDashboard.scss";
 
-export default function LenderDashboard() {
-  const { id } = useParams();
-  const [userloanData, setUserLoanData] = useState([]);
-
-  useEffect(() => {
-    fetch(`${API}/lenders/${id}}`)
-      .then((res) => res.json())
-      .then((data) => setUserLoanData(data))
-      .catch((err) => console.error(err));
-  }, []);
-  // Map information when received.
+export default function LenderDashboard({ userlenderData }) {
   return (
     <div className="lender-dashboard">
       <header className="dashboard-header">
