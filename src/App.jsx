@@ -1,8 +1,10 @@
-import "./App.css";
-import { Routes, Route } from "react-router-dom";
-import NavBar from "./components/NavBar";
-import Header from "./components/Header";
-import Home from "./Pages/Home";
+import './App.css'
+import { Routes,Route } from 'react-router-dom'
+import NavBar from './components/NavBar/NavBar'
+import Header from './components/Header'
+import Home from './Pages/Home'
+import LenderDashboard from './components/LenderDashboard'import { Routes,Route } from 'react-router-dom'
+import NavBar from './components/NavBar'
 function App() {
   return (
     <>
