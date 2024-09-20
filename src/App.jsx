@@ -3,8 +3,7 @@ import { Routes,Route } from 'react-router-dom'
 import NavBar from './components/NavBar/NavBar'
 import Header from './components/Header'
 import Home from './Pages/Home'
-import LenderDashboard from './components/LenderDashboard'import { Routes,Route } from 'react-router-dom'
-import NavBar from './components/NavBar'
+import LenderDashboard from './components/LenderDashboard'
 function App() {
   return (
     <>
