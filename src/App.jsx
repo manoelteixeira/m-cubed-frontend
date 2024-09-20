@@ -23,6 +23,9 @@ function App() {
         <Route path="/disclaimer" element={<></>} />{" "}
         {/* FF: Info page for Borrowers/Lenders to know about additional services */}
       </Routes>
+      <Routes>
+        <Route path="/" element={<Home />} />
+      </Routes>
     </>
   );
 }
