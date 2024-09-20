@@ -11,15 +11,11 @@ function App() {
   return (
     <>
       <Header /> {/* Call to Action Header for Services */}
-      <NavBar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route
-          path="/lenders/:id/lenderdashboard"
-          element={<LenderDashboard />}
-        />
+        {/* <Route path='/login' element={<Login/>}/> */}
+        {/* <Route path='/signup' element={<SignUp/>}/> */}
+        <Route path="/lenders/:id/lenderdashboard" element={<Lenderpage />} />
         <Route path="/borrowers/:id/borrowersdashboard" element={<></>} />
         <Route path="/lenders/:id/edit" element={<></>} />
         <Route path="/borrowers/:id/edit" element={<></>} />
