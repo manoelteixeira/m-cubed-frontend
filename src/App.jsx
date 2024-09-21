@@ -4,6 +4,7 @@ import NavBar from './components/NavBar/NavBar'
 import Header from './components/Header'
 import Home from './Pages/Home'
 import LenderDashboard from './components/LenderDashboard/LenderDashboard'
+import Lenderpage from './Pages/Lenderpage'
 function App() {
 
   return (
@@ -14,7 +15,7 @@ function App() {
       <Route path='/' element={<Home/>}/>
       {/* <Route path='/login' element={<Login/>}/> */}
       {/* <Route path='/signup' element={<SignUp/>}/> */}
-      <Route path='/lenders/:id/lenderdashboard' element={<LenderDashboard/>}/>
+      <Route path='/lenders/:id/lenderdashboard' element={<Lenderpage/>}/>
       <Route path='/borrowers/:id/borrowersdashboard' element={<></>}/>
       <Route path='/lenders/:id/edit' element={<></>}/>
       <Route path='/borrowers/:id/edit' element={<></>}/>
