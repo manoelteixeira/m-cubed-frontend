@@ -5,12 +5,12 @@ const API = import.meta.env.VITE_BASE_URL;
 
 export default function LenderDashboard() {
   const { id } = useParams()
-  const [loanData, setLoanData] = useState([]);
+  const [userloanData, setUserLoanData] = useState([]);
 
   useEffect(() => {
     fetch(`${API}/lenders/${id}}`) 
       .then(res => res.json())
-      .then(data => setLoanData(data))
+      .then(data => setUserLoanData(data))
       .catch(err => console.error(err));
   }, []);
 
@@ -21,7 +21,7 @@ export default function LenderDashboard() {
         <h1>Hi, User</h1>
         <p>Here are the loans you have in flight.</p>
         <div className="total-loan-volume">
-          <h2>Total Loan Volume: <span>{/* helper function to add the sum of total Loan volumes  */}</span></h2>
+          <h2>Total Loan Volume: <span>{/* helper function to add the sum of total Loan volumes here  */}</span></h2>
           <button className="new-loan-file-btn">+ New Loan File</button>
         </div>
       </header>
@@ -33,7 +33,7 @@ export default function LenderDashboard() {
         <div className="loan-status">
           <select>
             <option value="11">Loans Selected</option>
-            {/* Loan Selection*/}
+            {/* Organize loan selection here*/}
           </select>
         </div>
         <button className="reset-filters">Reset Filters</button>
@@ -53,7 +53,7 @@ export default function LenderDashboard() {
           </tr>
         </thead>
         <tbody>
-          {loanData.map((loan, index) => (
+          {userloanData.map((loan, index) => (
             <tr key={index}>
               <td>{loan.borrowers}</td>
               <td>{loan.email}</td>
