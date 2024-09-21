@@ -1,4 +1,4 @@
-import "./LenderDashboard.scss";
+import "/Users/eliwills/Desktop/Pursuit/MMM/m-cubed-frontend/src/components/LenderDashboard/LenderDashboard.scss";
 
 export default function LenderDashboard() {
   const { id } = useParams();
@@ -10,7 +10,7 @@ export default function LenderDashboard() {
       .then((data) => setUserLoanData(data))
       .catch((err) => console.error(err));
   }, []);
-
+  // Map information when received.
   return (
     <div className="lender-dashboard">
       <header className="dashboard-header">
