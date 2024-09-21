@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router';
-
+import '/Users/eliwills/Desktop/Pursuit/MMM/m-cubed-frontend/src/components/LenderDashboard/LenderDashboard.scss'
 const API = import.meta.env.VITE_BASE_URL;
 
 export default function LenderDashboard() {
