@@ -4,7 +4,6 @@ import NavBar from './components/NavBar'
 import NavBar from './components/NavBar/NavBar'
 import Header from './components/Header'
 import Home from './Pages/Home'
-import LenderDashboard from './components/LenderDashboard'
 import LenderDashboard from './components/LenderDashboard/LenderDashboard'
 function App() {
 
@@ -28,7 +27,6 @@ function App() {
       <Route path='borrowers/:id/requests/:id' element={<></>}/>
       <Route path='/disclaimer' element={<></>}/> {/* FF: Info page for Borrowers/Lenders to know about additional services */}
     </Routes>
-    <LenderDashboard/>
     </>
   )
 }
