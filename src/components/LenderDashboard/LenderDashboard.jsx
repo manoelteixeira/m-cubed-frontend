@@ -2,12 +2,12 @@ import "/Users/eliwills/Desktop/Pursuit/MMM/m-cubed-frontend/src/components/Lend
 
 export default function LenderDashboard() {
   const { id } = useParams();
-  const [userloanData, setUserLoanData] = useState([]);
+  const [userlenderData, setUserLenderData] = useState([]);
 
   useEffect(() => {
-    fetch(`${API}/lenders/${id}}`)
+    fetch(`${API}/lenders/${id}}/lenderdashboard`)
       .then((res) => res.json())
-      .then((data) => setUserLoanData(data))
+      .then((data) => setUserLenderData(data))
       .catch((err) => console.error(err));
   }, []);
   // Map information when received.
@@ -41,7 +41,7 @@ export default function LenderDashboard() {
         <div className="loan-status">
           <select>
             <option value="11">Loans Selected</option>
-            {/* Organize loan selection here*/}
+            {/* Organize loans will add additional options when they come*/}
           </select>
         </div>
         <button className="reset-filters">Reset Filters</button>
@@ -61,7 +61,7 @@ export default function LenderDashboard() {
           </tr>
         </thead>
         <tbody>
-          {userloanData.map((loan, index) => (
+          {userlenderData.map((loan, index) => (
             <tr key={index}>
               <td>{loan.borrowers}</td>
               <td>{loan.email}</td>
