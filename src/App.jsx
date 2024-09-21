@@ -4,11 +4,6 @@ import NavBar from "./components/NavBar/NavBar";
 import Header from "./components/Header";
 import Home from "./Pages/Homepage";
 import Lenderpage from "./Pages/Lenderpage";
-import { Routes, Route } from "react-router-dom";
-import NavBar from "./components/NavBar";
-import NavBar from "./components/NavBar/NavBar";
-import Header from "./components/Header";
-import Home from "./Pages/Home";
 import LenderDashboard from "./components/LenderDashboard";
 function App() {
   return (
