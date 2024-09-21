@@ -2,15 +2,15 @@ import "./LenderDashboard.scss";
 
 export default function LenderDashboard() {
   const { id } = useParams();
-  const [loanData, setLoanData] = useState([]);
+  const [userloanData, setUserLoanData] = useState([]);
 
   useEffect(() => {
     fetch(`${API}/lenders/${id}}`)
       .then((res) => res.json())
-      .then((data) => setLoanData(data))
+      .then((data) => setUserLoanData(data))
       .catch((err) => console.error(err));
   }, []);
-// Map information when received.
+  // Map information when received.
   return (
     <div className="lender-dashboard">
       <header className="dashboard-header">

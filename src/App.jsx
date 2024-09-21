@@ -6,10 +6,24 @@ import Home from "./Pages/Home";
 function App() {
   return (
     <>
-      <Header />
+      <Header /> {/* Call to Action Header for Services */}
       <NavBar />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route
+          path="/lenders/:id/lenderdashboard"
+          element={<LenderDashboard />}
+        />
+        <Route path="/borrowers/:id/borrowersdashboard" element={<></>} />
+        <Route path="/lenders/:id/edit" element={<></>} />
+        <Route path="/borrowers/:id/edit" element={<></>} />
+        <Route path="lenders/:id/proposals" element={<></>} />
+        <Route path="lenders/:id/proposals/:id" element={<></>} />
+        <Route path="borrowers/:id/requests/:id" element={<></>} />
+        <Route path="/disclaimer" element={<></>} />{" "}
+        {/* FF: Info page for Borrowers/Lenders to know about additional services */}
       </Routes>
     </>
   );
