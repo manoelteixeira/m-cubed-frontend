@@ -1,6 +1,5 @@
 import './App.css'
 import { Routes,Route } from 'react-router-dom'
-import NavBar from './components/NavBar'
 import NavBar from './components/NavBar/NavBar'
 import Header from './components/Header'
 import Home from './Pages/Home'
@@ -9,9 +8,6 @@ function App() {
 
   return (
     <>
-    <LenderDashboard/>
-    <NavBar/>
-    <Header/>
     <Header/> {/* Call to Action Header for Services */}
     <NavBar/>
     <Routes>
