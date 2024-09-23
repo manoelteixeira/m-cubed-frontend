@@ -1,5 +1,7 @@
 import React from 'react'
 import '/Users/eliwills/Desktop/Pursuit/MMM/m-cubed-frontend/src/components/Homepage/Home.scss'
+import LenderPhoto from '/Users/eliwills/Desktop/Pursuit/MMM/m-cubed-frontend/src/assets/LenderPhoto.jpeg'
+import BorrowerPhoto from '/Users/eliwills/Desktop/Pursuit/MMM/m-cubed-frontend/src/assets/BorrowerPhoto.jpeg'
 
 export default function Home() {
   return (
@@ -17,12 +19,12 @@ export default function Home() {
       </section>
       {/*Hopscotch Patch work display */}
       <section className='home-container__lender-CTA'>
-        <p>Lender Information</p>
-        <img src="" alt="borrower copilot pic" />
+        <p className='lender-details'>Diversify your Portfolio by Partnering with M-cubed for endless Possibilites</p>
+        <img src={ LenderPhoto } alt="borrower copilot pic" id='lender-photo' />
       </section>
       <section className='home-container__borrower-CTA'>
+        <img src={ BorrowerPhoto } alt="borrwer copilot pic" id='borrower-photo'/>
         <p>Lender Information</p>
-        <img src="" alt="Lender copilot pic" />
       </section>
       <section className='home-container__container-5'>
 

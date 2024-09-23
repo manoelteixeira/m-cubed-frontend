@@ -9,11 +9,42 @@
 
     &__landing-intro {
         display: flex;
+        justify-content: space-evenly;
     }
 
     &__badge-names {
         display: flex;
-        gap: 10px;
+        justify-content: space-between;
+        gap: 14px;
+    }
+
+    &__lender-CTA {
+        background: blue;
+        height: auto;
+        display: grid;
+        margin: 40px;
+        grid-template-columns: repeat(2, 1fr);
+        justify-content: center;
+        align-items: center;
+
+
+        .lender-details {
+            font-size: 40px;
+        }
+
+        #lender-photo {
+            display: grid;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            border-radius: 20px;
+            width: 300px;
+        }
+    }
+
+    &__borrower-CTA {
+        display: flex;
+        justify-content: space-evenly;
     }
 }
 
