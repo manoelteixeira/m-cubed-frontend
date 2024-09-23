@@ -1,10 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router';
 import '/Users/eliwills/Desktop/Pursuit/MMM/m-cubed-frontend/src/components/LenderDashboard/LenderDashboard.scss'
 
 export default function LenderDashboard({userlenderData}) {
- 
-// Map information when received.
   return (
     <div className="lender-dashboard">
       <header className="dashboard-header">
@@ -24,7 +20,7 @@ export default function LenderDashboard({userlenderData}) {
         <div className="loan-status">
           <select>
             <option value="11">Loans Selected</option>
-            {/* Organize loans will add additional options when they come*/}
+            {/* Organize loans will add additional options when they come as options and advice from Manoel/Rizel */}
           </select>
         </div>
         <button className="reset-filters">Reset Filters</button>
