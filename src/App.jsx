@@ -4,13 +4,16 @@ import NavBar from "./components/NavBar/NavBar";
 import Header from "./components/Header";
 import Home from "./Pages/Homepage";
 import Lenderpage from "./Pages/Lenderpage";
-import LenderDashboard from "./components/LenderDashboard";
+import AboutUs from "./components/AboutUs";
+// import LenderDashboard from "./components/LenderDashboard";
 function App() {
   return (
     <>
       <Header /> {/* Call to Action Header for Services */}
+      <NavBar />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/about" element={<AboutUs />} />
         {/* <Route path='/login' element={<Login/>}/> */}
         {/* <Route path='/signup' element={<SignUp/>}/> */}
         <Route path="/lenders/:id/lenderdashboard" element={<Lenderpage />} />
