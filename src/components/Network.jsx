@@ -22,8 +22,8 @@ const Network = () => {
           </a>
         </li>
         <li>
-          <a href='https://github.com/renad-lab' target='_blank' rel='noopener noreferrer'>
-        Rizel Enad
+          <a href='https://github.com/manoelteixeira' target='_blank' rel='noopener noreferrer'>
+        Manoel Teixeira
           </a>
         </li>
         <li>
