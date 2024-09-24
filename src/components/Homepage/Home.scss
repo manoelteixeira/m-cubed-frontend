@@ -1,9 +1,9 @@
+
+
 .home-container {
     height: 100vh;
     width: 100vw;
     display: grid;
-    // grid-template-columns: repeat(2, 1fr);
-    // grid-template-rows:  repeat(5,1fr);
     justify-content: center;
     align-items: center;
 
@@ -14,37 +14,85 @@
 
     &__badge-names {
         display: flex;
-        justify-content: space-between;
-        gap: 14px;
+        justify-content: space-evenly;
     }
 
     &__lender-CTA {
-        background: blue;
+        background: rgb(236, 249, 239);
         height: auto;
         display: grid;
-        margin: 40px;
+        padding: 40px;
         grid-template-columns: repeat(2, 1fr);
         justify-content: center;
         align-items: center;
 
-
-        .lender-details {
-            font-size: 40px;
-        }
-
-        #lender-photo {
+        .details-container {
             display: grid;
             justify-content: center;
             align-items: center;
-            padding: 40px;
+            height: auto;
+
+            .banner-signup {
+                background: rgb(255, 255, 255);
+                color: rgb(0, 0, 0);
+                place-self: center;
+                font-size: 30px;
+                margin-top: 40px;
+                padding: 10px;
+                width: auto;
+                border-radius: 20px;
+                border: 1px solid gray;
+
+                &:hover{
+                    background: green;
+                    color: white;
+                    border: none;
+                }
+            }
+        }
+        .lender-details {
+            font-size: 40px;
+            text-align: center;
+        }
+
+        #lender-photo {
+           place-self: center;
+            // border: 2px solid black;
             border-radius: 20px;
             width: 300px;
         }
     }
 
     &__borrower-CTA {
-        display: flex;
-        justify-content: space-evenly;
+        background: rgb(255, 255, 255);
+        height: auto;
+        display: grid;
+        // margin: 40px;
+        grid-template-columns: repeat(2, 1fr);
+        justify-content: center;
+        align-items: center;
+
+        #borrower-photo {
+            place-self: center;
+            padding: 40px;
+            border-radius: 20px;
+            width: 300px;
+        }
+
+        .borrower-details {
+            background: rgb(70, 145, 70);
+            margin: 100px;
+            padding: 20px;
+            // border: 2px solid black;
+            border-radius: 20px;
+            font-size: 40px;
+            text-align: center;
+            box-shadow: 12px 10px 22px 0px rgb(191, 242, 176);
+
+            span {
+                color: white;
+            }
+        }
     }
 }
 
