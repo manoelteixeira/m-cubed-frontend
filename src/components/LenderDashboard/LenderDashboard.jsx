@@ -1,5 +1,4 @@
 import "./LenderDashboard.scss";
-const API = import.meta.env.VITE_BASE_URL;
 
 export default function LenderDashboard({userlenderData}) {
   console.log(userlenderData)

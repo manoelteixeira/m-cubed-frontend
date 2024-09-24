@@ -6,7 +6,7 @@ import Home from "./Pages/Homepage";
 import Lenderpage from "./Pages/Lenderpage";
 import AboutUs from "./components/AboutUs";
 import SignInForm from "./components/SignInForm";
-// import LenderDashboard from "./components/LenderDashboard";
+import ListOfLenders from "./Pages/ListOfLenders";
 function App() {
   return (
     <>
