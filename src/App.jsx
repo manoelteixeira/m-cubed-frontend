@@ -17,12 +17,13 @@ function App() {
         <Route path="/about" element={<AboutUs />} />
         <Route path="/login" element={<SignInForm />} />
         {/* <Route path='/signup' element={<SignUp/>}/> */}
+        <Route path='/lenders' element={<ListOfLenders/>}/>
         <Route path="/lenders/:id/lenderdashboard" element={<Lenderpage />} />
         <Route path="/borrowers/:id/borrowersdashboard" element={<></>} />
         <Route path="/lenders/:id/edit" element={<></>} />
         <Route path="/borrowers/:id/edit" element={<></>} />
-        <Route path="lenders/:id/proposals" element={<></>} />
-        <Route path="lenders/:id/proposals/:id" element={<></>} />
+        <Route path="/lenders/:id/proposals" element={<></>} />
+        <Route path="/lenders/:id/proposals/:id" element={<></>} />
         <Route path="borrowers/:id/requests/:id" element={<></>} />
         <Route path="/disclaimer" element={<></>} />{" "}
         {/* FF: Info page for Borrowers/Lenders to know about additional services */}
