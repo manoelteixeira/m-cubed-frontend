@@ -5,6 +5,7 @@ import Header from "./components/Header";
 import Home from "./Pages/Homepage";
 import Lenderpage from "./Pages/Lenderpage";
 import AboutUs from "./components/AboutUs";
+import SignInForm from "./components/SignInForm";
 // import LenderDashboard from "./components/LenderDashboard";
 function App() {
   return (
@@ -14,7 +15,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<AboutUs />} />
-        {/* <Route path='/login' element={<Login/>}/> */}
+        <Route path="/login" element={<SignInForm />} />
         {/* <Route path='/signup' element={<SignUp/>}/> */}
         <Route path="/lenders/:id/lenderdashboard" element={<Lenderpage />} />
         <Route path="/borrowers/:id/borrowersdashboard" element={<></>} />
