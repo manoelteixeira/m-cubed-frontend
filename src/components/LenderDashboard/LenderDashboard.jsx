@@ -1,12 +1,12 @@
 import "./LenderDashboard.scss";
 
-export default function LenderDashboard() {
-  // {userlenderData}
+export default function LenderDashboard({userlenderData}) {
+  
   return (
     <div className="lender-dashboard">
       <header className="dashboard-header">
         <img src="" alt="Logo" className="logo" />
-        {/* <h1>Hi, {userlenderData.business_name}</h1> */}
+        {/* <h1>Hi,{userlenderData.business_name} </h1> */}
         <p>Current Loan Capacity</p>
         <div className="total-loan-volume">
           <h2>
@@ -15,7 +15,7 @@ export default function LenderDashboard() {
               {/* helper function to add the sum of total Loan volumes here  */}
             </span>
           </h2>
-          <button className="new-loan-file-btn">+ New Loan File </button>
+          <button className="new-loan-file-btn">Add New Loan </button>
         </div>
       </header>
 
@@ -44,7 +44,6 @@ export default function LenderDashboard() {
           </tr>
         </thead>
         <tbody>
-          
         </tbody>
       </table>
     </div>
