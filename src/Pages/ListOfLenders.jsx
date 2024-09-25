@@ -9,10 +9,11 @@ export default function ListOfLenders() {
           .then(data => setListOfLenders(data))
           .catch(err => console.error(err));
       }, []);
-
-      console.log(lenderList)
-
-  return (
-    <div>purr</div>
+  return (<>
+  <div>{lenderList.map(lender => {
+       return  <p key = {lender.id}>{lender.business_name}</p>
+})}</div>
+    <h1>WE GOT DATA!!!!</h1>
+      </>
   )
 }
