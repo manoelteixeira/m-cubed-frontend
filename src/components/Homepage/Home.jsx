@@ -22,8 +22,8 @@ export default function Home() {
       <section className="home-container__lender-CTA">
         <div className="details-container">
           <p className="lender-details">
-            Diversify your Portfolio by Partnering with M-cubed for endless
-            Possibilites
+            <em>Diversify</em> your Portfolio by Partnering with M-cubed for endless 
+             <strong> Possibilites</strong>
           </p>
           <button className="banner-signup">Sign up Now</button>
         </div>
