@@ -1,12 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "./Navbar.scss";
+import logo from '/Users/eliwills/Desktop/Pursuit/MMM/m-cubed-frontend/src/Images/logo.jpeg'
 
 export default function NavBar() {
   return (
     <nav className="navbar">
       <div className="navbar-logo">
-        <img src="" alt="MMM Logo" />
+        <img src={ logo } alt="MMM Logo" />
       </div>
       <ul className="navbar__links">
         <li>
@@ -20,9 +21,6 @@ export default function NavBar() {
         </li>
         <li>
           <Link to="/about">About</Link>
-        </li>
-        <li>
-          <Link to="/employees">For Employers</Link>
         </li>
       </ul>
       <div className="navbar__actions">
