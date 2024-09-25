@@ -3,7 +3,7 @@ import React from "react";
 import "./Home.scss";
 import LenderPhoto from "../../assets/LenderPhoto.jpeg";
 import BorrowerPhoto from "../../assets/BorrowerPhoto.jpeg";
-import Handshake from '../../assets/handshake-no-bg.png'
+import Handshake from "../../assets/handshake-no-bg.png";
 import { Link } from "react-router-dom";
 
 export default function Home() {
@@ -11,10 +11,20 @@ export default function Home() {
     <main className="home-container">
       <section className="home-container__landing-intro">
         <div className="first-slide-display">
-          <h1>M-cubed: Borrower <span>Smarter</span>, Lend With <span>Confidence!</span> </h1>
+          <h1>
+            M-cubed: Borrow <span>Smarter</span>, Lend With{" "}
+            <span>Confidence!</span>{" "}
+          </h1>
           <div className="btn-email-entry">
-            <p>Sign up for our Newsletter if want to keep updated with all things cubey</p>
-            <input type="text" placeholder="Enter Email Here" name='email-entry' />
+            <p>
+              Sign up for our Newsletter if want to keep updated with all things
+              cubey
+            </p>
+            <input
+              type="text"
+              placeholder="Enter Email Here"
+              name="email-entry"
+            />
             <button>Sign Up</button>
             <Link>Already Have an account?</Link>
           </div>
@@ -23,7 +33,7 @@ export default function Home() {
       </section>
       <section className="home-container__badge-names">
         {/* Horizontal display */}
-        <h2>Sponsors 1</h2> 
+        <h2>Sponsors 1</h2>
         <h2>Sponsors 2</h2>
         <h2>Sponsors 3</h2>
         <h2>Sponsors 4</h2>
@@ -33,8 +43,9 @@ export default function Home() {
       <section className="home-container__lender-CTA">
         <div className="details-container">
           <p className="lender-details">
-            <em>Diversify</em> your Portfolio by Partnering with M-cubed for endless 
-             <strong> Possibilites</strong>...
+            <em>Diversify</em> your Portfolio by Partnering with M-cubed for
+            endless
+            <strong> Possibilites</strong>...
           </p>
           <button className="banner-signup">Sign up Now</button>
         </div>
@@ -50,7 +61,8 @@ export default function Home() {
           <div className="designer-"></div>
           <p className="borrower-details">
             {" "}
-            <span>Apply </span>for <em> faster</em> funding for Qualifying Loan Requests with ease with you in mind with every step of the way!
+            <span>Apply </span>for <em> faster</em> funding for Qualifying Loan
+            Requests with ease with you in mind with every step of the way!
           </p>
         </div>
       </section>
