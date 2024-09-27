@@ -2,12 +2,14 @@ import React, {useEffect,useState}from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import axios from 'axios'
 import { TextField, Button, Box, Typography } from "@mui/material";
-import './NewForm.scss'
+import './NewLenderForm.scss'
 
 
 const API = import.meta.env.VITE_BASE_URL;
 
 export default function NewLenderForm() {
+
+  // combine NewLender and Edit Lender together and prop drill the variable and use a ternary to check if there is an id or not to swap between which form will be displayed. For now stick with this. 
 const navigate = useNavigate()
 
     const [newLender, setNewLender] = useState({

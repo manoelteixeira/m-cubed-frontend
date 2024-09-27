@@ -10,6 +10,7 @@ import ListOfLenders from "./Pages/ListOfLenders";
 import NewLender from "./Pages/NewLender";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import NewBorrower from "./Pages/NewBorrower";
+import EditLenderForm from "./components/EditUserFolder/EditLenderInfo";
 
 
 const theme = createTheme({
@@ -39,7 +40,7 @@ function App() {
         <Route path='/borrowers/new' element={<NewBorrower/>}/>
         <Route path="/lenders/:id/lenderdashboard" element={<Lenderpage />} />
         <Route path="/borrowers/:id/borrowersdashboard" element={<></>} />
-        <Route path="/lenders/:id/edit" element={<></>} />
+        <Route path="/lenders/:id/edit" element={<EditLenderForm/>} />
         <Route path="/borrowers/:id/edit" element={<></>} />
         <Route path="/lenders/:id/proposals" element={<></>} />
         <Route path="/lenders/:id/proposals/:id" element={<></>} />

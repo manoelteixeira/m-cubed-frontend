@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { TextField, Button, Box, Typography } from "@mui/material";
-import './NewForm.scss';
 
 const API = import.meta.env.VITE_BASE_URL;
 
