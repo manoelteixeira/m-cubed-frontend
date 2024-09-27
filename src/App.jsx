@@ -5,7 +5,8 @@ import Header from "./components/Header";
 import Home from "./Pages/Homepage";
 import Lenderpage from "./Pages/Lenderpage";
 import AboutUs from "./components/AboutFolder/AboutUs";
-import SignInForm from "./components/SignInForm";
+import SignInForm from "./components/Library/SignInForm";
+import SignUp from "./Pages/signUp";
 import ListOfLenders from "./Pages/ListOfLenders";
 import NewLender from "./Pages/NewLender";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -34,13 +35,14 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<AboutUs />} />
         <Route path="/login" element={<SignInForm />} />
+        <Route path="/signup" element={<SignUp />} />
         {/* <Route path='/signup' element={<SignUp/>}/> */}
-        <Route path='/lenders' element={<ListOfLenders/>}/>
-        <Route path='/lenders/new' element={<NewLender/>}/>
-        <Route path='/borrowers/new' element={<NewBorrower/>}/>
+        <Route path='/lenders' element={<ListOfLenders />} />
+        <Route path='/lenders/new' element={<NewLender />} />
+        <Route path='/borrowers/new' element={<NewBorrower />} />
         <Route path="/lenders/:id/lenderdashboard" element={<Lenderpage />} />
         <Route path="/borrowers/:id/borrowersdashboard" element={<></>} />
-        <Route path="/lenders/:id/edit" element={<EditLenderForm/>} />
+        <Route path="/lenders/:id/edit" element={<EditLenderForm />} />
         <Route path="/borrowers/:id/edit" element={<></>} />
         <Route path="/lenders/:id/proposals" element={<></>} />
         <Route path="/lenders/:id/proposals/:id" element={<></>} />
