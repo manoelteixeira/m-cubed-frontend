@@ -1,51 +1,71 @@
-import "./LenderDashboard.scss";
 
-export default function LenderDashboard({userlenderData}) {
-  
+import React from 'react';
+import {AppBar,Toolbar,Typography,Button,TextField,Select,MenuItem,FormControl,InputLabel,
+  Table,TableBody,TableCell,TableContainer,TableHead,TableRow,Paper,
+} from '@mui/material';
+import './LenderDashboard.scss';
+// import logo from "../../assets/logo.jpeg";
+
+
+export default function LenderDashboard({ userlenderData }) {
   return (
     <div className="lender-dashboard">
-      <header className="dashboard-header">
-        <img src="" alt="Logo" className="logo" />
-        {/* <h1>Hi,{userlenderData.business_name} </h1> */}
-        <p>Current Loan Capacity</p>
-        <div className="total-loan-volume">
-          <h2>
-            Total Loan Volume:{" "}
-            <span>
-              {/* helper function to add the sum of total Loan volumes here  */}
-            </span>
-          </h2>
-          <button className="new-loan-file-btn">Add New Loan </button>
-        </div>
-      </header>
+      <AppBar position="static" color='Secondary'>
+        <Toolbar>
+          {/* <img src={logo} alt="Logo" className="logo" width={'40px'} /> */}
+          <Typography variant="h4" sx={{ flexGrow: 1 }}>
+            Welcome, {userlenderData.business_name}
+          </Typography>
+          <Button color="inherit">Add New Loan</Button>
+        </Toolbar>
+      </AppBar>
 
-      <div className="filters">
-        <div className="search-bar">
-          <input type="text" placeholder="Search by loan # or name" />
-        </div>
-        <div className="loan-status">
-          <select>
-            <option value="11">Loans Selected</option>
-          </select>
-        </div>
-        <button className="reset-filters">Reset Filters</button>
+      <Typography variant="h5" sx={{ marginTop: 2 }}>
+        Current Loan Capacity
+      </Typography>
+      <div className="total-loan-volume">
+        <Typography variant="h6">
+          Total Loan Volume: <span>{/* helper function for total Loan volumes */}</span>
+        </Typography>
       </div>
 
-      <table className="loans-table">
-        <thead>
-          <tr>
-            <th>Borrower(s)</th>
-            <th>Email</th>
-            <th>Tasks</th>
-            <th>Docs to Review</th>
-            <th>Created Date</th>
-            <th>Last Logged In</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-        </tbody>
-      </table>
+      <div className="filters" style={{ marginTop: 2, marginBottom: 2 }}>
+        <TextField
+          label="Search by loan # or name"
+          variant="outlined"
+          fullWidth
+          style={{ marginRight: 16 }}
+        />
+        <FormControl variant="outlined" style={{ marginRight: 16, minWidth: 120 }}>
+          <InputLabel>Loan Status</InputLabel>
+          <Select defaultValue="11">
+            <MenuItem value="11">Loans Selected</MenuItem>
+            {/* Add more MenuItems as needed */}
+          </Select>
+        </FormControl>
+        <Button variant="contained" color="secondary">
+          Reset Filters
+        </Button>
+      </div>
+
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Borrower(s)</TableCell>
+              <TableCell>Email</TableCell>
+              {/* <TableCell>Tasks</TableCell> */}
+              <TableCell>Created Date</TableCell>
+              <TableCell>Last Logged In</TableCell>
+              <TableCell>Status</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {/* when we make the link for the  */}
+            <TableRow>Hello</TableRow>
+          </TableBody>
+        </Table>
+      </TableContainer>
     </div>
   );
 }

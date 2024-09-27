@@ -11,6 +11,6 @@ export default function NewBorrowerForm() {
   return (
     <div>
         <BorrowerForm/>
-        </div>
+    </div>
   )
 }

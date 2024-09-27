@@ -10,7 +10,7 @@ export default function Lenderpage() {
   const [userlenderData, setUserLenderData] = useState([]);
 
   useEffect(() => {
-    fetch(`${API}/lenders`) 
+    fetch(`${API}/lenders/${id}`) 
       .then(res => res.json())
       .then(data => setUserLenderData(data))
       .catch(err => console.error(err));
