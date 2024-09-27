@@ -6,7 +6,7 @@ import Home from "./Pages/Homepage";
 import Lenderpage from "./Pages/Lenderpage";
 import AboutUs from "./components/AboutFolder/AboutUs";
 import SignInForm from "./components/Library/AppFiles/SignInForm";
-import SignUp from "./Pages/signUp";
+import SignUp from "./Pages/SignUp";
 import ListOfLenders from "./Pages/ListOfLenders";
 import NewLender from "./Pages/NewLender";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -49,7 +49,7 @@ function App() {
         <Route path="/lenders/:id/proposals/:id" element={<></>} />
         <Route path="borrowers/:id/requests/:id" element={<></>} />
         <Route path="/disclaimer" element={<></>} />{" "}
-        <Route path="/newsletter" element={<EmailNewsletter/>}></Route>
+        <Route path="/newsletter" element={<EmailNewsletter />}></Route>
         {/* FF: Info page for Borrowers/Lenders to know about additional services */}
       </Routes>
     </ThemeProvider>

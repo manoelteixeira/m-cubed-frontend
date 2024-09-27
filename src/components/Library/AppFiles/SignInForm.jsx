@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { TextField, Button, Box, Typography, Grid, IconButton, InputAdornment } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 
 const SignInForm = ({ setUser }) => {
     const [email, setEmail] = useState('');
@@ -25,9 +26,7 @@ const SignInForm = ({ setUser }) => {
             const data = await response.json();
             if (response.ok) {
                 setUser(data);
-                console.log(data)
                 if (data.lender) {
-
                     navigate(`/lenders/${data.lender.id}/lenderdashboard`);
                 } else {
                     navigate(`/borrowers/${data.borrower.id}/borrowersdashboard`);
@@ -41,6 +40,15 @@ const SignInForm = ({ setUser }) => {
         }
     };
 
+    const handleGoogleSuccess = (response) => {
+        console.log(response);
+    };
+
+    const handleGoogleFailure = (response) => {
+        console.error('Google Login failed:', response);
+        setError('Google login failed. Please try again.');
+    };
+
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
     };
@@ -49,83 +57,84 @@ const SignInForm = ({ setUser }) => {
         <Box
             component="form"
             onSubmit={handleLogin}
-            sx={{ maxWidth: 400, margin: 'auto', padding: 2 }}
+            sx={{
+                maxWidth: 600,  // Formun genişliğini artırdık
+                margin: 'auto',
+                padding: 2,
+                display: 'flex',
+                alignItems: 'center',  // İçerikleri dikeyde ortalıyoruz
+                justifyContent: 'space-between',  // Resim ve formu yatayda ayırıyoruz
+                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+                borderRadius: '8px'
+            }}
         >
-            <Typography variant="h5" component="h2" sx={{ mb: 2 }}>
-                Log In
-            </Typography>
-            <Grid container spacing={2}>
-                <Grid item xs={12}>
-                    <TextField
-                        label="Email"
-                        name="email"
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        fullWidth
-                        required
-                        margin="normal"
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                    <TextField
-                        label="Password"
-                        name="password"
-                        type={showPassword ? 'text' : 'password'}
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        fullWidth
-                        required
-                        margin="normal"
-                        InputProps={{
-                            endAdornment: (
-                                <InputAdornment position="end">
-                                    <IconButton
-                                        aria-label="toggle password visibility"
-                                        onClick={togglePasswordVisibility}
-                                        edge="end"
-                                    >
-                                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                                    </IconButton>
-                                </InputAdornment>
-                            ),
-                        }}
-                    />
-                </Grid>
-            </Grid>
-            {error && (
-                <Typography color="error" sx={{ mt: 1 }}>
-                    {error}
+            <Box sx={{ flexGrow: 1 }}>  {/* Form kısmı */}
+                <Typography variant="h5" component="h2" sx={{ mb: 2 }}>
+                    Log In
                 </Typography>
-            )}
-            <Button
-                variant="contained"
-                color="primary"
-                type="submit"
-                fullWidth
-                sx={{ mt: 2 }}
-            >
-                Login
-            </Button>
-            <Button
-                onClick={() => navigate(`/forgot-password`)}
-                color="secondary"
-                fullWidth
-                sx={{ mt: 1 }}
-            >
-                Forgot Password
-            </Button>
-            <Button
-                component={Link}
-                to="https://accounts.google.com/signin/v2/identifier"
-                target="_blank"
-                rel="noopener noreferrer"
-                variant="outlined"
-                fullWidth
-                sx={{ mt: 2 }}
-            >
-                Login with Google
-            </Button>
+                <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                        <TextField
+                            label="Email"
+                            name="email"
+                            type="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            fullWidth
+                            required
+                            margin="normal"
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField
+                            label="Password"
+                            name="password"
+                            type={showPassword ? 'text' : 'password'}
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            fullWidth
+                            required
+                            margin="normal"
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <IconButton aria-label="toggle password visibility" onClick={togglePasswordVisibility} edge="end">
+                                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                                        </IconButton>
+                                    </InputAdornment>
+                                ),
+                            }}
+                        />
+                    </Grid>
+                </Grid>
+                {error && (
+                    <Typography color="error" sx={{ mt: 1 }}>
+                        {error}
+                    </Typography>
+                )}
+                <Button variant="contained" color="primary" type="submit" fullWidth sx={{ mt: 2 }}>
+                    Login
+                </Button>
+                <Button onClick={() => navigate(`/forgot-password`)} color="secondary" fullWidth sx={{ mt: 1 }}>
+                    Forgot Password
+                </Button>
+                <GoogleOAuthProvider clientId="YOUR_GOOGLE_CLIENT_ID">
+                    <GoogleLogin
+                        onSuccess={handleGoogleSuccess}
+                        onError={handleGoogleFailure}
+                        fullWidth
+                        sx={{ mt: 2 }}
+                    />
+                </GoogleOAuthProvider>
+            </Box>
+            {/* Sağda yer alan resim */}
+            <Box sx={{ ml: 2 }}>
+                <img
+                    src="../src/components/Library/IMG/51525890-BF92-4236-AE2A-1E795AAB0DA4.png"
+                    width="120px"
+                    alt="Logo"
+                />
+            </Box>
         </Box>
     );
 };
