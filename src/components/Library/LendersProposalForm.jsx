@@ -33,7 +33,6 @@ const LoanProposalForm = () => {
   // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Here, you would typically handle form submission to your server
     console.log("Loan proposal submitted:", formData);
   };
 
