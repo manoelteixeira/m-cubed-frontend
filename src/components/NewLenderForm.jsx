@@ -76,7 +76,7 @@ const navigate = useNavigate()
       <TextField
         label="Business Name"
         name="businessName"
-        value={newLender.businessName}
+        value={newLender.business_name}
         onChange={handleChange}
         fullWidth
         required
@@ -93,7 +93,7 @@ const navigate = useNavigate()
       </Button>
     </Box>
   );
-  
+
 }
 
 

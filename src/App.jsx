@@ -8,9 +8,24 @@ import AboutUs from "./components/AboutFolder/AboutUs";
 import SignInForm from "./components/SignInForm";
 import ListOfLenders from "./Pages/ListOfLenders";
 import NewLender from "./Pages/NewLender";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#4caf50", // Green color for buttons
+      contrastText: "#ffffff", // White text color for contrast
+    },
+    secondary: {
+      main: "#4caf50", // Use green color for secondary buttons as well
+      contrastText: "#ffffff", // White text color for contrast
+    },
+  },
+});
 function App() {
   return (
-    <>
+    <ThemeProvider theme={theme}>
       <Header /> {/* Call to Action Header for Services */}
       <NavBar />
       <Routes>
@@ -30,7 +45,7 @@ function App() {
         <Route path="/disclaimer" element={<></>} />{" "}
         {/* FF: Info page for Borrowers/Lenders to know about additional services */}
       </Routes>
-    </>
+    </ThemeProvider>
   );
 }
 
