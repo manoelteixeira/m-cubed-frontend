@@ -2,6 +2,7 @@ import React, {useEffect,useState}from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import axios from 'axios'
 import { TextField, Button, Box, Typography } from "@mui/material";
+import './NewForm.scss'
 
 
 const API = import.meta.env.VITE_BASE_URL;
@@ -30,6 +31,8 @@ const navigate = useNavigate()
 
     const handleChange = (e) => {
         const { name, value } = e.target;
+        console.log(value)
+
         setNewLender({
           ...newLender,
           [name]: value,
@@ -44,55 +47,54 @@ const navigate = useNavigate()
 
 
 
-  return (
-    <Box
-      component="form"
-      onSubmit={handleSubmit}
-      sx={{ maxWidth: 400, margin: "auto", padding: 2 }}
-    >
-      <Typography variant="h5" component="h2" sx={{ mb: 2 }}>
-        Lender Registration
-      </Typography>
-      <TextField
-        label="Email"
-        name="email"
-        type="email"
-        value={newLender.email}
-        onChange={handleChange}
-        fullWidth
-        required
-        margin="normal"
-      />
-      <TextField
-        label="Password"
-        name="password"
-        type="password"
-        value={newLender.password}
-        onChange={handleChange}
-        fullWidth
-        required
-        margin="normal"
-      />
-      <TextField
-        label="Business Name"
-        name="businessName"
-        value={newLender.business_name}
-        onChange={handleChange}
-        fullWidth
-        required
-        margin="normal"
-      />
-      <Button
-        variant="contained"
-        color="primary"
-        type="submit"
-        fullWidth
-        sx={{ mt: 2 }}
-      >
-        Get Started!
-      </Button>
-    </Box>
-  );
+      return (
+        <Box
+          component="form"
+          onSubmit={handleSubmit}
+          className="form-container"
+        >
+          <Typography variant="h4" component="h2">
+            Lender Registration
+          </Typography>
+          <Typography variant="h1">
+            Release the limits to your <em>Portfolio</em> and <strong>EXPAND!</strong>
+          </Typography>
+          <TextField
+            label="Email"
+            name="email"
+            type="email"
+            value={newLender.email}
+            onChange={handleChange}
+            fullWidth
+            required
+          />
+          <TextField
+            label="Password"
+            name="password"
+            type="password"
+            value={newLender.password}
+            onChange={handleChange}
+            fullWidth
+            required
+          />
+          <TextField
+            label="Business Name"
+            name="business_name"
+            value={newLender.business_name}
+            onChange={handleChange}
+            fullWidth
+            required
+          />
+          <Button
+            variant="contained"
+            color="primary"
+            type="submit"
+            fullWidth
+          >
+            Get Started!
+          </Button>
+        </Box>
+      );
 
 }
 

@@ -1,0 +1,36 @@
+$form-padding: 2.5rem;
+$typography-margin-bottom: 2rem;
+
+.form-container {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: $form-padding;
+
+  h2 {
+    margin-bottom: 3rem;
+    width: 100%;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+    
+    em {
+        font-style: italic;
+        font-weight: bold;
+    }
+
+    strong {
+      font-weight: 100;
+    }
+
+    margin-bottom: 3rem;
+  }
+
+  .MuiTextField-root {
+    margin-bottom: 3rem;
+  }
+
+  .MuiButton-root {
+    margin-top: 1rem;
+  }
+}
