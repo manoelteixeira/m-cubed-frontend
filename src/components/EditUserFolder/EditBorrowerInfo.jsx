@@ -34,7 +34,7 @@ const EditBorrowerForm = () => {
     const fetchBorrowerData = async () => {
       try {
         const response = await axios.get(`${API}/borrowers/${borrowerId}`);
-        setEditBorrower(response.data); // Set fetched data to form state
+        setEditBorrower(response.data); 
       } catch (error) {
         console.error('Error fetching borrower data: ', error);
       }
