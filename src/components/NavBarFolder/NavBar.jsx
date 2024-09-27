@@ -10,7 +10,6 @@ const StyledLink = styled(Link)({
   margin: '0px 16px',
 });
 
-// Navbar component
 export default function NavBar() {
   return (
     <AppBar position="static">
