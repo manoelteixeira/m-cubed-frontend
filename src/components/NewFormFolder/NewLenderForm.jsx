@@ -18,12 +18,12 @@ const navigate = useNavigate()
 
     const createNewLender = async (newLender) => {
         try {
-            const results = await axios.post(API, newLender, 
+            const results = await axios.post(`${API}/lenders`, newLender, 
                { headers: {'Content-Type': 'application/json',
                },
             });
             const lenderId = results.data.id
-            navigate(`lenders/${lenderId}/lenderdashboard`)
+            // navigate(`lenders/${lenderId}/lenderdashboard`)
             } catch (error) {
                 console.error('Error creating lender: ', error)
             }
@@ -38,10 +38,21 @@ const navigate = useNavigate()
           [name]: value,
         });
       };
+
+      const handleCancel = () => {
+        navigate('/');
+      };
     
       const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("Form submitted:", newLender);
+
+        const { email, password, business_name } = newLender;
+
+    if (!email || !password || !business_name) {
+        alert("All fields are required");
+        return;
+    }
+        createNewLender(newLender);
       };
 
 
@@ -93,6 +104,15 @@ const navigate = useNavigate()
           >
             Get Started!
           </Button>
+          <Button
+          variant="outlined"
+          color="secondary"
+          onClick={handleCancel}
+          fullWidth
+        >
+          Cancel
+        </Button>
+          
         </Box>
       );
 

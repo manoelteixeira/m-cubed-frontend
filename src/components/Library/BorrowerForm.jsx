@@ -23,7 +23,19 @@ const BorrowerForm = () => {
     industry: "",
   });
 
-  // Handle input change
+  const createNewBorrwer = async (formData) => {
+    try {
+        const results = await axios.post(`${API}/borrowers`, formData, 
+           { headers: {'Content-Type': 'application/json',
+           },
+        });
+        const borrowerId = results.data.id
+        // navigate(`borrowers/${borrowerId}/borrowerdashboard`)
+        } catch (error) {
+            console.error('Error creating borrower: ', error)
+        }
+};
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -32,7 +44,6 @@ const BorrowerForm = () => {
     });
   };
 
-  // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Form submitted:", formData);
@@ -48,7 +59,7 @@ const BorrowerForm = () => {
         Borrower Registration
       </Typography>
       <Grid container spacing={2}>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={14} sm={6}>
           <TextField
             label="Email"
             name="email"
@@ -60,7 +71,7 @@ const BorrowerForm = () => {
             margin="normal"
           />
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={14} sm={6}>
           <TextField
             label="Password"
             name="password"
@@ -72,7 +83,7 @@ const BorrowerForm = () => {
             margin="normal"
           />
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={14} sm={6}>
           <TextField
             label="City"
             name="city"
@@ -83,7 +94,7 @@ const BorrowerForm = () => {
             margin="normal"
           />
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={14} sm={6}>
           <TextField
             label="Street"
             name="street"
@@ -94,7 +105,7 @@ const BorrowerForm = () => {
             margin="normal"
           />
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={14} sm={6}>
           <TextField
             label="State"
             name="state"
@@ -105,7 +116,7 @@ const BorrowerForm = () => {
             margin="normal"
           />
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={14} sm={6}>
           <TextField
             label="Zip Code"
             name="zipCode"
@@ -114,7 +125,7 @@ const BorrowerForm = () => {
             fullWidth
             required
             margin="normal"
-            inputProps={{ maxLength: 10 }} // Limit zip code length
+            inputProps={{ maxLength: 10 }} 
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -126,7 +137,7 @@ const BorrowerForm = () => {
             fullWidth
             required
             margin="normal"
-            inputProps={{ maxLength: 10 }} // Limit phone length
+            inputProps={{ maxLength: 10 }} 
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -150,7 +161,7 @@ const BorrowerForm = () => {
             fullWidth
             required
             margin="normal"
-            inputProps={{ min: 300, max: 850 }} // Credit score range
+            inputProps={{ min: 300, max: 850 }} 
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -179,7 +190,6 @@ const BorrowerForm = () => {
             margin="normal"
             select
           >
-            {/* Add your industry options here */}
             <MenuItem value="Retail">Retail</MenuItem>
             <MenuItem value="Technology">Technology</MenuItem>
             <MenuItem value="Healthcare">Healthcare</MenuItem>
