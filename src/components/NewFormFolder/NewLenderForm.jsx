@@ -1,16 +1,21 @@
 import React, {useEffect,useState}from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import axios from 'axios'
-import { TextField, Button, Box, Typography } from "@mui/material";
+// import axios from 'axios'
+import { Box, Typography, Grid, TextField, Button, Paper, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 import './NewLenderForm.scss'
+import {ThemeProvider, createTheme} from '@mui/material';
+import MMMLogo from "../../assets/newLogo.png";
 
 
 const API = import.meta.env.VITE_BASE_URL;
+
 
 export default function NewLenderForm() {
 
   // combine NewLender and Edit Lender together and prop drill the variable and use a ternary to check if there is an id or not to swap between which form will be displayed. For now stick with this. 
 const navigate = useNavigate()
+const [open, setOpen] = useState(false);
+
 
     const [newLender, setNewLender] = useState({
         email:'',
@@ -18,18 +23,43 @@ const navigate = useNavigate()
         business_name: ''
     })
 
+    // const createNewLender = async (newLender) => {
+    //     try {
+    //         const results = await axios.post(`${API}/lenders`, newLender, 
+    //            { headers: {'Content-Type': 'application/json',
+    //            },
+    //         });
+    //         const lenderId = results.data.id
+    //         // navigate(`lenders/${lenderId}/lenderdashboard`)
+    //         } catch (error) {
+    //             console.error('Error creating lender: ', error)
+    //         }
+    // };
+
     const createNewLender = async (newLender) => {
-        try {
-            const results = await axios.post(`${API}/lenders`, newLender, 
-               { headers: {'Content-Type': 'application/json',
-               },
-            });
-            const lenderId = results.data.id
-            // navigate(`lenders/${lenderId}/lenderdashboard`)
-            } catch (error) {
-                console.error('Error creating lender: ', error)
-            }
-    };
+      try {
+          const response = await fetch(`${API}/lenders`, {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(newLender), 
+          });
+  
+          if (!response.ok) {
+              throw new Error(`Error creating lender: ${response.statusText}`);
+          }
+  
+          const results = await response.json();
+          const lenderId = results.id;
+  
+          // navigate(`lenders/${lenderId}/lenderdashboard`);
+  
+      } catch (error) {
+          console.error('Error creating lender:', error);
+      }
+  };
+  
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -42,7 +72,16 @@ const navigate = useNavigate()
       };
 
       const handleCancel = () => {
-        navigate('/');
+        setOpen(true); 
+      };
+    
+      const handleConfirmCancel = () => {
+        setOpen(false);
+        navigate('/');  
+      };
+    
+      const handleClose = () => {
+        setOpen(false);
       };
     
       const handleSubmit = (e) => {
@@ -55,67 +94,170 @@ const navigate = useNavigate()
         return;
     }
         createNewLender(newLender);
-      };
+      }
 
+      const theme = createTheme({
+        palette: {
+          primary: {
+            main: "#4caf50", 
+            contrastText: "#ffffff", 
+          },
+        },
+      });
 
-
+      // const StyledLink = styled('li')({
+      //   textDecoration: 'none',
+      //   color: 'inherit',
+      //   margin: '0px 16px',
+      // });
 
       return (
-        <Box
-          component="form"
-          onSubmit={handleSubmit}
-          className="form-container"
+        <ThemeProvider theme={theme}>
+      <Grid container component={Paper} sx={{ height: "100vh" }}>
+        {/* Left Side Panel */}
+        <Grid
+          item
+          xs={12}
+          md={6}
+          sx={{
+            p: 4,
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "#f5f5f5",
+          }}
         >
-          <Typography variant="h4" component="h2">
-            Lender Registration
+          <img
+            src={MMMLogo}
+            alt="MMM Logo"
+            className="rotate"
+            style={{ width: "150px", marginBottom: "20px" }}
+          />
+          <Typography variant="h5" component="h1" gutterBottom>
+            Welcome to MoneyMoneyMoney
           </Typography>
-          <Typography variant="h1">
-            Release the limits to your <em>Portfolio</em> and <strong>EXPAND!</strong>
+          <Typography variant="body1" sx={{ textAlign: "center", mb: 2 }}>
+            Advantages for Lenders:
           </Typography>
-          <TextField
-            label="Email"
-            name="email"
-            type="email"
-            value={newLender.email}
-            onChange={handleChange}
-            fullWidth
-            required
-          />
-          <TextField
-            label="Password"
-            name="password"
-            type="password"
-            value={newLender.password}
-            onChange={handleChange}
-            fullWidth
-            required
-          />
-          <TextField
-            label="Business Name"
-            name="business_name"
-            value={newLender.business_name}
-            onChange={handleChange}
-            fullWidth
-            required
-          />
-          <Button
-            variant="contained"
-            color="primary"
-            type="submit"
-            fullWidth
+          <ul style={{paddingLeft:'120px'}}>
+            <li>
+              <Typography variant="body2">
+                Access to a diverse pool of potential borrowers.
+              </Typography>
+            </li>
+            <li>
+              <Typography variant="body2">
+                Opportunity to offer competitive rates and terms.
+              </Typography>
+            </li>
+            <li>
+              <Typography variant="body2">
+                Enhanced visibility and marketing support for your lending
+                products.
+              </Typography>
+            </li>
+            <li>
+              <Typography variant="body2">
+                Streamlined loan management process through our platform.
+              </Typography>
+            </li>
+          </ul>
+        </Grid>
+
+        {/* Right Side Sign-Up Form */}
+        <Grid
+          item
+          xs={12}
+          md={6}
+          sx={{
+            p: 4,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Box
+            component="form"
+            noValidate
+            autoComplete="off"
+            sx={{ width: "100%", maxWidth: 400 }}
+            onSubmit={handleSubmit}
           >
-            Get Started!
-          </Button>
-          <Button
+            {" "}
+            {/* Limit max width for form */}
+            <Typography variant="h5" component="h2" gutterBottom>
+              Sign Up as a Lender
+            </Typography>
+            <TextField
+              label="Email"
+              variant="outlined"
+              value={newLender.email}
+              onChange={handleChange}
+              fullWidth
+              required
+              margin="normal"
+            />
+            <TextField
+              label="Password"
+              type="password"
+              variant="outlined"
+              value={newLender.password}
+              onChange={handleChange}
+              fullWidth
+              required
+              margin="normal"
+            />
+            <TextField
+              label="Business Name"
+              variant="outlined"
+              value={newLender.business_name}
+              onChange={handleChange}
+              fullWidth
+              required
+              margin="normal"
+            />
+            <Button
+              variant="contained"
+              color="primary"
+              type="submit"
+              fullWidth
+              sx={{ mt: 2 }}
+            >
+              Sign Up
+            </Button>
+            <Button
           variant="outlined"
-          color="secondary"
+          color="inhert"
           onClick={handleCancel}
           fullWidth
+          sx={{ mt: 2 }}
         >
           Cancel
         </Button>
-          
-        </Box>
+          </Box>
+        </Grid>
+      </Grid>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+      >
+        <DialogTitle>{"Confirm Cancellation"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to cancel? Any unsaved data will be lost.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            No
+          </Button>
+          <Button onClick={handleConfirmCancel} color="inherit" autoFocus>
+            Yes
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </ThemeProvider>
       );
 
 }

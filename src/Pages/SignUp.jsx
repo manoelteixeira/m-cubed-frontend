@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import SignUpFormBorrow from '../components/Library/SignUpFormBorrow';
 import SignUpFormLender from '../components/Library/SignUpFormLender';
 import { Button, Box, Typography, Grid, ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 const SignUp = () => {
+   
     const [formType, setFormType] = useState('');
 
     const handleFormToggle = (event, newFormType) => {
@@ -38,6 +40,8 @@ const SignUp = () => {
                 {formType === 'borrower' && <SignUpFormBorrow />}
                 {formType === 'lender' && <SignUpFormLender />}
             </Box>
+
+            <Link to={'/'}>Sign Up as Borrower             </Link>
         </Box>
     );
 };

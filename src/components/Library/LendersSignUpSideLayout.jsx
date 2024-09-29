@@ -6,13 +6,14 @@ import MMMLogo from "./IMG/51525890-BF92-4236-AE2A-1E795AAB0DA4.png";
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#4caf50", // Main green color
-      contrastText: "#ffffff", // White text color for contrast
+      main: "#4caf50", 
+      contrastText: "#ffffff", 
     },
   },
 });
 
-const SignUpSideLayout = () => {
+
+const LenderSignUpSideLayout = () => {
   return (
     <ThemeProvider theme={theme}>
       <Grid container component={Paper} sx={{ height: "100vh" }}>
@@ -128,4 +129,4 @@ const SignUpSideLayout = () => {
   );
 };
 
-export default SignUpSideLayout;
+export default LenderSignUpSideLayout;
