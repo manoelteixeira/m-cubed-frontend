@@ -1,43 +1,38 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
 import { TextField, Button, Box, Typography } from "@mui/material";
 
 const API = import.meta.env.VITE_BASE_URL;
 
 export default function EditLenderForm() {
     const navigate = useNavigate();
-    const { lenderId } = useParams(); 
+    const { id } = useParams(); 
     const [lender, setLender] = useState({
         email: '',
         password: '',
         business_name: ''
     });
-
-    useEffect(() => {
-        const getExistingLender = async () => {
-            try {
-                const response = await axios.get(`${API}/lenders/${lenderId}`);
-                setLender(response.data);
-            } catch (error) {
-                console.error('Error fetching lender data: ', error);
+    
+    const updateLender = (lender) => {
+        fetch(`${API}/lenders/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(lender),
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error updating lender');
             }
-        };
-
-        getExistingLender();
-    }, [lenderId]);
-
-    const updateLender = async (lender) => {
-        try {
-            await axios.put(`${API}/lenders/${lenderId}`, lender, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-            navigate(`/lenders/${lenderId}/lenderdashboard`);
-        } catch (error) {
+            return response.json();
+        })
+        .then(() => {
+            navigate(`/lenders/${id}/lenderdashboard`);
+        })
+        .catch(error => {
             console.error('Error updating lender: ', error);
-        }
+        });
     };
 
     const handleChange = (e) => {
@@ -50,7 +45,7 @@ export default function EditLenderForm() {
     };
 
     const handleCancel = () => {
-        navigate(`/borrowers/${lenderId}/lenderdashboard`);
+        navigate(`/lenders/${id}/lenderdashboard`);
     };
 
     const handleSubmit = (e) => {
@@ -64,6 +59,15 @@ export default function EditLenderForm() {
         }
         updateLender(lender);
     };
+
+    useEffect(()=>{
+        fetch(`${API}/lenders/${id}`)
+        .then(res=>res.json())
+        .then(res=> {
+            setLender(res)
+        })
+        .catch(err=> console.error(err))
+    },[id])
 
     return (
         <Box
@@ -122,5 +126,3 @@ export default function EditLenderForm() {
         </Box>
     );
 }
-
-

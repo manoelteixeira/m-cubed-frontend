@@ -36,29 +36,24 @@ const [open, setOpen] = useState(false);
     //         }
     // };
 
-    const createNewLender = async (newLender) => {
-      try {
-          const response = await fetch(`${API}/lenders`, {
-              method: 'POST',
-              headers: {
-                  'Content-Type': 'application/json',
-              },
-              body: JSON.stringify(newLender), 
-          });
-  
-          if (!response.ok) {
-              throw new Error(`Error creating lender: ${response.statusText}`);
+    const createNewLender = (newLender) => {
+      fetch(`${API}/lenders`, {
+          method: 'POST',
+          body: JSON.stringify(newLender), 
+          headers: {
+              'Content-Type': 'application/json',
           }
-  
-          const results = await response.json();
-          const lenderId = results.id;
-  
+      })
+      .then((response) =>  response.json())
+      .then((results) => {
+          console.log('Server response:',results);
+          // const lenderId = results.id;
           // navigate(`lenders/${lenderId}/lenderdashboard`);
-  
-      } catch (error) {
+      })
+      .catch((error) => {
           console.error('Error creating lender:', error);
-      }
-  };
+      });
+    };
   
 
     const handleChange = (e) => {
@@ -197,6 +192,7 @@ const [open, setOpen] = useState(false);
               variant="outlined"
               value={newLender.email}
               onChange={handleChange}
+              name='email'
               fullWidth
               required
               margin="normal"
@@ -207,6 +203,7 @@ const [open, setOpen] = useState(false);
               variant="outlined"
               value={newLender.password}
               onChange={handleChange}
+              name='password'
               fullWidth
               required
               margin="normal"
@@ -216,6 +213,7 @@ const [open, setOpen] = useState(false);
               variant="outlined"
               value={newLender.business_name}
               onChange={handleChange}
+              name='business_name'
               fullWidth
               required
               margin="normal"

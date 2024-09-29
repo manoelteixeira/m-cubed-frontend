@@ -19,7 +19,7 @@ import {
 
 const API = import.meta.env.VITE_BASE_URL;
 
-export default function LenderDashboard(){
+export default function LenderDashboard({userlenderData}){
 const {id} = useParams()
 
   const [borrowers, setBorrowers] = useState([]);
@@ -108,7 +108,7 @@ const {id} = useParams()
       <AppBar position="static" color="secondary" sx={{m: 2, width: 1500}}>
         <Toolbar>
           <Typography variant="h4" sx={{ flexGrow: 1, m:2, mr:2 }}>
-            Welcome
+            Welcome, {`${userlenderData.business_name}`}
           </Typography>
           <Paper elevation={3} sx={{ m: 2, p: 2 }}>
             <Typography variant="h6">
