@@ -1,7 +1,7 @@
 import React, {useEffect,useState}from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 // import axios from 'axios'
-import { Box, Typography, Grid, TextField, Button, Paper, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
+import { Slide, Box, Typography, Grid, TextField, Button, Paper, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 import './NewLenderForm.scss'
 import {ThemeProvider, createTheme} from '@mui/material';
 import MMMLogo from "../../assets/newLogo.png";
@@ -79,6 +79,9 @@ const [open, setOpen] = useState(false);
         setOpen(false);
         navigate('/');  
       };
+      const Transition = React.forwardRef(function Transition(props, ref) {
+        return <Slide direction="up" ref={ref} {...props} />;
+      });
     
       const handleClose = () => {
         setOpen(false);
@@ -241,6 +244,7 @@ const [open, setOpen] = useState(false);
       <Dialog
         open={open}
         onClose={handleClose}
+        TransitionComponent={Transition}
       >
         <DialogTitle>{"Confirm Cancellation"}</DialogTitle>
         <DialogContent>
