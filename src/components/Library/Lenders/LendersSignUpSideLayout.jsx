@@ -1,17 +1,16 @@
 import React from "react";
 import { Box, Typography, Grid, TextField, Button, Paper } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import MMMLogo from "./IMG/51525890-BF92-4236-AE2A-1E795AAB0DA4.png";
+import MMMLogo from "../IMG/MMMLogo.png";
 
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#4caf50", 
-      contrastText: "#ffffff", 
+      main: "#4caf50",
+      contrastText: "#ffffff",
     },
   },
 });
-
 
 const LenderSignUpSideLayout = () => {
   return (

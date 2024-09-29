@@ -5,14 +5,13 @@ import Header from "./components/Header";
 import Home from "./Pages/Homepage";
 import Lenderpage from "./Pages/Lenderpage";
 import AboutUs from "./components/AboutFolder/AboutUs";
-import SignInForm from "./components/Library/SignInForm";
+import SignInForm from "./components/Library/AppFiles/SignInForm";
 import SignUp from "./Pages/signUp";
 import ListOfLenders from "./Pages/ListOfLenders";
 import NewLender from "./Pages/NewLender";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import NewBorrower from "./Pages/NewBorrower";
 import EditLenderForm from "./components/EditUserFolder/EditLenderInfo";
-
 
 const theme = createTheme({
   palette: {
@@ -36,12 +35,12 @@ function App() {
         <Route path="/about" element={<AboutUs />} />
         <Route path="/login" element={<SignInForm />} />
         <Route path="/signup" element={<SignUp />} />
-        <Route path='/signup/borrower'element={<></>}></Route>
-        <Route path='/signup/lender'element={<></>}></Route>
+        <Route path="/signup/borrower" element={<></>}></Route>
+        <Route path="/signup/lender" element={<></>}></Route>
         {/* <Route path='/signup' element={<SignUp/>}/> */}
-        <Route path='/lenders' element={<ListOfLenders />} />
-        <Route path='/lenders/new' element={<NewLender />} />
-        <Route path='/borrowers/new' element={<NewBorrower />} />
+        <Route path="/lenders" element={<ListOfLenders />} />
+        <Route path="/lenders/new" element={<NewLender />} />
+        <Route path="/borrowers/new" element={<NewBorrower />} />
         <Route path="/lenders/:id/lenderdashboard" element={<Lenderpage />} />
         <Route path="/borrowers/:id/borrowersdashboard" element={<></>} />
         <Route path="/lenders/:id/edit" element={<EditLenderForm />} />
