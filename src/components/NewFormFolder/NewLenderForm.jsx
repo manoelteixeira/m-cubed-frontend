@@ -12,8 +12,8 @@ const API = import.meta.env.VITE_BASE_URL;
 
 export default function NewLenderForm() {
 
-  // combine NewLender and Edit Lender together and prop drill the variable and use a ternary to check if there is an id or not to swap between which form will be displayed. For now stick with this. 
-const navigate = useNavigate()
+
+  const navigate = useNavigate()
 const [open, setOpen] = useState(false);
 
 
@@ -245,11 +245,12 @@ const [open, setOpen] = useState(false);
         <DialogTitle>{"Confirm Cancellation"}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Are you sure you want to cancel? Any unsaved data will be lost.
+            Are you sure you want to cancel?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={handleClose} color="primary"
+          >
             No
           </Button>
           <Button onClick={handleConfirmCancel} color="inherit" autoFocus>
