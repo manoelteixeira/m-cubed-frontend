@@ -9,12 +9,12 @@ export default function Lenderpage() {
   const { id } = useParams()
   const [userlenderData, setUserLenderData] = useState([]);
 
-  // useEffect(() => {
-  //   fetch(`${API}/lenders/${id}`) 
-  //     .then(res => res.json())
-  //     .then(data => setUserLenderData(data))
-  //     .catch(err => console.error(err));
-  // }, []);
+  useEffect(() => {
+    fetch(`${API}/lenders/${id}`) 
+      .then(res => res.json())
+      .then(data => setUserLenderData(data))
+      .catch(err => console.error(err));
+  }, []);
 
   return (
     <div>
