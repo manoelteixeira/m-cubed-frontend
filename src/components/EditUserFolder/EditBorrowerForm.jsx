@@ -14,7 +14,7 @@ const API = import.meta.env.VITE_BASE_URL;
 
 const EditBorrowerForm = () => {
   const navigate = useNavigate();
-  const { borrowerId } = useParams();
+  const { id } = useParams();
 
   const [editBorrower, setEditBorrower] = useState({
     email: "",
@@ -22,18 +22,18 @@ const EditBorrowerForm = () => {
     city: "",
     street: "",
     state: "",
-    zipCode: "",
+    zip_code: "",
     phone: "",
-    businessName: "",
-    creditScore: "",
-    startDate: "",
+    business_name: "",
+    credit_score: "",
+    start_date: "",
     industry: "",
   });
 //AXIOS FETCHING 
   // useEffect(() => {
   //   const fetchBorrowerData = async () => {
   //     try {
-  //       const response = await axios.get(`${API}/borrowers/${borrowerId}`);
+  //       const response = await axios.get(`${API}/borrowers/${id}`);
   //       setEditBorrower(response.data); 
   //     } catch (error) {
   //       console.error('Error fetching borrower data: ', error);
@@ -41,16 +41,16 @@ const EditBorrowerForm = () => {
   //   };
 
   //   fetchBorrowerData();
-  // }, [borrowerId]);
+  // }, [id]);
 
   // const updateBorrower = async (editBorrower) => {
   //   try {
-  //     await axios.put(`${API}/borrowers/${borrowerId}`, editBorrower, {
+  //     await axios.put(`${API}/borrowers/${id}`, editBorrower, {
   //       headers: {
   //         'Content-Type': 'application/json',
   //       },
   //     });
-  //     navigate(`/borrowers/${borrowerId}/borrowerdashboard`);
+  //     navigate(`/borrowers/${id}/borrowerdashboard`);
   //   } catch (error) {
   //     console.error('Error updating borrower: ', error);
   //   }
@@ -59,7 +59,7 @@ const EditBorrowerForm = () => {
   useEffect(() => {
     const fetchBorrowerData = async () => {
       try {
-        const response = await fetch(`${API}/borrowers/${borrowerId}`);
+        const response = await fetch(`${API}/borrowers/${id}`);
         if (!response.ok) {
           throw new Error('Error fetching borrower data');
         }
@@ -71,11 +71,11 @@ const EditBorrowerForm = () => {
     };
   
     fetchBorrowerData();
-  }, [borrowerId]);
+  }, [id]);
   
   const updateBorrower = async (editBorrower) => {
     try {
-      const response = await fetch(`${API}/borrowers/${borrowerId}`, {
+      const response = await fetch(`${API}/borrowers/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -87,7 +87,7 @@ const EditBorrowerForm = () => {
         throw new Error('Error updating borrower');
       }
   
-      navigate(`/borrowers/${borrowerId}/borrowerdashboard`);
+      navigate(`/borrowers/${id}/borrowerdashboard`);
     } catch (error) {
       console.error('Error updating borrower: ', error);
     }
@@ -129,7 +129,7 @@ const EditBorrowerForm = () => {
             margin="normal"
           />
         </Grid>
-        <Grid item xs={14} sm={6}>
+        {/* <Grid item xs={14} sm={6}>
           <TextField
             label="Password"
             name="password"
@@ -140,7 +140,7 @@ const EditBorrowerForm = () => {
             required
             margin="normal"
           />
-        </Grid>
+        </Grid> */}
         <Grid item xs={14} sm={6}>
           <TextField
             label="City"
@@ -178,7 +178,7 @@ const EditBorrowerForm = () => {
           <TextField
             label="Zip Code"
             name="zipCode"
-            value={editBorrower.zipCode}
+            value={editBorrower.zip_code}
             onChange={handleChange}
             fullWidth
             required
@@ -202,7 +202,7 @@ const EditBorrowerForm = () => {
           <TextField
             label="Business Name"
             name="businessName"
-            value={editBorrower.businessName}
+            value={editBorrower.business_name}
             onChange={handleChange}
             fullWidth
             required
@@ -214,7 +214,7 @@ const EditBorrowerForm = () => {
             label="Credit Score"
             name="creditScore"
             type="number"
-            value={editBorrower.creditScore}
+            value={editBorrower.credit_score}
             onChange={handleChange}
             fullWidth
             required
@@ -222,12 +222,12 @@ const EditBorrowerForm = () => {
             inputProps={{ min: 300, max: 850 }}
           />
         </Grid>
-        <Grid item xs={12} sm={6}>
+        {/* <Grid item xs={12} sm={6}>
           <TextField
             label="Start Date"
             name="startDate"
             type="date"
-            value={editBorrower.startDate}
+            value={editBorrower.start_date}
             onChange={handleChange}
             fullWidth
             required
@@ -236,7 +236,7 @@ const EditBorrowerForm = () => {
               shrink: true,
             }}
           />
-        </Grid>
+        </Grid> */}
         <Grid item xs={12} sm={6}>
           <TextField
             label="Industry"
