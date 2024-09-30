@@ -7,7 +7,7 @@ import {
   Grid,
   MenuItem,
 } from "@mui/material";
-import axios from 'axios';
+// import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 
 const API = import.meta.env.VITE_BASE_URL;
@@ -29,32 +29,70 @@ const EditBorrowerForm = () => {
     startDate: "",
     industry: "",
   });
+//AXIOS FETCHING 
+  // useEffect(() => {
+  //   const fetchBorrowerData = async () => {
+  //     try {
+  //       const response = await axios.get(`${API}/borrowers/${borrowerId}`);
+  //       setEditBorrower(response.data); 
+  //     } catch (error) {
+  //       console.error('Error fetching borrower data: ', error);
+  //     }
+  //   };
+
+  //   fetchBorrowerData();
+  // }, [borrowerId]);
+
+  // const updateBorrower = async (editBorrower) => {
+  //   try {
+  //     await axios.put(`${API}/borrowers/${borrowerId}`, editBorrower, {
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //     });
+  //     navigate(`/borrowers/${borrowerId}/borrowerdashboard`);
+  //   } catch (error) {
+  //     console.error('Error updating borrower: ', error);
+  //   }
+  // };
 
   useEffect(() => {
     const fetchBorrowerData = async () => {
       try {
-        const response = await axios.get(`${API}/borrowers/${borrowerId}`);
-        setEditBorrower(response.data); 
+        const response = await fetch(`${API}/borrowers/${borrowerId}`);
+        if (!response.ok) {
+          throw new Error('Error fetching borrower data');
+        }
+        const data = await response.json();
+        setEditBorrower(data); 
       } catch (error) {
         console.error('Error fetching borrower data: ', error);
       }
     };
-
+  
     fetchBorrowerData();
   }, [borrowerId]);
-
+  
   const updateBorrower = async (editBorrower) => {
     try {
-      await axios.put(`${API}/borrowers/${borrowerId}`, editBorrower, {
+      const response = await fetch(`${API}/borrowers/${borrowerId}`, {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
+        body: JSON.stringify(editBorrower),
       });
+  
+      if (!response.ok) {
+        throw new Error('Error updating borrower');
+      }
+  
       navigate(`/borrowers/${borrowerId}/borrowerdashboard`);
     } catch (error) {
       console.error('Error updating borrower: ', error);
     }
   };
+  
 
   const handleChange = (e) => {
     const { name, value } = e.target;

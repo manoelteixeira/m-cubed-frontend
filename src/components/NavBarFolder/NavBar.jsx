@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { AppBar, Toolbar, Typography, Button, IconButton } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import logo from "../../assets/logo.jpeg";
+import QRCodeComponent from "../QRCodeComponent";
 
 const StyledLink = styled(Link)({
   textDecoration: 'none',

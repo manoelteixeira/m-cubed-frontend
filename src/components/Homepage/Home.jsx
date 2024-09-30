@@ -5,6 +5,7 @@ import LenderPhoto from "../../assets/LenderPhoto.jpeg";
 import BorrowerPhoto from "../../assets/BorrowerPhoto.jpeg";
 import Handshake from "../../assets/handshake-no-bg.png";
 import { Link } from "react-router-dom";
+import QRCodeComponent from "../QRCodeComponent";
 
 export default function Home() {
   return (

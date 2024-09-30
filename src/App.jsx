@@ -12,7 +12,7 @@ import NewLender from "./Pages/NewLender";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import NewBorrower from "./Pages/NewBorrower";
 import EditLenderForm from "./components/EditUserFolder/EditLenderInfo";
-
+import EmailNewsletter from "./Pages/EmailNewsletter";
 const theme = createTheme({
   palette: {
     primary: {
@@ -49,6 +49,7 @@ function App() {
         <Route path="/lenders/:id/proposals/:id" element={<></>} />
         <Route path="borrowers/:id/requests/:id" element={<></>} />
         <Route path="/disclaimer" element={<></>} />{" "}
+        <Route path="/newsletter" element={<EmailNewsletter/>}></Route>
         {/* FF: Info page for Borrowers/Lenders to know about additional services */}
       </Routes>
     </ThemeProvider>
