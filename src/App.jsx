@@ -49,7 +49,7 @@ function App() {
         <Route path="/lenders/:id/lenderdashboard" element={<Lenderpage />} />
         <Route path="/borrowers/:id/new" element={<LoanRequestForm/>} />
         <Route path="/lenders/:id/edit" element={<EditLenderForm />} />
-        <Route path="/borrowers/:id/edit" element={<EditBorrowerForm/>} />
+        <Route path="/borrowers/:id/edit" element={<EditBorrowerForm />} />
         <Route path="/lenders/:id/proposals" element={<></>} />
         <Route path="/lenders/:id/proposals/:id" element={<LenderProposalPage/>} />
         <Route path="borrowers/:id/requests/:id" element={<></>} />

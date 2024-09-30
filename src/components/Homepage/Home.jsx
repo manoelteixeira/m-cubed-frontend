@@ -191,23 +191,23 @@ export default function Home() {
       <section className="home-container__lender-CTA">
         <Box textAlign="center" padding={4} bgcolor="#f5f5f5">
           <Typography variant="h6" color="#4CAF50" marginBottom={2}>
-            <em>Diversify</em> your Portfolio by Partnering with M-cubed for
-            endless <strong>Possibilities</strong>...
+            Lenders: Maximize Your Lending Opportunities with MMM – Connect with
+            Pre-Vetted Borrowers and Unlock New Avenues for Growth Today.
           </Typography>
           <Button
             variant="contained"
             style={{ backgroundColor: "#4CAF50" }}
             className="banner-signup"
           >
-            Sign up Now
+            Start your trial period!
           </Button>
         </Box>
       </section>
       <section className="home-container__borrower-CTA">
         <Box textAlign="center" padding={4} bgcolor="#f5f5f5">
           <Typography variant="h6" color="#4CAF50">
-            <span>Apply </span>for <em>faster</em> funding for Qualifying Loan
-            Requests with ease, keeping you in mind with every step of the way!
+            Borrowers: Protect your credit score – apply through one streamlined
+            process for minimal verifications and complete lender access.
           </Typography>
         </Box>
       </section>
