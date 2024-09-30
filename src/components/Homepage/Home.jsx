@@ -24,7 +24,7 @@ export default function Home() {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 3, // Show 3 images side by side
+    slidesToShow: 3,
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 3000,
