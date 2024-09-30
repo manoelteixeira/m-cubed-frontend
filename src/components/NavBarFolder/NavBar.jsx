@@ -53,17 +53,15 @@ import {
   Menu,
   MenuItem,
 } from "@mui/material";
-import { ArrowDropDown } from "@mui/icons-material"; // Icon for dropdown
+import { ArrowDropDown } from "@mui/icons-material";
 
 const Navbar = () => {
-  const [anchorEl, setAnchorEl] = React.useState(null); // State for dropdown anchor
+  const [anchorEl, setAnchorEl] = React.useState(null);
 
-  // Function to handle dropdown opening
   const handleDropdownClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
-  // Function to handle dropdown item selection
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -72,41 +70,37 @@ const Navbar = () => {
     <AppBar
       position="static"
       sx={{
-        backgroundColor: "#056612", // MMM green background color
+        backgroundColor: "#056612",
       }}
       elevation={0}
     >
       <Toolbar>
-        {/* MMM Title */}
         <Typography
           variant="h6"
           component="div"
-          sx={{ flexGrow: 1, color: "#fff" }} // White text for the title
+          sx={{ flexGrow: 1, color: "#fff" }}
         >
           WHY MMM
         </Typography>
 
-        {/* Meet the Team Button */}
         <Button
           color="inherit"
-          sx={{ marginRight: 2, color: "#fff" }} // Add margin and white text
-          href="/meet-the-team" // Link to the "Meet the Team" page
+          sx={{ marginRight: 2, color: "#fff" }}
+          href="/meet-the-team"
         >
           MEET THE TEAM
         </Button>
 
-        {/* Open an Account Button with Dropdown */}
         <Button
-          color="inherit" // Set text color to white
+          color="inherit"
           variant="outlined"
           onClick={handleDropdownClick}
-          endIcon={<ArrowDropDown />} // Dropdown icon
-          sx={{ borderColor: "#fff", color: "#fff" }} // White border and text
+          endIcon={<ArrowDropDown />}
+          sx={{ borderColor: "#fff", color: "#fff" }}
         >
           OPEN AN ACCOUNT
         </Button>
 
-        {/* Dropdown Menu */}
         <Menu
           anchorEl={anchorEl}
           open={Boolean(anchorEl)}
@@ -117,8 +111,7 @@ const Navbar = () => {
         >
           <MenuItem onClick={handleClose} sx={{ color: "#000" }}>
             Borrower
-          </MenuItem>{" "}
-          {/* Black text for dropdown items */}
+          </MenuItem>
           <MenuItem onClick={handleClose} sx={{ color: "#000" }}>
             Lender
           </MenuItem>
