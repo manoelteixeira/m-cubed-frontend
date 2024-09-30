@@ -281,7 +281,9 @@ export default function Home() {
               borderColor: "#4CAF50",
             }}
           >
-            <CardContent>
+            <CardContent sx={{ textAlign: "justify" }}>
+              {" "}
+              {/* Added textAlign: "justify" */}
               <MailOutline
                 style={{
                   fontSize: 50,
@@ -293,7 +295,13 @@ export default function Home() {
               <Typography variant="h6" align="center" gutterBottom>
                 Join the MMM Community!
               </Typography>
-              <Typography variant="body1" align="center" color="text.secondary">
+              <Typography
+                variant="body1"
+                align="justify"
+                color="text.secondary"
+              >
+                {" "}
+                {/* Changed align to justify */}
                 Hey there! If you're a business owner or lender curious about
                 our app, we'd love for you to subscribe to our mailing list.
                 We'll keep you posted on our launch and promise to be
