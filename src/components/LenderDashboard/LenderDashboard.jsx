@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import {
   AppBar,
   Toolbar,
@@ -179,7 +179,7 @@ const {id} = useParams()
         <Grid item xs={12} md={6}>
           <Paper elevation={3}>
             <Typography variant="h6" component="div" sx={{ padding: 2 }}>
-              Pending Loan Requests
+              Pending Loan Proposals
             </Typography>
             <TableContainer component={Paper}>
               <Table>
@@ -188,6 +188,7 @@ const {id} = useParams()
                     <TableCell>Title</TableCell>
                     <TableCell>Description</TableCell>
                     <TableCell>Created At</TableCell>
+                    
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -201,6 +202,8 @@ const {id} = useParams()
                         <TableCell>{loan.title}</TableCell>
                         <TableCell>{loan.description}</TableCell>
                         <TableCell>{new Date(loan.created_at).toLocaleDateString()}</TableCell>
+                        <TableCell><Link to={`/lenders/${id}/proposals/${id}`}><Button>Edit</Button></Link></TableCell>
+                        <TableCell><Button>Delete</Button></TableCell>
                       </TableRow>
                     ))}
                 </TableBody>

@@ -5,7 +5,7 @@ import Header from "./components/Header";
 import Home from "./Pages/Homepage";
 import Lenderpage from "./Pages/Lenderpage";
 import AboutUs from "./components/AboutFolder/AboutUs";
-import SignInForm from "./components/Library/AppFiles/SignInForm";
+// import SignInForm from "./components/Library/AppFiles/SignInForm";
 import SignUp from "./Pages/SignUp";
 import ListOfLenders from "./Pages/ListOfLenders";
 import NewLender from "./Pages/NewLender";
@@ -16,6 +16,7 @@ import BDashboard from "./components/BDashboard/BDashboard";
 import LoanRequestForm from "./components/LoanRequest/LoanRequestForm";
 import EmailNewsletter from "./Pages/EmailNewsletter";
 import EditBorrowerForm from "./components/EditUserFolder/EditBorrowerForm";
+import LenderProposalPage from "./Pages/LenderProposalPage";
 const theme = createTheme({
   palette: {
     primary: {
@@ -36,7 +37,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<AboutUs />} />
-        <Route path="/login" element={<SignInForm />} />
+        {/* <Route path="/login" element={<SignInForm />} /> */}
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signup/borrower" element={<></>}></Route>
         <Route path="/signup/lender" element={<></>}></Route>
@@ -50,7 +51,7 @@ function App() {
         <Route path="/lenders/:id/edit" element={<EditLenderForm />} />
         <Route path="/borrowers/:id/edit" element={<EditBorrowerForm/>} />
         <Route path="/lenders/:id/proposals" element={<></>} />
-        <Route path="/lenders/:id/proposals/:id" element={<></>} />
+        <Route path="/lenders/:id/proposals/:id" element={<LenderProposalPage/>} />
         <Route path="borrowers/:id/requests/:id" element={<></>} />
         <Route path="/disclaimer" element={<></>} />{" "}
         <Route path="/newsletter" element={<EmailNewsletter />}></Route>

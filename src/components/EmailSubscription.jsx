@@ -55,9 +55,8 @@ export default function EmailSubscriptionForm() {
         </Typography>
         <Typography variant='h5'>
             Subscribe <em>Today!</em>
-        </Typography>
+        </Typography>  
 
-        
         <TextField
           fullWidth
           label="First Name"
@@ -66,9 +65,7 @@ export default function EmailSubscriptionForm() {
           onChange={handleChange}
           sx={{ my: 2 }}
           required
-        />
-
-        
+        />   
         <TextField
           fullWidth
           label="Last Name"
@@ -77,9 +74,7 @@ export default function EmailSubscriptionForm() {
           onChange={handleChange}
           sx={{ my: 2 }}
           required
-        />
-
-        
+        />       
         <TextField
           fullWidth
           label="Email"
