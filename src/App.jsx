@@ -12,6 +12,8 @@ import NewLender from "./Pages/NewLender";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import NewBorrower from "./Pages/NewBorrower";
 import EditLenderForm from "./components/EditUserFolder/EditLenderInfo";
+import BDashboard from "./components/BDashboard/BDashboard";
+import LoanRequestForm from "./components/LoanRequest/LoanRequestForm";
 import EmailNewsletter from "./Pages/EmailNewsletter";
 import EditBorrowerForm from "./components/EditUserFolder/EditBorrowerForm";
 const theme = createTheme({
@@ -38,12 +40,13 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signup/borrower" element={<></>}></Route>
         <Route path="/signup/lender" element={<></>}></Route>
+        <Route path="/borrowers/:id" element={<BDashboard/>} />
         {/* <Route path='/signup' element={<SignUp/>}/> */}
         <Route path="/lenders" element={<ListOfLenders />} />
         <Route path="/lenders/new" element={<NewLender />} />
         <Route path="/borrowers/new" element={<NewBorrower />} />
         <Route path="/lenders/:id/lenderdashboard" element={<Lenderpage />} />
-        <Route path="/borrowers/:id/borrowersdashboard" element={<></>} />
+        <Route path="/borrowers/:id/new" element={<LoanRequestForm/>} />
         <Route path="/lenders/:id/edit" element={<EditLenderForm />} />
         <Route path="/borrowers/:id/edit" element={<EditBorrowerForm/>} />
         <Route path="/lenders/:id/proposals" element={<></>} />

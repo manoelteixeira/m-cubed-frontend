@@ -1,7 +1,14 @@
-import React, { useState } from 'react';
-import './LoanRequest.css'
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+const API = import.meta.env.VITE_BASE_URL;
+import './LoanRequest.css';
 
 const LoanRequestForm = () => {
+  const navigate = useNavigate();
+  const { loanRequestId } = useParams();
+  const [timestamp, setTimestamp] = useState('');
+  const [submissionStatus, setSubmissionStatus] = useState('');
   const [formData, setFormData] = useState({
     businessName: '',
     businessType: '',
@@ -9,66 +16,93 @@ const LoanRequestForm = () => {
     loanTerm: '',
     industry: '',
     revenue: '',
-    documents: null
+    documents: null,
   });
 
-  const [timestamp, setTimestamp] = useState('');
-  const [submissionStatus, setSubmissionStatus] = useState('');
+  
+  useEffect(() => {
+    if (loanRequestId) {
+      fetch(`${API}/borrowers/${id}/requests/${loanRequestId}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setFormData({
+            businessName: data.businessName,
+            businessType: data.businessType,
+            loanAmount: data.loanAmount,
+            loanTerm: data.loanTerm,
+            industry: data.industry,
+            revenue: data.revenue,
+            documents: null, 
+          });
+        })
+        .catch((error) => console.error('Error fetching loan details', error));
+    }
+  }, [loanRequestId]);
 
+  // Handle form input changes
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-    if (name === "documents") {
+    if (name === 'documents') {
       setFormData({
         ...formData,
-        documents: files[0] 
+        documents: files[0], 
       });
     } else {
       setFormData({
         ...formData,
-        [name]: value
+        [name]: value,
       });
     }
   };
 
+  // Submit the form (POST if no id, PUT otherwise)
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Prep form data for submission
+    const formDataToSubmit = new FormData();
+    formDataToSubmit.append('businessName', formData.businessName);
+    formDataToSubmit.append('businessType', formData.businessType);
+    formDataToSubmit.append('loanAmount', formData.loanAmount);
+    formDataToSubmit.append('loanTerm', formData.loanTerm);
+    formDataToSubmit.append('industry', formData.industry);
+    formDataToSubmit.append('revenue', formData.revenue);
+    if (formData.documents) {
+      formDataToSubmit.append('documents', formData.documents);
+    }
 
-    const now = new Date();
-    const formattedTimestamp = now.toLocaleString();
-    setTimestamp(`Submitted on: ${formattedTimestamp}`);
 
-    const dataToSubmit = {
-      ...formData,
-      timestamp: formattedTimestamp
-    };
+    const method = loanRequestId ? 'PUT' : 'POST';
+    const url = loanRequestId
+      ? `${API}/borrowers/${id}/requests/${requestsId}`
+      : `${API}/borrowers/${id}/requests`;
 
     try {
-      const response = await fetch("http://dotdotdotdot", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(dataToSubmit)
+      const response = await fetch(url, {
+        method: method,
+        body: formDataToSubmit, 
       });
 
       if (response.ok) {
-        setSubmissionStatus("Application submitted successfully!");
+        setSubmissionStatus('Application submitted successfully!');
+        navigate('/dashboard');
       } else {
-        setSubmissionStatus("Failed to submit the application.");
+        setSubmissionStatus('Failed to submit the application.');
       }
     } catch (error) {
-      console.error("Error submitting the form:", error);
-      setSubmissionStatus("An error occurred while submitting the form.");
+      console.error('Error submitting the form:', error);
+      setSubmissionStatus('An error occurred while submitting the form.');
     }
   };
 
+  // Save form localStorage
   const handleSaveDraft = () => {
     const now = new Date();
     const formattedTimestamp = now.toLocaleString();
     setTimestamp(`Draft saved on: ${formattedTimestamp}`);
 
     localStorage.setItem('loanDraft', JSON.stringify(formData));
-    setSubmissionStatus("Draft saved!");
+    setSubmissionStatus('Draft saved!');
   };
 
   return (
