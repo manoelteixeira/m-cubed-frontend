@@ -84,7 +84,6 @@ export default function Home() {
           >
             <CardContent sx={{ textAlign: "justify" }}>
               {" "}
-              {/* Added textAlign: "justify" */}
               <MailOutline
                 style={{
                   fontSize: 50,
