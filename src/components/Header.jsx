@@ -1,12 +1,3 @@
-// import React from 'react'
-
-// export default function Header() {
-//   return (
-//     <header>
-//         <h3 className='header_title'>Call to Action header above Nav</h3>
-//     </header>
-//   )
-// }
 import React from "react";
 import { Box, Typography, Grid, Container } from "@mui/material";
 import { AccountBalance, TrendingUp } from "@mui/icons-material";
