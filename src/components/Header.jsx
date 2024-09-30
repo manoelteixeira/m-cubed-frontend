@@ -7,7 +7,6 @@
 //     </header>
 //   )
 // }
-
 import React from "react";
 import { Box, Typography, Grid, Container } from "@mui/material";
 import { AccountBalance, TrendingUp } from "@mui/icons-material";
@@ -19,13 +18,12 @@ export default function CTAHeader() {
         backgroundColor: "#056612",
         color: "#fff",
         padding: "24px 0",
-        borderBottom: "4px solid #388e3c",
+        borderBottom: "1px solid white",
         boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
       }}
     >
       <Container>
         <Grid container spacing={4} alignItems="center" justifyContent="center">
-          {/* Borrowers CTA Section */}
           <Grid item xs={12} md={6} textAlign="center">
             <Box display="flex" alignItems="center" justifyContent="center">
               <AccountBalance sx={{ fontSize: 50, marginRight: 2 }} />{" "}
@@ -46,7 +44,6 @@ export default function CTAHeader() {
             </Box>
           </Grid>
 
-          {/* Lenders CTA Section */}
           <Grid item xs={12} md={6} textAlign="center">
             <Box display="flex" alignItems="center" justifyContent="center">
               <TrendingUp sx={{ fontSize: 50, marginRight: 2 }} />{" "}
@@ -57,7 +54,6 @@ export default function CTAHeader() {
                 >
                   Lenders: Expand Your Reach with Verified Borrowers!
                 </Typography>
-                {/* Merged into a single line */}
                 <Typography
                   variant="body1"
                   sx={{ fontSize: "1.1rem", marginTop: "8px" }}

@@ -1,0 +1,17 @@
+#primary green
+#00a250
+
+#dark green
+#056612
+
+#mint green
+#75D481
+
+#light green
+#c8e265
+
+#dark blue
+#003366
+
+#yellow
+#ffd700
