@@ -294,8 +294,10 @@ export default function Home() {
                 Join the MMM Community!
               </Typography>
               <Typography variant="body1" align="center" color="text.secondary">
-                Stay ahead with the latest insights, funding opportunities, and
-                updates tailored just for you.
+                Hey there! If you're a business owner or lender curious about
+                our app, we'd love for you to subscribe to our mailing list.
+                We'll keep you posted on our launch and promise to be
+                responsible with your email!
               </Typography>
               <TextField
                 variant="outlined"

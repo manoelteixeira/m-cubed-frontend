@@ -45,14 +45,7 @@
 // }
 
 import React from "react";
-import {
-  AppBar,
-  Toolbar,
-  Button,
-  Typography,
-  Menu,
-  MenuItem,
-} from "@mui/material";
+import { AppBar, Toolbar, Button, Menu, MenuItem } from "@mui/material";
 import { ArrowDropDown } from "@mui/icons-material";
 
 const Navbar = () => {
@@ -75,32 +68,52 @@ const Navbar = () => {
       elevation={0}
     >
       <Toolbar>
-        <Typography
-          variant="h6"
-          component="div"
-          sx={{ flexGrow: 1, color: "#fff" }}
-        >
-          WHY MMM
-        </Typography>
-
         <Button
           color="inherit"
-          sx={{ marginRight: 2, color: "#fff" }}
+          href="/borrower"
+          sx={{ color: "#fff", fontSize: "1rem" }}
+        >
+          Borrower
+        </Button>
+        <span style={{ color: "#fff", margin: "0 8px" }}>|</span>
+        <Button
+          color="inherit"
+          href="/lender"
+          sx={{ color: "#fff", fontSize: "1rem" }}
+        >
+          Lender
+        </Button>
+        <div style={{ flexGrow: 1 }} />
+        <Button
+          color="inherit"
+          href="/why-mmm"
+          sx={{ color: "#fff", fontSize: "1rem" }}
+        >
+          WHY MMM
+        </Button>
+        <span style={{ color: "#fff", margin: "0 4px" }}>|</span>{" "}
+        {/* Reduced margin */}
+        <Button
+          color="inherit"
+          sx={{ color: "#fff", fontSize: "1rem" }}
           href="/meet-the-team"
         >
           MEET THE TEAM
         </Button>
-
         <Button
           color="inherit"
           variant="outlined"
           onClick={handleDropdownClick}
           endIcon={<ArrowDropDown />}
-          sx={{ borderColor: "#fff", color: "#fff" }}
+          sx={{
+            borderColor: "#fff",
+            color: "#fff",
+            marginLeft: 2,
+            fontSize: "1rem",
+          }}
         >
           OPEN AN ACCOUNT
         </Button>
-
         <Menu
           anchorEl={anchorEl}
           open={Boolean(anchorEl)}
@@ -109,10 +122,16 @@ const Navbar = () => {
             "aria-labelledby": "basic-button",
           }}
         >
-          <MenuItem onClick={handleClose} sx={{ color: "#000" }}>
+          <MenuItem
+            onClick={handleClose}
+            sx={{ color: "#000", fontSize: "1rem" }}
+          >
             Borrower
           </MenuItem>
-          <MenuItem onClick={handleClose} sx={{ color: "#000" }}>
+          <MenuItem
+            onClick={handleClose}
+            sx={{ color: "#000", fontSize: "1rem" }}
+          >
             Lender
           </MenuItem>
         </Menu>
