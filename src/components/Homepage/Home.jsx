@@ -10,19 +10,21 @@ import {
   Typography,
   Grid,
   Box,
+  Divider,
 } from "@mui/material";
 import { MailOutline, ArrowForward } from "@mui/icons-material";
 import Slider from "react-slick";
-
+import QRCodeComponent from "../QRCodeComponent";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
+// Home component
 export default function Home() {
   const settings = {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 1,
+    slidesToShow: 3, // Show 3 images side by side
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 3000,
@@ -80,10 +82,20 @@ export default function Home() {
               padding: 2,
               boxShadow: 3,
               borderColor: "#4CAF50",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
             }}
           >
+            <QRCodeComponent
+              style={{
+                width: 30,
+                height: 30,
+                marginBottom: 16,
+                alignSelf: "center",
+              }}
+            />
             <CardContent sx={{ textAlign: "justify" }}>
-              {" "}
               <MailOutline
                 style={{
                   fontSize: 50,
@@ -100,8 +112,6 @@ export default function Home() {
                 align="justify"
                 color="text.secondary"
               >
-                {" "}
-                {/* Changed align to justify */}
                 Hey there! If you're a business owner or lender curious about
                 our app, we'd love for you to subscribe to our mailing list.
                 We'll keep you posted on our launch and promise to be
@@ -148,27 +158,42 @@ export default function Home() {
           </Card>
         </Grid>
       </Grid>
-
+      <Divider sx={{ my: 4 }} /> {/* Separator before the carousel */}
       <section className="home-container__badge-names">
         <Slider {...settings}>
           <div>
-            <h2>Sponsor 1</h2>
+            <img
+              src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1727713128/cami-talpone-eWzC1UwAIlw-unsplash_tkf4is.jpg"
+              alt="Borrower1"
+              className="carousel-image"
+              style={{ width: "100%", height: "200px", objectFit: "cover" }} // Consistent size for images
+            />
           </div>
           <div>
-            <h2>Sponsor 2</h2>
+            <img
+              src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1727713129/khachik-simonian-XYavU5BGF9o-unsplash_ejbz5m.jpg"
+              alt="Borrower2"
+              className="carousel-image"
+              style={{ width: "100%", height: "200px", objectFit: "cover" }} // Consistent size for images
+            />
           </div>
           <div>
-            <h2>Sponsor 3</h2>
+            <img
+              src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1727713132/s-o-c-i-a-l-c-u-t-7KkDiSs5UdQ-unsplash_1_jmcqts.jpg"
+              alt="Borrower3"
+              className="carousel-image"
+              style={{ width: "100%", height: "200px", objectFit: "cover" }} // Consistent size for images
+            />
           </div>
         </Slider>
       </section>
-
+      <Divider sx={{ my: 4 }} /> {/* Separator after the carousel */}
       <section className="home-container__lender-CTA">
-        <div className="details-container">
-          <p className="lender-details">
+        <Box textAlign="center" padding={4} bgcolor="#f5f5f5">
+          <Typography variant="h6" color="#4CAF50" marginBottom={2}>
             <em>Diversify</em> your Portfolio by Partnering with M-cubed for
             endless <strong>Possibilities</strong>...
-          </p>
+          </Typography>
           <Button
             variant="contained"
             style={{ backgroundColor: "#4CAF50" }}
@@ -176,16 +201,15 @@ export default function Home() {
           >
             Sign up Now
           </Button>
-        </div>
+        </Box>
       </section>
-
       <section className="home-container__borrower-CTA">
-        <div>
-          <p className="borrower-details">
+        <Box textAlign="center" padding={4} bgcolor="#f5f5f5">
+          <Typography variant="h6" color="#4CAF50">
             <span>Apply </span>for <em>faster</em> funding for Qualifying Loan
-            Requests with ease with you in mind with every step of the way!
-          </p>
-        </div>
+            Requests with ease, keeping you in mind with every step of the way!
+          </Typography>
+        </Box>
       </section>
       <section className="home-container__container-5"></section>
     </main>
