@@ -107,6 +107,10 @@ const EditBorrowerForm = () => {
     updateBorrower(editBorrower);
   };
 
+  const handleCancel = () => {
+    navigate(`/borrowers/${id}/borrowerdashboard`);
+};
+
   return (
     <Box
       component="form"
@@ -129,7 +133,7 @@ const EditBorrowerForm = () => {
             margin="normal"
           />
         </Grid>
-        {/* <Grid item xs={14} sm={6}>
+        <Grid item xs={14} sm={6}>
           <TextField
             label="Password"
             name="password"
@@ -140,7 +144,7 @@ const EditBorrowerForm = () => {
             required
             margin="normal"
           />
-        </Grid> */}
+        </Grid>
         <Grid item xs={14} sm={6}>
           <TextField
             label="City"
@@ -177,7 +181,7 @@ const EditBorrowerForm = () => {
         <Grid item xs={14} sm={6}>
           <TextField
             label="Zip Code"
-            name="zipCode"
+            name="zip_code"
             value={editBorrower.zip_code}
             onChange={handleChange}
             fullWidth
@@ -201,7 +205,7 @@ const EditBorrowerForm = () => {
         <Grid item xs={12} sm={6}>
           <TextField
             label="Business Name"
-            name="businessName"
+            name="business_name"
             value={editBorrower.business_name}
             onChange={handleChange}
             fullWidth
@@ -212,7 +216,7 @@ const EditBorrowerForm = () => {
         <Grid item xs={12} sm={6}>
           <TextField
             label="Credit Score"
-            name="creditScore"
+            name="credit_score"
             type="number"
             value={editBorrower.credit_score}
             onChange={handleChange}
@@ -222,21 +226,6 @@ const EditBorrowerForm = () => {
             inputProps={{ min: 300, max: 850 }}
           />
         </Grid>
-        {/* <Grid item xs={12} sm={6}>
-          <TextField
-            label="Start Date"
-            name="startDate"
-            type="date"
-            value={editBorrower.start_date}
-            onChange={handleChange}
-            fullWidth
-            required
-            margin="normal"
-            InputLabelProps={{
-              shrink: true,
-            }}
-          />
-        </Grid> */}
         <Grid item xs={12} sm={6}>
           <TextField
             label="Industry"
@@ -265,6 +254,15 @@ const EditBorrowerForm = () => {
       >
         Update Information
       </Button>
+      <Button
+                variant="outlined"
+                color="secondary"
+                onClick={handleCancel}
+                fullWidth
+            >
+                Cancel
+            </Button>
+      
     </Box>
   );
 };

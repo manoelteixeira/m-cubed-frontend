@@ -13,6 +13,8 @@ import {
   DialogContentText,
   DialogTitle,
   MenuItem,
+  ThemeProvider,
+  createTheme
 } from "@mui/material";
 import { useNavigate } from "react-router";
 import MMMLogo from "../../assets/newLogo.png";
@@ -90,17 +92,28 @@ const BorrowerForm = () => {
   const handleClose = () => {
     setOpen(false); 
   };
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: "#4caf50", 
+        contrastText: "#ffffff", 
+      },
+    },
+  });
 
   const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
   });
 
   return (
+    <ThemeProvider theme={theme}>
+
+
     <Box
       component="form"
-      onSubmit={handleSubmit}
-      sx={{ maxWidth: 1500, margin: "auto", padding: 2 }}
-    >
+      onSubmit={ handleSubmit }
+      sx={{ maxWidth: '100%', margin: "auto", padding: 2 }}
+      >
       <Grid container component={Paper} sx={{ height: "100vh" }}>
         {/* Left Side Panel */}
         <Grid
@@ -114,13 +127,14 @@ const BorrowerForm = () => {
             justifyContent: "center",
             alignItems: "center",
             backgroundColor: "#f5f5f5",
+            
           }}
-        >
+          >
           <img
             src={MMMLogo}
             alt="MMM Logo"
             style={{ width: "150px", marginBottom: "20px" }}
-          />
+            />
           <Typography variant="h5" component="h1" gutterBottom>
             Welcome to MoneyMoneyMoney
           </Typography>
@@ -153,7 +167,7 @@ const BorrowerForm = () => {
 
         {/* Right Side Panel (Form) */}
         <Grid item xs={12} md={6} sx={{ p: 4 }}>
-          <Typography variant="h5" component="h2" sx={{ mb: 2 }}>
+          <Typography variant="h5" component="h2" sx={{ mb: 2, textAlign: 'center' }}>
             Borrower Registration
           </Typography>
           <Grid container spacing={2}>
@@ -167,7 +181,7 @@ const BorrowerForm = () => {
                 fullWidth
                 required
                 margin="normal"
-              />
+                />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -179,7 +193,7 @@ const BorrowerForm = () => {
                 fullWidth
                 required
                 margin="normal"
-              />
+                />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -190,7 +204,7 @@ const BorrowerForm = () => {
                 fullWidth
                 required
                 margin="normal"
-              />
+                />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -201,7 +215,7 @@ const BorrowerForm = () => {
                 fullWidth
                 required
                 margin="normal"
-              />
+                />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -212,7 +226,7 @@ const BorrowerForm = () => {
                 fullWidth
                 required
                 margin="normal"
-              />
+                />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -224,7 +238,7 @@ const BorrowerForm = () => {
                 required
                 margin="normal"
                 inputProps={{ maxLength: 10 }}
-              />
+                />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -236,7 +250,7 @@ const BorrowerForm = () => {
                 required
                 margin="normal"
                 inputProps={{ maxLength: 10 }}
-              />
+                />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -247,7 +261,7 @@ const BorrowerForm = () => {
                 fullWidth
                 required
                 margin="normal"
-              />
+                />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -260,7 +274,7 @@ const BorrowerForm = () => {
                 required
                 margin="normal"
                 inputProps={{ min: 300, max: 850 }}
-              />
+                />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -275,7 +289,7 @@ const BorrowerForm = () => {
                 InputLabelProps={{
                   shrink: true,
                 }}
-              />
+                />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -287,7 +301,7 @@ const BorrowerForm = () => {
                 required
                 margin="normal"
                 select
-              >
+                >
                 <MenuItem value="Retail">Retail</MenuItem>
                 <MenuItem value="Technology">Technology</MenuItem>
                 <MenuItem value="Healthcare">Healthcare</MenuItem>
@@ -302,7 +316,7 @@ const BorrowerForm = () => {
             type="submit"
             fullWidth
             sx={{ mt: 2 }}
-          >
+            >
             Get Funded!
           </Button>
           <Button
@@ -311,7 +325,7 @@ const BorrowerForm = () => {
             onClick={handleCancel}
             fullWidth
             sx={{ mt: 2 }}
-          >
+            >
             Cancel
           </Button>
         </Grid>
@@ -335,6 +349,7 @@ const BorrowerForm = () => {
         </DialogActions>
       </Dialog>
     </Box>
+  </ThemeProvider>
   );
 };
 
