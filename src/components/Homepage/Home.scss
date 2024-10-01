@@ -1,147 +1,38 @@
-// .home-container {
-//     height: 100vh;
-//     width: 100vw;
-//     display: grid;
-//     justify-content: center;
-//     align-items: center;
+/* Home.scss */
 
-//     &__landing-intro {
-//         display: flex;
-//         height: auto;
-//         justify-content: space-evenly;
-//         background-color: rgb(169, 240, 169);
+/* Keyframes for rotation */
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
 
-//         .first-slide-display {
-//             font-size: 20px;
-//             display: grid;
-//             align-items: center;
-//             width: 30%;
+/* Class for rotating logo */
+.rotating-logo {
+  animation: rotate 18s linear infinite; /* Adjust duration and timing as needed */
+}
 
-//             h1 {
-//                 font-size: 40px;
-//             }
+/* Additional styles (you can adjust these as necessary) */
+.home-container {
+  padding: 20px;
+}
 
-//             .btn-email-entry {
-//             display: grid;
-//             gap: 10px;
-
-//             p {
-//                 padding: 20px 0px;
-//             }
-//             input {
-//                 width: 300px;
-//                 height: 30px;
-//             }
-//             button {
-//                 width: 100px;
-//                 padding: 10px;
-//                 border-radius: 20px;
-//                 border: none;
-//             }
-//             }
-
-//         }
-//     }
-
-//     &__badge-names {
-//         display: flex;
-//         justify-content: space-evenly;
-//         padding: 30px;
-//         box-shadow: 22px 5px 15px 5px rgb(195, 199, 194);
-
-//         h2 {
-//             padding: 20px;
-//             border: 2px solid black;
-//             box-shadow: 2px 5px 18px 2px rgb(195, 199, 194);
-
-//         }
-//     }
-
-//     &__lender-CTA {
-//         background: rgb(236, 249, 239);
-//         height: auto;
-//         margin: 10px;
-//         display: grid;
-//         padding: 80px;
-//         grid-template-columns: repeat(2, 1fr);
-//         justify-content: center;
-//         align-items: center;
-
-//         .details-container {
-//             display: grid;
-//             justify-content: center;
-//             align-items: center;
-//             height: auto;
-
-//             .banner-signup {
-//                 background: rgb(255, 255, 255);
-//                 color: rgb(0, 0, 0);
-//                 place-self: center;
-//                 font-size: 30px;
-//                 margin-top: 40px;
-//                 padding: 10px;
-//                 width: auto;
-//                 border-radius: 20px;
-//                 border: 1px solid gray;
-
-//                 &:hover{
-//                     background: green;
-//                     color: white;
-//                     border: none;
-//                 }
-//             }
-//         }
-//         .lender-details {
-//             place-self: center;
-//             width: 80%;
-//             font-size: 40px;
-//             text-align: center;
-//         }
-
-//         #lender-photo {
-//            place-self: center;
-//             border-radius: 20px;
-//             width: 300px;
-//             box-shadow: 22px 5px 15px 5px rgb(195, 199, 194);
-
-//         }
-//     }
-
-//     &__borrower-CTA {
-//         height: auto;
-//         margin: 10px;
-//         display: grid;
-//         padding: 80px;
-//         grid-template-columns: repeat(2, 1fr);
-//         justify-content: center;
-//         align-items: center;
-
-//         #borrower-photo {
-//             place-self: center;
-//             border-radius: 40px;
-//             width: 300px;
-//             box-shadow: 22px 5px 15px 5px rgb(195, 199, 194);
-
-//         }
-
-//         .borrower-details {
-//             width: 60%;
-//             background: rgb(70, 145, 70);
-//             margin: 100px;
-//             padding: 50px;
-//             border-radius: 20px;
-//             font-size: 40px;
-//             text-align: center;
-//             box-shadow: 12px 10px 22px 0px rgb(191, 242, 176);
-
-//             span {
-//                 color: white;
-//             }
-//         }
-//     }
-// }
+.carousel-image {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+}
 
 .home-container__badge-names {
-  height: 400px; /* Adjust the height as needed */
-  overflow: hidden; /* Prevent overflow of images */
+  padding: 20px;
+  height: 400px;
+  overflow: hidden;
+}
+
+.home-container__lender-CTA,
+.home-container__borrower-CTA {
+  margin-top: 40px;
 }

@@ -42,17 +42,29 @@ export default function Home() {
           alignItems="flex-start"
           direction="column"
         >
-          <Box textAlign="center" marginTop="15%" className="logo-container">
+          <Box
+            textAlign="center"
+            marginTop="10%"
+            marginLeft="auto"
+            className="logo-container"
+            style={{
+              marginRight: "auto",
+              paddingLeft: "10%",
+            }}
+          >
             <img
               src={MMMLogo}
               alt="MMM Logo"
               className="mmm-logo rotating-logo"
               style={{
-                width: "60%",
-                maxWidth: "800px",
-                marginBottom: "20px",
+                width: "50%",
+                maxWidth: "600px",
+                marginBottom: "100px",
+                marginLeft: "auto",
+                marginRight: "auto",
               }}
             />
+            <Typography />
             <Typography
               variant="h5"
               className="tagline"
@@ -159,6 +171,7 @@ export default function Home() {
         </Grid>
       </Grid>
       <Divider sx={{ my: 4 }} />
+
       <section className="home-container__badge-names">
         <Slider {...settings}>
           <div>
@@ -193,16 +206,29 @@ export default function Home() {
       <section className="home-container__lender-CTA">
         <Grid container spacing={2} justifyContent="center" alignItems="center">
           <Grid item xs={12} md={6}>
-            <Card sx={{ padding: 4, bgcolor: "#f5f5f5" }}>
+            <Card sx={{ padding: 4, bgcolor: "#f5f5f5", height: "350px" }}>
               <CardContent>
-                <Typography variant="h6" color="#4CAF50" marginBottom={2}>
-                  Lenders: Maximize Your Lending Opportunities with MMM –
-                  Connect with Pre-Vetted Borrowers and Unlock New Avenues for
-                  Growth Today.
+                <Typography
+                  variant="h4"
+                  color="#4CAF50"
+                  gutterBottom
+                  sx={{ textAlign: "center", letterSpacing: "2px" }}
+                >
+                  LENDERS
+                </Typography>
+                <Typography
+                  variant="body1"
+                  color="text.primary"
+                  style={{
+                    marginTop: "20px",
+                  }}
+                >
+                  Maximize Your Lending Opportunities with MMM – Connect with
+                  Pre-Vetted Borrowers and Unlock New Avenues for Growth Today.
                 </Typography>
                 <Button
                   variant="contained"
-                  style={{ backgroundColor: "#4CAF50" }}
+                  style={{ backgroundColor: "#4CAF50", marginTop: "20px" }}
                   fullWidth
                 >
                   Start your trial period!
@@ -214,7 +240,7 @@ export default function Home() {
             <Box
               sx={{
                 width: "100%",
-                height: "300px",
+                height: "350px",
                 bgcolor: "#e0e0e0",
                 display: "flex",
                 justifyContent: "center",
@@ -238,7 +264,7 @@ export default function Home() {
             <Box
               sx={{
                 width: "100%",
-                height: "300px",
+                height: "350px",
                 bgcolor: "#e0e0e0",
                 display: "flex",
                 justifyContent: "center",
@@ -251,19 +277,38 @@ export default function Home() {
             </Box>
           </Grid>
           <Grid item xs={12} md={6}>
-            <Card sx={{ padding: 4, bgcolor: "#f5f5f5" }}>
+            <Card sx={{ padding: 4, bgcolor: "#f5f5f5", height: "350px" }}>
               <CardContent>
-                <Typography variant="h6" color="#4CAF50">
-                  Borrowers: Protect your credit score – apply through one
-                  streamlined process for minimal verifications and complete
-                  lender access.
+                <Typography
+                  variant="h4"
+                  color="#4CAF50"
+                  gutterBottom
+                  sx={{ textAlign: "center", letterSpacing: "2px" }}
+                >
+                  BORROWERS
                 </Typography>
+                <Typography
+                  variant="body1"
+                  color="text.primary"
+                  style={{
+                    marginTop: "20px",
+                  }}
+                >
+                  Protect Your Credit Score – Apply Through One Streamlined
+                  Process For Minimal Verifications And Complete Lender Access.
+                </Typography>
+                <Button
+                  variant="contained"
+                  style={{ backgroundColor: "#4CAF50", marginTop: "20px" }}
+                  fullWidth
+                >
+                  Apply Now
+                </Button>
               </CardContent>
             </Card>
           </Grid>
         </Grid>
       </section>
-      <section className="home-container__container-5"></section>
     </main>
   );
 }
