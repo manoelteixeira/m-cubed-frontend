@@ -9,7 +9,7 @@ const BDashboard = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const { id } = useParams();
-  const [borrowerData, setBorrowerData] = useState(null);
+  const [borrowerData, setBorrowerData] = useState();
   const navigate = useNavigate()
   
 
@@ -56,6 +56,8 @@ const BDashboard = () => {
 
   const openLoanApplicationForm = () => {
     navigate(`/borrowers/${id}/new`);
+
+    console.log(borrowerData)
   }
 
   return (

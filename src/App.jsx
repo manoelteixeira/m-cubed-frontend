@@ -5,7 +5,6 @@ import Header from "./components/Header";
 import Home from "./Pages/Homepage";
 import Lenderpage from "./Pages/Lenderpage";
 import AboutUs from "./components/AboutFolder/AboutUs";
-// import SignInForm from "./components/Library/AppFiles/SignInForm";
 import SignUp from "./Pages/SignUp";
 import ListOfLenders from "./Pages/ListOfLenders";
 import NewLender from "./Pages/NewLender";
@@ -17,18 +16,7 @@ import LoanRequestForm from "./components/LoanRequest/LoanRequestForm";
 import EmailNewsletter from "./Pages/EmailNewsletter";
 import EditBorrowerForm from "./components/EditUserFolder/EditBorrowerForm";
 import LenderProposalPage from "./Pages/LenderProposalPage";
-// const theme = createTheme({
-//   palette: {
-//     primary: {
-//       main: "#4caf50", // Green color for buttons
-//       contrastText: "#ffffff", // White text color for contrast
-//     },
-//     secondary: {
-//       main: "#4caf50", // Use green color for secondary buttons as well
-//       contrastText: "#ffffff", // White text color for contrast
-//     },
-//   },
-// });
+import LoginPage from "./Pages/LoginPage";
 function App() {
   return (
     <>
@@ -37,15 +25,12 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<AboutUs />} />
-        {/* <Route path="/login" element={<SignInForm />} /> */}
+        <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignUp />} />
-        <Route path="/signup/borrower" element={<></>}></Route>
-        <Route path="/signup/lender" element={<></>}></Route>
-        {/* <Route path="/borrowers/:id" element={<BDashboard/>} /> */}
         {/* <Route path='/signup' element={<SignUp/>}/> */}
         <Route path="/lenders" element={<ListOfLenders />} />
-        <Route path="/lenders/new" element={<NewLender />} />
-        <Route path="/borrowers/new" element={<NewBorrower />} />
+        <Route path="/lenders/signup" element={<NewLender />} />
+        <Route path="/borrowers/signup" element={<NewBorrower />} />
         <Route path="/lenders/:id/lenderdashboard" element={<Lenderpage />} />
         <Route path='/borrowers/:id/borrowerdashboard' element={<BDashboard/>}/>
         <Route path="/borrowers/:id/new" element={<LoanRequestForm/>} />

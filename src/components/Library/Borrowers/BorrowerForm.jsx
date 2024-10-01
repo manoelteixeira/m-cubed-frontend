@@ -9,7 +9,6 @@ import {
   Paper,
 } from "@mui/material";
 
-const API = "YOUR_API_ENDPOINT";
 
 const BorrowerForm = () => {
   const [formData, setFormData] = useState({
@@ -25,28 +24,6 @@ const BorrowerForm = () => {
     start_date: "",
     industry: "",
   });
-  const createNewBorrower = async (formData) => {
-    try {
-      const response = await fetch(`${API}/borrowers`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-  
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-  
-      const results = await response.json();
-      const borrowerId = results.id;
-  
-      console.log(`Borrower created with ID: ${borrowerId}`);
-    } catch (error) {
-      console.error("Error creating borrower:", error);
-    }
-  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;

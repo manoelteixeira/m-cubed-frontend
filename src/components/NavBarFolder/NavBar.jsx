@@ -1,9 +1,11 @@
 import React from "react";
-import { AppBar, Toolbar, Button, Menu, MenuItem } from "@mui/material";
+import { useParams } from "react-router-dom";
+import { AppBar, Toolbar, Button, Menu, MenuItem, Link } from "@mui/material";
 import { ArrowDropDown } from "@mui/icons-material";
 
 const Navbar = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const { id }= useParams()
 
   const handleDropdownClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -12,6 +14,8 @@ const Navbar = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+
 
   return (
     <AppBar
@@ -24,7 +28,7 @@ const Navbar = () => {
       <Toolbar>
         <Button
           color="inherit"
-          href="/borrower"
+          href={`/borrowers/${id}/borrowerdashboard`}
           sx={{ color: "#fff", fontSize: "1rem" }}
         >
           Borrower
@@ -32,7 +36,7 @@ const Navbar = () => {
         <span style={{ color: "#fff", margin: "0 8px" }}>|</span>
         <Button
           color="inherit"
-          href="/lender"
+          href={`/lenders/${id}/lenderdashboard`}
           sx={{ color: "#fff", fontSize: "1rem" }}
         >
           Lender
@@ -40,7 +44,7 @@ const Navbar = () => {
         <div style={{ flexGrow: 1 }} />
         <Button
           color="inherit"
-          href="/why-mmm"
+          href="/about"
           sx={{ color: "#fff", fontSize: "1rem" }}
         >
           WHY MMM
@@ -78,15 +82,24 @@ const Navbar = () => {
         >
           <MenuItem
             onClick={handleClose}
-            sx={{ color: "#000", fontSize: "1rem" }}
+            sx={{ color: "#000", fontSize: "1rem",}}
           >
-            Borrower
+            <Link href={`/borrowers/signup`}
+            sx={{ 
+              textDecoration: 'none',
+              color: "#000"          
+            }}>Borrower</Link>
           </MenuItem>
           <MenuItem
             onClick={handleClose}
             sx={{ color: "#000", fontSize: "1rem" }}
           >
-            Lender
+          <Link href={`/lenders/signup`}
+          sx={{ 
+            textDecoration: 'none',
+            color: "#000"           
+          }}>Lender</Link>
+
           </MenuItem>
         </Menu>
       </Toolbar>
