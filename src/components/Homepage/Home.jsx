@@ -1,5 +1,6 @@
 import React from "react";
 import "./Home.scss";
+import Footer from "../../components/Library/AppFiles/Footer";
 import MMMLogo from "../../components/Library/IMG/MMMLogo.png";
 import { Link } from "react-router-dom";
 import {
@@ -17,7 +18,6 @@ import Slider from "react-slick";
 import QRCodeComponent from "../QRCodeComponent";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-
 // Home component
 export default function Home() {
   const settings = {
@@ -309,6 +309,7 @@ export default function Home() {
           </Grid>
         </Grid>
       </section>
+      <Footer />
     </main>
   );
 }
