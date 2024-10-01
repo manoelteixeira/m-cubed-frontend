@@ -57,7 +57,7 @@ export default function Home() {
               alt="MMM Logo"
               className="mmm-logo rotating-logo"
               style={{
-                width: "50%",
+                width: "70%",
                 maxWidth: "600px",
                 marginBottom: "100px",
                 marginLeft: "auto",
