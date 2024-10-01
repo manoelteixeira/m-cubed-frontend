@@ -14,7 +14,7 @@ export default function NewLenderForm() {
 
 
   const navigate = useNavigate()
-const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false);
 
 
     const [newLender, setNewLender] = useState({
@@ -47,8 +47,8 @@ const [open, setOpen] = useState(false);
       .then((response) =>  response.json())
       .then((results) => {
           console.log('Server response:',results);
-          // const lenderId = results.id;
-          // navigate(`lenders/${lenderId}/lenderdashboard`);
+          const id = results.id;
+          navigate(`lenders/${id}/lenderdashboard`);
       })
       .catch((error) => {
           console.error('Error creating lender:', error);

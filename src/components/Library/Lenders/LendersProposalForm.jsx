@@ -10,6 +10,7 @@ import {
   Checkbox,
 } from "@mui/material";
 
+
 const LoanProposalForm = () => {
   // State to hold form data
   const [formData, setFormData] = useState({

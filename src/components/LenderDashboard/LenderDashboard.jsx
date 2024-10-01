@@ -171,6 +171,8 @@ const {id} = useParams()
               onPageChange={handleChangePageBorrowers}
               rowsPerPage={rowsPerPageBorrowers}
               onRowsPerPageChange={handleChangeRowsPerPageBorrowers}
+              rowsPerPageOptions={[5,10, 25, 50, 100]} 
+
             />
           </Paper>
         </Grid>
@@ -216,6 +218,7 @@ const {id} = useParams()
               onPageChange={handleChangePageLoanRequests}
               rowsPerPage={rowsPerPageLoanRequests}
               onRowsPerPageChange={handleChangeRowsPerPageLoanRequests}
+              rowsPerPageOptions={[5,10, 25, 50, 100]} 
             />
           </Paper>
         </Grid>

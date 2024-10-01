@@ -17,21 +17,21 @@ import LoanRequestForm from "./components/LoanRequest/LoanRequestForm";
 import EmailNewsletter from "./Pages/EmailNewsletter";
 import EditBorrowerForm from "./components/EditUserFolder/EditBorrowerForm";
 import LenderProposalPage from "./Pages/LenderProposalPage";
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: "#4caf50", // Green color for buttons
-      contrastText: "#ffffff", // White text color for contrast
-    },
-    secondary: {
-      main: "#4caf50", // Use green color for secondary buttons as well
-      contrastText: "#ffffff", // White text color for contrast
-    },
-  },
-});
+// const theme = createTheme({
+//   palette: {
+//     primary: {
+//       main: "#4caf50", // Green color for buttons
+//       contrastText: "#ffffff", // White text color for contrast
+//     },
+//     secondary: {
+//       main: "#4caf50", // Use green color for secondary buttons as well
+//       contrastText: "#ffffff", // White text color for contrast
+//     },
+//   },
+// });
 function App() {
   return (
-    <ThemeProvider theme={theme}>
+    <>
       <Header /> {/* Call to Action Header for Services */}
       <NavBar />
       <Routes>
@@ -41,23 +41,24 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signup/borrower" element={<></>}></Route>
         <Route path="/signup/lender" element={<></>}></Route>
-        <Route path="/borrowers/:id" element={<BDashboard/>} />
+        {/* <Route path="/borrowers/:id" element={<BDashboard/>} /> */}
         {/* <Route path='/signup' element={<SignUp/>}/> */}
         <Route path="/lenders" element={<ListOfLenders />} />
         <Route path="/lenders/new" element={<NewLender />} />
         <Route path="/borrowers/new" element={<NewBorrower />} />
         <Route path="/lenders/:id/lenderdashboard" element={<Lenderpage />} />
+        <Route path='/borrowers/:id/borrowerdashboard' element={<BDashboard/>}/>
         <Route path="/borrowers/:id/new" element={<LoanRequestForm/>} />
         <Route path="/lenders/:id/edit" element={<EditLenderForm />} />
         <Route path="/borrowers/:id/edit" element={<EditBorrowerForm />} />
         <Route path="/lenders/:id/proposals" element={<></>} />
-        <Route path="/lenders/:id/proposals/:id" element={<LenderProposalPage/>} />
+        <Route path="/lenders/:id/proposals/" element={<LenderProposalPage/>} />
         <Route path="borrowers/:id/requests/:id" element={<></>} />
         <Route path="/disclaimer" element={<></>} />{" "}
         <Route path="/newsletter" element={<EmailNewsletter />}></Route>
         {/* FF: Info page for Borrowers/Lenders to know about additional services */}
       </Routes>
-    </ThemeProvider>
+    </>
   );
 }
 
