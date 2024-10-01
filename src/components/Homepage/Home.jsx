@@ -158,7 +158,7 @@ export default function Home() {
           </Card>
         </Grid>
       </Grid>
-      <Divider sx={{ my: 4 }} /> {/* Separator before the carousel */}
+      <Divider sx={{ my: 4 }} />
       <section className="home-container__badge-names">
         <Slider {...settings}>
           <div>
@@ -166,7 +166,7 @@ export default function Home() {
               src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1727713128/cami-talpone-eWzC1UwAIlw-unsplash_tkf4is.jpg"
               alt="Borrower1"
               className="carousel-image"
-              style={{ width: "100%", height: "200px", objectFit: "cover" }} // Consistent size for images
+              style={{ width: "100%", height: "300px", objectFit: "cover" }}
             />
           </div>
           <div>
@@ -174,7 +174,7 @@ export default function Home() {
               src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1727713129/khachik-simonian-XYavU5BGF9o-unsplash_ejbz5m.jpg"
               alt="Borrower2"
               className="carousel-image"
-              style={{ width: "100%", height: "200px", objectFit: "cover" }} // Consistent size for images
+              style={{ width: "100%", height: "300px", objectFit: "cover" }}
             />
           </div>
           <div>
@@ -182,34 +182,86 @@ export default function Home() {
               src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1727713132/s-o-c-i-a-l-c-u-t-7KkDiSs5UdQ-unsplash_1_jmcqts.jpg"
               alt="Borrower3"
               className="carousel-image"
-              style={{ width: "100%", height: "200px", objectFit: "cover" }} // Consistent size for images
+              style={{ width: "100%", height: "300px", objectFit: "cover" }}
             />
           </div>
         </Slider>
       </section>
-      <Divider sx={{ my: 4 }} /> {/* Separator after the carousel */}
+      <Divider sx={{ my: 4 }} />
+
+      {/* Lender Section */}
       <section className="home-container__lender-CTA">
-        <Box textAlign="center" padding={4} bgcolor="#f5f5f5">
-          <Typography variant="h6" color="#4CAF50" marginBottom={2}>
-            Lenders: Maximize Your Lending Opportunities with MMM – Connect with
-            Pre-Vetted Borrowers and Unlock New Avenues for Growth Today.
-          </Typography>
-          <Button
-            variant="contained"
-            style={{ backgroundColor: "#4CAF50" }}
-            className="banner-signup"
-          >
-            Start your trial period!
-          </Button>
-        </Box>
+        <Grid container spacing={2} justifyContent="center" alignItems="center">
+          <Grid item xs={12} md={6}>
+            <Card sx={{ padding: 4, bgcolor: "#f5f5f5" }}>
+              <CardContent>
+                <Typography variant="h6" color="#4CAF50" marginBottom={2}>
+                  Lenders: Maximize Your Lending Opportunities with MMM –
+                  Connect with Pre-Vetted Borrowers and Unlock New Avenues for
+                  Growth Today.
+                </Typography>
+                <Button
+                  variant="contained"
+                  style={{ backgroundColor: "#4CAF50" }}
+                  fullWidth
+                >
+                  Start your trial period!
+                </Button>
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <Box
+              sx={{
+                width: "100%",
+                height: "300px",
+                bgcolor: "#e0e0e0",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Typography variant="h6" color="text.secondary">
+                Placeholder for Lender Image
+              </Typography>
+            </Box>
+          </Grid>
+        </Grid>
       </section>
+
+      <Divider sx={{ my: 4 }} />
+
+      {/* Borrower Section */}
       <section className="home-container__borrower-CTA">
-        <Box textAlign="center" padding={4} bgcolor="#f5f5f5">
-          <Typography variant="h6" color="#4CAF50">
-            Borrowers: Protect your credit score – apply through one streamlined
-            process for minimal verifications and complete lender access.
-          </Typography>
-        </Box>
+        <Grid container spacing={2} justifyContent="center" alignItems="center">
+          <Grid item xs={12} md={6}>
+            <Box
+              sx={{
+                width: "100%",
+                height: "300px",
+                bgcolor: "#e0e0e0",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Typography variant="h6" color="text.secondary">
+                Placeholder for Borrower Image
+              </Typography>
+            </Box>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <Card sx={{ padding: 4, bgcolor: "#f5f5f5" }}>
+              <CardContent>
+                <Typography variant="h6" color="#4CAF50">
+                  Borrowers: Protect your credit score – apply through one
+                  streamlined process for minimal verifications and complete
+                  lender access.
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+        </Grid>
       </section>
       <section className="home-container__container-5"></section>
     </main>
