@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { getBorrower, getAllLoanRequests, updateRequest, deleteRequest } from '../services/serviceRequest';
+import { getBorrower, getAllLoanRequests, deleteRequest } from '../services/serviceRequest';
 import './BDashboard.css'
 
 
@@ -14,49 +14,67 @@ const BDashboard = () => {
   
 
   useEffect(() => {
-    const fetchBorrower = async () => {
-     
+    const fetchBorrowerData = async () => {
       try {
-        const data = await getBorrower(id);
-        console.log(data)
-        if (data) {
-          setBorrowerData(data);
+        const borrower = await getBorrower(id);
+        if (borrower) {
+          setBorrowerData(borrower);
         } else {
-          console.error("No borrower data returned.");
+          setError("No borrower data returned.");
         }
-      } catch (err) {
-        console.error('Error fetching borrower:', err);
-      } finally {
-        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching borrower data:", error);
+        setError("Error fetching borrower data.");
       }
     };
   
-    const fetchLoanRequests = async () => {
+    const fetchLoanRequestsData = async () => {
       try {
         const loanRequests = await getAllLoanRequests(id);
         if (loanRequests) {
           setRequests(loanRequests);
-        }else {
-          console.error("No loan requests data returned.");
+        } else {
+          setError("No loan requests data returned.");
         }
-      } catch (err) {
-        console.error('Error fetching loan requests:', err);
-      } finally {
-        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching loan requests:", error);
+        setError("Error fetching loan requests.");
       }
     };
   
-    fetchBorrower();
-    fetchLoanRequests();
+    const fetchData = async () => {
+      await fetchBorrowerData();
+      await fetchLoanRequestsData();
+      setLoading(false);
+    };
+    fetchData();
   }, [id]);
   
+  
+  const handleDeleteRequest = async (requestId) => {
+    try {
+      const deletedId = await deleteRequest(id, requestId);
+      if (deletedId) {
+        setRequests((prevRequests) => prevRequests.filter((req) => req.id !== deletedId));
+      }
+    } catch (error) {
+      setError("Error deleting loan request.");
+      console.error("Error deleting loan request:", error);
+    }
+  };
+
+  const handleUpdateRequest = (requestId) => {
+    navigate(`/borrowers/${id}/edit-request/${requestId}`);
+  };
   
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error fetching data!</p>;
 
   const openLoanApplicationForm = () => {
-    navigate(`/borrowers/${id}/new`);
+    navigate(`/borrowers/${id}/requests/new`);
   }
+ 
+
 
   return (
     <div className="borrower-dashboard">
@@ -67,6 +85,7 @@ const BDashboard = () => {
         <p>Your loan applications and offers are listed below.</p>
         <button className="new-application-btn" 
             onClick={openLoanApplicationForm}>+ New Application</button>
+            
       </header>
 
 
@@ -79,7 +98,6 @@ const BDashboard = () => {
         <button className="reset-filters">Reset Filters</button>
 
       </div>
-
 
       <table className="applications-table">
           
@@ -95,8 +113,8 @@ const BDashboard = () => {
           </thead>
 
           <tbody>
-              {requests.map((request, index) => (
-               <tr key={index}>
+              {requests.map((request) => (
+               <tr key={request.id}>
                 <td>{request.id}</td>
                 <td>{request.lenderName}</td>
                 <td>{request.value}</td>
@@ -105,8 +123,11 @@ const BDashboard = () => {
                 <td>
 
 
-                  <Link to={`/borrowers/${id}/edit`}><button onClick={() => updateRequest(request.id, updatedData)}>Update</button></Link>
-                  <button onClick={() => deleteRequest(request.id)}>Delete</button>
+                  
+                <button onClick={() => handleUpdateRequest(request.id)}>Update</button>
+                 
+
+                  <button onClick={() => handleDeleteRequest(request.id)}>Delete</button>
                 </td>
                </tr>
               ))}

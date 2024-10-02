@@ -17,7 +17,8 @@ import LoanRequestForm from "./components/LoanRequest/LoanRequestForm";
 import EmailNewsletter from "./Pages/EmailNewsletter";
 import EditBorrowerForm from "./components/EditUserFolder/EditBorrowerForm";
 import LenderProposalPage from "./Pages/LenderProposalPage";
-// const theme = createTheme({
+import EditLoanRequestForm from "./components/editLoanRequestForm/editLoanRequestForm";
+//const theme = createTheme({
 //   palette: {
 //     primary: {
 //       main: "#4caf50", // Green color for buttons
@@ -41,14 +42,14 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signup/borrower" element={<></>}></Route>
         <Route path="/signup/lender" element={<></>}></Route>
-        {/* <Route path="/borrowers/:id" element={<BDashboard/>} /> */}
+        <Route path="/borrowers/:id" element={<BDashboard/>} />
+        <Route path="/borrowers/:id/edit-request/:requestId" element={<EditLoanRequestForm />} />
         {/* <Route path='/signup' element={<SignUp/>}/> */}
         <Route path="/lenders" element={<ListOfLenders />} />
         <Route path="/lenders/new" element={<NewLender />} />
         <Route path="/borrowers/new" element={<NewBorrower />} />
         <Route path="/lenders/:id/lenderdashboard" element={<Lenderpage />} />
-        <Route path='/borrowers/:id/borrowerdashboard' element={<BDashboard/>}/>
-        <Route path="/borrowers/:id/new" element={<LoanRequestForm/>} />
+        <Route path="/borrowers/:id/requests/new" element={<LoanRequestForm/>} />
         <Route path="/lenders/:id/edit" element={<EditLenderForm />} />
         <Route path="/borrowers/:id/edit" element={<EditBorrowerForm />} />
         <Route path="/lenders/:id/proposals" element={<></>} />
