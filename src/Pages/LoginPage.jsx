@@ -1,11 +1,12 @@
 import React from 'react'
-import Login from '../components/Library/AppFiles/Login'
+import Login from '../components/Login/Login'
 
 export const LoginPage = () => {
   return (
     <div>
-      LoginPage
+      Log in
       <Login />
     </div>
   )
 }
+
