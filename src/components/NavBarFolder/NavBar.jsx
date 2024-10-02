@@ -42,7 +42,7 @@ const NavBar = () => {
           edge="start"
           aria-label="mmm logo"
           onClick={handleLogoClick}
-          sx={{ color: "#056612", marginRight: 2 }}
+          sx={{ color: "#00a250", marginRight: 2 }}
         >
           <img src={MMMIcon} alt="MMM Logo" style={{ width: 40, height: 40 }} />
         </IconButton>
@@ -50,19 +50,19 @@ const NavBar = () => {
           color="inherit"
           href="/borrower"
           sx={{
-            color: "#056612",
+            color: "#00a250",
             fontSize: "1rem",
             fontWeight: "bold",
           }}
         >
           Borrower
         </Button>
-        <span style={{ color: "#056612", margin: "0 8px" }}>|</span>
+        <span style={{ color: "#00a250", margin: "0 8px" }}>|</span>
         <Button
           color="inherit"
           href="/lender"
           sx={{
-            color: "#056612",
+            color: "#00a250",
             fontSize: "1rem",
             fontWeight: "bold",
           }}
@@ -74,19 +74,19 @@ const NavBar = () => {
           color="inherit"
           href="/why-mmm"
           sx={{
-            color: "#056612",
+            color: "#00a250",
             fontSize: "1rem",
             fontWeight: "bold",
           }}
         >
           WHY MMM
         </Button>
-        <span style={{ color: "#056612", margin: "0 4px" }}>|</span>
+        <span style={{ color: "#00a250", margin: "0 4px" }}>|</span>
         <Button
           color="inherit"
           href="/meet-the-team"
           sx={{
-            color: "#056612",
+            color: "#00a250",
             fontSize: "1rem",
             fontWeight: "bold",
           }}
@@ -99,8 +99,8 @@ const NavBar = () => {
           onClick={handleDropdownClick}
           endIcon={<ArrowDropDown />}
           sx={{
-            borderColor: "#056612",
-            color: "#056612",
+            borderColor: "#00a250",
+            color: "#00a250",
             marginLeft: 2,
             fontSize: "1rem",
             fontWeight: "bold",
