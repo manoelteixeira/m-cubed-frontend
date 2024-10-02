@@ -1,7 +1,7 @@
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import NavBar from "./components/NavBarFolder/NavBar";
-import Header from "./components/Header";
+// import Header from "./components/Header";
 import Home from "./Pages/Homepage";
 import Lenderpage from "./Pages/Lenderpage";
 import AboutUs from "./components/AboutFolder/AboutUs";
@@ -20,7 +20,7 @@ import LoginPage from "./Pages/LoginPage";
 function App() {
   return (
     <>
-      <Header /> {/* Call to Action Header for Services */}
+      {/* <Header /> Call to Action Header for Services */}
       <NavBar />
       <Routes>
         <Route path="/" element={<Home />} />
@@ -32,12 +32,18 @@ function App() {
         <Route path="/lenders/signup" element={<NewLender />} />
         <Route path="/borrowers/signup" element={<NewBorrower />} />
         <Route path="/lenders/:id/lenderdashboard" element={<Lenderpage />} />
-        <Route path='/borrowers/:id/borrowerdashboard' element={<BDashboard/>}/>
-        <Route path="/borrowers/:id/new" element={<LoanRequestForm/>} />
+        <Route
+          path="/borrowers/:id/borrowerdashboard"
+          element={<BDashboard />}
+        />
+        <Route path="/borrowers/:id/new" element={<LoanRequestForm />} />
         <Route path="/lenders/:id/edit" element={<EditLenderForm />} />
         <Route path="/borrowers/:id/edit" element={<EditBorrowerForm />} />
         <Route path="/lenders/:id/proposals" element={<></>} />
-        <Route path="/lenders/:id/proposals/" element={<LenderProposalPage/>} />
+        <Route
+          path="/lenders/:id/proposals/"
+          element={<LenderProposalPage />}
+        />
         <Route path="borrowers/:id/requests/:id" element={<></>} />
         <Route path="/disclaimer" element={<></>} />{" "}
         <Route path="/newsletter" element={<EmailNewsletter />}></Route>
