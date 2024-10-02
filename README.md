@@ -1,8 +1,10 @@
-# React + Vite
+# M-Cubed Front End
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Front-end for [M-Cubed](https://github.com/manoelteixeira/m-cubed-backend) app
 
-Currently, two official plugins are available:
+## Instalation And Setup
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+1. **Fork** and **Clone** this repository
+2. Create a .env file with echo `VITE_BASE_URL=<url for the backend>`
+3. Install project dependencies with `npm install`
+4. Run the project with `npm run dev`
