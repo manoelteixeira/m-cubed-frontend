@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import {
   Container,
   Box,
@@ -14,6 +15,9 @@ import {
 const API = import.meta.env.VITE_BASE_URL
 
 export default function LoanProposalForm() {
+    const { id}  = useParams()
+
+
   const [lenderproposal, setLenderProposal] = useState({
     title: '',
     description: '',
@@ -41,7 +45,7 @@ export default function LoanProposalForm() {
     setSuccessMessage('');
 
     try {
-      const response = await fetch(`${API}/loan_proposals`, {
+      const response = await fetch(`${API}/lenders/${id}/proposals'`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -61,7 +65,7 @@ export default function LoanProposalForm() {
         description: '',
         loan_amount: '',
         interest_rate: '',
-        repayment_term: '',
+        repayment_term: 0,
         accepted: false,
         lender_id: '',
         loan_request_id: '',
