@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Typography, Grid, TextField, Button, Paper } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import MMMLogo from "../IMG/MMMLogo.png";
+import MMMLogo from "../../../../src/assets/MMMlogo.png";
 
 const theme = createTheme({
   palette: {
