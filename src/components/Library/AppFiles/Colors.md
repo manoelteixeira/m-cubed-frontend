@@ -15,3 +15,6 @@
 
 #yellow
 #ffd700
+
+#backgroundwhite
+#f6f7f8
