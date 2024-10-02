@@ -11,9 +11,8 @@ import {
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
-//import styles from "./LoginForm.module.scss";
 
-const Login = ({ setUser }) => {
+const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
@@ -34,11 +33,12 @@ const Login = ({ setUser }) => {
             });
             const data = await response.json();
             if (response.ok) {
-                setUser(data);
+                console.log("Login success:", data);
+                // Navigate based on user type
                 if (data.lender) {
                     navigate(`/lenders/${data.lender.id}/lenderdashboard`);
                 } else {
-                    navigate(`/borrowers/${data.borrower.id}/borrowersdashboard`);
+                    navigate(`/borrowers/${data.borrower.id}/borrowerdashboard`);
                 }
             } else {
                 setError(data.error || "Login failed. Please check your credentials.");
@@ -49,8 +49,30 @@ const Login = ({ setUser }) => {
         }
     };
 
-    const handleGoogleSuccess = (response) => {
-        console.log(response);
+    const handleGoogleSuccess = async (credentialResponse) => {
+        const { credential } = credentialResponse;
+
+        // Send the credential to your server for verification
+        const response = await fetch(`${API}/google-login`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ idToken: credential }),
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+            console.log("Google login success:", data);
+            // Navigate based on user type
+            if (data.lender) {
+                navigate(`/lenders/${data.lender.id}/lenderdashboard`);
+            } else {
+                navigate(`/borrowers/${data.borrower.id}/borrowerdashboard`);
+            }
+        } else {
+            setError(data.error || "Google login failed. Please try again.");
+        }
     };
 
     const handleGoogleFailure = (response) => {
@@ -59,12 +81,12 @@ const Login = ({ setUser }) => {
     };
 
     const togglePasswordVisibility = () => {
-        setShowPassword(!showPassword);
+        setShowPassword((prev) => !prev);
     };
 
     return (
-        <Box component="form" onSubmit={handleLogin} className={styles.formContainer}>
-            <Typography variant="h5" component="h2" sx={{ mb: 2 }}>
+        <Box component="form" onSubmit={handleLogin} sx={{ maxWidth: 400, mx: "auto", mt: 4 }}>
+            <Typography variant="h5" component="h2" sx={{ mb: 2, textAlign: "center" }}>
                 Log In
             </Typography>
             <Grid container spacing={2}>
@@ -107,7 +129,7 @@ const Login = ({ setUser }) => {
                 </Grid>
             </Grid>
             {error && (
-                <Typography color="error" sx={{ mt: 1 }}>
+                <Typography color="error" sx={{ mt: 1, textAlign: "center" }}>
                     {error}
                 </Typography>
             )}
@@ -115,7 +137,10 @@ const Login = ({ setUser }) => {
                 Login
             </Button>
             <GoogleOAuthProvider clientId="YOUR_GOOGLE_CLIENT_ID">
-                <GoogleLogin onSuccess={handleGoogleSuccess} onError={handleGoogleFailure} />
+                <GoogleLogin
+                    onSuccess={handleGoogleSuccess}
+                    onError={handleGoogleFailure}
+                />
             </GoogleOAuthProvider>
         </Box>
     );
