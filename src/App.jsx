@@ -23,9 +23,9 @@ function App() {
       {/* <Header /> Call to Action Header for Services */}
       <NavBar />
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<AboutUs />} />
-        <Route path="/login" element={<LoginPage />} />
+        <Route path="/" element={<Home/>} />
+        <Route path="/about" element={<AboutUs/>} />
+        <Route path="/login" element={<LoginPage/>} />
         {/* <Route path="/signup" element={<SignUp/>} /> */}
         {/* <Route path='/signup' element={<SignUp/>}/> */}
         <Route path="/lenders" element={<ListOfLenders />} />
@@ -40,9 +40,7 @@ function App() {
         <Route path="/lenders/:id/edit" element={<EditLenderForm />} />
         <Route path="/borrowers/:id/edit" element={<EditBorrowerForm />} />
         <Route path="/lenders/:id/proposals" element={<></>} />
-        <Route
-          path="/lenders/:id/proposals/"
-          element={<LenderProposalPage />}
+        <Route path="/lenders/:id/proposals/" element={<LenderProposalPage />}
         />
         <Route path="borrowers/:id/requests/:id" element={<></>} />
         <Route path="/disclaimer" element={<></>} />{" "}
