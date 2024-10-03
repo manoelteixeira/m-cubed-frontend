@@ -48,13 +48,12 @@ const BorrowerForm = () => {
         },
         body: JSON.stringify(newborrower),
       });
-      console.log(response)
-
       const results = await response.json();
+      console.log(results)
       const id = results.borrower?.id;
 
       console.log(`Borrower created with ID: ${id}`);
-      navigate(`/borrowers/${id}/borrowersdashboard`);
+      navigate(`/borrowers/${id}/borrowerdashboard`);
     } catch (error) {
       console.error("Error creating borrower:", error);
     }

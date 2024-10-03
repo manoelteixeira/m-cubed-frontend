@@ -2,19 +2,31 @@ const API = import.meta.env.VITE_BASE_URL;
 
 
 // Handle adding a new request
-export const addRequest = async (newRequest) => {
-    try {
-      const response = await fetch(`${API}/borrowers/${id}/requests`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newRequest),
-      });
-      const data = await response.json();
-      setRequests((prevRequests) => [...prevRequests, data]);
-    } catch (err) {
-      console.error('Error adding request:', err);
+export const addRequest = async (newborrower) => {
+  try {
+    const response = await fetch(`${API}/borrowers`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newborrower),
+    });
+
+    if (!response.ok) {
+      const errorDetails = await response.json();
+      throw new Error(`Failed to create borrower: ${errorDetails.error}`);
     }
-  };
+
+    const results = await response.json();
+    const id = results.borrower?.id;
+
+    console.log(`Borrower created with ID: ${id}`);
+    navigate(`/borrowers/${id}/borrowerdashboard`);
+  } catch (error) {
+    console.error("Error creating borrower:", error);
+  }
+};
+
   
   // Handle updating a request
   export const updateRequest = async (requestId, updatedRequest) => {
@@ -64,9 +76,9 @@ export const getBorrower = async (borrowerId) => {
 };
 
   // handle get * loan request
-  export const getAllLoanRequests = async (borrowerId) => {
+  export const getAllLoanRequests = async (id) => {
     try {
-      const response = await fetch(`${API}/borrowers/${borrowerId}/requests`, {
+      const response = await fetch(`${API}/borrowers/${id}/requests`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
       });
