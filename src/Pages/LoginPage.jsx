@@ -1,7 +1,12 @@
 import React from 'react'
-import LoginForm from '../components/LoginFormFolder.jsx/LoginForm'
-export default function LoginPage() {
+import Login from '../components/Login/Login'
+
+export const LoginPage = () => {
   return (
-    <div><LoginForm/></div>
+    <div>
+      Log in
+      <Login />
+    </div>
   )
 }
+

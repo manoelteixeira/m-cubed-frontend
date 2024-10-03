@@ -5,7 +5,7 @@ import NavBar from "./components/NavBarFolder/NavBar";
 import Home from "./Pages/Homepage";
 import Lenderpage from "./Pages/Lenderpage";
 import AboutUs from "./components/AboutFolder/AboutUs";
-import SignUp from "./Pages/SignUp";
+import { LoginPage } from "./Pages/LoginPage";
 import ListOfLenders from "./Pages/ListOfLenders";
 import NewLender from "./Pages/NewLender";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -16,7 +16,7 @@ import LoanRequestForm from "./components/LoanRequest/LoanRequestForm";
 import EmailNewsletter from "./Pages/EmailNewsletter";
 import EditBorrowerForm from "./components/EditUserFolder/EditBorrowerForm";
 import LenderProposalPage from "./Pages/LenderProposalPage";
-import LoginPage from "./Pages/LoginPage";
+
 function App() {
   return (
     <>
@@ -26,11 +26,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<AboutUs />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<SignUp />} />
-        {/* <Route path='/signup' element={<SignUp/>}/> */}
         <Route path="/lenders" element={<ListOfLenders />} />
-        <Route path="/lenders/signup" element={<NewLender />} />
-        <Route path="/borrowers/signup" element={<NewBorrower />} />
         <Route path="/lenders/:id/lenderdashboard" element={<Lenderpage />} />
         <Route
           path="/borrowers/:id/borrowerdashboard"
