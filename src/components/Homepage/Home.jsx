@@ -7,7 +7,7 @@ import {
   TextField,
   Button,
   Typography,
-  Divider,
+  // Divider,
   Card,
   Grid,
 } from "@mui/material";
@@ -92,19 +92,6 @@ export default function Home() {
 
               <Typography
                 variant="h6"
-                color="text.primary"
-                sx={{
-                  fontWeight: "bold",
-                  textAlign: "left",
-                  color: "text.secondary",
-                  mb: 1,
-                  marginTop: 4,
-                }}
-              >
-                We understand your journey.
-              </Typography>
-              <Typography
-                variant="h6"
                 color="text.secondary"
                 sx={{ fontWeight: "bold", textAlign: "left", mb: 1 }}
               >
@@ -116,11 +103,17 @@ export default function Home() {
                 color="text.secondary"
                 sx={{ fontWeight: "bold", textAlign: "left", mb: 1 }}
               >
-                At MMM, we get it. You need the right tools and resources to
-                turn your vision into reality.
+                At MMM, we get it.
+              </Typography>
+              <Typography
+                variant="h6"
+                color="text.secondary"
+                sx={{ fontWeight: "bold", textAlign: "left", mb: 1 }}
+              >
+                You need the right tools and resources to turn your vision into
+                reality.
               </Typography>
 
-              {/* Changed the Access the Capital text to a Button */}
               <Link to="/signup" style={{ textDecoration: "none" }}>
                 <Button
                   variant="contained"
@@ -224,43 +217,35 @@ export default function Home() {
           </Card>
         </Grid>
       </Grid>
-      <Divider sx={{ my: 4 }} />
+      {/* <Divider sx={{ my: 4 }} /> */}
 
-      {/* HOW THIS WORKS Section */}
-      <Grid container spacing={4} justifyContent="center" sx={{ padding: 5 }}>
-        <Grid item xs={12}>
-          <Typography
-            variant="h2"
-            sx={{
-              textAlign: "center",
-              fontWeight: "bold",
-              color: "#00a250",
-              mb: 4,
-              fontSize: { xs: "2rem", sm: "3rem" },
-            }}
-          >
-            HOW THIS WORKS
-          </Typography>
+      <Grid container spacing={4} justifyContent="center" sx={{ padding: 18 }}>
+        <Grid item xs={12} display="flex" justifyContent="center">
+          <img
+            src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1727973657/How_This_Works_1_i0lklb.png"
+            alt="How This Works Image Placeholder"
+            style={{ width: "100%", maxWidth: 1200, borderRadius: 8 }}
+          />
         </Grid>
 
         <Grid container justifyContent="center" spacing={2}>
           <Grid item xs={4} sm={4} display="flex" justifyContent="center">
             <img
-              src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1727966108/Add_a_heading_uhpziy.png"
+              src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1727971472/Add_a_heading_500_x_500_px_3_zpg3qg.png"
               alt="How it works step 1"
               style={{ width: 400, height: 400, borderRadius: 8 }}
             />
           </Grid>
           <Grid item xs={4} sm={4} display="flex" justifyContent="center">
             <img
-              src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1727966108/Add_a_heading_1_yldkn8.png"
+              src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1727971519/Add_a_heading_500_x_500_px_4_dei8rk.png"
               alt="How it works step 2"
               style={{ width: 400, height: 400, borderRadius: 8 }}
             />
           </Grid>
           <Grid item xs={4} sm={4} display="flex" justifyContent="center">
             <img
-              src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1727966108/Add_a_heading_2_zym2dl.png"
+              src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1727971595/Add_a_heading_500_x_500_px_5_bksdkn.png"
               alt="How it works step 3"
               style={{ width: 400, height: 400, borderRadius: 8 }}
             />
