@@ -42,9 +42,18 @@ const NavBar = () => {
           edge="start"
           aria-label="mmm logo"
           onClick={handleLogoClick}
-          sx={{ color: "#00a250", marginRight: 2 }}
+          sx={{
+            color: "#00a250",
+            marginRight: 2,
+            borderRadius: 0, // No rounding for the button
+            padding: 0, // Tight fit for the logo
+          }}
         >
-          <img src={MMMIcon} alt="MMM Logo" style={{ width: 40, height: 40 }} />
+          <img
+            src={MMMIcon}
+            alt="MMM Logo"
+            style={{ width: 40, height: 40, borderRadius: 0 }}
+          />
         </IconButton>
         <Button
           color="inherit"
