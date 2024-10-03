@@ -5,8 +5,8 @@ const Footer = () => {
   return (
     <Box
       sx={{
-        backgroundColor: "#004d00",
-        color: "#ffffff",
+        backgroundColor: "#00a250",
+        color: "#f6f7f8",
         padding: "20px 0",
         marginTop: "auto",
       }}
@@ -24,7 +24,7 @@ const Footer = () => {
             </Typography>
             <Link
               href="/about"
-              sx={{ color: "#ffffff", textDecoration: "underline" }}
+              sx={{ color: "#f6f7f8", textDecoration: "underline" }}
             >
               Learn more
             </Link>
@@ -32,24 +32,18 @@ const Footer = () => {
 
           <Grid item xs={12} md={6}>
             <Typography variant="h6" gutterBottom>
-              Legal Information
+              Meet The Team
             </Typography>
             <Typography variant="body2">
-              Please review our terms of service and privacy policy to
-              understand how we protect your information.
+              Our dedicated team is here to support you and ensure a smooth
+              financing experience. Learn more about our expertise and
+              commitment.
             </Typography>
             <Link
-              href="/terms"
-              sx={{ color: "#ffffff", textDecoration: "underline" }}
+              href="/meet-the-team"
+              sx={{ color: "#f6f7f8", textDecoration: "underline" }}
             >
-              Terms of Service
-            </Link>
-            <br />
-            <Link
-              href="/privacy"
-              sx={{ color: "#ffffff", textDecoration: "underline" }}
-            >
-              Privacy Policy
+              Meet the Team
             </Link>
           </Grid>
         </Grid>
