@@ -5,7 +5,7 @@ import NavBar from "./components/NavBarFolder/NavBar";
 import Home from "./Pages/Homepage";
 import Lenderpage from "./Pages/Lenderpage";
 import AboutUs from "./components/AboutFolder/AboutUs";
-import LoginPage from "./Pages/LoginPage";
+import { LoginPage } from "./Pages/LoginPage";
 import ListOfLenders from "./Pages/ListOfLenders";
 import NewLender from "./Pages/NewLender";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
