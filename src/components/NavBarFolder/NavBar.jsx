@@ -45,8 +45,8 @@ const NavBar = () => {
           sx={{
             color: "#00a250",
             marginRight: 2,
-            borderRadius: 0, // No rounding for the button
-            padding: 0, // Tight fit for the logo
+            borderRadius: 0,
+            padding: 0,
           }}
         >
           <img
@@ -55,29 +55,6 @@ const NavBar = () => {
             style={{ width: 40, height: 40, borderRadius: 0 }}
           />
         </IconButton>
-        <Button
-          color="inherit"
-          href="/borrower"
-          sx={{
-            color: "#00a250",
-            fontSize: "1rem",
-            fontWeight: "bold",
-          }}
-        >
-          Borrower
-        </Button>
-        <span style={{ color: "#00a250", margin: "0 8px" }}>|</span>
-        <Button
-          color="inherit"
-          href="/lender"
-          sx={{
-            color: "#00a250",
-            fontSize: "1rem",
-            fontWeight: "bold",
-          }}
-        >
-          Lender
-        </Button>
         <Box sx={{ flexGrow: 1 }} />
         <Button
           color="inherit"
@@ -115,7 +92,7 @@ const NavBar = () => {
             fontWeight: "bold",
           }}
         >
-          OPEN AN ACCOUNT
+          LOG IN
         </Button>
         <Menu
           anchorEl={anchorEl}
