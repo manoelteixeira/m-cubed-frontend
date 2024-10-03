@@ -26,6 +26,7 @@ const {id} = useParams()
   const [loanRequests, setLoanRequests] = useState([]);
   const [filteredBorrowers, setFilteredBorrowers] = useState([]);
   const [filteredLoanRequests, setFilteredLoanRequests] = useState([]);
+  const [loanlisting, setLoanListing] = useState([])
   
   const [pageBorrowers, setPageBorrowers] = useState(0);
   const [rowsPerPageBorrowers, setRowsPerPageBorrowers] = useState(5);
@@ -35,7 +36,10 @@ const {id} = useParams()
   const [searchTerm, setSearchTerm] = useState('');
 
   const calculateTotalLoanVolume = () => {
-    return loanRequests.reduce((total, loan) => total + loan.value, 0);
+    return loanRequests.reduce((total, loan) => {
+      const loanValue = isNaN(parseFloat(loan.value)) ? 0 : parseFloat(loan.value);
+      return total + loanValue;
+    }, 0);
   };
 
   useEffect(() => {
@@ -61,8 +65,20 @@ const {id} = useParams()
       }
     };
 
+    const fetchLoanListing = async () => {
+      try{
+        const response = await fetch(`${API}/lenders/${id}/requests`)
+        const data = await response.json();
+
+        setLoanListing(data)
+      }catch(error){
+        console.error('Error fetching requests: ', error)
+      }
+    }
+
     fetchBorrowers();
     fetchLoanRequests();
+    fetchLoanListing()
   }, []);
 
   const handleChangePageBorrowers = (event, newPage) => {
@@ -112,7 +128,7 @@ const {id} = useParams()
           </Typography>
           <Paper elevation={3} sx={{ m: 2, p: 2 }}>
             <Typography variant="h6">
-              Total Loan Volume: ${calculateTotalLoanVolume().toFixed(2)}
+              Total Loan Volume: ${calculateTotalLoanVolume().toFixed()}
             </Typography>
           </Paper>
           <Button color="primary" variant="contained">
@@ -130,7 +146,7 @@ const {id} = useParams()
         sx={{ m: 2, width: 500}}
       />
 
-      <Grid container spacing={3}>
+      <Grid container spacing={3} sx={{m:2}}>
         {/* Left Side - Borrowers Table */}
         <Grid item xs={12} md={6}>
           <Paper elevation={3}>
@@ -219,6 +235,50 @@ const {id} = useParams()
               rowsPerPage={rowsPerPageLoanRequests}
               onRowsPerPageChange={handleChangeRowsPerPageLoanRequests}
               rowsPerPageOptions={[5,10, 25, 50, 100]} 
+            />
+          </Paper>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <Paper elevation={3}>
+            <Typography variant="h6" component="div" sx={{ padding: 2 }}>
+              Available Loan Listings
+            </Typography>
+            <TableContainer component={Paper}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Business Name</TableCell>
+                    <TableCell>City</TableCell>
+                    <TableCell>Credit Score</TableCell>
+                    <TableCell>Industry</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {filteredBorrowers
+                    .slice(
+                      pageBorrowers * rowsPerPageBorrowers,
+                      pageBorrowers * rowsPerPageBorrowers + rowsPerPageBorrowers
+                    )
+                    .map((borrower) => (
+                      <TableRow key={borrower.id}>
+                        <TableCell>{borrower.business_name}</TableCell>
+                        {/* <TableCell>{borrower.city}</TableCell>
+                        <TableCell>{borrower.credit_score}</TableCell>
+                        <TableCell>{borrower.industry}</TableCell> */}
+                      </TableRow>
+                    ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <TablePagination
+              component="div"
+              count={filteredBorrowers.length}
+              page={pageBorrowers}
+              onPageChange={handleChangePageBorrowers}
+              rowsPerPage={rowsPerPageBorrowers}
+              onRowsPerPageChange={handleChangeRowsPerPageBorrowers}
+              rowsPerPageOptions={[5,10, 25, 50, 100]} 
+
             />
           </Paper>
         </Grid>

@@ -33,8 +33,7 @@ function App() {
         <Route path="/borrowers/signup" element={<NewBorrower />} />
         <Route path="/lenders/:id/lenderdashboard" element={<Lenderpage />} />
         <Route
-          path="/borrowers/:id/borrowerdashboard"
-          element={<BDashboard />}
+          path="/borrowers/:id/borrowerdashboard" element={<BDashboard />}
         />
         <Route path="/borrowers/:id/new" element={<LoanRequestForm />} />
         <Route path="/lenders/:id/edit" element={<EditLenderForm />} />
