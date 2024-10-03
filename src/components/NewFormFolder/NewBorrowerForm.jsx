@@ -54,7 +54,7 @@ const BorrowerForm = () => {
       const id = results.borrower?.id;
 
       console.log(`Borrower created with ID: ${id}`);
-      navigate(`/borrowers/${id}/borrowersdashboard`);
+      navigate(`/borrowers/${id}/borrowerdashboard`);
     } catch (error) {
       console.error("Error creating borrower:", error);
     }

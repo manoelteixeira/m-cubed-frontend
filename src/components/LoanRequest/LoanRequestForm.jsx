@@ -10,10 +10,10 @@ const LoanRequestForm = () => {
   const [timestamp, setTimestamp] = useState('');
   const [submissionStatus, setSubmissionStatus] = useState('');
   const [formData, setFormData] = useState({
-    businessName: '',
-    businessType: '',
-    loanAmount: '',
-    loanTerm: '',
+    business_name: '',
+    business_type: '',
+    loan_amount: '',
+    loan_term: '',
     industry: '',
     revenue: '',
     documents: null,
@@ -26,10 +26,10 @@ const LoanRequestForm = () => {
         .then((res) => res.json())
         .then((data) => {
           setFormData({
-            businessName: data.businessName,
-            businessType: data.businessType,
-            loanAmount: data.loanAmount,
-            loanTerm: data.loanTerm,
+            business_name: data.business_name,
+            business_type: data.business_type,
+            loan_amount: data.loan_amount,
+            loan_term: data.loan_term,
             industry: data.industry,
             revenue: data.revenue,
             documents: null, 
@@ -61,10 +61,10 @@ const LoanRequestForm = () => {
     
     // Prep form data for submission
     const formDataToSubmit = new FormData();
-    formDataToSubmit.append('businessName', formData.businessName);
-    formDataToSubmit.append('businessType', formData.businessType);
-    formDataToSubmit.append('loanAmount', formData.loanAmount);
-    formDataToSubmit.append('loanTerm', formData.loanTerm);
+    formDataToSubmit.append('business_name', formData.business_name);
+    formDataToSubmit.append('business_type', formData.business_type);
+    formDataToSubmit.append('loan_amount', formData.loan_amount);
+    formDataToSubmit.append('loan_term', formData.loan_term);
     formDataToSubmit.append('industry', formData.industry);
     formDataToSubmit.append('revenue', formData.revenue);
     if (formData.documents) {
@@ -110,42 +110,42 @@ const LoanRequestForm = () => {
       <h2>Loan Application Form</h2>
 
       <form onSubmit={handleSubmit}>
-        <label htmlFor="businessName">Business Name</label>
+        <label htmlFor="business_name">Business Name</label>
         <input
           type="text"
-          id="businessName"
-          name="businessName"
-          value={formData.businessName}
+          id="business_name"
+          name="business_name"
+          value={formData.business_name}
           onChange={handleChange}
           required
         />
 
-        <label htmlFor="businessType">Business Type</label>
+        <label htmlFor="business_type">Business Type</label>
         <input
           type="text"
-          id="businessType"
-          name="businessType"
-          value={formData.businessType}
+          id="business_type"
+          name="business_type"
+          value={formData.business_type}
           onChange={handleChange}
           required
         />
 
-        <label htmlFor="loanAmount">Loan Amount Requested</label>
+        <label htmlFor="loan_amount">Loan Amount Requested</label>
         <input
           type="number"
-          id="loanAmount"
-          name="loanAmount"
-          value={formData.loanAmount}
+          id="loan_amount"
+          name="loan_amount"
+          value={formData.loan_amount}
           onChange={handleChange}
           required
         />
 
-        <label htmlFor="loanTerm">Loan Term</label>
+        <label htmlFor="loan_term">Loan Term</label>
         <input
           type="text"
-          id="loanTerm"
-          name="loanTerm"
-          value={formData.loanTerm}
+          id="loan_term"
+          name="loan_term"
+          value={formData.loan_term}
           onChange={handleChange}
           required
         />
