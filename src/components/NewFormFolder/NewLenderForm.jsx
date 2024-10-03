@@ -29,8 +29,8 @@ export default function NewLenderForm() {
     .then((response) => response.json())
     .then((results) => {
       console.log('Server response:', results);
-      const id = results.lender?.id;
-      navigate(`/lenders/${id}/lenderdashboard`);
+      const id = results.id;
+      navigate(`lenders/${id}/lenderdashboard`);
     })
     .catch((error) => {
       console.error('Error creating lender:', error);
