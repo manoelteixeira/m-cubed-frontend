@@ -58,29 +58,6 @@ const NavBar = () => {
         <Box sx={{ flexGrow: 1 }} />
         <Button
           color="inherit"
-          href="/why-mmm"
-          sx={{
-            color: "#00a250",
-            fontSize: "1rem",
-            fontWeight: "bold",
-          }}
-        >
-          WHY MMM
-        </Button>
-        <span style={{ color: "#00a250", margin: "0 4px" }}>|</span>
-        <Button
-          color="inherit"
-          href="/meet-the-team"
-          sx={{
-            color: "#00a250",
-            fontSize: "1rem",
-            fontWeight: "bold",
-          }}
-        >
-          MEET THE TEAM
-        </Button>
-        <Button
-          color="inherit"
           variant="outlined"
           onClick={handleDropdownClick}
           endIcon={<ArrowDropDown />}

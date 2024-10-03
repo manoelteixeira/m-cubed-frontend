@@ -244,23 +244,23 @@ export default function Home() {
         <Grid container justifyContent="center" spacing={2}>
           <Grid item xs={4} sm={4} display="flex" justifyContent="center">
             <img
-              src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1727962989/Add_a_heading_mhsurf.png"
+              src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1727966108/Add_a_heading_uhpziy.png"
               alt="How it works step 1"
-              style={{ width: 400, height: 400, borderRadius: 8 }}
+              style={{ width: 500, height: 500, borderRadius: 8 }}
             />
           </Grid>
           <Grid item xs={4} sm={4} display="flex" justifyContent="center">
             <img
-              src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1727962989/Add_a_heading_1_zzu1pc.png"
+              src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1727966108/Add_a_heading_1_yldkn8.png"
               alt="How it works step 2"
-              style={{ width: 400, height: 400, borderRadius: 8 }}
+              style={{ width: 500, height: 500, borderRadius: 8 }}
             />
           </Grid>
           <Grid item xs={4} sm={4} display="flex" justifyContent="center">
             <img
-              src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1727962989/Add_a_heading_2_jixwie.png"
+              src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1727966108/Add_a_heading_2_zym2dl.png"
               alt="How it works step 3"
-              style={{ width: 400, height: 400, borderRadius: 8 }}
+              style={{ width: 500, height: 500, borderRadius: 8 }}
             />
           </Grid>
         </Grid>
