@@ -101,21 +101,23 @@ export default function Home() {
                   marginTop: 4,
                 }}
               >
-                Make Funding easy.
+                We understand your journey.
               </Typography>
               <Typography
                 variant="h6"
                 color="text.secondary"
                 sx={{ fontWeight: "bold", textAlign: "left", mb: 1 }}
               >
-                Find the right lenders.
+                Growing a business is more than just numbers—it's about building
+                dreams, fostering innovation, and overcoming challenges.
               </Typography>
               <Typography
                 variant="h6"
                 color="text.secondary"
                 sx={{ fontWeight: "bold", textAlign: "left", mb: 1 }}
               >
-                Grow your business by getting the equipment you need.
+                At MMM, we get it. You need the right tools and resources to
+                turn your vision into reality.
               </Typography>
 
               {/* Changed the Access the Capital text to a Button */}
@@ -125,7 +127,7 @@ export default function Home() {
                   style={{ backgroundColor: "#00a250", marginTop: "16px" }}
                   fullWidth
                 >
-                  Access the Capital You Need with MMM
+                  Let us help you get funded
                 </Button>
               </Link>
             </CardContent>
@@ -246,21 +248,21 @@ export default function Home() {
             <img
               src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1727966108/Add_a_heading_uhpziy.png"
               alt="How it works step 1"
-              style={{ width: 500, height: 500, borderRadius: 8 }}
+              style={{ width: 400, height: 400, borderRadius: 8 }}
             />
           </Grid>
           <Grid item xs={4} sm={4} display="flex" justifyContent="center">
             <img
               src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1727966108/Add_a_heading_1_yldkn8.png"
               alt="How it works step 2"
-              style={{ width: 500, height: 500, borderRadius: 8 }}
+              style={{ width: 400, height: 400, borderRadius: 8 }}
             />
           </Grid>
           <Grid item xs={4} sm={4} display="flex" justifyContent="center">
             <img
               src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1727966108/Add_a_heading_2_zym2dl.png"
               alt="How it works step 3"
-              style={{ width: 500, height: 500, borderRadius: 8 }}
+              style={{ width: 400, height: 400, borderRadius: 8 }}
             />
           </Grid>
         </Grid>
