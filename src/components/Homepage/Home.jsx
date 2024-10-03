@@ -93,7 +93,12 @@ export default function Home() {
               <Typography
                 variant="h6"
                 color="text.secondary"
-                sx={{ fontWeight: "bold", textAlign: "left", mb: 1 }}
+                sx={{
+                  fontWeight: "bold",
+                  textAlign: "left",
+                  mb: 1,
+                  marginTop: 2,
+                }}
               >
                 Growing a business is more than just numbers—it's about building
                 dreams, fostering innovation, and overcoming challenges.
@@ -117,10 +122,10 @@ export default function Home() {
               <Link to="/signup" style={{ textDecoration: "none" }}>
                 <Button
                   variant="contained"
-                  style={{ backgroundColor: "#00a250", marginTop: "16px" }}
+                  style={{ backgroundColor: "#00a250", marginTop: "60px" }}
                   fullWidth
                 >
-                  Let us help you get funded
+                  Let MMM help you get funded
                 </Button>
               </Link>
             </CardContent>
