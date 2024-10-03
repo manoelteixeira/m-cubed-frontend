@@ -485,7 +485,7 @@ const BDashboard = () => {
       </TableContainer>
 
       <Typography variant="h6" gutterBottom>
-        Loan Offers
+        Loan Proposals
       </Typography>
       <TableContainer component={Paper}>
         <Table>
