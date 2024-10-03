@@ -1,134 +1,185 @@
 import React from "react";
 import "./Home.scss";
 import Footer from "../../components/Library/AppFiles/Footer";
-import MMMLogo from "../../../src/assets/MMMlogo.png";
 import { Link } from "react-router-dom";
 import {
-  Card,
   CardContent,
   TextField,
   Button,
   Typography,
-  Grid,
-  Box,
   Divider,
+  Card,
+  Grid,
 } from "@mui/material";
 import { MailOutline, ArrowForward } from "@mui/icons-material";
 import Slider from "react-slick";
 import QRCodeComponent from "../QRCodeComponent";
+import { motion } from "framer-motion";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-// Home component
 export default function Home() {
+  const equipmentItems = [
+    "Medical Equipment",
+    "Point of Sale Systems",
+    "Catering Equipment",
+    "Mining Equipment",
+    "Agri Machinery",
+    "Laboratory Equipment",
+  ];
+
   const settings = {
-    dots: true,
+    dots: false,
     infinite: true,
     speed: 500,
-    slidesToShow: 3,
+    slidesToShow: 1,
     slidesToScroll: 1,
+    vertical: true,
+    verticalSwiping: true,
     autoplay: true,
-    autoplaySpeed: 3000,
+    autoplaySpeed: 2000,
   };
 
   return (
-    <main>
-      <Grid container spacing={2} style={{ height: "100vh" }}>
+    <main style={{ backgroundColor: "#f6f7f8", marginTop: "64px" }}>
+      <Grid container spacing={1} justifyContent="center" sx={{ padding: 5 }}>
         <Grid
           item
           xs={12}
+          sm={6}
           md={6}
-          container
-          justifyContent="center"
-          alignItems="flex-start"
-          direction="column"
+          sx={{ display: "flex", justifyContent: "center" }}
         >
-          <Box
-            textAlign="center"
-            marginTop="10%"
-            marginLeft="auto"
-            className="logo-container"
-            style={{
-              marginRight: "auto",
-              paddingLeft: "10%",
+          <Card
+            sx={{
+              width: "100%",
+              maxWidth: 1200,
+              height: "auto",
+              padding: 0,
+              backgroundColor: "transparent",
+              border: "none",
+              boxShadow: "none",
+              marginLeft: 10,
+              marginRight: 10,
             }}
           >
-            <img
-              src={MMMLogo}
-              alt="MMM Logo"
-              className="mmm-logo rotating-logo"
-              style={{
-                width: "70%",
-                maxWidth: "600px",
-                marginBottom: "100px",
-                marginLeft: "auto",
-                marginRight: "auto",
-              }}
-            />
-            <Typography />
-            <Typography
-              variant="h5"
-              className="tagline"
-              style={{
-                marginTop: "0",
-                textAlign: "center",
-              }}
-            >
-              Bridging the funding gap for borrowers and lenders.
-            </Typography>
-          </Box>
+            <CardContent>
+              <Slider {...settings}>
+                {equipmentItems.map((item, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <Typography
+                      variant="h5"
+                      color="black"
+                      sx={{
+                        mb: 2,
+                        p: 2,
+                        textAlign: "left",
+                        fontWeight: "bold",
+                        fontSize: { xs: "2.5rem", sm: "3.5rem" },
+                      }}
+                    >
+                      {item}
+                    </Typography>
+                  </motion.div>
+                ))}
+              </Slider>
+
+              <Typography
+                variant="h6"
+                color="text.primary"
+                sx={{
+                  fontWeight: "bold",
+                  textAlign: "left",
+                  color: "text.secondary",
+                  mb: 1,
+                  marginTop: 4,
+                }}
+              >
+                Make Funding easy.
+              </Typography>
+              <Typography
+                variant="h6"
+                color="text.secondary"
+                sx={{ fontWeight: "bold", textAlign: "left", mb: 1 }}
+              >
+                Find the right lenders.
+              </Typography>
+              <Typography
+                variant="h6"
+                color="text.secondary"
+                sx={{ fontWeight: "bold", textAlign: "left", mb: 1 }}
+              >
+                Grow your business by getting the equipment you need.
+              </Typography>
+
+              {/* Changed the Access the Capital text to a Button */}
+              <Link to="/signup" style={{ textDecoration: "none" }}>
+                <Button
+                  variant="contained"
+                  style={{ backgroundColor: "#00a250", marginTop: "16px" }}
+                  fullWidth
+                >
+                  Access the Capital You Need with MMM
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
         </Grid>
 
         <Grid
           item
           xs={12}
+          sm={6}
           md={6}
-          container
-          justifyContent="center"
-          alignItems="center"
+          sx={{ display: "flex", justifyContent: "center", padding: 0 }}
         >
           <Card
-            variant="outlined"
             sx={{
-              maxWidth: 450,
               width: "100%",
+              maxWidth: 400,
+              height: "auto",
               padding: 2,
-              boxShadow: 3,
-              borderColor: "#4CAF50",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
+              justifyContent: "space-between",
+              border: "1px solid #e0e0e0",
+              borderRadius: 2,
+              backgroundColor: "transparent",
             }}
           >
             <QRCodeComponent
               style={{
-                width: 30,
-                height: 30,
+                width: 60,
+                height: 60,
                 marginBottom: 16,
-                alignSelf: "center",
+                alignSelf: "right",
               }}
             />
-            <CardContent sx={{ textAlign: "justify" }}>
+            <CardContent sx={{ textAlign: "center" }}>
               <MailOutline
                 style={{
                   fontSize: 50,
-                  color: "#4CAF50",
+                  color: "#00a250",
                   marginBottom: 16,
-                  textAlign: "center",
                 }}
               />
-              <Typography variant="h6" align="center" gutterBottom>
+              <Typography variant="h6" gutterBottom>
                 Join the MMM Community!
               </Typography>
               <Typography
                 variant="body1"
-                align="justify"
+                align="center"
                 color="text.secondary"
+                sx={{ marginBottom: 2 }}
               >
-                Hey there! If you're a business owner or lender curious about
-                our app, we'd love for you to subscribe to our mailing list.
-                We'll keep you posted on our launch and promise to be
-                responsible with your email!
+                Subscribe to our mailing list to stay updated on our launch!
               </Typography>
               <TextField
                 variant="outlined"
@@ -144,7 +195,7 @@ export default function Home() {
               />
               <Button
                 variant="contained"
-                style={{ backgroundColor: "#4CAF50" }}
+                style={{ backgroundColor: "#00a250" }}
                 fullWidth
                 endIcon={<ArrowForward />}
               >
@@ -154,14 +205,14 @@ export default function Home() {
                 variant="body2"
                 align="center"
                 color="text.secondary"
-                style={{ marginTop: "10px" }}
+                sx={{ marginTop: 2 }}
               >
                 Already a member?{" "}
                 <Link
                   to="/login"
                   style={{
                     textDecoration: "none",
-                    color: "#4CAF50",
+                    color: "#00a250",
                   }}
                 >
                   Log in here
@@ -173,143 +224,48 @@ export default function Home() {
       </Grid>
       <Divider sx={{ my: 4 }} />
 
-      <section className="home-container__badge-names">
-        <Slider {...settings}>
-          <div>
-            <img
-              src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1727713128/cami-talpone-eWzC1UwAIlw-unsplash_tkf4is.jpg"
-              alt="Borrower1"
-              className="carousel-image"
-              style={{ width: "100%", height: "300px", objectFit: "cover" }}
-            />
-          </div>
-          <div>
-            <img
-              src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1727713129/khachik-simonian-XYavU5BGF9o-unsplash_ejbz5m.jpg"
-              alt="Borrower2"
-              className="carousel-image"
-              style={{ width: "100%", height: "300px", objectFit: "cover" }}
-            />
-          </div>
-          <div>
-            <img
-              src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1727713132/s-o-c-i-a-l-c-u-t-7KkDiSs5UdQ-unsplash_1_jmcqts.jpg"
-              alt="Borrower3"
-              className="carousel-image"
-              style={{ width: "100%", height: "300px", objectFit: "cover" }}
-            />
-          </div>
-        </Slider>
-      </section>
-      <Divider sx={{ my: 4 }} />
+      {/* HOW THIS WORKS Section */}
+      <Grid container spacing={4} justifyContent="center" sx={{ padding: 5 }}>
+        <Grid item xs={12}>
+          <Typography
+            variant="h2"
+            sx={{
+              textAlign: "center",
+              fontWeight: "bold",
+              color: "#00a250",
+              mb: 4,
+              fontSize: { xs: "2rem", sm: "3rem" },
+            }}
+          >
+            HOW THIS WORKS
+          </Typography>
+        </Grid>
 
-      {/* Lender Section */}
-      <section className="home-container__lender-CTA">
-        <Grid container spacing={2} justifyContent="center" alignItems="center">
-          <Grid item xs={12} md={6}>
-            <Card sx={{ padding: 4, bgcolor: "#f5f5f5", height: "350px" }}>
-              <CardContent>
-                <Typography
-                  variant="h4"
-                  color="#4CAF50"
-                  gutterBottom
-                  sx={{ textAlign: "center", letterSpacing: "2px" }}
-                >
-                  LENDERS
-                </Typography>
-                <Typography
-                  variant="body1"
-                  color="text.primary"
-                  style={{
-                    marginTop: "20px",
-                  }}
-                >
-                  Maximize Your Lending Opportunities with MMM – Connect with
-                  Pre-Vetted Borrowers and Unlock New Avenues for Growth Today.
-                </Typography>
-                <Button
-                  variant="contained"
-                  style={{ backgroundColor: "#4CAF50", marginTop: "20px" }}
-                  fullWidth
-                >
-                  Start your trial period!
-                </Button>
-              </CardContent>
-            </Card>
+        <Grid container justifyContent="center" spacing={2}>
+          <Grid item xs={4} sm={4} display="flex" justifyContent="center">
+            <img
+              src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1727962989/Add_a_heading_mhsurf.png"
+              alt="How it works step 1"
+              style={{ width: 400, height: 400, borderRadius: 8 }}
+            />
           </Grid>
-          <Grid item xs={12} md={6}>
-            <Box
-              sx={{
-                width: "100%",
-                height: "350px",
-                bgcolor: "#e0e0e0",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Typography variant="h6" color="text.secondary">
-                Placeholder for Lender Image
-              </Typography>
-            </Box>
+          <Grid item xs={4} sm={4} display="flex" justifyContent="center">
+            <img
+              src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1727962989/Add_a_heading_1_zzu1pc.png"
+              alt="How it works step 2"
+              style={{ width: 400, height: 400, borderRadius: 8 }}
+            />
+          </Grid>
+          <Grid item xs={4} sm={4} display="flex" justifyContent="center">
+            <img
+              src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1727962989/Add_a_heading_2_jixwie.png"
+              alt="How it works step 3"
+              style={{ width: 400, height: 400, borderRadius: 8 }}
+            />
           </Grid>
         </Grid>
-      </section>
+      </Grid>
 
-      <Divider sx={{ my: 4 }} />
-
-      {/* Borrower Section */}
-      <section className="home-container__borrower-CTA">
-        <Grid container spacing={2} justifyContent="center" alignItems="center">
-          <Grid item xs={12} md={6}>
-            <Box
-              sx={{
-                width: "100%",
-                height: "350px",
-                bgcolor: "#e0e0e0",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Typography variant="h6" color="text.secondary">
-                Placeholder for Borrower Image
-              </Typography>
-            </Box>
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <Card sx={{ padding: 4, bgcolor: "#f5f5f5", height: "350px" }}>
-              <CardContent>
-                <Typography
-                  variant="h4"
-                  color="#4CAF50"
-                  gutterBottom
-                  sx={{ textAlign: "center", letterSpacing: "2px" }}
-                >
-                  BORROWERS
-                </Typography>
-                <Typography
-                  variant="body1"
-                  color="text.primary"
-                  style={{
-                    marginTop: "20px",
-                  }}
-                >
-                  Protect Your Credit Score – Apply Through One Streamlined
-                  Process For Minimal Verifications And Complete Lender Access.
-                </Typography>
-                <Button
-                  variant="contained"
-                  style={{ backgroundColor: "#4CAF50", marginTop: "20px" }}
-                  fullWidth
-                >
-                  Apply Now
-                </Button>
-              </CardContent>
-            </Card>
-          </Grid>
-        </Grid>
-      </section>
       <Footer />
     </main>
   );
