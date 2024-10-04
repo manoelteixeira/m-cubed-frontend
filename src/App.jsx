@@ -18,6 +18,7 @@ import EmailNewsletter from "./Pages/EmailNewsletter";
 import EditBorrowerForm from "./components/EditUserFolder/EditBorrowerForm";
 import LenderProposalPage from "./Pages/LenderProposalPage";
 import EditLoanRequestForm from "./components/editLoanRequestForm/editLoanRequestForm";
+import Cards from './components/Cards/Cards';
 //const theme = createTheme({
 //   palette: {
 //     primary: {
@@ -38,6 +39,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<AboutUs />} />
+        <Route path="/team" element={<Cards />} />
         {/* <Route path="/login" element={<SignInForm />} /> */}
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signup/borrower" element={<></>}></Route>
