@@ -72,6 +72,7 @@ import LoanRequestForm from "./components/LoanRequest/LoanRequestForm";
 import EmailNewsletter from "./Pages/EmailNewsletter";
 import LenderProposalPage from "./Pages/LenderProposalPage";
 import EditLoanRequestForm from "./components/editLoanRequestForm/editLoanRequestForm";
+import Cards from './components/Cards/Cards';
 //const theme = createTheme({
 //   palette: {
 //     primary: {
@@ -95,6 +96,7 @@ function App() {
         {/* Home and General Info Pages */}
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<AboutUs />} />
+        <Route path="/team" element={<Cards />} />
         {/* <Route path="/login" element={<SignInForm />} /> */}
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signup/borrower" element={<></>}></Route>
