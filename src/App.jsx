@@ -71,7 +71,6 @@ import BDashboard from "./components/BDashboard/BDashboard";
 import LoanRequestForm from "./components/LoanRequest/LoanRequestForm";
 import EmailNewsletter from "./Pages/EmailNewsletter";
 import LenderProposalPage from "./Pages/LenderProposalPage";
-import EditProposalPage from "./Pages/EditProposalPage";
 
 // Grouped by functionality for easier navigation and clarity
 function App() {
@@ -106,7 +105,7 @@ function App() {
         />
         <Route path="/borrowers/:id/new" element={<LoanRequestForm />} />
         <Route path="/borrowers/:id/edit" element={<EditBorrowerForm />} />
-        <Route path="/lenders/:id/proposals/:id" element={<EditProposalPage/>} />
+        <Route path="/lenders/:id/proposals" element={<></>} />
         <Route
           path="/lenders/:id/proposals/"
           element={<LenderProposalPage />}
