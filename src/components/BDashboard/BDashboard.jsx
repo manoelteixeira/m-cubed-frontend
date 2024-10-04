@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { getBorrower, getAllLoanRequests, deleteRequest } from '../services/serviceRequest';
 import './BDashboard.css'
 
@@ -11,6 +11,7 @@ const BDashboard = () => {
   const { id } = useParams();
   const [borrowerData, setBorrowerData] = useState(null);
   const navigate = useNavigate()
+  
   
 
   useEffect(() => {
@@ -47,7 +48,8 @@ const BDashboard = () => {
       await fetchLoanRequestsData();
       setLoading(false);
     };
-    fetchData();
+   
+      fetchData();
   }, [id]);
   
   

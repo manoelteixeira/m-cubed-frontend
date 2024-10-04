@@ -3,36 +3,30 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { updateRequest, getLoanRequest } from '../services/serviceRequest';
 
 
-
-
 const EditLoanRequestForm = () => {
   const { id, requestId } = useParams();
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    businessName: '',
-    businessType: '',
-    loanAmount: '',
-    loanTerm: '',
-    industry: '',
-    revenue: '',
-    documents: null,
-  });
   const [error, setError] = useState(null);
-
-
+  const [formData, setFormData] = useState({
+    title: '',
+    description: '',
+    value: '',
+    created_at: '',
+    funded_at: '',
+    
+  });
 
   useEffect(() => {
     const fetchRequest = async () => {
       try {
-        const request = await getLoanRequest(id, requestId); 
+        const request = await getLoanRequest(id, requestId);
         setFormData({
-          businessName: request.businessName,
-          businessType: request.businessType,
-          loanAmount: request.loanAmount,
-          loanTerm: request.loanTerm,
-          industry: request.industry,
-          revenue: request.revenue,
-          documents: null, 
+          title: request.title,
+          description: request.description,
+          value: request.value,
+          created_at: request.created_at ? request.created_at.slice(0, 10) : '',
+          funded_at: request.funded_at ? request.funded_at.slice(0, 10) : '',
+          accepted_proposal_id: request.accepted_proposal_id || '',
         });
       } catch (err) {
         setError('Error fetching loan request.');
@@ -42,10 +36,10 @@ const EditLoanRequestForm = () => {
   }, [id, requestId]);
 
   const handleChange = (e) => {
-    const { name, value, files } = e.target;
+    const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: files ? files[0] : value, 
+      [name]: value,
     });
   };
 
@@ -55,86 +49,68 @@ const EditLoanRequestForm = () => {
       const updatedData = await updateRequest(id, requestId, formData);
       if (updatedData) {
         console.log('Request updated successfully:', updatedData);
-        navigate(`/borrowers/${id}`); 
+        navigate(`/borrowers/${id}`);
       }
     } catch (err) {
       setError('Error updating request.');
     }
   };
 
-
   return (
     <div className="Loan-Request">
       <h2>Edit Loan Application</h2>
 
       <form onSubmit={handleSubmit}>
-        <label htmlFor="businessName">Business Name</label>
+        <label htmlFor="title">Business Name</label>
         <input
           type="text"
-          id="businessName"
-          name="businessName"
-          value={formData.businessName}
+          id="title"
+          name="title"
+          value={formData.title}
           onChange={handleChange}
           required
         />
 
-        <label htmlFor="businessType">Business Type</label>
+        <label htmlFor="description">Business Type</label>
         <input
           type="text"
-          id="businessType"
-          name="businessType"
-          value={formData.businessType}
+          id="description"
+          name="description"
+          value={formData.description}
           onChange={handleChange}
           required
         />
 
-        <label htmlFor="loanAmount">Loan Amount Requested</label>
+        <label htmlFor="value">Loan Amount Requested</label>
         <input
           type="number"
-          id="loanAmount"
-          name="loanAmount"
-          value={formData.loanAmount}
+          id="value"
+          name="value"
+          value={formData.value}
           onChange={handleChange}
           required
         />
 
-        <label htmlFor="loanTerm">Loan Term</label>
+        <label htmlFor="created_at">Created At</label>
         <input
-          type="text"
-          id="loanTerm"
-          name="loanTerm"
-          value={formData.loanTerm}
+          type="date"
+          id="created_at"
+          name="created_at"
+          value={formData.created_at}
           onChange={handleChange}
           required
         />
 
-        <label htmlFor="industry">Industry</label>
+        <label htmlFor="funded_at">Funded At</label>
         <input
-          type="text"
-          id="industry"
-          name="industry"
-          value={formData.industry}
+          type="date"
+          id="funded_at"
+          name="funded_at"
+          value={formData.funded_at || ''}
           onChange={handleChange}
-          required
         />
 
-        <label htmlFor="revenue">Revenue</label>
-        <input
-          type="number"
-          id="revenue"
-          name="revenue"
-          value={formData.revenue}
-          onChange={handleChange}
-          required
-        />
-
-        <label htmlFor="documents">Upload Documents (optional)</label>
-        <input
-          type="file"
-          id="documents"
-          name="documents"
-          onChange={handleChange}
-        />
+      
 
         <div className="form-buttons">
           <button type="submit">Submit Changes</button>
