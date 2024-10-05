@@ -86,25 +86,27 @@ function App() {
         <Route path="/about" element={<AboutUs />} />
         <Route path="/disclaimer" element={<></>} />
         <Route path="/newsletter" element={<EmailNewsletter />} />
-
         {/* User Authentication Pages */}
         <Route path="/login" element={<LoginPage />} />
-
         {/* Lenders Section */}
         <Route path="/lenders" element={<ListOfLenders />} />
         <Route path="/lenders/signup" element={<NewLender />} />
         <Route path="/lenders/:id/lenderdashboard" element={<Lenderpage />} />
         <Route path="/lenders/:id/edit" element={<EditLenderForm />} />
         <Route path="/lenders/:id/proposals" element={<LenderProposalPage />} />
-
         {/* Borrowers Section */}
         <Route path="/borrowers/signup" element={<NewBorrower />} />
-        <Route path="/borrowers/:id/borrowerdashboard" element={<BDashboard />}
+        <Route
+          path="/borrowers/:id/borrowerdashboard"
+          element={<BDashboard />}
         />
-        <Route path="/borrowers/:id/new" element={<LoanRequestForm />}/>
-        <Route path="/lenders/:id/edit" element={<EditLenderForm />}/>
-        <Route path="/borrowers/:id/edit" element={<EditBorrowerForm />}/>
-        <Route path="/lenders/:id/requests/:id/newproposal" element={<LenderProposalPage/>}/>
+        <Route path="/borrowers/:id/new" element={<LoanRequestForm />} />
+        <Route path="/lenders/:id/edit" element={<EditLenderForm />} />
+        <Route path="/borrowers/:id/edit" element={<EditBorrowerForm />} />
+        <Route
+          path="/lenders/:id/requests/:id/newproposal"
+          element={<LenderProposalPage />}
+        />
         <Route path="borrowers/:id/requests/:id" element={<></>} />
         <Route path="/disclaimer" element={<></>} />{" "}
         <Route path="/newsletter" element={<EmailNewsletter />}></Route>
@@ -115,4 +117,3 @@ function App() {
 }
 
 export default App;
-git 

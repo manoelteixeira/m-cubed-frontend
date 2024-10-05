@@ -1,31 +1,25 @@
 import React from "react";
-import {
-  AppBar,
-  Toolbar,
-  Button,
-  Menu,
-  MenuItem,
-  IconButton,
-  Box,
-} from "@mui/material";
-import { ArrowDropDown } from "@mui/icons-material";
+import { AppBar, Toolbar, Button, IconButton, Box } from "@mui/material";
 import MMMIcon from "../../assets/MMMlogo.png";
 import { useNavigate } from "react-router-dom";
 
 const NavBar = () => {
-  const [anchorEl, setAnchorEl] = React.useState(null);
   const navigate = useNavigate();
-
-  const handleDropdownClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
 
   const handleLogoClick = () => {
     navigate("/");
+  };
+
+  const handleSignUpClick = (role) => {
+    if (role === "borrower") {
+      navigate("/borrowers/signup");
+    } else if (role === "lender") {
+      navigate("/lenders/signup");
+    }
+  };
+
+  const handleLoginClick = () => {
+    navigate("/login");
   };
 
   return (
@@ -38,6 +32,7 @@ const NavBar = () => {
       elevation={0}
     >
       <Toolbar>
+        {/* Logo */}
         <IconButton
           edge="start"
           aria-label="mmm logo"
@@ -55,12 +50,40 @@ const NavBar = () => {
             style={{ width: 40, height: 40, borderRadius: 0 }}
           />
         </IconButton>
+
         <Box sx={{ flexGrow: 1 }} />
+
         <Button
-          color="inherit"
           variant="outlined"
-          onClick={handleDropdownClick}
-          endIcon={<ArrowDropDown />}
+          onClick={() => handleSignUpClick("borrower")}
+          sx={{
+            borderColor: "#00a250",
+            color: "#00a250",
+            marginLeft: 2,
+            fontSize: "1rem",
+            fontWeight: "bold",
+          }}
+        >
+          SIGN UP BORROWER
+        </Button>
+
+        <Button
+          variant="outlined"
+          onClick={() => handleSignUpClick("lender")}
+          sx={{
+            borderColor: "#00a250",
+            color: "#00a250",
+            marginLeft: 2,
+            fontSize: "1rem",
+            fontWeight: "bold",
+          }}
+        >
+          SIGN UP LENDER
+        </Button>
+
+        <Button
+          variant="outlined"
+          onClick={handleLoginClick}
           sx={{
             borderColor: "#00a250",
             color: "#00a250",
@@ -71,27 +94,6 @@ const NavBar = () => {
         >
           LOG IN
         </Button>
-        <Menu
-          anchorEl={anchorEl}
-          open={Boolean(anchorEl)}
-          onClose={handleClose}
-          MenuListProps={{
-            "aria-labelledby": "basic-button",
-          }}
-        >
-          <MenuItem
-            onClick={handleClose}
-            sx={{ color: "#000", fontSize: "1rem" }}
-          >
-            Borrower
-          </MenuItem>
-          <MenuItem
-            onClick={handleClose}
-            sx={{ color: "#000", fontSize: "1rem" }}
-          >
-            Lender
-          </MenuItem>
-        </Menu>
       </Toolbar>
     </AppBar>
   );
