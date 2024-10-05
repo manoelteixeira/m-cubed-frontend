@@ -109,11 +109,11 @@ export default function Home() {
                 <span style={{ color: "#00a250", fontWeight: "bold" }}>
                   MMM
                 </span>{" "}
-                is a powerful platform designed for businesses seeking small
-                ticket equipment financing. With one streamlined application,
-                minimal credit pulls, and direct access to a network of
-                lenders—no middlemen— we cut through the noise to deliver fast,
-                effective financing solutions.
+                is a powerful platform designed for businesses seeking
+                small-ticket equipment financing. With one streamlined
+                application, minimal credit pulls, and direct access to a
+                network of lenders—no middlemen— we cut through the noise to
+                deliver fast, effective financing solutions.
               </Typography>
 
               <Link to="/signup" style={{ textDecoration: "none" }}>
@@ -122,7 +122,7 @@ export default function Home() {
                   style={{ backgroundColor: "#00a250", marginTop: "60px" }}
                   fullWidth
                 >
-                  Let MMM help you get funded
+                  Get Started!
                 </Button>
               </Link>
             </CardContent>
