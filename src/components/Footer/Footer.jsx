@@ -31,7 +31,7 @@ const Footer = () => {
               simplifying the financing process.
             </Typography>
             <Link
-              href="/about" // Link to the About Us page
+              href="/about"
               sx={{ color: "#f6f7f8", textDecoration: "underline" }}
             >
               Learn more
