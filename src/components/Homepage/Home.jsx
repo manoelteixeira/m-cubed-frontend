@@ -7,7 +7,6 @@ import {
   TextField,
   Button,
   Typography,
-  // Divider,
   Card,
   Grid,
 } from "@mui/material";
@@ -48,7 +47,11 @@ export default function Home() {
           xs={12}
           sm={6}
           md={6}
-          sx={{ display: "flex", justifyContent: "center" }}
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            flexDirection: "column",
+          }}
         >
           <Card
             sx={{
@@ -64,6 +67,7 @@ export default function Home() {
             }}
           >
             <CardContent>
+              {/* Equipment Slider */}
               <Slider {...settings}>
                 {equipmentItems.map((item, index) => (
                   <motion.div
@@ -90,33 +94,26 @@ export default function Home() {
                 ))}
               </Slider>
 
+              {/* MMM Description */}
               <Typography
                 variant="h6"
-                color="text.secondary"
+                color="black"
                 sx={{
                   fontWeight: "bold",
+                  textAlign: "justify",
                   textAlign: "left",
                   mb: 1,
                   marginTop: 2,
                 }}
               >
-                Growing a business is more than just numbers—it's about building
-                dreams, fostering innovation, and overcoming challenges.
-              </Typography>
-              <Typography
-                variant="h6"
-                color="text.secondary"
-                sx={{ fontWeight: "bold", textAlign: "left", mb: 1 }}
-              >
-                At MMM, we get it.
-              </Typography>
-              <Typography
-                variant="h6"
-                color="text.secondary"
-                sx={{ fontWeight: "bold", textAlign: "left", mb: 1 }}
-              >
-                You need the right tools and resources to turn your vision into
-                reality.
+                <span style={{ color: "#00a250", fontWeight: "bold" }}>
+                  MMM
+                </span>{" "}
+                is a powerful platform designed for businesses seeking small
+                ticket equipment financing. With one streamlined application,
+                minimal credit pulls, and direct access to a network of
+                lenders—no middlemen— we cut through the noise to deliver fast,
+                effective financing solutions.
               </Typography>
 
               <Link to="/signup" style={{ textDecoration: "none" }}>
@@ -222,7 +219,6 @@ export default function Home() {
           </Card>
         </Grid>
       </Grid>
-      {/* <Divider sx={{ my: 4 }} /> */}
 
       <Grid container spacing={4} justifyContent="center" sx={{ padding: 18 }}>
         <Grid item xs={12} display="flex" justifyContent="center">
