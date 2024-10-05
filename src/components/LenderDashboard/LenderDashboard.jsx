@@ -16,23 +16,21 @@ import {
   TablePagination,
   TextField,
 } from '@mui/material';
+import './LenderDashboard.scss';
 
 const API = import.meta.env.VITE_BASE_URL;
 
-export default function LenderDashboard({userlenderData}){
-const {id} = useParams()
-
+export default function LenderDashboard({userlenderData}) {
+  const {  id } = useParams();
   const [borrowers, setBorrowers] = useState([]);
   const [loanRequests, setLoanRequests] = useState([]);
   const [filteredBorrowers, setFilteredBorrowers] = useState([]);
   const [filteredLoanRequests, setFilteredLoanRequests] = useState([]);
-  const [loanlisting, setLoanListing] = useState([])
-  
+  const [loanlisting, setLoanListing] = useState([]);
   const [pageBorrowers, setPageBorrowers] = useState(0);
   const [rowsPerPageBorrowers, setRowsPerPageBorrowers] = useState(5);
   const [pageLoanRequests, setPageLoanRequests] = useState(0);
   const [rowsPerPageLoanRequests, setRowsPerPageLoanRequests] = useState(5);
-
   const [searchTerm, setSearchTerm] = useState('');
 
   const calculateTotalLoanVolume = () => {
@@ -43,40 +41,29 @@ const {id} = useParams()
   };
 
   useEffect(() => {
-    const fetchBorrowers = async () => {
-      try {
-        const response = await fetch(`${API}/borrowers`); 
-        const data = await response.json();
-        setBorrowers(data);
-        setFilteredBorrowers(data); 
-      } catch (error) {
-        console.error('Error fetching borrowers:', error);
-      }
-    };
+  
 
     const fetchLoanRequests = async () => {
       try {
         const response = await fetch(`${API}/borrowers/${id}/requests`); 
         const data = await response.json();
         setLoanRequests(data);
-        setFilteredLoanRequests(data); 
       } catch (error) {
         console.error('Error fetching loan requests:', error);
       }
     };
 
     const fetchLoanListing = async () => {
-      try{
+      try {
         const response = await fetch(`${API}/lenders/${id}/requests`)
         const data = await response.json();
-
         setLoanListing(data)
-      }catch(error){
+      } catch (error) {
         console.error('Error fetching requests: ', error)
       }
     }
 
-    fetchBorrowers();
+    // fetchBorrowers();
     fetchLoanRequests();
     fetchLoanListing()
   }, []);
@@ -119,19 +106,21 @@ const {id} = useParams()
     setFilteredLoanRequests(filteredLoanRequests);
   };
 
+  console.log(loanlisting)
+
   return (
-    <div>
-      <AppBar position="static" color="secondary" sx={{m: 2, width: 1500}}>
+    <div className="lender-dashboard">
+      <AppBar position="static" color="secondary" className="app-bar">
         <Toolbar>
-          <Typography variant="h4" sx={{ flexGrow: 1, m:2, mr:2 }}>
+          <Typography variant="h4" className="welcome-title">
             Welcome, {`${userlenderData.business_name}`}
           </Typography>
-          <Paper elevation={3} sx={{ m: 2, p: 2 }}>
+          <Paper elevation={3} className="total-loan-volume">
             <Typography variant="h6">
-              Total Loan Volume: ${calculateTotalLoanVolume().toFixed()}
+              Total Loan Volume: ${calculateTotalLoanVolume().toFixed(2)}
             </Typography>
           </Paper>
-          <Button color="primary" variant="contained">
+          <Button className="add-loan-button" color="primary" variant="contained">
             Add New Loan
           </Button>
         </Toolbar>
@@ -140,36 +129,132 @@ const {id} = useParams()
       <TextField
         label="Search"
         variant="outlined"
-        // halfWidth
         value={searchTerm}
         onChange={handleSearchChange}
-        sx={{ m: 2, width: 500}}
+        className="search-bar"
       />
 
-      <Grid container spacing={3} sx={{m:2}}>
+      <Grid container spacing={2}>
         {/* Left Side - Borrowers Table */}
-        <Grid item xs={12} md={6}>
-          <Paper elevation={3}>
-            <Typography variant="h6" component="div" sx={{ padding: 2 }}>
+ <Grid item xs={12} md={12}>
+          <Paper elevation={3} className="loan-listings-table">
+            <Typography variant="h6" component="div">
+              Available Loan Listings
+            </Typography>
+            <TableContainer component={Paper}>
+              <Table>
+                <TableHead>
+                  <TableRow className="table-header">
+                    <TableCell>Title</TableCell>
+                    <TableCell>Description</TableCell>
+                    <TableCell>Created On</TableCell>
+                    <TableCell>Action</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody className="table-body">
+                  {loanlisting
+                    .slice(
+                      pageBorrowers * rowsPerPageBorrowers,
+                      pageBorrowers * rowsPerPageBorrowers + rowsPerPageBorrowers
+                    )
+                    .map((loan) => (
+                      <TableRow key={loan.id}>
+                        <TableCell>{loan.title}</TableCell>
+                        <TableCell width={'40%'}>{loan.description}</TableCell>
+                        <TableCell>{new Date(loan.created_at).toLocaleDateString()}</TableCell>
+                        <TableCell className="action-buttons">
+                          <Button> <Link to={`/lenders/${userlenderData.id}/requests/${loan.id}/newproposal`}>Submit Offer</Link> </Button>
+                          <Button><Link>PASS</Link> </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <TablePagination
+              component="div"
+              count={filteredBorrowers.length}
+              page={pageBorrowers}
+              onPageChange={handleChangePageBorrowers}
+              rowsPerPage={rowsPerPageBorrowers}
+              onRowsPerPageChange={handleChangeRowsPerPageBorrowers}
+              rowsPerPageOptions={[5,10, 25, 50, 100]} 
+            />
+          </Paper>
+        </Grid>
+        {/* Right Side - Pending Loan Requests Table */}
+        <Grid item xs={12} md={12}>
+          <Paper elevation={3} className="loan-requests-table">
+            <Typography variant="h6" component="div">
+              Pending Loan Proposals
+            </Typography>
+            <TableContainer component={Paper}>
+              <Table>
+                <TableHead>
+                  <TableRow className="table-header">
+                    <TableCell >Title</TableCell>
+                    <TableCell sx={{textAlign: 'center'}}>Description</TableCell>
+                    <TableCell>Created At</TableCell>
+                    <TableCell colSpan={3} sx={{textAlign: 'center'}}>Action</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody className="table-body">
+                  {filteredLoanRequests
+                    .slice(
+                      pageLoanRequests * rowsPerPageLoanRequests,
+                      pageLoanRequests * rowsPerPageLoanRequests + rowsPerPageLoanRequests
+                    )
+                    .map((loan) => (
+                      <TableRow key={loan.id}>
+                        <TableCell>{loan.title}</TableCell>
+                        <TableCell sx={{textAlign: 'center'}}>{loan.description}</TableCell>
+                        <TableCell>{new Date(loan.created_at).toLocaleDateString()}</TableCell>
+                        <TableCell className="action-buttons">
+                        <Button> <Link>ACCEPT</Link> </Button>
+                          <Button><Link>PASS</Link> </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <TablePagination
+              component="div"
+              count={filteredLoanRequests.length}
+              page={pageLoanRequests}
+              onPageChange={handleChangePageLoanRequests}
+              rowsPerPage={rowsPerPageLoanRequests}
+              onRowsPerPageChange={handleChangeRowsPerPageLoanRequests}
+              rowsPerPageOptions={[5,10, 25, 50, 100]} 
+            />
+          </Paper>
+        </Grid>       
+      </Grid>
+    </div>
+  );
+};
+
+
+
+   {/* <Grid item xs={12} md={5}>
+          <Paper elevation={3} className="borrowers-table">
+            <Typography variant="h6" component="div">
               Current Borrowers
             </Typography>
             <TableContainer component={Paper}>
               <Table>
                 <TableHead>
-                  <TableRow>
+                  <TableRow className="table-header">
                     <TableCell>Business Name</TableCell>
                     <TableCell>City</TableCell>
                     <TableCell>Credit Score</TableCell>
                     <TableCell>Industry</TableCell>
                   </TableRow>
                 </TableHead>
-                <TableBody>
+                <TableBody className="table-body">
                   {filteredBorrowers
-                    .slice(
-                      pageBorrowers * rowsPerPageBorrowers,
-                      pageBorrowers * rowsPerPageBorrowers + rowsPerPageBorrowers
-                    )
-                    .map((borrower) => (
+                  // .slice(pageBorrowers * rowsPerPageBorrowers,pageBorrowers * rowsPerPageBorrowers + rowsPerPageBorrowers)
+                  .map((borrower) => (
                       <TableRow key={borrower.id}>
                         <TableCell>{borrower.business_name}</TableCell>
                         <TableCell>{borrower.city}</TableCell>
@@ -188,104 +273,16 @@ const {id} = useParams()
               rowsPerPage={rowsPerPageBorrowers}
               onRowsPerPageChange={handleChangeRowsPerPageBorrowers}
               rowsPerPageOptions={[5,10, 25, 50, 100]} 
-
             />
           </Paper>
-        </Grid>
+        </Grid> */}
 
-        {/* Right Side - Pending Loan Requests Table */}
-        <Grid item xs={12} md={6}>
-          <Paper elevation={3}>
-            <Typography variant="h6" component="div" sx={{ padding: 2 }}>
-              Pending Loan Proposals
-            </Typography>
-            <TableContainer component={Paper}>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Title</TableCell>
-                    <TableCell>Description</TableCell>
-                    <TableCell>Created At</TableCell>
-                    
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {filteredLoanRequests
-                    .slice(
-                      pageLoanRequests * rowsPerPageLoanRequests,
-                      pageLoanRequests * rowsPerPageLoanRequests + rowsPerPageLoanRequests
-                    )
-                    .map((loan) => (
-                      <TableRow key={loan.id}>
-                        <TableCell>{loan.title}</TableCell>
-                        <TableCell>{loan.description}</TableCell>
-                        <TableCell>{new Date(loan.created_at).toLocaleDateString()}</TableCell>
-                        <TableCell><Link to={`/lenders/${id}/proposals/${id}`}><Button>Edit</Button></Link></TableCell>
-                        <TableCell><Button>Delete</Button></TableCell>
-                      </TableRow>
-                    ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-            <TablePagination
-              component="div"
-              count={filteredLoanRequests.length}
-              page={pageLoanRequests}
-              onPageChange={handleChangePageLoanRequests}
-              rowsPerPage={rowsPerPageLoanRequests}
-              onRowsPerPageChange={handleChangeRowsPerPageLoanRequests}
-              rowsPerPageOptions={[5,10, 25, 50, 100]} 
-            />
-          </Paper>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <Paper elevation={3}>
-            <Typography variant="h6" component="div" sx={{ padding: 2 }}>
-              Available Loan Listings
-            </Typography>
-            <TableContainer component={Paper}>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Business Name</TableCell>
-                    <TableCell>City</TableCell>
-                    <TableCell>Credit Score</TableCell>
-                    <TableCell>Industry</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {filteredBorrowers
-                    .slice(
-                      pageBorrowers * rowsPerPageBorrowers,
-                      pageBorrowers * rowsPerPageBorrowers + rowsPerPageBorrowers
-                    )
-                    .map((borrower) => (
-                      <TableRow key={borrower.id}>
-                        <TableCell>{borrower.business_name}</TableCell>
-                        {/* <TableCell>{borrower.city}</TableCell>
-                        <TableCell>{borrower.credit_score}</TableCell>
-                        <TableCell>{borrower.industry}</TableCell> */}
-                      </TableRow>
-                    ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-            <TablePagination
-              component="div"
-              count={filteredBorrowers.length}
-              page={pageBorrowers}
-              onPageChange={handleChangePageBorrowers}
-              rowsPerPage={rowsPerPageBorrowers}
-              onRowsPerPageChange={handleChangeRowsPerPageBorrowers}
-              rowsPerPageOptions={[5,10, 25, 50, 100]} 
-
-            />
-          </Paper>
-        </Grid>
-      </Grid>
-    </div>
-  );
-};
-
-
-
+          // const fetchBorrowers = async () => {
+    //   try {
+    //     const response = await fetch(`${API}/borrowers`); 
+    //     const data = await response.json();
+    //     setBorrowers(data);
+    //   } catch (error) {
+    //     console.error('Error fetching borrowers:', error);
+    //   }
+    // };

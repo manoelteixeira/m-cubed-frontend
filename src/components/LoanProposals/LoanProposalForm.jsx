@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams,Link } from 'react-router-dom';
 import {
   Container,
   Box,
@@ -10,13 +10,13 @@ import {
   InputLabel,
   Select,
   FormControl,
+  Typography
 } from '@mui/material';
 
-const API = import.meta.env.VITE_BASE_URL
+const API = import.meta.env.VITE_BASE_URL;
 
 export default function LoanProposalForm() {
-    const { id}  = useParams()
-
+  const { lender_id,id } = useParams();
 
   const [lenderproposal, setLenderProposal] = useState({
     title: '',
@@ -35,7 +35,14 @@ export default function LoanProposalForm() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setLenderProposal({ ...lenderproposal, [name]: value });
+
+    if (name === 'accepted') {
+      setLenderProposal({ ...lenderproposal, [name]: value === 'true' });
+    } else if (name === 'loan_amount' || name === 'interest_rate' || name === 'repayment_term') {
+      setLenderProposal({ ...lenderproposal, [name]: Number(value) });
+    } else {
+      setLenderProposal({ ...lenderproposal, [name]: value });
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -45,7 +52,7 @@ export default function LoanProposalForm() {
     setSuccessMessage('');
 
     try {
-      const response = await fetch(`${API}/lenders/${id}/proposals'`, {
+      const response = await fetch(`${API}/lenders/${lender_id}/requests/${id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -55,7 +62,7 @@ export default function LoanProposalForm() {
 
       if (!response.ok) {
         const errorData = await response.json();
-        setErrorMessage(`Error: ${errorData.message}`);
+        setErrorMessage(`Error: ${errorData.error || errorData.message}`);
         return;
       }
 
@@ -63,10 +70,11 @@ export default function LoanProposalForm() {
       setLenderProposal({
         title: '',
         description: '',
+        created_at:'',
         loan_amount: '',
         interest_rate: '',
-        repayment_term: 0,
-        accepted: false,
+        repayment_term: '',
+        accepted: false, 
         lender_id: '',
         loan_request_id: '',
       });
@@ -80,8 +88,8 @@ export default function LoanProposalForm() {
   return (
     <Container>
       <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
-        <Grid container spacing={3}>
-          {/* Title */}
+        <Grid container spacing={4}>
+          <Typography>Loan Proposal for</Typography>
           <Grid item xs={12}>
             <TextField
               required
@@ -122,6 +130,21 @@ export default function LoanProposalForm() {
               inputProps={{ step: '0.01', min: '0' }}
             />
           </Grid>
+          <Grid item xs={12} sm={6}>
+  <TextField
+    required
+    fullWidth
+    id="created_at"
+    label="Proposal Date"
+    name="created_at"
+    type="date"  
+    value={lenderproposal.created_at}  
+    onChange={handleChange}
+    InputLabelProps={{
+      shrink: true,  
+    }}
+  />
+</Grid>
 
           <Grid item xs={12} sm={6}>
             <TextField
@@ -150,6 +173,7 @@ export default function LoanProposalForm() {
               inputProps={{ min: '0' }}
             />
           </Grid>
+          
           <Grid item xs={12} sm={6}>
             <FormControl fullWidth>
               <InputLabel id="accepted-label">Accepted</InputLabel>
@@ -157,16 +181,18 @@ export default function LoanProposalForm() {
                 labelId="accepted-label"
                 id="accepted"
                 name="accepted"
-                value={lenderproposal.accepted}
+                value={lenderproposal.accepted ? 'true' : 'false'} 
                 label="Accepted"
                 onChange={handleChange}
               >
-                <MenuItem value={true}>Yes</MenuItem>
-                <MenuItem value={false}>No</MenuItem>
+                <MenuItem value="true">Yes</MenuItem>
+                <MenuItem value="false">No</MenuItem>
               </Select>
             </FormControl>
           </Grid>
+          
           <Grid item xs={12}>
+            <Link to={`/lenders/${id}/lenderdashboard`}>
             <Button
               type="submit"
               fullWidth
@@ -176,7 +202,10 @@ export default function LoanProposalForm() {
             >
               {loading ? 'Submitting...' : 'Submit Proposal'}
             </Button>
+            
+            </Link>
           </Grid>
+          
           {errorMessage && (
             <Grid item xs={12}>
               <p style={{ color: 'red' }}>{errorMessage}</p>

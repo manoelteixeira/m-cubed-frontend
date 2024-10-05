@@ -1,149 +1,79 @@
+// LenderDashboard.scss
+
+$primary-color: #36c856; // Change to your primary color
+$secondary-color: #b7e98f; // Change to your secondary color
+$background-color: #f6fbf0; // Background color
+
 .lender-dashboard {
-  height: 100%;
-    padding: 20px;
-    font-family: Arial, sans-serif;
+  background-color: $background-color;
+  padding: 20px;
+  min-height: 100vh;
   
-    .dashboard-header {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      margin-bottom: 20px;
-  
-      .logo {
-        width: 150px;
-        margin-bottom: 10px;
-      }
-  
-      h1 {
-        font-size: 24px;
-        margin: 10px 0;
-      }
-  
-      p {
-        font-size: 16px;
-        color: #666;
-        margin-bottom: 20px;
-      }
-  
-      .total-loan-volume {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        width: 100%;
-        max-width: 600px;
-        margin: 20px 0;
-  
-        h2 {
-          font-size: 20px;
-  
-          span {
-            color: #2a9d8f;
-            font-weight: bold;
-          }
-        }
-  
-        .new-loan-file-btn {
-          background-color: #30b75b;
-          color: white;
-          border: none;
-          padding: 10px 20px;
-          border-radius: 5px;
-          cursor: pointer;
-          font-size: 16px;
-          transition: background-color 0.3s ease;
-  
-          &:hover {
-            background-color: #21867a;
-          }
-        }
-      }
+  .app-bar {
+    margin: 16px;
+    width: calc(100% - 111px);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: $primary-color;
+    border-radius: 10px;
+    .welcome-title {
+      margin: 0 16px;
     }
-  
-    .filters {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-  
-      .search-bar {
-        flex: 1;
-  
-        input {
-          width: 100%;
-          padding: 10px;
-          border: 1px solid #ccc;
-          border-radius: 5px;
-          font-size: 16px;
-        }
-      }
-  
-      .loan-status {
-        margin-left: 20px;
-  
-        select {
-          padding: 10px;
-          font-size: 16px;
-          border: 1px solid #ccc;
-          border-radius: 5px;
-        }
-      }
-  
-      .reset-filters {
-        background-color: #e63946;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 5px;
-        cursor: pointer;
-        margin-left: 20px;
-        font-size: 16px;
-        transition: background-color 0.3s ease;
-  
-        &:hover {
-          background-color: #d62839;
-        }
-      }
+    
+    .total-loan-volume {
+      margin: 16px;
+      padding: 16px;
     }
-  
-    .loans-table {
-      width: 100%;
-      border-collapse: collapse;
-  
-      th, td {
-        text-align: left;
-        padding: 12px 15px;
-        border-bottom: 1px solid #ddd;
-      }
-  
-      th {
-        background-color: #299e34;
-        color: white;
-      }
-  
-      tbody tr {
-        &:hover {
-          background-color: #f1f1f1;
-        }
-  
-        td {
-          vertical-align: middle;
-  
-          .resend-invite-btn, .start-btn {
-            background-color: #2a9d8f;
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-  
-            &:hover {
-              background-color: #21867a;
-            }
-          }
-        }
-      }
+    
+    .add-loan-button {
+      margin: 16px;
     }
   }
   
+  .search-bar {
+    margin: 16px 16px 0 16px;
+    width: 500px;
+    place-self: center;
+  }
+  
+  .borrowers-table,
+  .loan-requests-table,
+  .loan-listings-table {
+    display: grid;
+    text-align: center;
+    margin: 16px;
+    padding: 18px;
+    background-color: white;
+    gap: 10px;
+    
+    .table-header {
+      background-color: $primary-color;
+      color: white;
+      text-align: center;
+
+      td {
+        text-align: center;
+
+      }
+      th {
+        text-align: center;
+
+      }
+    }
+    
+    .table-body {
+      td {
+        text-align: center;
+      }
+    }
+    
+    .action-buttons {
+      display: flex;
+      justify-content: center;
+      button {
+        margin: 0 8px;
+      }
+    }
+  }
+}

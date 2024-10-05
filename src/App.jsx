@@ -99,17 +99,12 @@ function App() {
 
         {/* Borrowers Section */}
         <Route path="/borrowers/signup" element={<NewBorrower />} />
-        <Route
-          path="/borrowers/:id/borrowerdashboard"
-          element={<BDashboard />}
+        <Route path="/borrowers/:id/borrowerdashboard" element={<BDashboard />}
         />
-        <Route path="/borrowers/:id/new" element={<LoanRequestForm />} />
-        <Route path="/borrowers/:id/edit" element={<EditBorrowerForm />} />
-        <Route path="/lenders/:id/proposals" element={<></>} />
-        <Route
-          path="/lenders/:id/proposals/"
-          element={<LenderProposalPage />}
-        />
+        <Route path="/borrowers/:id/new" element={<LoanRequestForm />}/>
+        <Route path="/lenders/:id/edit" element={<EditLenderForm />}/>
+        <Route path="/borrowers/:id/edit" element={<EditBorrowerForm />}/>
+        <Route path="/lenders/:id/requests/:id/newproposal" element={<LenderProposalPage/>}/>
         <Route path="borrowers/:id/requests/:id" element={<></>} />
         <Route path="/disclaimer" element={<></>} />{" "}
         <Route path="/newsletter" element={<EmailNewsletter />}></Route>
