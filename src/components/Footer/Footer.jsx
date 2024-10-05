@@ -1,5 +1,13 @@
 import React from "react";
-import { Box, Typography, Link, Container, Grid } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Link,
+  Container,
+  Grid,
+  TextField,
+  Button,
+} from "@mui/material";
 
 const Footer = () => {
   return (
@@ -23,28 +31,39 @@ const Footer = () => {
               simplifying the financing process.
             </Typography>
             <Link
-              href="/about"
+              href="/about" // Link to the About Us page
               sx={{ color: "#f6f7f8", textDecoration: "underline" }}
             >
               Learn more
             </Link>
           </Grid>
 
+          {/* Subscribe Section */}
           <Grid item xs={12} md={6}>
             <Typography variant="h6" gutterBottom>
-              Meet The Team
+              Subscribe to Our Mailing List
             </Typography>
-            <Typography variant="body2">
-              Our dedicated team is here to support you and ensure a smooth
-              financing experience. Learn more about our expertise and
-              commitment.
+            <Typography variant="body2" sx={{ marginBottom: 2 }}>
+              Stay updated about our launch and get the latest news.
             </Typography>
-            <Link
-              href="/meet-the-team"
-              sx={{ color: "#f6f7f8", textDecoration: "underline" }}
+            <TextField
+              variant="outlined"
+              placeholder="Enter your email"
+              sx={{ marginBottom: 1, backgroundColor: "#fff" }}
+              fullWidth
+            />
+            <Button
+              variant="contained"
+              sx={{
+                backgroundColor: "#008b3e",
+                color: "#fff",
+                "&:hover": {
+                  backgroundColor: "#007a2e",
+                },
+              }}
             >
-              Meet the Team
-            </Link>
+              Subscribe
+            </Button>
           </Grid>
         </Grid>
         <Typography variant="body2" align="center" sx={{ marginTop: "20px" }}>
