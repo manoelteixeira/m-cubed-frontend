@@ -71,6 +71,7 @@ import BDashboard from "./components/BDashboard/BDashboard";
 import LoanRequestForm from "./components/LoanRequest/LoanRequestForm";
 import EmailNewsletter from "./Pages/EmailNewsletter";
 import LenderProposalPage from "./Pages/LenderProposalPage";
+import EditLoanProposalPage from "./Pages/EditLoanProposalPage";
 
 // Grouped by functionality for easier navigation and clarity
 function App() {
@@ -94,7 +95,8 @@ function App() {
         <Route path="/lenders/:id/lenderdashboard" element={<Lenderpage />} />
         <Route path="/lenders/:id/edit" element={<EditLenderForm />} />
         <Route path="/lenders/:id/proposals" element={<LenderProposalPage />} />
-        <Route path="/lenders/:id/requests/:id/newproposal" element={<LenderProposalPage/>}/>
+        <Route path="/lenders/:lender_id/requests/:id/newproposal" element={<LenderProposalPage/>}/>
+        <Route path="/lenders/:lender_id/proposals/:id/edit" element={<EditLoanProposalPage/>}/>
         <Route path="/lenders/:id/edit" element={<EditLenderForm />}/>
 
         {/* Borrowers Section */}
@@ -102,7 +104,7 @@ function App() {
         <Route path="/borrowers/:id/borrowerdashboard" element={<BDashboard />}/>
         <Route path="/borrowers/:id/new" element={<LoanRequestForm />}/>
         <Route path="/borrowers/:id/edit" element={<EditBorrowerForm />}/>
-        <Route path="borrowers/:id/requests/:id" element={<></>} />
+        <Route path="borrowers/:borrower_id/requests/:id" element={<></>} />
         <Route path="/disclaimer" element={<></>} />{" "}
         <Route path="/newsletter" element={<EmailNewsletter />}></Route>
         {/* FF: Info page for Borrowers/Lenders to know about additional services */}

@@ -22,30 +22,30 @@ const API = import.meta.env.VITE_BASE_URL;
 
 export default function LenderDashboard({ userlenderData }) {
   const { id } = useParams();
-  const [loanRequests, setLoanRequests] = useState([]);
-  const [filteredLoanRequests, setFilteredLoanRequests] = useState([]);
-  const [loanListing, setLoanListing] = useState([]);
-  const [filteredLoanListing, setFilteredLoanListing] = useState([]);
+  const [loanProposals, setLoanProposals] = useState([]);
+  const [filteredloanProposals, setFilteredLoanProposals] = useState([]);
+  const [loanListings, setLoanListings] = useState([]);
+  const [filteredloanListings, setFilteredLoanListings] = useState([]);
   const [pageBorrowers, setPageBorrowers] = useState(0);
   const [rowsPerPageBorrowers, setRowsPerPageBorrowers] = useState(5);
-  const [pageLoanRequests, setPageLoanRequests] = useState(0);
-  const [rowsPerPageLoanRequests, setRowsPerPageLoanRequests] = useState(5);
+  const [pageloanProposals, setPageloanProposals] = useState(0);
+  const [rowsPerPageloanProposals, setRowsPerPageloanProposals] = useState(5);
   const [searchTerm, setSearchTerm] = useState('');
 
   const calculateTotalLoanVolume = () => {
-    return loanRequests.reduce((total, loan) => {
+    return loanProposals.reduce((total, loan) => {
       const loanValue = isNaN(parseFloat(loan.value)) ? 0 : parseFloat(loan.value);
       return total + loanValue;
     }, 0);
   };
 
   useEffect(() => {
-    const fetchLoanRequests = async () => {
+    const fetchLoanProposals = async () => {
       try {
-        const response = await fetch(`${API}/borrowers/${id}/requests`);
+        const response = await fetch(`${API}/lenders/${id}/proposals`);
         const data = await response.json();
-        setLoanRequests(data);
-        setFilteredLoanRequests(data);
+        setLoanProposals(data);
+        setFilteredLoanProposals(data);
       } catch (error) {
         console.error('Error fetching loan requests:', error);
       }
@@ -55,17 +55,18 @@ export default function LenderDashboard({ userlenderData }) {
       try {
         const response = await fetch(`${API}/lenders/${id}/requests`);
         const data = await response.json();
-        setLoanListing(data);
-        setFilteredLoanListing(data);
+        setLoanListings(data);
+        setFilteredLoanListings(data);
       } catch (error) {
         console.error('Error fetching requests: ', error);
       }
     };
 
-    fetchLoanRequests();
+    fetchLoanProposals();
     fetchLoanListing();
   }, []);
 
+// PAGINATION CODE START!!
   const handleChangePageBorrowers = (event, newPage) => {
     setPageBorrowers(newPage);
   };
@@ -75,33 +76,37 @@ export default function LenderDashboard({ userlenderData }) {
     setPageBorrowers(0);
   };
 
-  const handleChangePageLoanRequests = (event, newPage) => {
-    setPageLoanRequests(newPage);
+  const handleChangePageloanProposals = (event, newPage) => {
+    setPageloanProposals(newPage);
   };
 
-  const handleChangeRowsPerPageLoanRequests = (event) => {
-    setRowsPerPageLoanRequests(parseInt(event.target.value, 10));
-    setPageLoanRequests(0);
+  const handleChangeRowsPerPageloanProposals = (event) => {
+    setRowsPerPageloanProposals(parseInt(event.target.value, 10));
+    setPageloanProposals(0);
   };
+  // PAGINATION CODE END!!!
+
+  // Search Bar START !!
 
   const handleSearchChange = (event) => {
     const term = event.target.value.toLowerCase();
     setSearchTerm(term);
 
-    const filteredBorrowers = loanListing.filter(
+    const filteredBorrowers = loanListings.filter(
       (loan) =>
         loan.title.toLowerCase().includes(term) ||
         loan.description.toLowerCase().includes(term)
     );
-    setFilteredLoanListing(filteredBorrowers);
+    setFilteredLoanListings(filteredBorrowers);
 
-    const filteredLoanRequests = loanRequests.filter(
+    const filteredloanProposals = loanProposals.filter(
       (loan) =>
         loan.title.toLowerCase().includes(term) ||
         loan.description.toLowerCase().includes(term)
     );
-    setFilteredLoanRequests(filteredLoanRequests);
+    setFilteredLoanProposals(filteredloanProposals);
   };
+  // SEARCH BAR END!!
 
   return (
     <div className="lender-dashboard">
@@ -115,9 +120,9 @@ export default function LenderDashboard({ userlenderData }) {
               Total Loan Volume: ${calculateTotalLoanVolume().toFixed(2)}
             </Typography>
           </Paper>
-          <Button className="add-loan-button" color="primary" variant="contained">
+          {/* <Button className="add-loan-button" color="primary" variant="contained">
             Add New Loan
-          </Button>
+          </Button> */}
         </Toolbar>
       </AppBar>
 
@@ -158,7 +163,7 @@ export default function LenderDashboard({ userlenderData }) {
                   </TableRow>
                 </TableHead>
                 <TableBody className="table-body">
-                  {filteredLoanListing
+                  {filteredloanListings
                     .slice(
                       pageBorrowers * rowsPerPageBorrowers,
                       pageBorrowers * rowsPerPageBorrowers + rowsPerPageBorrowers
@@ -187,7 +192,7 @@ export default function LenderDashboard({ userlenderData }) {
             </TableContainer>
             <TablePagination
               component="div"
-              count={filteredLoanListing.length}
+              count={filteredloanListings.length}
               page={pageBorrowers}
               onPageChange={handleChangePageBorrowers}
               rowsPerPage={rowsPerPageBorrowers}
@@ -218,10 +223,10 @@ export default function LenderDashboard({ userlenderData }) {
                   </TableRow>
                 </TableHead>
                 <TableBody className="table-body">
-                  {filteredLoanRequests
+                  {filteredloanProposals
                     .slice(
-                      pageLoanRequests * rowsPerPageLoanRequests,
-                      pageLoanRequests * rowsPerPageLoanRequests + rowsPerPageLoanRequests
+                      pageloanProposals * rowsPerPageloanProposals,
+                      pageloanProposals * rowsPerPageloanProposals + rowsPerPageloanProposals
                     )
                     .map((loan) => (
                       <TableRow key={loan.id}>
@@ -234,7 +239,7 @@ export default function LenderDashboard({ userlenderData }) {
                         </TableCell>
                         <TableCell className="action-buttons">
                           <Button>
-                            <Link>Review</Link>
+                            <Link to={`/lenders/${id}/proposals/${loan.id}/edit`}>Review</Link>
                           </Button>
                         </TableCell>
                       </TableRow>
@@ -244,11 +249,11 @@ export default function LenderDashboard({ userlenderData }) {
             </TableContainer>
             <TablePagination
               component="div"
-              count={filteredLoanRequests.length}
-              page={pageLoanRequests}
-              onPageChange={handleChangePageLoanRequests}
-              rowsPerPage={rowsPerPageLoanRequests}
-              onRowsPerPageChange={handleChangeRowsPerPageLoanRequests}
+              count={filteredloanProposals.length}
+              page={pageloanProposals}
+              onPageChange={handleChangePageloanProposals}
+              rowsPerPage={rowsPerPageloanProposals}
+              onRowsPerPageChange={handleChangeRowsPerPageloanProposals}
               rowsPerPageOptions={[5, 10, 25, 50, 100]}
             />
           </Paper>

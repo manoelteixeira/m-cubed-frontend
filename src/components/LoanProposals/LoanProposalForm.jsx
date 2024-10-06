@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams,Link } from 'react-router-dom';
 import {
   Container,
@@ -16,6 +16,7 @@ import {
 const API = import.meta.env.VITE_BASE_URL;
 
 export default function LoanProposalForm() {
+
   const { lender_id,id } = useParams();
 
   const [lenderproposal, setLenderProposal] = useState({
@@ -25,10 +26,7 @@ export default function LoanProposalForm() {
     interest_rate: '',
     repayment_term: '',
     accepted: false,
-    lender_id: '',
-    loan_request_id: '',
   });
-
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
@@ -45,45 +43,70 @@ export default function LoanProposalForm() {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setErrorMessage('');
-    setSuccessMessage('');
-
-    try {
-      const response = await fetch(`${API}/lenders/${lender_id}/requests/${id}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(lenderproposal),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        setErrorMessage(`Error: ${errorData.error || errorData.message}`);
-        return;
+  useEffect(() =>{
+    const fetchBorrower = async () => {
+      try {
+        const res = await fetch(`${API}/borrowers/${id}`)
+        const data = await res.json()
+        setBorrowerForProposal(data)
       }
-
-      setSuccessMessage('Loan proposal submitted successfully!');
-      setLenderProposal({
-        title: '',
-        description: '',
-        created_at:'',
-        loan_amount: '',
-        interest_rate: '',
-        repayment_term: '',
-        accepted: false, 
-        lender_id: '',
-        loan_request_id: '',
-      });
-    } catch (error) {
-      setErrorMessage('An error occurred while submitting the form.');
-    } finally {
-      setLoading(false);
+      catch(error){
+        console.error(error)
+      }
     }
-  };
+
+    fetchBorrower()
+  },[id])
+  console.log(parseInt(lender_id))
+
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+  setLoading(true);
+  setErrorMessage('');
+  setSuccessMessage('');
+
+  try {
+    const response = await fetch(`${API}/lenders/${lender_id}/requests/${id}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        title: lenderproposal.title,
+        description: lenderproposal.description,
+        loan_amount: lenderproposal.loan_amount,
+        interest_rate: lenderproposal.interest_rate,
+        repayment_term: lenderproposal.repayment_term,
+        created_at: lenderproposal.created_at,   
+        accepted: lenderproposal.accepted,
+        lender_id: lender_id,                   
+        loan_request_id: id                     
+      }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      setErrorMessage(`Error: ${errorData.error || errorData.message}`);
+      return;
+    }
+
+    setSuccessMessage('Loan proposal submitted successfully!');
+    setLenderProposal({
+      title: '',
+      description: '',
+      created_at: '',
+      loan_amount: '',
+      interest_rate: '',
+      repayment_term: '',
+      accepted: false, 
+    });
+  } catch (error) {
+    setErrorMessage('An error occurred while submitting the form.');
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <Container>
@@ -174,7 +197,7 @@ export default function LoanProposalForm() {
             />
           </Grid>
           
-          <Grid item xs={12} sm={6}>
+          {/* <Grid item xs={12} sm={6}>
             <FormControl fullWidth>
               <InputLabel id="accepted-label">Accepted</InputLabel>
               <Select
@@ -189,10 +212,10 @@ export default function LoanProposalForm() {
                 <MenuItem value="false">No</MenuItem>
               </Select>
             </FormControl>
-          </Grid>
+          </Grid> */}
           
           <Grid item xs={12}>
-            <Link to={`/lenders/${id}/lenderdashboard`}>
+            <Link to={`/lenders/${lender_id}/lenderdashboard`}>
             <Button
               type="submit"
               fullWidth
