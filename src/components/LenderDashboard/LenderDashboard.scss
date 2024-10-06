@@ -24,10 +24,7 @@ $background-color: #f6fbf0;
       color: $secondary-color;
       font-weight: 600;
       text-shadow: 
-        // -2px -2px 0 #000,  
-        2px -2px 4px #000,  
-        // -2px 5px 5px #000,   
-        // 2px 5px 5px #000; 
+        2px -2px 4px #656363,  
     }
 
     .lender-name {
@@ -45,10 +42,10 @@ $background-color: #f6fbf0;
   }
   
   .search-bar {
-    margin: 3em 20em;
-    width: 40%;
+    // margin: 3em 20em;
+    width: 100%;
     place-self: center;
-    min-height: 1vh; 
+    // min-height: 1vh; 
   }
 
   
