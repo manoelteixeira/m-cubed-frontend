@@ -1,8 +1,8 @@
 // LenderDashboard.scss
 
-$primary-color: #36c856; // Change to your primary color
-$secondary-color: #b7e98f; // Change to your secondary color
-$background-color: #f6fbf0; // Background color
+$primary-color: #36c856; 
+$secondary-color: #b7e98f; 
+$background-color: #f6fbf0; 
 
 .lender-dashboard {
   background-color: $background-color;
@@ -10,24 +10,37 @@ $background-color: #f6fbf0; // Background color
   min-height: 100vh;
   
   .app-bar {
-    margin: 18px;
+    margin: 1em;
     width: calc(100% - 30px);
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between; 
     align-items: center;
     background: $primary-color;
     border-radius: 10px;
+
     .welcome-title {
-      margin: 0 3em;
+      margin-right: 1em;
+      padding-right: 2em;
+      color: $secondary-color;
+      font-weight: 600;
+      text-shadow: 
+        // -2px -2px 0 #000,  
+        2px -2px 4px #000,  
+        // -2px 5px 5px #000,   
+        // 2px 5px 5px #000; 
+    }
+
+    .lender-name {
+      font-size: 4em;
     }
     
     .total-loan-volume {
-      margin: 16px;
-      padding: 16px;
-    }
-    
-    .add-loan-button {
-      margin: 16px;
+      margin-right: 1em;
+      padding: 1em;
+      display: flex;
+      justify-content: flex-end;
+      background: white;
+      border-radius: 8px;
     }
   }
   

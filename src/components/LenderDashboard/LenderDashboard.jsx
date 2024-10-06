@@ -108,23 +108,35 @@ export default function LenderDashboard({ userlenderData }) {
   };
   // SEARCH BAR END!!
 
+  console.log(filteredloanProposals)
   return (
     <div className="lender-dashboard">
       <AppBar position="static" color="secondary" className="app-bar">
-        <Toolbar>
-          <Typography variant="h3" className="welcome-title">
-            Welcome, {`${userlenderData.business_name}`}
+  <Toolbar style={{ width: '100%' }} sx={{
+        background: 'linear-gradient(to bottom, #36c856, #b7e98f)'
+      }}>
+    <Grid container justifyContent="space-between" alignItems="center">
+      {/* Left Side: Welcome Message */}
+      <Grid item>
+        <Typography variant="h1" className="welcome-title">
+          Welcome
+        </Typography>
+        <Typography className='lender-name' variant="h3" ml={'4em'} mb={'10px'}>
+          <em>{`${userlenderData.business_name}`}</em>
+        </Typography>
+      </Grid>
+
+      {/* Right Side: Total Loan Volume */}
+      <Grid item>
+        <Paper elevation={3} className="total-loan-volume">
+          <Typography variant="h6">
+            Total Loan Volume: ${calculateTotalLoanVolume().toFixed(2)}
           </Typography>
-          <Paper elevation={3} className="total-loan-volume">
-            <Typography variant="h6">
-              Total Loan Volume: ${calculateTotalLoanVolume().toFixed(2)}
-            </Typography>
-          </Paper>
-          {/* <Button className="add-loan-button" color="primary" variant="contained">
-            Add New Loan
-          </Button> */}
-        </Toolbar>
-      </AppBar>
+        </Paper>
+      </Grid>
+    </Grid>
+  </Toolbar>
+</AppBar>
 
       <Grid
   container
