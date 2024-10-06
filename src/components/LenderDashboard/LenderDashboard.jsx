@@ -20,13 +20,12 @@ import './LenderDashboard.scss';
 
 const API = import.meta.env.VITE_BASE_URL;
 
-export default function LenderDashboard({userlenderData}) {
-  const {  id } = useParams();
-  const [borrowers, setBorrowers] = useState([]);
+export default function LenderDashboard({ userlenderData }) {
+  const { id } = useParams();
   const [loanRequests, setLoanRequests] = useState([]);
-  const [filteredBorrowers, setFilteredBorrowers] = useState([]);
   const [filteredLoanRequests, setFilteredLoanRequests] = useState([]);
-  const [loanlisting, setLoanListing] = useState([]);
+  const [loanListing, setLoanListing] = useState([]);
+  const [filteredLoanListing, setFilteredLoanListing] = useState([]);
   const [pageBorrowers, setPageBorrowers] = useState(0);
   const [rowsPerPageBorrowers, setRowsPerPageBorrowers] = useState(5);
   const [pageLoanRequests, setPageLoanRequests] = useState(0);
@@ -41,13 +40,12 @@ export default function LenderDashboard({userlenderData}) {
   };
 
   useEffect(() => {
-  
-
     const fetchLoanRequests = async () => {
       try {
-        const response = await fetch(`${API}/borrowers/${id}/requests`); 
+        const response = await fetch(`${API}/borrowers/${id}/requests`);
         const data = await response.json();
         setLoanRequests(data);
+        setFilteredLoanRequests(data);
       } catch (error) {
         console.error('Error fetching loan requests:', error);
       }
@@ -55,17 +53,17 @@ export default function LenderDashboard({userlenderData}) {
 
     const fetchLoanListing = async () => {
       try {
-        const response = await fetch(`${API}/lenders/${id}/requests`)
+        const response = await fetch(`${API}/lenders/${id}/requests`);
         const data = await response.json();
-        setLoanListing(data)
+        setLoanListing(data);
+        setFilteredLoanListing(data);
       } catch (error) {
-        console.error('Error fetching requests: ', error)
+        console.error('Error fetching requests: ', error);
       }
-    }
+    };
 
-    // fetchBorrowers();
     fetchLoanRequests();
-    fetchLoanListing()
+    fetchLoanListing();
   }, []);
 
   const handleChangePageBorrowers = (event, newPage) => {
@@ -90,13 +88,12 @@ export default function LenderDashboard({userlenderData}) {
     const term = event.target.value.toLowerCase();
     setSearchTerm(term);
 
-    const filteredBorrowers = borrowers.filter(
-      (borrower) =>
-        borrower.business_name.toLowerCase().includes(term) ||
-        borrower.city.toLowerCase().includes(term) ||
-        borrower.industry.toLowerCase().includes(term)
+    const filteredBorrowers = loanListing.filter(
+      (loan) =>
+        loan.title.toLowerCase().includes(term) ||
+        loan.description.toLowerCase().includes(term)
     );
-    setFilteredBorrowers(filteredBorrowers);
+    setFilteredLoanListing(filteredBorrowers);
 
     const filteredLoanRequests = loanRequests.filter(
       (loan) =>
@@ -106,13 +103,11 @@ export default function LenderDashboard({userlenderData}) {
     setFilteredLoanRequests(filteredLoanRequests);
   };
 
-  console.log(loanlisting)
-
   return (
     <div className="lender-dashboard">
       <AppBar position="static" color="secondary" className="app-bar">
         <Toolbar>
-          <Typography variant="h4" className="welcome-title">
+          <Typography variant="h3" className="welcome-title">
             Welcome, {`${userlenderData.business_name}`}
           </Typography>
           <Paper elevation={3} className="total-loan-volume">
@@ -126,17 +121,28 @@ export default function LenderDashboard({userlenderData}) {
         </Toolbar>
       </AppBar>
 
-      <TextField
-        label="Search"
-        variant="outlined"
-        value={searchTerm}
-        onChange={handleSearchChange}
-        className="search-bar"
-      />
+      <Grid
+  container
+  justifyContent="center"
+  alignItems="center"
+>
+  <TextField
+    placeholder="Search"
+    variant="outlined"
+    value={searchTerm}
+    onChange={handleSearchChange}
+    className="search-bar"
+    inputProps={{
+      style: { textAlign: 'center' }
+    }}
+  />
+</Grid>
+
 
       <Grid container spacing={2}>
-        {/* Left Side - Borrowers Table */}
- <Grid item xs={12} md={12}>
+
+        {/* Loan Listings Table */}
+        <Grid item xs={12} md={12}>
           <Paper elevation={3} className="loan-listings-table">
             <Typography variant="h6" component="div">
               Available Loan Listings
@@ -152,7 +158,7 @@ export default function LenderDashboard({userlenderData}) {
                   </TableRow>
                 </TableHead>
                 <TableBody className="table-body">
-                  {loanlisting
+                  {filteredLoanListing
                     .slice(
                       pageBorrowers * rowsPerPageBorrowers,
                       pageBorrowers * rowsPerPageBorrowers + rowsPerPageBorrowers
@@ -161,10 +167,18 @@ export default function LenderDashboard({userlenderData}) {
                       <TableRow key={loan.id}>
                         <TableCell>{loan.title}</TableCell>
                         <TableCell width={'40%'}>{loan.description}</TableCell>
-                        <TableCell>{new Date(loan.created_at).toLocaleDateString()}</TableCell>
+                        <TableCell>
+                          {new Date(loan.created_at).toLocaleDateString()}
+                        </TableCell>
                         <TableCell className="action-buttons">
-                          <Button> <Link to={`/lenders/${userlenderData.id}/requests/${loan.id}/newproposal`}>Submit Offer</Link> </Button>
-                          <Button><Link>PASS</Link> </Button>
+                          <Button>
+                            <Link to={`/lenders/${userlenderData.id}/requests/${loan.id}/newproposal`}>
+                              Submit Offer
+                            </Link>
+                          </Button>
+                          <Button>
+                            <Link>PASS</Link>
+                          </Button>
                         </TableCell>
                       </TableRow>
                     ))}
@@ -173,16 +187,17 @@ export default function LenderDashboard({userlenderData}) {
             </TableContainer>
             <TablePagination
               component="div"
-              count={filteredBorrowers.length}
+              count={filteredLoanListing.length}
               page={pageBorrowers}
               onPageChange={handleChangePageBorrowers}
               rowsPerPage={rowsPerPageBorrowers}
               onRowsPerPageChange={handleChangeRowsPerPageBorrowers}
-              rowsPerPageOptions={[5,10, 25, 50, 100]} 
+              rowsPerPageOptions={[5, 10, 25, 50, 100]}
             />
           </Paper>
         </Grid>
-        {/* Right Side - Pending Loan Requests Table */}
+
+        {/* Pending Loan Requests Table */}
         <Grid item xs={12} md={12}>
           <Paper elevation={3} className="loan-requests-table">
             <Typography variant="h6" component="div">
@@ -192,10 +207,14 @@ export default function LenderDashboard({userlenderData}) {
               <Table>
                 <TableHead>
                   <TableRow className="table-header">
-                    <TableCell >Title</TableCell>
-                    <TableCell sx={{textAlign: 'center'}}>Description</TableCell>
+                    <TableCell>Title</TableCell>
+                    <TableCell sx={{ textAlign: 'center' }}>
+                      Description
+                    </TableCell>
                     <TableCell>Created At</TableCell>
-                    <TableCell colSpan={3} sx={{textAlign: 'center'}}>Action</TableCell>
+                    <TableCell colSpan={3} sx={{ textAlign: 'center' }}>
+                      Action
+                    </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody className="table-body">
@@ -207,11 +226,16 @@ export default function LenderDashboard({userlenderData}) {
                     .map((loan) => (
                       <TableRow key={loan.id}>
                         <TableCell>{loan.title}</TableCell>
-                        <TableCell sx={{textAlign: 'center'}}>{loan.description}</TableCell>
-                        <TableCell>{new Date(loan.created_at).toLocaleDateString()}</TableCell>
+                        <TableCell sx={{ textAlign: 'center' }}>
+                          {loan.description}
+                        </TableCell>
+                        <TableCell>
+                          {new Date(loan.created_at).toLocaleDateString()}
+                        </TableCell>
                         <TableCell className="action-buttons">
-                        <Button> <Link>ACCEPT</Link> </Button>
-                          <Button><Link>PASS</Link> </Button>
+                          <Button>
+                            <Link>Review</Link>
+                          </Button>
                         </TableCell>
                       </TableRow>
                     ))}
@@ -225,64 +249,11 @@ export default function LenderDashboard({userlenderData}) {
               onPageChange={handleChangePageLoanRequests}
               rowsPerPage={rowsPerPageLoanRequests}
               onRowsPerPageChange={handleChangeRowsPerPageLoanRequests}
-              rowsPerPageOptions={[5,10, 25, 50, 100]} 
+              rowsPerPageOptions={[5, 10, 25, 50, 100]}
             />
           </Paper>
-        </Grid>       
+        </Grid>
       </Grid>
     </div>
   );
-};
-
-
-
-   {/* <Grid item xs={12} md={5}>
-          <Paper elevation={3} className="borrowers-table">
-            <Typography variant="h6" component="div">
-              Current Borrowers
-            </Typography>
-            <TableContainer component={Paper}>
-              <Table>
-                <TableHead>
-                  <TableRow className="table-header">
-                    <TableCell>Business Name</TableCell>
-                    <TableCell>City</TableCell>
-                    <TableCell>Credit Score</TableCell>
-                    <TableCell>Industry</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody className="table-body">
-                  {filteredBorrowers
-                  // .slice(pageBorrowers * rowsPerPageBorrowers,pageBorrowers * rowsPerPageBorrowers + rowsPerPageBorrowers)
-                  .map((borrower) => (
-                      <TableRow key={borrower.id}>
-                        <TableCell>{borrower.business_name}</TableCell>
-                        <TableCell>{borrower.city}</TableCell>
-                        <TableCell>{borrower.credit_score}</TableCell>
-                        <TableCell>{borrower.industry}</TableCell>
-                      </TableRow>
-                    ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-            <TablePagination
-              component="div"
-              count={filteredBorrowers.length}
-              page={pageBorrowers}
-              onPageChange={handleChangePageBorrowers}
-              rowsPerPage={rowsPerPageBorrowers}
-              onRowsPerPageChange={handleChangeRowsPerPageBorrowers}
-              rowsPerPageOptions={[5,10, 25, 50, 100]} 
-            />
-          </Paper>
-        </Grid> */}
-
-          // const fetchBorrowers = async () => {
-    //   try {
-    //     const response = await fetch(`${API}/borrowers`); 
-    //     const data = await response.json();
-    //     setBorrowers(data);
-    //   } catch (error) {
-    //     console.error('Error fetching borrowers:', error);
-    //   }
-    // };
+}

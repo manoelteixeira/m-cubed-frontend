@@ -10,15 +10,15 @@ $background-color: #f6fbf0; // Background color
   min-height: 100vh;
   
   .app-bar {
-    margin: 16px;
-    width: calc(100% - 111px);
+    margin: 18px;
+    width: calc(100% - 30px);
     display: flex;
     justify-content: space-between;
     align-items: center;
     background: $primary-color;
     border-radius: 10px;
     .welcome-title {
-      margin: 0 16px;
+      margin: 0 3em;
     }
     
     .total-loan-volume {
@@ -32,10 +32,12 @@ $background-color: #f6fbf0; // Background color
   }
   
   .search-bar {
-    margin: 16px 16px 0 16px;
-    width: 500px;
+    margin: 3em 20em;
+    width: 40%;
     place-self: center;
+    min-height: 1vh; 
   }
+
   
   .borrowers-table,
   .loan-requests-table,
