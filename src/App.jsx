@@ -98,7 +98,7 @@ function App() {
         <Route path="/about" element={<AboutUs />} />
         <Route path="/team" element={<Cards />} />
         {/* <Route path="/login" element={<SignInForm />} /> */}
-        <Route path="/signup" element={<SignUp />} />
+        {/* <Route path="/signup" element={<SignUp />} /> */}
         <Route path="/signup/borrower" element={<></>}></Route>
         <Route path="/signup/lender" element={<></>}></Route>
         <Route path="/borrowers/:id" element={<BDashboard/>} />
@@ -111,7 +111,7 @@ function App() {
         <Route path="/lenders/:id/edit" element={<EditLenderForm />} />
         <Route path="/lenders/:id/proposals" element={<LenderProposalPage />} />
         <Route path="/lenders/:lender_id/requests/:id/newproposal" element={<LenderProposalPage/>}/>
-        <Route path="/lenders/:lender_id/proposals/:id/edit" element={<EditLoanProposalPage/>}/>
+        {/* <Route path="/lenders/:lender_id/proposals/:id/edit" element={<EditLoanProposalPage/>}/> */}
         <Route path="/lenders/:id/edit" element={<EditLenderForm />}/>
 
         {/* Borrowers Section */}
@@ -124,7 +124,7 @@ function App() {
         <Route path="/newsletter" element={<EmailNewsletter />}></Route>
         {/* FF: Info page for Borrowers/Lenders to know about additional services */}
       </Routes>
-      <Footer/>
+      {/* <Footer/> */}
     </>
   );
 }

@@ -349,7 +349,7 @@ const BDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { id } = useParams();
-  const [borrowerData, setBorrowerData] = useState(null);
+  
   const navigate = useNavigate()
   
   
