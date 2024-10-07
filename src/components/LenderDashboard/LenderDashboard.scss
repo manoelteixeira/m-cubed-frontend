@@ -1,91 +1,90 @@
-// LenderDashboard.scss
+// // LenderDashboard.scss
 
-$primary-color: #36c856; 
-$secondary-color: #b7e98f; 
-$background-color: #f6fbf0; 
+// $primary-color: #36c856;
+// $secondary-color: #b7e98f;
+// $background-color: #f6fbf0;
 
-.lender-dashboard {
-  background-color: $background-color;
-  padding: 20px;
-  min-height: 100vh;
-  
-  .app-bar {
-    margin: 1em;
-    width: calc(100% - 30px);
-    display: flex;
-    justify-content: space-between; 
-    align-items: center;
-    background: $primary-color;
-    border-radius: 10px;
+// .lender-dashboard {
+//   background-color: $background-color;
+//   padding: 20px;
+//   min-height: 100vh;
 
-    .welcome-title {
-      margin-right: 1em;
-      padding-right: 2em;
-      color: $secondary-color;
-      font-weight: 600;
-      text-shadow: 
-        2px -2px 4px #656363,  
-    }
+//   .app-bar {
+//     margin: 1em;
+//     width: calc(100% - 30px);
+//     display: flex;
+//     justify-content: space-between;
+//     align-items: center;
+//     background: $primary-color;
+//     border-radius: 10px;
 
-    .lender-name {
-      font-size: 4em;
-    }
-    
-    .total-loan-volume {
-      margin-right: 1em;
-      padding: 1em;
-      display: flex;
-      justify-content: flex-end;
-      background: white;
-      border-radius: 8px;
-    }
-  }
-  
-  .search-bar {
-    // margin: 3em 20em;
-    width: 100%;
-    place-self: center;
-    // min-height: 1vh; 
-  }
+//     .welcome-title {
+//       margin-right: 1em;
+//       padding-right: 2em;
+//       color: $secondary-color;
+//       font-weight: 600;
+//       text-shadow:
+//         2px -2px 4px #656363,
+//     }
 
-  
-  .borrowers-table,
-  .loan-requests-table,
-  .loan-listings-table {
-    display: grid;
-    text-align: center;
-    margin: 16px;
-    padding: 18px;
-    background-color: white;
-    gap: 10px;
-    
-    .table-header {
-      background-color: $primary-color;
-      color: white;
-      text-align: center;
+//     .lender-name {
+//       font-size: 4em;
+//     }
 
-      td {
-        text-align: center;
+//     .total-loan-volume {
+//       margin-right: 1em;
+//       padding: 1em;
+//       display: flex;
+//       justify-content: flex-end;
+//       background: white;
+//       border-radius: 8px;
+//     }
+//   }
 
-      }
-      th {
-        text-align: center;
+//   .search-bar {
+//     // margin: 3em 20em;
+//     width: 100%;
+//     place-self: center;
+//     // min-height: 1vh;
+//   }
 
-      }
-    }
-    
-    .table-body {
-      td {
-        text-align: center;
-      }
-    }
-    
-    .action-buttons {
-      display: flex;
-      justify-content: center;
-      button {
-        margin: 0 8px;
-      }
-    }
-  }
-}
+//   .borrowers-table,
+//   .loan-requests-table,
+//   .loan-listings-table {
+//     display: grid;
+//     text-align: center;
+//     margin: 16px;
+//     padding: 18px;
+//     background-color: white;
+//     gap: 10px;
+
+//     .table-header {
+//       background-color: $primary-color;
+//       color: white;
+//       text-align: center;
+
+//       td {
+//         text-align: center;
+
+//       }
+//       th {
+//         text-align: center;
+
+//       }
+//     }
+
+//     .table-body {
+//       td {
+//         text-align: center;
+//       }
+//     }
+
+//     .action-buttons {
+//       display: flex;
+//       justify-content: center;
+//       button {
+//         margin: 0 8px;
+//       }
+//     }
+//   }
+// }

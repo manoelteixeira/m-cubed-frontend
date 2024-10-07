@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { useParams, Link } from "react-router-dom";
 import {
   AppBar,
   Toolbar,
@@ -15,8 +15,8 @@ import {
   Typography,
   TablePagination,
   TextField,
-} from '@mui/material';
-import './LenderDashboard.scss';
+} from "@mui/material";
+import "./LenderDashboard.scss";
 
 const API = import.meta.env.VITE_BASE_URL;
 
@@ -35,17 +35,22 @@ export default function LenderDashboard({ userlenderData }) {
   const [pageloanProposals, setPageloanProposals] = useState(0);
   const [rowsPerPageloanProposals, setRowsPerPageloanProposals] = useState(5);
   // Filter states to search Listing and Proposals
-  const [searchTermLoanListings, setSearchTermLoanListings] = useState('');
-  const [searchTermLoanProposals, setSearchTermLoanProposals] = useState('');
+  const [searchTermLoanListings, setSearchTermLoanListings] = useState("");
+  const [searchTermLoanProposals, setSearchTermLoanProposals] = useState("");
 
   const calculateTotalLoanVolume = () => {
     const total = loanProposals.reduce((total, loan) => {
       console.log(loan);
-      const loanValue = isNaN(parseFloat(loan.loan_amount)) ? 0 : parseFloat(loan.loan_amount);
+      const loanValue = isNaN(parseFloat(loan.loan_amount))
+        ? 0
+        : parseFloat(loan.loan_amount);
       return total + loanValue;
     }, 0);
-  
-    return total.toLocaleString('en-US',{ minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+    return total.toLocaleString("en-US", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
   };
 
   useEffect(() => {
@@ -56,7 +61,7 @@ export default function LenderDashboard({ userlenderData }) {
         setLoanProposals(data);
         setFilteredLoanProposals(data);
       } catch (error) {
-        console.error('Error fetching loan requests:', error);
+        console.error("Error fetching loan requests:", error);
       }
     };
 
@@ -67,7 +72,7 @@ export default function LenderDashboard({ userlenderData }) {
         setLoanListings(data);
         setFilteredLoanListings(data);
       } catch (error) {
-        console.error('Error fetching requests: ', error);
+        console.error("Error fetching requests: ", error);
       }
     };
 
@@ -97,7 +102,7 @@ export default function LenderDashboard({ userlenderData }) {
 
   // Search bar for Loan Listings
   const handleSearchChangeLoanListings = (event) => {
-    //watches the change 
+    //watches the change
     const term = event.target.value.toLowerCase();
     setSearchTermLoanListings(term);
 
@@ -122,19 +127,29 @@ export default function LenderDashboard({ userlenderData }) {
     setFilteredLoanProposals(filteredProposals);
   };
 
-  console.log(loanProposals)
+  console.log(loanProposals);
 
-  const filterBorrowerName = () => {}
+  const filterBorrowerName = () => {};
 
   return (
     <div className="lender-dashboard">
       <AppBar position="static" color="secondary" className="app-bar">
-        <Toolbar style={{ width: '100%' }} sx={{ background: 'linear-gradient(to bottom, #36c856, #b7e98f)' }}>
+        <Toolbar
+          style={{ width: "100%" }}
+          sx={{ background: "linear-gradient(to bottom, #36c856, #b7e98f)" }}
+        >
           <Grid container justifyContent="space-between" alignItems="center">
             {/* Left Side: Welcome Message */}
             <Grid item>
-              <Typography variant="h1" className="welcome-title">Welcome</Typography>
-              <Typography className='lender-name' variant="h3" ml={'4em'} mb={'10px'}>
+              <Typography variant="h1" className="welcome-title">
+                Welcome
+              </Typography>
+              <Typography
+                className="lender-name"
+                variant="h3"
+                ml={"4em"}
+                mb={"10px"}
+              >
                 <em>{`${userlenderData.business_name}`}</em>
               </Typography>
             </Grid>
@@ -143,7 +158,10 @@ export default function LenderDashboard({ userlenderData }) {
             <Grid item>
               <Paper elevation={3} className="total-loan-volume">
                 <Typography variant="h6">
-                  Total Loan Volume: $<span style={{color:'green', fontStyle:'italic'}}>{calculateTotalLoanVolume()}</span>
+                  Total Loan Volume: $
+                  <span style={{ color: "green", fontStyle: "italic" }}>
+                    {calculateTotalLoanVolume()}
+                  </span>
                 </Typography>
               </Paper>
             </Grid>
@@ -155,28 +173,32 @@ export default function LenderDashboard({ userlenderData }) {
         {/* Loan Listings Table */}
         <Grid item xs={12} md={12}>
           <Paper elevation={3} className="loan-listings-table">
-          <Typography variant="h6" component="div">
-            <Grid container justifyContent="space-between" alignItems="center" spacing={0} sx={{padding:'0', m:'0'}}>
-              {/* Left: Title */}
-              <Grid item>
-                Available Loan Listings
-              </Grid>
+            <Typography variant="h6" component="div">
+              <Grid
+                container
+                justifyContent="space-between"
+                alignItems="center"
+                spacing={0}
+                sx={{ padding: "0", m: "0" }}
+              >
+                {/* Left: Title */}
+                <Grid item>Available Loan Listings</Grid>
 
-              {/* Right: Search Bar */}
-              <Grid item>
-                <TextField
-                  placeholder="Search Loan Listings"
-                  variant="outlined"
-                  value={searchTermLoanListings}
-                  onChange={handleSearchChangeLoanListings}
-                  className="search-bar"
-                  inputProps={{
-                    style: { textAlign: 'center' }
-                  }}
-                />
+                {/* Right: Search Bar */}
+                <Grid item>
+                  <TextField
+                    placeholder="Search Loan Listings"
+                    variant="outlined"
+                    value={searchTermLoanListings}
+                    onChange={handleSearchChangeLoanListings}
+                    className="search-bar"
+                    inputProps={{
+                      style: { textAlign: "center" },
+                    }}
+                  />
+                </Grid>
               </Grid>
-            </Grid>
-          </Typography>
+            </Typography>
             <TableContainer component={Paper}>
               <Table>
                 <TableHead>
@@ -191,18 +213,21 @@ export default function LenderDashboard({ userlenderData }) {
                   {filteredloanListings
                     .slice(
                       pageBorrowers * rowsPerPageBorrowers,
-                      pageBorrowers * rowsPerPageBorrowers + rowsPerPageBorrowers
+                      pageBorrowers * rowsPerPageBorrowers +
+                        rowsPerPageBorrowers
                     )
                     .map((loan) => (
                       <TableRow key={loan.id}>
                         <TableCell>{loan.title}</TableCell>
-                        <TableCell width={'40%'}>{loan.description}</TableCell>
+                        <TableCell width={"40%"}>{loan.description}</TableCell>
                         <TableCell>
                           {new Date(loan.created_at).toLocaleDateString()}
                         </TableCell>
                         <TableCell className="action-buttons">
                           <Button>
-                            <Link to={`/lenders/${userlenderData.id}/requests/${loan.id}/newproposal`}>
+                            <Link
+                              to={`/lenders/${userlenderData.id}/requests/${loan.id}/newproposal`}
+                            >
                               Submit Offer
                             </Link>
                           </Button>
@@ -231,51 +256,68 @@ export default function LenderDashboard({ userlenderData }) {
         <Grid item xs={12} md={12}>
           <Paper elevation={3} className="loan-requests-table">
             <Typography variant="h6" component="div">
-            <Grid container justifyContent="space-between" alignItems="center" spacing={0} sx={{padding:'0', m:'0'}}>
-              {/* Left: Title */}
-              <Grid item>
-                Pending Loan Proposals
-              </Grid>
+              <Grid
+                container
+                justifyContent="space-between"
+                alignItems="center"
+                spacing={0}
+                sx={{ padding: "0", m: "0" }}
+              >
+                {/* Left: Title */}
+                <Grid item>Pending Loan Proposals</Grid>
 
-              {/* Right: Search Bar */}
-              <Grid item>
-                <TextField
-                  placeholder="Search Loan Proposals"
-                  variant="outlined"
-                  value={searchTermLoanProposals}
-                  onChange={handleSearchChangeLoanProposals}
-                  className="search-bar"
-                  inputProps={{
-                    style: { textAlign: 'center' }
-                  }}
-                />
+                {/* Right: Search Bar */}
+                <Grid item>
+                  <TextField
+                    placeholder="Search Loan Proposals"
+                    variant="outlined"
+                    value={searchTermLoanProposals}
+                    onChange={handleSearchChangeLoanProposals}
+                    className="search-bar"
+                    inputProps={{
+                      style: { textAlign: "center" },
+                    }}
+                  />
+                </Grid>
               </Grid>
-            </Grid>
-          </Typography>
+            </Typography>
             <TableContainer component={Paper}>
               <Table>
                 <TableHead>
                   <TableRow className="table-header">
                     <TableCell>Title</TableCell>
-                    <TableCell sx={{ textAlign: 'center' }}>Description</TableCell>
+                    <TableCell sx={{ textAlign: "center" }}>
+                      Description
+                    </TableCell>
                     <TableCell>Created At</TableCell>
-                    <TableCell colSpan={3} sx={{ textAlign: 'center' }}>Action</TableCell>
+                    <TableCell colSpan={3} sx={{ textAlign: "center" }}>
+                      Action
+                    </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody className="table-body">
                   {filteredloanProposals
                     .slice(
                       pageloanProposals * rowsPerPageloanProposals,
-                      pageloanProposals * rowsPerPageloanProposals + rowsPerPageloanProposals
+                      pageloanProposals * rowsPerPageloanProposals +
+                        rowsPerPageloanProposals
                     )
                     .map((loan) => (
                       <TableRow key={loan.id}>
                         <TableCell>{loan.title}</TableCell>
-                        <TableCell sx={{ textAlign: 'center' }}>{loan.description}</TableCell>
-                        <TableCell>{new Date(loan.created_at).toLocaleDateString()}</TableCell>
+                        <TableCell sx={{ textAlign: "center" }}>
+                          {loan.description}
+                        </TableCell>
+                        <TableCell>
+                          {new Date(loan.created_at).toLocaleDateString()}
+                        </TableCell>
                         <TableCell className="action-buttons">
                           <Button>
-                            <Link to={`/lenders/${id}/proposals/${loan.id}/edit`}>Review</Link>
+                            <Link
+                              to={`/lenders/${id}/proposals/${loan.id}/edit`}
+                            >
+                              Review
+                            </Link>
                           </Button>
                         </TableCell>
                       </TableRow>
