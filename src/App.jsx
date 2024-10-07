@@ -61,7 +61,7 @@ import NavBar from "./components/NavBarFolder/NavBar";
 import Home from "./Pages/Homepage";
 import Lenderpage from "./Pages/Lenderpage";
 import AboutUs from "./components/AboutFolder/AboutUs";
-import LoginPage from './Pages/LoginPage.jsx'
+// import LoginPage from "./Pages/LoginPage";
 import ListOfLenders from "./Pages/ListOfLenders";
 import NewLender from "./Pages/NewLender";
 import NewBorrower from "./Pages/NewBorrower";
@@ -72,20 +72,11 @@ import LoanRequestForm from "./components/LoanRequest/LoanRequestForm";
 import EmailNewsletter from "./Pages/EmailNewsletter";
 import LenderProposalPage from "./Pages/LenderProposalPage";
 import EditLoanRequestForm from "./components/editLoanRequestForm/editLoanRequestForm";
-import Cards from './components/Cards/Cards';
+import Cards from "./components/Cards/Cards";
 import EditLoanProposalPage from "./components/LoanProposals/EditLoanProposalForm";
-//const theme = createTheme({
-//   palette: {
-//     primary: {
-//       main: "#4caf50", // Green color for buttons
-//       contrastText: "#ffffff", // White text color for contrast
-//     },
-//     secondary: {
-//       main: "#4caf50", // Use green color for secondary buttons as well
-//       contrastText: "#ffffff", // White text color for contrast
-//     },
-//   },
-// });
+import SignInForm from "./Pages/LoginPage.jsx";
+import Footer from "./components/Footer/Footer";
+
 function App() {
   return (
     <>
@@ -98,33 +89,47 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<AboutUs />} />
         <Route path="/team" element={<Cards />} />
-        <Route path="/login" element={<LoginPage />} />
+        <Route path="/login" element={<SignInForm />} />{" "}
+        {/* Ensure this is defined */}
         {/* <Route path="/signup" element={<SignUp />} /> */}
         <Route path="/signup/borrower" element={<></>}></Route>
         <Route path="/signup/lender" element={<></>}></Route>
-        <Route path="/borrowers/:id" element={<BDashboard/>} />
-        <Route path="/borrowers/:id/edit-request/:requestId" element={<EditLoanRequestForm />} />
+        <Route path="/borrowers/:id" element={<BDashboard />} />
+        <Route
+          path="/borrowers/:id/edit-request/:requestId"
+          element={<EditLoanRequestForm />}
+        />
         <Route path="/lenders" element={<ListOfLenders />} />
         <Route path="/lenders/signup" element={<NewLender />} />
         <Route path="/lenders/:id/lenderdashboard" element={<Lenderpage />} />
-        <Route path="/borrowers/:id/requests/new" element={<LoanRequestForm/>} />
+        <Route
+          path="/borrowers/:id/requests/new"
+          element={<LoanRequestForm />}
+        />
         <Route path="/lenders/:id/edit" element={<EditLenderForm />} />
         <Route path="/lenders/:id/proposals" element={<LenderProposalPage />} />
-        <Route path="/lenders/:lender_id/requests/:id/newproposal" element={<LenderProposalPage/>}/>
-        <Route path="/lenders/:lender_id/proposals/:id/edit" element={<EditLoanProposalPage/>}/>
-        <Route path="/lenders/:id/edit" element={<EditLenderForm />}/>
-
+        <Route
+          path="/lenders/:lender_id/requests/:id/newproposal"
+          element={<LenderProposalPage />}
+        />
+        <Route
+          path="/lenders/:lender_id/proposals/:id/edit"
+          element={<EditLoanProposalPage />}
+        />
+        <Route path="/lenders/:id/edit" element={<EditLenderForm />} />
         {/* Borrowers Section */}
         <Route path="/borrowers/signup" element={<NewBorrower />} />
-        <Route path="/borrowers/:id/borrowerdashboard" element={<BDashboard />}/>
-        <Route path="/borrowers/:id/new" element={<LoanRequestForm />}/>
-        <Route path="/borrowers/:id/edit" element={<EditBorrowerForm />}/>
+        <Route
+          path="/borrowers/:id/borrowerdashboard"
+          element={<BDashboard />}
+        />
+        <Route path="/borrowers/:id/new" element={<LoanRequestForm />} />
+        <Route path="/borrowers/:id/edit" element={<EditBorrowerForm />} />
         <Route path="borrowers/:borrower_id/requests/:id" element={<></>} />
         <Route path="/disclaimer" element={<></>} />{" "}
         <Route path="/newsletter" element={<EmailNewsletter />}></Route>
-        {/* FF: Info page for Borrowers/Lenders to know about additional services */}
       </Routes>
-      {/* <Footer/> */}
+      <Footer />
     </>
   );
 }
