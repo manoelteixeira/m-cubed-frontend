@@ -73,6 +73,7 @@ import EmailNewsletter from "./Pages/EmailNewsletter";
 import LenderProposalPage from "./Pages/LenderProposalPage";
 import EditLoanRequestForm from "./components/editLoanRequestForm/editLoanRequestForm";
 import Cards from './components/Cards/Cards';
+import EditLoanProposalPage from "./components/LoanProposals/EditLoanProposalForm";
 //const theme = createTheme({
 //   palette: {
 //     primary: {
@@ -111,7 +112,7 @@ function App() {
         <Route path="/lenders/:id/edit" element={<EditLenderForm />} />
         <Route path="/lenders/:id/proposals" element={<LenderProposalPage />} />
         <Route path="/lenders/:lender_id/requests/:id/newproposal" element={<LenderProposalPage/>}/>
-        {/* <Route path="/lenders/:lender_id/proposals/:id/edit" element={<EditLoanProposalPage/>}/> */}
+        <Route path="/lenders/:lender_id/proposals/:id/edit" element={<EditLoanProposalPage/>}/>
         <Route path="/lenders/:id/edit" element={<EditLenderForm />}/>
 
         {/* Borrowers Section */}
