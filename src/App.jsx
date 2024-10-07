@@ -61,7 +61,7 @@ import NavBar from "./components/NavBarFolder/NavBar";
 import Home from "./Pages/Homepage";
 import Lenderpage from "./Pages/Lenderpage";
 import AboutUs from "./components/AboutFolder/AboutUs";
-import LoginPage from "./Pages/LoginPage";
+import LoginPage from './Pages/LoginPage.jsx'
 import ListOfLenders from "./Pages/ListOfLenders";
 import NewLender from "./Pages/NewLender";
 import NewBorrower from "./Pages/NewBorrower";
@@ -98,13 +98,12 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<AboutUs />} />
         <Route path="/team" element={<Cards />} />
-        {/* <Route path="/login" element={<SignInForm />} /> */}
+        <Route path="/login" element={<LoginPage />} />
         {/* <Route path="/signup" element={<SignUp />} /> */}
         <Route path="/signup/borrower" element={<></>}></Route>
         <Route path="/signup/lender" element={<></>}></Route>
         <Route path="/borrowers/:id" element={<BDashboard/>} />
         <Route path="/borrowers/:id/edit-request/:requestId" element={<EditLoanRequestForm />} />
-        {/* <Route path='/signup' element={<SignUp/>}/> */}
         <Route path="/lenders" element={<ListOfLenders />} />
         <Route path="/lenders/signup" element={<NewLender />} />
         <Route path="/lenders/:id/lenderdashboard" element={<Lenderpage />} />
