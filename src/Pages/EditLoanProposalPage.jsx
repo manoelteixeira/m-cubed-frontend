@@ -1,8 +1,8 @@
 import React,{useParams,useState} from 'react'
-import EditiLoanProposalForm from '../components/LoanProposals/EditiLoanProposalForm'
+import EditLoanProposalForm from '../components/LoanProposals/EditLoanProposalForm'
 export default function EditLoanProposalPage() {
 
   return (
-    <div><EditiLoanProposalForm/></div>
+    <div><EditLoanProposalForm/></div>
   )
 }

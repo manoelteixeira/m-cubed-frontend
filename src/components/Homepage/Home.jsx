@@ -1,6 +1,6 @@
 import React from "react";
 import "./Home.scss";
-import Footer from "../../components/Footer/Footer";
+// import Footer from "../../components/Footer/Footer";
 import { Link } from "react-router-dom";
 import {
   CardContent,
@@ -254,7 +254,7 @@ export default function Home() {
         </Grid>
       </Grid>
 
-      <Footer />
+      {/* <Footer /> */}
     </main>
   );
 }

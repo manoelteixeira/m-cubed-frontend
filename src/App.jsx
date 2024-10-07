@@ -72,7 +72,7 @@ import LoanRequestForm from "./components/LoanRequest/LoanRequestForm";
 import EmailNewsletter from "./Pages/EmailNewsletter";
 import LenderProposalPage from "./Pages/LenderProposalPage";
 import EditLoanProposalPage from "./Pages/EditLoanProposalPage";
-
+import Footer from './components/Footer/Footer'
 // Grouped by functionality for easier navigation and clarity
 function App() {
   return (
@@ -87,8 +87,10 @@ function App() {
         <Route path="/about" element={<AboutUs />} />
         <Route path="/disclaimer" element={<></>} />
         <Route path="/newsletter" element={<EmailNewsletter />} />
+        
         {/* User Authentication Pages */}
         <Route path="/login" element={<LoginPage />} />
+
         {/* Lenders Section */}
         <Route path="/lenders" element={<ListOfLenders />} />
         <Route path="/lenders/signup" element={<NewLender />} />
@@ -109,6 +111,7 @@ function App() {
         <Route path="/newsletter" element={<EmailNewsletter />}></Route>
         {/* FF: Info page for Borrowers/Lenders to know about additional services */}
       </Routes>
+      <Footer/>
     </>
   );
 }
