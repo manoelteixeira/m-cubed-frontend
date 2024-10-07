@@ -339,28 +339,9 @@
 
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import {
-  Container,
-  Typography,
-  Button,
-  TextField,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  CircularProgress,
-  Snackbar,
-} from "@mui/material";
-import { Alert } from "@mui/material";
-import {
-  getBorrower,
-  getAllLoanRequests,
- 
-  deleteRequest,
-} from "../services/serviceRequest";
+import { getBorrower, getAllLoanRequests, deleteRequest } from '../services/serviceRequest';
+import './BDashboard.css'
+
 
 const BDashboard = () => {
   const [requests, setRequests] = useState([]);
@@ -368,7 +349,10 @@ const BDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { id } = useParams();
-  const navigate = useNavigate();
+  const [borrowerData, setBorrowerData] = useState(null);
+  const navigate = useNavigate()
+  
+  
 
   useEffect(() => {
     const fetchBorrowerData = async () => {
@@ -404,7 +388,8 @@ const BDashboard = () => {
       await fetchLoanRequestsData();
       setLoading(false);
     };
-    fetchData();
+   
+      fetchData();
   }, [id]);
   
   

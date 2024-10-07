@@ -1,26 +1,23 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import {addRequest} from '../services/serviceRequest'
+import { addRequest } from '../services/serviceRequest';
 import './LoanRequest.css';
 
 const LoanRequestForm = () => {
-  const {id} = useParams()
+  const { id } = useParams(); 
   const navigate = useNavigate();
-  const [error,setError]= useState(null)
+  const [error, setError] = useState(null);
+  const [requests, setRequests] = useState([]);
   const [timestamp, setTimestamp] = useState('');
   const [submissionStatus, setSubmissionStatus] = useState('');
   const [formData, setFormData] = useState({
-    businessName: '',
-    businessType: '',
-    loanAmount: '',
-    loanTerm: '',
-    industry: '',
-    revenue: '',
-    documents: null,
+    title: '',
+    description: '',
+    value: '',
+    created_at: '',
+    funded_at: '',
+    borrower_id: id, 
   });
-
-
-
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -30,24 +27,32 @@ const LoanRequestForm = () => {
     }));
   };
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
-      const addedRequest = await addRequest(id, formData);
+      const loanData = {
+        title: formData.title,
+        description: formData.description,
+        value: parseFloat(formData.value), 
+        created_at: formData.created_at,
+        funded_at: formData.funded_at || null,
+        borrower_id: id, 
+      };
+
+      const addedRequest = await addRequest(id, loanData);
+
       if (addedRequest) {
-        console.log("Request added successfully:", addedRequest);
-        
+        setRequests((prevRequests) => [...prevRequests, addedRequest]);
         navigate(`/borrowers/${id}`);
       }
     } catch (err) {
-      setError("Error adding request.");
+      setError('Error adding request.');
+      console.error('Submission error:', err);
     }
   };
-  
-     
 
-  // Save localStorage
+  // Save form data as a draft in localStorage
   const handleSaveDraft = () => {
     const now = new Date();
     const formattedTimestamp = now.toLocaleString();
@@ -62,71 +67,52 @@ const LoanRequestForm = () => {
       <h2>Loan Application Form</h2>
 
       <form onSubmit={handleSubmit}>
-        <label htmlFor="businessName">Business Name</label>
+        <label htmlFor="title">Business Name</label>
         <input
           type="text"
-          id="businessName"
-          name="businessName"
-          value={formData.businessName}
+          id="title"
+          name="title"
+          value={formData.title}
           onChange={handleChange}
           required
         />
 
-        <label htmlFor="businessType">Business Type</label>
+        <label htmlFor="description">Business Type</label>
         <input
           type="text"
-          id="businessType"
-          name="businessType"
-          value={formData.businessType}
+          id="description"
+          name="description"
+          value={formData.description}
           onChange={handleChange}
           required
         />
 
-        <label htmlFor="loanAmount">Loan Amount Requested</label>
+        <label htmlFor="value">Loan Amount Requested</label>
         <input
           type="number"
-          id="loanAmount"
-          name="loanAmount"
-          value={formData.loanAmount}
+          id="value"
+          name="value"
+          value={formData.value}
           onChange={handleChange}
           required
         />
 
-        <label htmlFor="loanTerm">Loan Term</label>
+        <label htmlFor="created_at">Created At</label>
         <input
-          type="text"
-          id="loanTerm"
-          name="loanTerm"
-          value={formData.loanTerm}
+          type="date"
+          id="created_at"
+          name="created_at"
+          value={formData.created_at}
           onChange={handleChange}
           required
         />
 
-        <label htmlFor="industry">Industry</label>
+        <label htmlFor="funded_at">Funded At</label>
         <input
-          type="text"
-          id="industry"
-          name="industry"
-          value={formData.industry}
-          onChange={handleChange}
-          required
-        />
-
-        <label htmlFor="revenue">Revenue</label>
-        <input
-          type="number"
-          id="revenue"
-          name="revenue"
-          value={formData.revenue}
-          onChange={handleChange}
-          required
-        />
-
-        <label htmlFor="documents">Upload Documents (e.g., Financial Statements)</label>
-        <input
-          type="file"
-          id="documents"
-          name="documents"
+          type="date"
+          id="funded_at"
+          name="funded_at"
+          value={formData.funded_at || ''}
           onChange={handleChange}
         />
 
@@ -138,6 +124,7 @@ const LoanRequestForm = () => {
 
       {timestamp && <div className="timestamp">{timestamp}</div>}
       {submissionStatus && <div>{submissionStatus}</div>}
+      {error && <div className="error">{error}</div>}
     </div>
   );
 };
