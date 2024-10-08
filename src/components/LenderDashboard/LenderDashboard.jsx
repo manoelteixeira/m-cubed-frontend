@@ -378,19 +378,14 @@ const API = import.meta.env.VITE_BASE_URL;
 
 export default function LenderDashboard({ userlenderData }) {
   const { id } = useParams();
-
-  // states for listings
   const [loanProposals, setLoanProposals] = useState([]);
   const [loanListings, setLoanListings] = useState([]);
-  // filtering for listings
   const [filteredloanProposals, setFilteredLoanProposals] = useState([]);
   const [filteredloanListings, setFilteredLoanListings] = useState([]);
-  // Paginations
   const [pageBorrowers, setPageBorrowers] = useState(0);
   const [rowsPerPageBorrowers, setRowsPerPageBorrowers] = useState(5);
   const [pageloanProposals, setPageloanProposals] = useState(0);
   const [rowsPerPageloanProposals, setRowsPerPageloanProposals] = useState(5);
-  // Filter states to search Listing and Proposals
   const [searchTermLoanListings, setSearchTermLoanListings] = useState("");
   const [searchTermLoanProposals, setSearchTermLoanProposals] = useState("");
 
@@ -404,7 +399,6 @@ export default function LenderDashboard({ userlenderData }) {
         : parseFloat(loan.loan_amount);
       return total + loanValue;
     }, 0);
-
     return total.toLocaleString("en-US", {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
@@ -438,7 +432,6 @@ export default function LenderDashboard({ userlenderData }) {
     fetchLoanListing();
   }, [id]);
 
-  // PAGINATION CODE START!!
   const handleChangePageBorrowers = (event, newPage) => {
     setPageBorrowers(newPage);
   };
@@ -456,19 +449,15 @@ export default function LenderDashboard({ userlenderData }) {
     setRowsPerPageloanProposals(parseInt(event.target.value, 10));
     setPageloanProposals(0);
   };
-  // PAGINATION CODE END!!!
 
-  // Search bar for Loan Listings
   const handleSearchChangeLoanListings = (event) => {
     const term = event.target.value.toLowerCase();
     setSearchTermLoanListings(term);
   };
 
-  // Search bar for Loan Proposals
   const handleSearchChangeLoanProposals = (event) => {
     const term = event.target.value.toLowerCase();
     setSearchTermLoanProposals(term);
-
     const filteredProposals = loanProposals.filter(
       (loan) =>
         loan.title.toLowerCase().includes(term) ||
@@ -487,7 +476,6 @@ export default function LenderDashboard({ userlenderData }) {
       >
         <Toolbar style={{ width: "100%" }}>
           <Grid container justifyContent="space-between" alignItems="center">
-            {/* Left Side: Welcome Message */}
             <Grid item>
               <Typography variant="h1" className="welcome-title">
                 Welcome
@@ -501,8 +489,6 @@ export default function LenderDashboard({ userlenderData }) {
                 <em>{`${userlenderData.business_name}`}</em>
               </Typography>
             </Grid>
-
-            {/* Right Side: Total Loan Volume */}
             <Grid item>
               <Paper elevation={3} className="total-loan-volume">
                 <Typography variant="h6">
@@ -520,7 +506,6 @@ export default function LenderDashboard({ userlenderData }) {
       </AppBar>
 
       <Grid container spacing={3}>
-        {/* Loan Listings Table */}
         <Grid item xs={12} md={12}>
           <Paper elevation={3} className="loan-listings-table">
             <Typography variant="h6" component="div">
@@ -531,10 +516,9 @@ export default function LenderDashboard({ userlenderData }) {
                 spacing={0}
                 sx={{ padding: "0", m: "0" }}
               >
-                {/* Left: Title */}
-                <Grid item>Available Loan Listings</Grid>
-
-                {/* Right: Search Bar */}
+                <Grid item xs={12} textAlign="center">
+                  <strong>The Loans Marketplace</strong>
+                </Grid>
                 <Grid item>
                   <TextField
                     placeholder="Search Loan Listings"
@@ -548,6 +532,13 @@ export default function LenderDashboard({ userlenderData }) {
                   />
                 </Grid>
               </Grid>
+              <Typography
+                variant="body1"
+                component="div"
+                style={{ textAlign: "center", marginTop: "10px" }}
+              >
+                Total Loans in Marketplace: {loanListings.length}
+              </Typography>
             </Typography>
             <TableContainer component={Paper}>
               <Table>
@@ -555,7 +546,7 @@ export default function LenderDashboard({ userlenderData }) {
                   <TableRow className="table-header">
                     <TableCell>Title</TableCell>
                     <TableCell>Description</TableCell>
-                    <TableCell>Value</TableCell> {/* Changed to Value */}
+                    <TableCell>Value</TableCell>
                     <TableCell>Created On</TableCell>
                     <TableCell>Action</TableCell>
                   </TableRow>
@@ -578,8 +569,7 @@ export default function LenderDashboard({ userlenderData }) {
                                 minimumFractionDigits: 2,
                               })
                             : "N/A"}
-                        </TableCell>{" "}
-                        {/* Display Value */}
+                        </TableCell>
                         <TableCell>
                           {new Date(loan.created_at).toLocaleDateString()}
                         </TableCell>
@@ -611,7 +601,6 @@ export default function LenderDashboard({ userlenderData }) {
             />
           </Paper>
         </Grid>
-        {/* Loan Proposals Table */}
         <Grid item xs={12} md={12}>
           <Paper elevation={3} className="loan-requests-table">
             <Typography variant="h6" component="div">
@@ -622,10 +611,7 @@ export default function LenderDashboard({ userlenderData }) {
                 spacing={0}
                 sx={{ padding: "0", m: "0" }}
               >
-                {/* Left: Title */}
                 <Grid item>Pending Loan Proposals</Grid>
-
-                {/* Right: Search Bar */}
                 <Grid item>
                   <TextField
                     placeholder="Search Loan Proposals"
@@ -646,7 +632,7 @@ export default function LenderDashboard({ userlenderData }) {
                   <TableRow className="table-header">
                     <TableCell>Title</TableCell>
                     <TableCell>Description</TableCell>
-                    <TableCell>Value</TableCell> {/* Changed to Value */}
+                    <TableCell>Loan Amount</TableCell>
                     <TableCell>Created On</TableCell>
                     <TableCell>Action</TableCell>
                   </TableRow>
@@ -664,27 +650,26 @@ export default function LenderDashboard({ userlenderData }) {
                         <TableCell width={"40%"}>{loan.description}</TableCell>
                         <TableCell>
                           $
-                          {parseFloat(loan.loan_amount)
-                            ? parseFloat(loan.loan_amount).toLocaleString(
-                                "en-US",
-                                { minimumFractionDigits: 2 }
-                              )
-                            : "N/A"}
-                        </TableCell>{" "}
-                        {/* Display Value */}
+                          {parseFloat(loan.loan_amount).toLocaleString(
+                            "en-US",
+                            {
+                              minimumFractionDigits: 2,
+                            }
+                          )}
+                        </TableCell>
                         <TableCell>
                           {new Date(loan.created_at).toLocaleDateString()}
                         </TableCell>
                         <TableCell className="action-buttons">
                           <Button>
                             <Link
-                              to={`/lenders/${userlenderData.id}/proposals/${loan.id}`}
+                              to={`/lenders/${userlenderData.id}/requests/${loan.id}/newoffer`}
                             >
-                              View Proposal
+                              View Offer
                             </Link>
                           </Button>
                           <Button>
-                            <Link>PASS</Link>
+                            <Link>Reject</Link>
                           </Button>
                         </TableCell>
                       </TableRow>
