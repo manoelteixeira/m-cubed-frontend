@@ -109,16 +109,20 @@ const LenderForm = () => {
           {/* Left Side with Placeholder Image */}
           <Grid item xs={12} md={6}>
             <Card sx={{ p: 0, boxShadow: "none" }}>
-              <img
-                src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1728325843/Hey_there_Friend_5_bgxdye.png"
-                alt="Welcome to MoneyMoneyMoney"
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                  border: "none",
-                }}
-              />
+              <Box sx={{ mt: -2 }}>
+                {" "}
+                {/* Use negative margin to move image up */}
+                <img
+                  src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1728325843/Hey_there_Friend_5_bgxdye.png"
+                  alt="Welcome to MoneyMoneyMoney"
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    border: "none",
+                  }}
+                />
+              </Box>
             </Card>
           </Grid>
 
