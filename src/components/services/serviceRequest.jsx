@@ -75,7 +75,7 @@ export const getBorrower = async (id) => {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
-      console.log(data)
+      
       return data;
     } catch (err) {
       console.error('Error fetching loan requests:', err);

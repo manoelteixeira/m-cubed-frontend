@@ -388,14 +388,13 @@ const BDashboard = () => {
    
    
     const fetchLoanOffers = async () => {
-    
+      console.log(requests)
       try {
         const loanOffers = [];
         for (const request of requests) {
-         
+        console.log(request)
           const proposals = await getProposalsByRequestId(id, request.id);
        
-          // const acceptedOffers = offers.filter(offer => offer.accepted); 
           loanOffers.push(...proposals);
         }
         setOffers(loanOffers)
@@ -408,13 +407,32 @@ const BDashboard = () => {
     const fetchData = async () => {
       await fetchBorrowerData();
       await fetchLoanRequestsData();
-      await fetchLoanOffers(requests)
+      // await fetchLoanOffers(requests)
       setLoading(false);
     };
    
       fetchData();
   }, [id]);
   
+  useEffect(() => {
+    const fetchLoanOffers = async () => {
+      console.log(requests)
+      try {
+        const loanOffers = [];
+        for (const request of requests) {
+        console.log(request)
+          const proposals = await getProposalsByRequestId(id, request.id);
+       
+          loanOffers.push(...proposals);
+        }
+        setOffers(loanOffers)
+      } catch (error) {
+        console.error('Error fetching loan offers:', error);
+        setError('Error fetching loan offers.');
+      }
+    };
+  fetchLoanOffers(requests)
+  },[requests])
   console.log(offers)
   const handleDeleteRequest = async (requestId) => {
     try {
@@ -514,7 +532,7 @@ const BDashboard = () => {
           {offers.length > 0 ? ( 
             offers.map((offer, index) => (
               <li key={index}> 
-                {offer.title} - ${offer.loan_amount} - {offer.terms}  - {offer.repayment_term} months - {offer.interest_rate}% interest
+                {offer.title} - ${offer.loan_amount} - {offer.repayment_terms}  - {offer.repayment_term} months - {offer.interest_rate}% interest
               </li>
             ))
           ) : (
