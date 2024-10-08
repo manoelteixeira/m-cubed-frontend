@@ -14,7 +14,6 @@ import {
   InputAdornment,
   ThemeProvider,
   createTheme,
-  Card,
 } from "@mui/material";
 import { useNavigate } from "react-router";
 import { Email, Lock, Business } from "@mui/icons-material";
@@ -106,29 +105,27 @@ const LenderForm = () => {
         }}
       >
         <Grid container sx={{ height: "100vh" }} spacing={0}>
-          {/* Left Side with Placeholder Image */}
+          {/* Left Side with the Image */}
           <Grid item xs={12} md={6}>
-            <Card sx={{ p: 0, boxShadow: "none" }}>
-              <Box sx={{ mt: -2 }}>
-                {" "}
-                {/* Use negative margin to move image up */}
-                <img
-                  src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1728325843/Hey_there_Friend_5_bgxdye.png"
-                  alt="Welcome to MoneyMoneyMoney"
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                    border: "none",
-                  }}
-                />
-              </Box>
-            </Card>
+            <Box sx={{ mt: -2 }}>
+              {" "}
+              {/* Use negative margin to move image up */}
+              <img
+                src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1728325843/Hey_there_Friend_5_bgxdye.png"
+                alt="Welcome to MoneyMoneyMoney"
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  border: "none",
+                }}
+              />
+            </Box>
           </Grid>
 
           {/* Right Side with Form */}
           <Grid item xs={12} md={6}>
-            <Card sx={{ p: 4, backgroundColor: "#f6f7f8", boxShadow: "none" }}>
+            <Box sx={{ p: 4, backgroundColor: "#f6f7f8" }}>
               <Typography
                 variant="h5"
                 component="h2"
@@ -223,7 +220,7 @@ const LenderForm = () => {
               >
                 <strong>Cancel</strong>
               </Button>
-            </Card>
+            </Box>
           </Grid>
         </Grid>
 
