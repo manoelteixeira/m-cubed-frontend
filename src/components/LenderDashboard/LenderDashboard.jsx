@@ -39,19 +39,17 @@ export default function LenderDashboard({ userlenderData }) {
   const [searchTermLoanProposals, setSearchTermLoanProposals] = useState("");
 
   const calculateTotalLoanVolume = () => {
-    const total = loanProposals.reduce((total, loan) => {
-      console.log(loan);
-      const loanValue = isNaN(parseFloat(loan.loan_amount))
-        ? 0
-        : parseFloat(loan.loan_amount);
+    if (!Array.isArray(loanProposals) || loanProposals.length === 0) {
+      return "0.00";
+    }
+      const total = loanProposals.reduce((total, loan) => {
+      const loanValue = isNaN(parseFloat(loan.loan_amount)) ? 0 : parseFloat(loan.loan_amount);
       return total + loanValue;
     }, 0);
-
-    return total.toLocaleString("en-US", {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    });
+  
+    return total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   };
+  
 
   useEffect(() => {
     const fetchLoanProposals = async () => {
@@ -105,13 +103,6 @@ export default function LenderDashboard({ userlenderData }) {
     //watches the change
     const term = event.target.value.toLowerCase();
     setSearchTermLoanListings(term);
-
-    const filteredBorrowers = loanListings.filter(
-      (loan) =>
-        loan.title.toLowerCase().includes(term) ||
-        loan.description.toLowerCase().includes(term)
-    );
-    setFilteredLoanListings(filteredBorrowers);
   };
 
   // Search bar for Loan Proposals
@@ -127,9 +118,8 @@ export default function LenderDashboard({ userlenderData }) {
     setFilteredLoanProposals(filteredProposals);
   };
 
-  console.log(loanProposals);
+  console.log(filteredloanProposals)
 
-  const filterBorrowerName = () => {};
 
   return (
     <div className="lender-dashboard">
@@ -158,10 +148,7 @@ export default function LenderDashboard({ userlenderData }) {
             <Grid item>
               <Paper elevation={3} className="total-loan-volume">
                 <Typography variant="h6">
-                  Total Loan Volume: $
-                  <span style={{ color: "green", fontStyle: "italic" }}>
-                    {calculateTotalLoanVolume()}
-                  </span>
+                  Total Loan Volume: $<span style={{color:'green', fontStyle:'italic'}}>{loanProposals.length === 0 ? 0 : calculateTotalLoanVolume()}</span>
                 </Typography>
               </Paper>
             </Grid>
@@ -251,90 +238,85 @@ export default function LenderDashboard({ userlenderData }) {
             />
           </Paper>
         </Grid>
-
         {/* Loan Proposals Table */}
         <Grid item xs={12} md={12}>
-          <Paper elevation={3} className="loan-requests-table">
-            <Typography variant="h6" component="div">
-              <Grid
-                container
-                justifyContent="space-between"
-                alignItems="center"
-                spacing={0}
-                sx={{ padding: "0", m: "0" }}
-              >
-                {/* Left: Title */}
-                <Grid item>Pending Loan Proposals</Grid>
+  <Paper elevation={3} className="loan-requests-table">
+    <Typography variant="h6" component="div">
+      <Grid container justifyContent="space-between" alignItems="center" spacing={0} sx={{ padding: '0', m: '0' }}>
+        {/* Left: Title */}
+        <Grid item>Pending Loan Proposals</Grid>
 
-                {/* Right: Search Bar */}
-                <Grid item>
-                  <TextField
-                    placeholder="Search Loan Proposals"
-                    variant="outlined"
-                    value={searchTermLoanProposals}
-                    onChange={handleSearchChangeLoanProposals}
-                    className="search-bar"
-                    inputProps={{
-                      style: { textAlign: "center" },
-                    }}
-                  />
-                </Grid>
-              </Grid>
-            </Typography>
-            <TableContainer component={Paper}>
-              <Table>
-                <TableHead>
-                  <TableRow className="table-header">
-                    <TableCell>Title</TableCell>
-                    <TableCell sx={{ textAlign: "center" }}>
-                      Description
-                    </TableCell>
-                    <TableCell>Created At</TableCell>
-                    <TableCell colSpan={3} sx={{ textAlign: "center" }}>
-                      Action
-                    </TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody className="table-body">
-                  {filteredloanProposals
-                    .slice(
-                      pageloanProposals * rowsPerPageloanProposals,
-                      pageloanProposals * rowsPerPageloanProposals +
-                        rowsPerPageloanProposals
-                    )
-                    .map((loan) => (
-                      <TableRow key={loan.id}>
-                        <TableCell>{loan.title}</TableCell>
-                        <TableCell sx={{ textAlign: "center" }}>
-                          {loan.description}
-                        </TableCell>
-                        <TableCell>
-                          {new Date(loan.created_at).toLocaleDateString()}
-                        </TableCell>
-                        <TableCell className="action-buttons">
-                          <Button>
-                            <Link
-                              to={`/lenders/${id}/proposals/${loan.id}/edit`}
-                            >
-                              Review
-                            </Link>
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-            <TablePagination
-              component="div"
-              count={filteredloanProposals.length}
-              page={pageloanProposals}
-              onPageChange={handleChangePageloanProposals}
-              rowsPerPage={rowsPerPageloanProposals}
-              onRowsPerPageChange={handleChangeRowsPerPageloanProposals}
-              rowsPerPageOptions={[5, 10, 25, 50, 100]}
-            />
-          </Paper>
+        {/* Right: Search Bar */}
+        <Grid item>
+          <TextField
+            placeholder="Search Loan Proposals"
+            variant="outlined"
+            value={searchTermLoanProposals}
+            onChange={handleSearchChangeLoanProposals}
+            className="search-bar"
+            inputProps={{
+              style: { textAlign: 'center' },
+            }}
+          />
+        </Grid>
+      </Grid>
+    </Typography>
+    {filteredloanProposals.length === 0 ? (
+      <Typography variant="body1" textAlign="center" sx={{ padding: '20px' }}>
+        No Loan Proposals Available
+      </Typography>
+    ) : (
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow className="table-header">
+              <TableCell>Title</TableCell>
+              <TableCell sx={{ textAlign: 'center' }}>Description</TableCell>
+              <TableCell>Created At</TableCell>
+              <TableCell colSpan={3} sx={{ textAlign: 'center' }}>Action</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody className="table-body">
+            {Array.isArray(filteredloanProposals) && filteredloanProposals.length > 0
+              ? filteredloanProposals
+                  .slice(
+                    pageloanProposals * rowsPerPageloanProposals,
+                    pageloanProposals * rowsPerPageloanProposals + rowsPerPageloanProposals
+                  )
+                  .map((loan) => (
+                    <TableRow key={loan.id}>
+                      <TableCell>{loan.title}</TableCell>
+                      <TableCell sx={{ textAlign: 'center' }}>{loan.description}</TableCell>
+                      <TableCell>{new Date(loan.created_at).toLocaleDateString()}</TableCell>
+                      <TableCell className="action-buttons">
+                        <Button>
+                          <Link to={`/lenders/${id}/proposals/${loan.id}/edit`}>Review</Link>
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))
+              : (
+                <TableRow>
+                  <TableCell colSpan={4} style={{ textAlign: 'center' }}>
+                    No Loan Proposals Available
+                  </TableCell>
+                </TableRow>
+              )
+            }
+          </TableBody>
+        </Table>
+      </TableContainer>
+    )}
+    <TablePagination
+      component="div"
+      count={filteredloanProposals.length}
+      page={pageloanProposals}
+      onPageChange={handleChangePageloanProposals}
+      rowsPerPage={rowsPerPageloanProposals}
+      onRowsPerPageChange={handleChangeRowsPerPageloanProposals}
+      rowsPerPageOptions={[0, 5, 10, 25, 50, 100]}
+    />
+  </Paper>
         </Grid>
       </Grid>
     </div>
