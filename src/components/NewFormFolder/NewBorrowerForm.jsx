@@ -25,7 +25,7 @@ import {
   Business,
   CreditScore,
   Home,
-} from "@mui/icons-material"; // Import icons for inputs
+} from "@mui/icons-material";
 
 const API = import.meta.env.VITE_BASE_URL;
 
@@ -130,16 +130,20 @@ const BorrowerForm = () => {
         <Grid container sx={{ height: "100vh" }} spacing={0}>
           <Grid item xs={12} md={6}>
             <Card sx={{ p: 0, boxShadow: "none" }}>
-              <img
-                src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1728325842/Hey_there_Friend_4_x4suwt.png"
-                alt="Welcome to MoneyMoneyMoney"
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                  border: "none",
-                }}
-              />
+              <Box sx={{ mt: -2 }}>
+                {" "}
+                {/* Use negative margin to move image up */}
+                <img
+                  src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1728325842/Hey_there_Friend_4_x4suwt.png"
+                  alt="Welcome to MoneyMoneyMoney"
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    border: "none",
+                  }}
+                />
+              </Box>
             </Card>
           </Grid>
 
@@ -352,6 +356,9 @@ const BorrowerForm = () => {
                     <MenuItem value="Professional, Scientific, and Technical Services">
                       Professional, Scientific, and Technical Services
                     </MenuItem>
+                    <MenuItem value="Real Estate and Rental and Leasing">
+                      Real Estate and Rental and Leasing
+                    </MenuItem>
                     <MenuItem value="Retail Trade">Retail Trade</MenuItem>
                     <MenuItem value="Transportation and Warehousing">
                       Transportation and Warehousing
@@ -360,50 +367,48 @@ const BorrowerForm = () => {
                     <MenuItem value="Wholesale Trade">Wholesale Trade</MenuItem>
                   </TextField>
                 </Grid>
+                <Grid item xs={12}>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    fullWidth
+                  >
+                    Submit
+                  </Button>
+                </Grid>
               </Grid>
               <Button
-                variant="contained"
-                color="primary"
-                type="submit"
-                fullWidth
-                sx={{ mt: 2 }}
-              >
-                <strong>Get Funded!</strong>
-              </Button>
-              <Button
                 variant="outlined"
-                color="inherit"
+                color="secondary"
                 onClick={handleCancel}
                 fullWidth
                 sx={{ mt: 2 }}
               >
-                <strong>Cancel</strong>
+                Cancel
               </Button>
             </Card>
           </Grid>
         </Grid>
-
-        <Dialog
-          open={open}
-          onClose={handleClose}
-          TransitionComponent={Transition}
-        >
-          <DialogTitle>{"Confirm Cancellation"}</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              Are you sure you want to cancel?
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose} color="primary">
-              No
-            </Button>
-            <Button onClick={handleConfirmCancel} color="primary">
-              Yes
-            </Button>
-          </DialogActions>
-        </Dialog>
       </Box>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        TransitionComponent={Transition}
+      >
+        <DialogTitle>Cancel Registration</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to cancel the registration?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>No</Button>
+          <Button onClick={handleConfirmCancel} color="primary">
+            Yes
+          </Button>
+        </DialogActions>
+      </Dialog>
     </ThemeProvider>
   );
 };
