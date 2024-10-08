@@ -1,22 +1,47 @@
-import React, { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { addRequest } from '../services/serviceRequest';
-import './LoanRequest.css';
+import React, { useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { addRequest } from "../services/serviceRequest";
+import {
+  TextField,
+  Button,
+  Container,
+  Typography,
+  Snackbar,
+  IconButton,
+  Box,
+  createTheme,
+  ThemeProvider,
+} from "@mui/material";
+import SaveIcon from "@mui/icons-material/Save";
+import SendIcon from "@mui/icons-material/Send";
+import CloseIcon from "@mui/icons-material/Close";
+import "./LoanRequest.css";
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#00a250",
+    },
+    secondary: {
+      main: "#ffffff",
+    },
+  },
+});
 
 const LoanRequestForm = () => {
-  const { id } = useParams(); 
+  const { id } = useParams();
   const navigate = useNavigate();
   const [error, setError] = useState(null);
   const [requests, setRequests] = useState([]);
-  const [timestamp, setTimestamp] = useState('');
-  const [submissionStatus, setSubmissionStatus] = useState('');
+  const [timestamp, setTimestamp] = useState("");
+  const [submissionStatus, setSubmissionStatus] = useState("");
   const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    value: '',
-    created_at: '',
-    funded_at: '',
-    borrower_id: id, 
+    title: "",
+    description: "",
+    value: "",
+    created_at: "",
+    funded_at: "",
+    borrower_id: id,
   });
 
   const handleChange = (e) => {
@@ -34,10 +59,10 @@ const LoanRequestForm = () => {
       const loanData = {
         title: formData.title,
         description: formData.description,
-        value: parseFloat(formData.value), 
+        value: parseFloat(formData.value),
         created_at: formData.created_at,
         funded_at: formData.funded_at || null,
-        borrower_id: id, 
+        borrower_id: id,
       };
 
       const addedRequest = await addRequest(id, loanData);
@@ -47,85 +72,202 @@ const LoanRequestForm = () => {
         navigate(`/borrowers/${id}`);
       }
     } catch (err) {
-      setError('Error adding request.');
-      console.error('Submission error:', err);
+      setError("Error adding request.");
+      console.error("Submission error:", err);
     }
   };
 
-  // Save form data as a draft in localStorage
   const handleSaveDraft = () => {
     const now = new Date();
     const formattedTimestamp = now.toLocaleString();
     setTimestamp(`Draft saved on: ${formattedTimestamp}`);
 
-    localStorage.setItem('loanDraft', JSON.stringify(formData));
-    setSubmissionStatus('Draft saved!');
+    localStorage.setItem("loanDraft", JSON.stringify(formData));
+    setSubmissionStatus("Draft saved!");
+  };
+
+  const handleCloseSnackbar = () => {
+    setError(null);
+    setSubmissionStatus("");
   };
 
   return (
-    <div className="Loan-Request">
-      <h2>Loan Application Form</h2>
+    <ThemeProvider theme={theme}>
+      <Container
+        maxWidth="sm"
+        style={{
+          backgroundColor: "#f6f7f8",
+          padding: "2rem",
+          borderRadius: "8px",
+          boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
+        }}
+      >
+        <Typography
+          variant="h4"
+          align="center"
+          gutterBottom
+          style={{ color: "#00a250" }}
+        >
+          Loan Application Form
+        </Typography>
 
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="title">Business Name</label>
-        <input
-          type="text"
-          id="title"
-          name="title"
-          value={formData.title}
-          onChange={handleChange}
-          required
+        <form onSubmit={handleSubmit}>
+          <TextField
+            label="Business Name"
+            name="title"
+            value={formData.title}
+            onChange={handleChange}
+            required
+            fullWidth
+            margin="normal"
+            variant="outlined"
+            InputLabelProps={{ style: { color: "#00a250" } }}
+            InputProps={{
+              style: {
+                borderColor: "#00a250",
+              },
+            }}
+          />
+
+          <TextField
+            label="Business Type"
+            name="description"
+            value={formData.description}
+            onChange={handleChange}
+            required
+            fullWidth
+            margin="normal"
+            variant="outlined"
+            InputLabelProps={{ style: { color: "#00a250" } }}
+            InputProps={{
+              style: {
+                borderColor: "#00a250",
+              },
+            }}
+          />
+
+          <TextField
+            label="Loan Amount Requested"
+            name="value"
+            type="number"
+            value={formData.value}
+            onChange={handleChange}
+            required
+            fullWidth
+            margin="normal"
+            variant="outlined"
+            InputLabelProps={{ style: { color: "#00a250" } }}
+            InputProps={{
+              style: {
+                borderColor: "#00a250",
+              },
+            }}
+          />
+
+          <TextField
+            label="Created At"
+            name="created_at"
+            type="date"
+            value={formData.created_at}
+            onChange={handleChange}
+            required
+            fullWidth
+            margin="normal"
+            variant="outlined"
+            InputLabelProps={{ style: { color: "#00a250" } }}
+            InputProps={{
+              style: {
+                borderColor: "#00a250",
+              },
+            }}
+          />
+
+          <TextField
+            label="Funded At"
+            name="funded_at"
+            type="date"
+            value={formData.funded_at || ""}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+            variant="outlined"
+            InputLabelProps={{ style: { color: "#00a250" } }}
+            InputProps={{
+              style: {
+                borderColor: "#00a250",
+              },
+            }}
+          />
+
+          <Box display="flex" justifyContent="space-between" marginTop="1.5rem">
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              startIcon={<SendIcon />}
+              style={{ backgroundColor: "#00a250", color: "white" }}
+            >
+              Submit Application
+            </Button>
+
+            <Button
+              type="button"
+              onClick={handleSaveDraft}
+              variant="outlined"
+              startIcon={<SaveIcon />}
+              style={{ borderColor: "#00a250", color: "#00a250" }}
+            >
+              Save Draft
+            </Button>
+          </Box>
+        </form>
+
+        {timestamp && (
+          <Typography
+            variant="body2"
+            color="textSecondary"
+            align="center"
+            style={{ marginTop: "1rem" }}
+          >
+            {timestamp}
+          </Typography>
+        )}
+
+        <Snackbar
+          open={!!submissionStatus}
+          autoHideDuration={6000}
+          onClose={handleCloseSnackbar}
+          message={submissionStatus}
+          action={
+            <IconButton
+              size="small"
+              aria-label="close"
+              color="inherit"
+              onClick={handleCloseSnackbar}
+            >
+              <CloseIcon fontSize="small" />
+            </IconButton>
+          }
         />
 
-        <label htmlFor="description">Business Type</label>
-        <input
-          type="text"
-          id="description"
-          name="description"
-          value={formData.description}
-          onChange={handleChange}
-          required
+        <Snackbar
+          open={!!error}
+          autoHideDuration={6000}
+          onClose={handleCloseSnackbar}
+          message={error}
+          action={
+            <IconButton
+              size="small"
+              aria-label="close"
+              color="inherit"
+              onClick={handleCloseSnackbar}
+            >
+              <CloseIcon fontSize="small" />
+            </IconButton>
+          }
         />
-
-        <label htmlFor="value">Loan Amount Requested</label>
-        <input
-          type="number"
-          id="value"
-          name="value"
-          value={formData.value}
-          onChange={handleChange}
-          required
-        />
-
-        <label htmlFor="created_at">Created At</label>
-        <input
-          type="date"
-          id="created_at"
-          name="created_at"
-          value={formData.created_at}
-          onChange={handleChange}
-          required
-        />
-
-        <label htmlFor="funded_at">Funded At</label>
-        <input
-          type="date"
-          id="funded_at"
-          name="funded_at"
-          value={formData.funded_at || ''}
-          onChange={handleChange}
-        />
-
-        <div className="form-buttons">
-          <button type="submit">Submit Application</button>
-          <button type="button" onClick={handleSaveDraft}>Save Draft</button>
-        </div>
-      </form>
-
-      {timestamp && <div className="timestamp">{timestamp}</div>}
-      {submissionStatus && <div>{submissionStatus}</div>}
-      {error && <div className="error">{error}</div>}
-    </div>
+      </Container>
+    </ThemeProvider>
   );
 };
 
