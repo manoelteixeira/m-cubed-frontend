@@ -122,6 +122,10 @@ export default function EditLoanProposalForm() {
     }, 1000); 
   };
 
+  const handleCancel = () => {
+    navigate(`/lenders/${lender_id}/lenderdashboard`)
+  }
+
   return (
     <Container className="loan-proposal-form-container">
       <Paper elevation={3} className="loan-proposal-paper">
@@ -273,7 +277,7 @@ export default function EditLoanProposalForm() {
                       <Button
                         fullWidth
                         variant="outlined"
-                        onClick={handleDelete} 
+                        onClick={handleCancel} 
                         disabled={deleteLoading}
                         sx={{
                           width: '10em',

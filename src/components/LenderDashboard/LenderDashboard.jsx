@@ -121,9 +121,6 @@ export default function LenderDashboard({ userlenderData }) {
     );
     setFilteredLoanProposals(filteredProposals);
   };
-
-  console.log(filteredloanProposals);
-
   return (
     <div className="lender-dashboard">
       <AppBar position="static" color="secondary" className="app-bar">
@@ -150,13 +147,8 @@ export default function LenderDashboard({ userlenderData }) {
             {/* Right Side: Total Loan Volume */}
             <Grid item>
               <Paper elevation={3} className="total-loan-volume">
-                <Typography variant="h6">
-                  Total Loan Volume: $
-                  <span style={{ color: "green", fontStyle: "italic" }}>
-                    {loanProposals.length === 0
-                      ? 0
-                      : calculateTotalLoanVolume()}
-                  </span>
+                <Typography variant="h6" >
+                  Total Loan Volume: $<span style={{color:'green', fontStyle:'italic'}}>{loanProposals.length === 0 ? 0 : calculateTotalLoanVolume()}</span>
                 </Typography>
               </Paper>
             </Grid>
@@ -218,10 +210,10 @@ export default function LenderDashboard({ userlenderData }) {
                         <TableCell>
                           {new Date(loan.created_at).toLocaleDateString()}
                         </TableCell>
-                        <TableCell className="action-buttons">
+                        <TableCell className="action-buttons"sx={{ textAlign: 'center'}}>
                           <Button>
                             <Link
-                              to={`/lenders/${userlenderData.id}/requests/${loan.id}/newproposal`}
+                              to={`/lenders/${userlenderData.id}/requests/${loan.borrower_id}/newproposal`}
                             >
                               Submit Offer
                             </Link>
@@ -260,94 +252,77 @@ export default function LenderDashboard({ userlenderData }) {
                 {/* Left: Title */}
                 <Grid item>Pending Loan Proposals</Grid>
 
-                {/* Right: Search Bar */}
-                <Grid item>
-                  <TextField
-                    placeholder="Search Loan Proposals"
-                    variant="outlined"
-                    value={searchTermLoanProposals}
-                    onChange={handleSearchChangeLoanProposals}
-                    className="search-bar"
-                    inputProps={{
-                      style: { textAlign: "center" },
-                    }}
-                  />
-                </Grid>
-              </Grid>
-            </Typography>
-            {filteredloanProposals.length === 0 ? (
-              <Typography
-                variant="body1"
-                textAlign="center"
-                sx={{ padding: "20px" }}
-              >
-                No Loan Proposals Available
-              </Typography>
-            ) : (
-              <TableContainer component={Paper}>
-                <Table>
-                  <TableHead>
-                    <TableRow className="table-header">
-                      <TableCell>Title</TableCell>
-                      <TableCell sx={{ textAlign: "center" }}>
-                        Description
-                      </TableCell>
-                      <TableCell>Created At</TableCell>
-                      <TableCell colSpan={3} sx={{ textAlign: "center" }}>
-                        Action
+        {/* Right: Search Bar */}
+        <Grid item>
+          <TextField
+            placeholder="Search Loan Proposals"
+            variant="outlined"
+            value={searchTermLoanProposals}
+            onChange={handleSearchChangeLoanProposals}
+            className="search-bar"
+            inputProps={{
+              style: { textAlign: 'center' },
+            }}
+          />
+        </Grid>
+      </Grid>
+    </Typography>
+    {filteredloanProposals.length === 0 ? (
+      <Typography variant="body1" textAlign="center" sx={{ padding: '20px' }}>
+        No Loan Proposals Available
+      </Typography>
+    ) : (
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow className="table-header">
+              <TableCell>Title</TableCell>
+              <TableCell >Description</TableCell>
+              <TableCell>Created At</TableCell>
+              <TableCell colSpan={3}>Action</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody className="table-body">
+            {Array.isArray(filteredloanProposals) && filteredloanProposals.length > 0
+              ? filteredloanProposals
+                  .slice(
+                    pageloanProposals * rowsPerPageloanProposals,
+                    pageloanProposals * rowsPerPageloanProposals + rowsPerPageloanProposals
+                  )
+                  .map((loan) => (
+                    <TableRow key={loan.id}>
+                      <TableCell>{loan.title}</TableCell>
+                      <TableCell sx={{ textAlign: 'center' }}>{loan.description}</TableCell>
+                      <TableCell>{new Date(loan.created_at).toLocaleDateString()}</TableCell>
+                      <TableCell className="action-buttons"sx={{ textAlign: 'center' }}>
+                        <Button>
+                          <Link to={`/lenders/${id}/proposals/${loan.id}/edit`}>Review</Link>
+                        </Button>
                       </TableCell>
                     </TableRow>
-                  </TableHead>
-                  <TableBody className="table-body">
-                    {Array.isArray(filteredloanProposals) &&
-                    filteredloanProposals.length > 0 ? (
-                      filteredloanProposals
-                        .slice(
-                          pageloanProposals * rowsPerPageloanProposals,
-                          pageloanProposals * rowsPerPageloanProposals +
-                            rowsPerPageloanProposals
-                        )
-                        .map((loan) => (
-                          <TableRow key={loan.id}>
-                            <TableCell>{loan.title}</TableCell>
-                            <TableCell sx={{ textAlign: "center" }}>
-                              {loan.description}
-                            </TableCell>
-                            <TableCell>
-                              {new Date(loan.created_at).toLocaleDateString()}
-                            </TableCell>
-                            <TableCell className="action-buttons">
-                              <Button>
-                                <Link
-                                  to={`/lenders/${id}/proposals/${loan.id}/edit`}
-                                >
-                                  Review
-                                </Link>
-                              </Button>
-                            </TableCell>
-                          </TableRow>
-                        ))
-                    ) : (
-                      <TableRow>
-                        <TableCell colSpan={4} style={{ textAlign: "center" }}>
-                          No Loan Proposals Available
-                        </TableCell>
-                      </TableRow>
-                    )}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            )}
-            <TablePagination
-              component="div"
-              count={filteredloanProposals.length}
-              page={pageloanProposals}
-              onPageChange={handleChangePageloanProposals}
-              rowsPerPage={rowsPerPageloanProposals}
-              onRowsPerPageChange={handleChangeRowsPerPageloanProposals}
-              rowsPerPageOptions={[0, 5, 10, 25, 50, 100]}
-            />
-          </Paper>
+                  ))
+              : (
+                <TableRow>
+                  <TableCell colSpan={4} style={{ textAlign: 'center' }}>
+                    No Loan Proposals Available
+                  </TableCell>
+                </TableRow>
+              )
+            }
+          </TableBody>
+        </Table>
+      </TableContainer>
+    )}
+    <TablePagination
+      component="div"
+      count={filteredloanProposals.length}
+      page={pageloanProposals}
+      onPageChange={handleChangePageloanProposals}
+      rowsPerPage={rowsPerPageloanProposals}
+      onRowsPerPageChange={handleChangeRowsPerPageloanProposals}
+      rowsPerPageOptions={[0, 5, 10, 25, 50, 100]}
+    />
+  </Paper>
         </Grid>
       </Grid>
     </div>

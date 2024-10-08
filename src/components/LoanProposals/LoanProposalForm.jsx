@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import {
   Container,
   Box,
@@ -14,8 +14,10 @@ import './LoanProposalForm.scss';
 const API = import.meta.env.VITE_BASE_URL;
 
 export default function LoanProposalForm() {
+  const navigate = useNavigate()
   const { lender_id, id } = useParams();
-  const [borrowerForProposal, setBorrowerForProposal] = useState();
+  const [borrowerForProposal, setBorrowerForProposal] = useState([]);
+
 
   const [lenderproposal, setLenderProposal] = useState({
     title: '',
@@ -23,6 +25,7 @@ export default function LoanProposalForm() {
     loan_amount: '',
     interest_rate: '',
     repayment_term: '',
+    created_at:'',
     accepted: false,
   });
   const [loading, setLoading] = useState(false);
@@ -47,27 +50,40 @@ export default function LoanProposalForm() {
     fetchBorrower();
   }, [id]);
 
+  const borrowerInfo = [borrowerForProposal]
+  // console.log (borrowerInfo)
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setErrorMessage('');
     setSuccessMessage('');
-
+  
     try {
       const response = await fetch(`${API}/lenders/${lender_id}/requests/${id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(lenderproposal),
+        body: JSON.stringify({
+          title: lenderproposal.title,
+          description: lenderproposal.description,
+          loan_amount: Number(lenderproposal.loan_amount),
+          interest_rate: Number(lenderproposal.interest_rate),
+          repayment_term: Number(lenderproposal.repayment_term),
+          created_at: lenderproposal.created_at,
+          accepted: lenderproposal.accepted,
+          lender_id: Number(lender_id),
+          loan_request_id: Number(id),
+        }),
       });
-
+  
       if (!response.ok) {
         const errorData = await response.json();
         setErrorMessage(`Error: ${errorData.error || errorData.message}`);
         return;
       }
-
+      console.log(response)
       setSuccessMessage('Loan proposal submitted successfully!');
       setLenderProposal({
         title: '',
@@ -75,30 +91,47 @@ export default function LoanProposalForm() {
         loan_amount: '',
         interest_rate: '',
         repayment_term: '',
+        created_at: '',
         accepted: false,
       });
+      navigate(`/lenders/${lender_id}/lenderdashboard`)
     } catch (error) {
       setErrorMessage('An error occurred while submitting the form.');
     } finally {
       setLoading(false);
     }
   };
-
   return (
     <Container className="loan-proposal-form-container">
       <Paper elevation={3} className="loan-proposal-paper">
         <Grid container justifyContent="space-between" alignItems="flex-start" spacing={3}>
-          <Grid item xs={12} sm={4}>
-            <Paper>
-            <Typography variant="h4" align="right" className="borrower-info">
-              Borrower Info
-            </Typography>
+        <Grid item xs={12} sm={4}>
+            <Paper className="borrower-details-paper">
+              <Grid flexGrow={1} gap={'20px'}>
+                <Typography variant='h3' className="borrower-info-title">Borrower Details</Typography>
+                {borrowerInfo.map((info,id) => {
+                  return (
+                    <div className='borrower-details' key={id}>
+                      <Typography variant="h4" align="left" className="borrower-info">
+                        Industry: {info.industry}
+                      </Typography>
+
+                      <Typography variant='h5'>Location: {info.city}, {info.state}</Typography>
+                      <Typography variant='h5'>Credit Score: <em>{info.credit_score}</em></Typography>
+                    </div>
+                  )} 
+                )}
+                <Typography className="disclaimer">
+                  <strong>Disclaimer</strong>: 
+                  This information is confidential and the respective future compatriant will only see details of the Loan Proposal. Further details upon review can be determined after approval.
+                </Typography>
+              </Grid>
             </Paper>
           </Grid>
           <Grid item xs={12} sm={6}>
             <Box component="form" onSubmit={handleSubmit} className="form-box">
               <Paper>
-              <Typography className="form-title" sx={{m: '20px', fontSize:'2em', textAlign:'center'}}>Loan Proposal for //Borrower Business Name</Typography>
+              <Typography className="form-title" sx={{m: '20px', fontSize:'2em', textAlign:'center'}}>Loan Proposal for {borrowerForProposal.business_name}</Typography>
               </Paper>
               <Grid container spacing={4} sx={{borderLeft: '1px solid black'}}>
                 <Grid item xs={12}>
@@ -174,9 +207,21 @@ export default function LoanProposalForm() {
                     inputProps={{ min: '0' }}
                   />
                 </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    required
+                    fullWidth
+                    id="created_at"
+                    name="created_at"
+                    type="date"
+                    value={lenderproposal.created_at}
+                    onChange={handleChange}
+                    className="input-field"
+                    inputProps={{ min: '0' }}
+                  />
+                </Grid>
 
                 <Grid item xs={12}>
-                  <Link to={`/lenders/${lender_id}/lenderdashboard`}>
                     <Button
                       type="submit"
                       fullWidth
@@ -185,9 +230,10 @@ export default function LoanProposalForm() {
                       className="submit-button"
                       sx={{background: 'green'}}
                     >
+                  {/* <Link to={`/lenders/${lender_id}/lenderdashboard`}> */}
                       {loading ? 'Submitting...' : 'Submit Proposal'}
+                  {/* </Link> */}
                     </Button>
-                  </Link>
                 </Grid>
 
                 {errorMessage && (
