@@ -91,7 +91,6 @@ function App() {
         <Route path="/team" element={<Cards />} />
         <Route path="/login" element={<SignInForm />} />
         <Route path="/forgotcredentials" element={<ForgotCredentials />} />{" "}
-        {/* Fixed stray characters */}
         {/* <Route path="/signup" element={<SignUp />} /> */}
         <Route path="/signup/borrower" element={<></>}></Route>
         <Route path="/signup/lender" element={<></>}></Route>
