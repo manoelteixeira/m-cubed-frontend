@@ -61,7 +61,7 @@ const EditLoanRequestForm = () => {
       <h2>Edit Loan Application</h2>
 
       <form onSubmit={handleSubmit}>
-        <label htmlFor="title">Business Name</label>
+        <label htmlFor="title">title</label>
         <input
           type="text"
           id="title"
@@ -71,7 +71,7 @@ const EditLoanRequestForm = () => {
           required
         />
 
-        <label htmlFor="description">Business Type</label>
+        <label htmlFor="description">description</label>
         <input
           type="text"
           id="description"

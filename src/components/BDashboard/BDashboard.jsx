@@ -339,7 +339,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getBorrower, getAllLoanRequests, deleteRequest } from '../services/serviceRequest';
+import { getBorrower, getAllLoanRequests, deleteRequest, getProposalsByRequestId } from '../services/serviceRequest';
 import './BDashboard.css'
 
 
@@ -347,6 +347,7 @@ const BDashboard = () => {
   const [requests, setRequests] = useState([]);
   const [borrowerData, setBorrowerData] = useState({});
   const [loading, setLoading] = useState(true);
+  const [offers, setOffers] = useState([]);
   const [error, setError] = useState(null);
   const { id } = useParams();
   
@@ -374,6 +375,7 @@ const BDashboard = () => {
         const loanRequests = await getAllLoanRequests(id);
         if (loanRequests) {
           setRequests(loanRequests);
+        
         } else {
           setError("No loan requests data returned.");
         }
@@ -381,18 +383,39 @@ const BDashboard = () => {
         console.error("Error fetching loan requests:", error);
         setError("Error fetching loan requests.");
       }
+      
+    };
+   
+   
+    const fetchLoanOffers = async () => {
+    
+      try {
+        const loanOffers = [];
+        for (const request of requests) {
+         
+          const proposals = await getProposalsByRequestId(id, request.id);
+       
+          // const acceptedOffers = offers.filter(offer => offer.accepted); 
+          loanOffers.push(...proposals);
+        }
+        setOffers(loanOffers)
+      } catch (error) {
+        console.error('Error fetching loan offers:', error);
+        setError('Error fetching loan offers.');
+      }
     };
   
     const fetchData = async () => {
       await fetchBorrowerData();
       await fetchLoanRequestsData();
+      await fetchLoanOffers(requests)
       setLoading(false);
     };
    
       fetchData();
   }, [id]);
   
-  
+  console.log(offers)
   const handleDeleteRequest = async (requestId) => {
     try {
       const deletedId = await deleteRequest(id, requestId);
@@ -446,7 +469,7 @@ const BDashboard = () => {
           <thead>
             <tr>
               <th>Application #</th>
-              <th>Lender</th>
+              <th>Description</th>
               <th>Loan Amount</th>
               <th>Created Date</th>
               <th>Status</th>
@@ -458,7 +481,7 @@ const BDashboard = () => {
               {requests.map((request) => (
                <tr key={request.id}>
                 <td>{request.id}</td>
-                <td>{request.lenderName}</td>
+                <td>{request.description}</td>
                 <td>{request.value}</td>
                 <td>{request.created_at}</td>
                 <td>{request.status}</td>
@@ -488,11 +511,15 @@ const BDashboard = () => {
       <div className="offers-section">
         <h2>Loan Offers</h2>
         <ul>
-          {requests.offers?.map((offer, index) => (
-            <li key={index}>
-              {offer.lenderName} - ${offer.amount} - {offer.terms}
-            </li>
-          ))}
+          {offers.length > 0 ? ( 
+            offers.map((offer, index) => (
+              <li key={index}> 
+                {offer.title} - ${offer.loan_amount} - {offer.terms}  - {offer.repayment_term} months - {offer.interest_rate}% interest
+              </li>
+            ))
+          ) : (
+            <li>No loan offers available.</li> 
+          )}
         </ul>
       </div>
     </div>

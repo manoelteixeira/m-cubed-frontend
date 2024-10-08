@@ -113,7 +113,7 @@ const LoanRequestForm = () => {
 
         <form onSubmit={handleSubmit}>
           <TextField
-            label="Business Name"
+            label="Tite"
             name="title"
             value={formData.title}
             onChange={handleChange}
@@ -130,7 +130,7 @@ const LoanRequestForm = () => {
           />
 
           <TextField
-            label="Business Type"
+            label="description"
             name="description"
             value={formData.description}
             onChange={handleChange}

@@ -56,7 +56,6 @@ export const getBorrower = async (id) => {
     }
 
     const data = await response.json();
-
     return data;
   } catch (err) {
     console.error("Error fetching borrower:", err);
@@ -98,6 +97,25 @@ export const getBorrower = async (id) => {
       }
       const data = await response.json();
       console.log(data)
+      return data;
+    } catch (err) {
+      console.error('Error fetching loan requests:', err);
+      return null;
+    }
+  };
+
+  //handle get loan offers
+  export const getProposalsByRequestId = async ( borrowerId,requestId) => {
+    try {
+      const response = await fetch(`${API}/borrowers/${borrowerId}/requests/${requestId}/proposals`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }const data = await response.json();
+      console.log(data)
+      
       return data;
     } catch (err) {
       console.error('Error fetching loan requests:', err);
