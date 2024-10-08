@@ -131,7 +131,7 @@ const BorrowerForm = () => {
           <Grid item xs={12} md={6}>
             <Card sx={{ p: 0, boxShadow: "none" }}>
               <img
-                src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1728064240/Hey_there_Friend_1_dwre67.png"
+                src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1728325842/Hey_there_Friend_4_x4suwt.png"
                 alt="Welcome to MoneyMoneyMoney"
                 style={{
                   width: "100%",

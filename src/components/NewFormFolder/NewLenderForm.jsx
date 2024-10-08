@@ -110,7 +110,7 @@ const LenderForm = () => {
           <Grid item xs={12} md={6}>
             <Card sx={{ p: 0, boxShadow: "none" }}>
               <img
-                src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1728068756/Hey_there_Friend_2_zkos0a.png"
+                src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1728325843/Hey_there_Friend_5_bgxdye.png"
                 alt="Welcome to MoneyMoneyMoney"
                 style={{
                   width: "100%",
