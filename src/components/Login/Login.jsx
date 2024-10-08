@@ -11,7 +11,7 @@ import {
   Divider,
   Paper,
 } from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { Visibility, VisibilityOff, Email, Lock } from "@mui/icons-material"; // Import icons
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import GoogleIcon from "@mui/icons-material/Google";
@@ -150,6 +150,11 @@ const Login = () => {
                   required
                   margin="normal"
                   InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <Email />
+                      </InputAdornment>
+                    ),
                     sx: { backgroundColor: "#fff" },
                   }}
                 />
@@ -165,6 +170,11 @@ const Login = () => {
                   required
                   margin="normal"
                   InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <Lock />
+                      </InputAdornment>
+                    ),
                     sx: { backgroundColor: "#fff" },
                     endAdornment: (
                       <InputAdornment position="end">
@@ -212,9 +222,7 @@ const Login = () => {
                     fontSize: "0.9rem",
                     width: "100%",
                   }}
-                  onClick={() =>
-                    alert("Forgot Email functionality coming soon!")
-                  }
+                  onClick={() => navigate("/forgot-email")} // Routing for forgot email
                 >
                   Forgot Email?
                 </Button>
@@ -228,9 +236,7 @@ const Login = () => {
                     fontSize: "0.9rem",
                     width: "100%",
                   }}
-                  onClick={() =>
-                    alert("Forgot Password functionality coming soon!")
-                  }
+                  onClick={() => navigate("/forgot-password")} // Routing for forgot password
                 >
                   Forgot Password?
                 </Button>

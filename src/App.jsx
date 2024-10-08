@@ -61,7 +61,6 @@ import NavBar from "./components/NavBarFolder/NavBar";
 import Home from "./Pages/Homepage";
 import Lenderpage from "./Pages/Lenderpage";
 import AboutUs from "./components/AboutFolder/AboutUs";
-// import LoginPage from "./Pages/LoginPage";
 import ListOfLenders from "./Pages/ListOfLenders";
 import NewLender from "./Pages/NewLender";
 import NewBorrower from "./Pages/NewBorrower";
@@ -75,6 +74,7 @@ import EditLoanRequestForm from "./components/editLoanRequestForm/editLoanReques
 import Cards from "./components/Cards/Cards";
 import EditLoanProposalPage from "./components/LoanProposals/EditLoanProposalForm";
 import SignInForm from "./Pages/LoginPage.jsx";
+import ForgotCredentials from "./components/ForgotCredentials/ForgotCredentials.jsx";
 import Footer from "./components/Footer/Footer";
 
 function App() {
@@ -89,8 +89,9 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<AboutUs />} />
         <Route path="/team" element={<Cards />} />
-        <Route path="/login" element={<SignInForm />} />{" "}
-        {/* Ensure this is defined */}
+        <Route path="/login" element={<SignInForm />} />
+        <Route path="/forgotcredentials" element={<ForgotCredentials />} />{" "}
+        {/* Fixed stray characters */}
         {/* <Route path="/signup" element={<SignUp />} /> */}
         <Route path="/signup/borrower" element={<></>}></Route>
         <Route path="/signup/lender" element={<></>}></Route>
@@ -126,7 +127,7 @@ function App() {
         <Route path="/borrowers/:id/new" element={<LoanRequestForm />} />
         <Route path="/borrowers/:id/edit" element={<EditBorrowerForm />} />
         <Route path="borrowers/:borrower_id/requests/:id" element={<></>} />
-        <Route path="/disclaimer" element={<></>} />{" "}
+        <Route path="/disclaimer" element={<></>} />
         <Route path="/newsletter" element={<EmailNewsletter />}></Route>
       </Routes>
       <Footer />
