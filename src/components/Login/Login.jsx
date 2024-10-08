@@ -11,7 +11,7 @@ import {
   Divider,
   Paper,
 } from "@mui/material";
-import { Visibility, VisibilityOff, Email, Lock } from "@mui/icons-material"; // Import icons
+import { Visibility, VisibilityOff, Email, Lock } from "@mui/icons-material";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import GoogleIcon from "@mui/icons-material/Google";
@@ -222,7 +222,7 @@ const Login = () => {
                     fontSize: "0.9rem",
                     width: "100%",
                   }}
-                  onClick={() => navigate("/forgot-email")} // Routing for forgot email
+                  onClick={() => navigate("/forgotcredentials")}
                 >
                   Forgot Email?
                 </Button>
@@ -236,7 +236,7 @@ const Login = () => {
                     fontSize: "0.9rem",
                     width: "100%",
                   }}
-                  onClick={() => navigate("/forgot-password")} // Routing for forgot password
+                  onClick={() => navigate("/forgotcredentials")}
                 >
                   Forgot Password?
                 </Button>
