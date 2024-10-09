@@ -153,12 +153,10 @@ const loanListingValueTotal = () => {
   let loanTotal = loanListings.reduce((total, loan) => {
     return total + Number(loan.value);
   }, 0);
-  
   const valueTotalformat = loanTotal.toLocaleString("en-US", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   });
-
   return valueTotalformat
 } 
 
@@ -190,7 +188,7 @@ const loanListingValueTotal = () => {
             <Grid item>
               <Paper elevation={3} className="total-loan-volume">
                 <Typography variant="h6" >
-                  Total Loan Volume: $<span style={{color:'green', fontStyle:'italic'}}>{loanProposals.length === 0 ? 0 : calculateTotalLoanVolume()}</span>
+                  Portfolio Volume: $<span style={{color:'green', fontStyle:'italic'}}>{loanProposals.length === 0 ? 0 : calculateTotalLoanVolume()}</span>
                 </Typography>
               </Paper>
             </Grid>
@@ -212,7 +210,7 @@ const loanListingValueTotal = () => {
               >
                 {/* Left: Title */}
                 <Grid item>Available Loan Listings</Grid>
-                <Grid item >Total Loan Listing Value: <span style={{color:'green'}}>{loanListingValueTotal()}</span></Grid>
+                <Grid item >Current Loan Listing Value: <span style={{color:'green'}}>{loanListingValueTotal()}</span></Grid>
 
                 {/* Right: Search Bar */}
                 <Grid item>
