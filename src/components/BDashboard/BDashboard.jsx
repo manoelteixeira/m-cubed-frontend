@@ -387,22 +387,22 @@ const BDashboard = () => {
     };
    
    
-    const fetchLoanOffers = async () => {
-      console.log(requests)
-      try {
-        const loanOffers = [];
-        for (const request of requests) {
-        console.log(request)
-          const proposals = await getProposalsByRequestId(id, request.id);
+    // const fetchLoanOffers = async () => {
+    //   console.log(requests)
+    //   try {
+    //     const loanOffers = [];
+    //     for (const request of requests) {
+    //     console.log(request)
+    //       const proposals = await getProposalsByRequestId(id, request.id);
        
-          loanOffers.push(...proposals);
-        }
-        setOffers(loanOffers)
-      } catch (error) {
-        console.error('Error fetching loan offers:', error);
-        setError('Error fetching loan offers.');
-      }
-    };
+    //       loanOffers.push(...proposals);
+    //     }
+    //     setOffers(loanOffers)
+    //   } catch (error) {
+    //     console.error('Error fetching loan offers:', error);
+    //     setError('Error fetching loan offers.');
+    //   }
+    // };
   
     const fetchData = async () => {
       await fetchBorrowerData();
@@ -532,7 +532,7 @@ const BDashboard = () => {
           {offers.length > 0 ? ( 
             offers.map((offer, index) => (
               <li key={index}> 
-                {offer.title} - ${offer.loan_amount} - {offer.repayment_terms}  - {offer.repayment_term} months - {offer.interest_rate}% interest
+                {offer.lender_id}.- {offer.title} - ${offer.loan_amount} - {offer.repayment_terms}  - {offer.repayment_term} months - {offer.interest_rate}% interest
               </li>
             ))
           ) : (
