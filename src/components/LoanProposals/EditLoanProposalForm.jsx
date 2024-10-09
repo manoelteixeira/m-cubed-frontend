@@ -223,8 +223,8 @@ export default function EditLoanProposalForm() {
                       display: 'flex',
                       flexDirection: 'row',
                       alignItems: 'center',
-                      m:4,
-                      gap: '2em'
+                      mt:'2em',
+                      gap: '1em'
                     }}
                     
                   >
@@ -260,11 +260,12 @@ export default function EditLoanProposalForm() {
                         disabled={deleteLoading}
                         sx={{
                           width: '13em',
-                          color: 'red',
+                          color: 'green',
                           border: 'none',
                           '&:hover': {
-                            backgroundColor: 'rgba(255, 0, 0, 0.1)',
+                            backgroundColor: 'rgba(1, 162, 80)',
                             borderColor: 'darkred',
+                            color: 'black'
                           }
                         }}
                       >

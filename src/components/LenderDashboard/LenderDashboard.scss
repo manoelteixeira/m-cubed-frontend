@@ -6,17 +6,16 @@ $background-color: #f6fbf0;
 
 .lender-dashboard {
   background-color: $background-color;
-  padding: 20px;
+//   padding: 20px;
   min-height: 100vh;
 
   .app-bar {
-    margin: 1em;
-    width: calc(100% - 30px);
+    margin: 4em 0;
+    width: 100vw;
     display: flex;
     justify-content: space-between;
     align-items: center;
     background: $primary-color;
-    border-radius: 10px;
 
     .welcome-title {
       margin-right: 1em;
@@ -42,10 +41,8 @@ $background-color: #f6fbf0;
   }
 
   .search-bar {
-    // margin: 3em 20em;
     width: 100%;
     place-self: center;
-    // min-height: 1vh;
   }
 
   .borrowers-table,
@@ -83,7 +80,15 @@ $background-color: #f6fbf0;
       display: flex;
       justify-content: center;
       button {
-        margin: 0 8px;
+          margin: 0 8px;
+        }
+        .action-btn-one,
+        .action-btn-two{
+            color: $primary-color;
+            &:hover {
+            background-color: rgba(0, 128, 0, 0.1); 
+            border-color: darkgreen;
+          }
       }
     }
   }

@@ -103,11 +103,19 @@ export default function LenderDashboard({ userlenderData }) {
   // PAGINATION CODE END!!!
 
   // Search bar for Loan Listings
-  const handleSearchChangeLoanListings = (event) => {
-    //watches the change
-    const term = event.target.value.toLowerCase();
-    setSearchTermLoanListings(term);
-  };
+const handleSearchChangeLoanListings = (event) => {
+  const term = event.target.value.toLowerCase();
+  setSearchTermLoanListings(term);
+
+  const filteredListings = loanListings.filter(
+    (listing) =>
+      listing.title.toLowerCase().includes(term) ||
+      listing.description.toLowerCase().includes(term)
+  );
+
+  setFilteredLoanListings(filteredListings);
+};
+
 
   // Search bar for Loan Proposals
   const handleSearchChangeLoanProposals = (event) => {
@@ -151,7 +159,7 @@ export default function LenderDashboard({ userlenderData }) {
       <AppBar position="static" color="secondary" className="app-bar">
         <Toolbar
           style={{ width: "100%" }}
-          sx={{ background: "linear-gradient(to bottom, #36c856, #b7e98f)" }}
+          sx={{ background: "rgb(1, 162, 80)" }}
         >
           <Grid container justifyContent="space-between" alignItems="center">
             {/* Left Side: Welcome Message */}
@@ -231,19 +239,19 @@ export default function LenderDashboard({ userlenderData }) {
                     .map((loan) => (
                       <TableRow key={loan.id}>
                         <TableCell>{loan.title}</TableCell>
-                        <TableCell width={"40%"}>{loan.description}</TableCell>
+                        <TableCell >{loan.description}</TableCell>
                         <TableCell>
                           {new Date(loan.created_at).toLocaleDateString()}
                         </TableCell>
                         <TableCell className="action-buttons"sx={{ textAlign: 'center'}}>
-                          <Button>
+                          <Button className="action-btn-one">
                             <Link
                               to={`/lenders/${userlenderData.id}/requests/${loan.borrower_id}/newproposal`}
                             >
                               Submit Offer
                             </Link>
                           </Button>
-                          <Button>
+                          <Button className="action-btn-two">
                             <Link>PASS</Link>
                           </Button>
                         </TableCell>
@@ -320,10 +328,10 @@ export default function LenderDashboard({ userlenderData }) {
                       <TableCell sx={{ textAlign: 'center' }}>{loan.description}</TableCell>
                       <TableCell>{new Date(loan.created_at).toLocaleDateString()}</TableCell>
                       <TableCell className="action-buttons"sx={{ textAlign: 'center' }}>
-                        <Button>
+                        <Button className="action-btn-one">
                           <Link to={`/lenders/${id}/proposals/${loan.id}/edit`}>Review</Link>
                         </Button>
-                        <Button onClick={()=>handleDelete(loan.loan_request_id)}>
+                        <Button className="action-btn-two" onClick={()=>handleDelete(loan.loan_request_id)}>
                           Delete
                         </Button>
                       </TableCell>
