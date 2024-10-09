@@ -127,7 +127,7 @@ const BorrowerForm = () => {
           <Grid item xs={12} md={6}>
             <Box sx={{ mt: -2 }}>
               <img
-                src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1728325842/Hey_there_Friend_4_x4suwt.png"
+                src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1728411151/Hey_there_Friend_4_snyiql.png"
                 alt="Welcome to MoneyMoneyMoney"
                 style={{
                   width: "100%",
