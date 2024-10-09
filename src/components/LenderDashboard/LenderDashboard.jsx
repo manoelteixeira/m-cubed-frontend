@@ -20,7 +20,7 @@ import "./LenderDashboard.scss";
 
 const API = import.meta.env.VITE_BASE_URL;
 
-export default function LenderDashboard({ userlenderData }) {
+export default function LenderDashboard() {
   const { id } = useParams();
 
   // states for listings
@@ -54,8 +54,26 @@ export default function LenderDashboard({ userlenderData }) {
       maximumFractionDigits: 2,
     });
   };
+  const [userlenderData, setUserLenderData] = useState([]);
 
   useEffect(() => {
+    fetch(`${API}/lenders/${id}`) 
+      .then(res => res.json())
+      .then(data => setUserLenderData(data))
+      .catch(err => console.error(err));
+  }, []);
+
+  useEffect(() => {
+    const fetchLender = async () => {
+      try {
+        const response = await fetch(`${API}/lenders/${id}`)
+        const data = await response.json();
+        setUserLenderData(data)
+      }catch(err){
+        console.error("Error fetching lender info: ", err)
+      }
+    }
+
     const fetchLoanProposals = async () => {
       try {
         const response = await fetch(`${API}/lenders/${id}/proposals`);
@@ -77,7 +95,7 @@ export default function LenderDashboard({ userlenderData }) {
         console.error("Error fetching requests: ", error);
       }
     };
-
+    fetchLender();
     fetchLoanProposals();
     fetchLoanListing();
   }, [id]);
