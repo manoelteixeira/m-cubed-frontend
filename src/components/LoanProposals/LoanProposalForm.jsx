@@ -118,7 +118,7 @@ export default function LoanProposalForm() {
                   return (
                     <div className='borrower-details' key={id}>
                       {/*Left-side of Grid */}
-                      <Typography variant="h4" align="left" className="borrower-info">Industry: {info.industry}</Typography>
+                      <Typography variant="h4" align="center" className="borrower-info">Industry: {info.industry}</Typography>
                       <Typography variant='h5'>Location: {info.city}, {info.state}</Typography>
                       <Typography variant='h5'>Credit Score: <em>{info.credit_score}</em></Typography>
                     </div>
