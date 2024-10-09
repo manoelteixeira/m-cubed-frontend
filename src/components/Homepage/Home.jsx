@@ -280,11 +280,11 @@ import "slick-carousel/slick/slick-theme.css";
 export default function Home() {
   const equipmentItems = [
     "Medical Equipment",
-    "Point of Sale Systems",
+    "POS Systems",
     "Catering Equipment",
     "Mining Equipment",
     "Agri Machinery",
-    "Laboratory Equipment",
+    "Lab Equipment",
   ];
 
   const settings = {
@@ -422,7 +422,7 @@ export default function Home() {
               style={{ width: "100%", borderRadius: 8, marginBottom: 16 }}
             />
             <img
-              src ="src/assets/LenderDashboard.png"
+              src="src/assets/LenderDashboard.png"
               alt="Product Placeholder"
               style={{ width: "100%", borderRadius: 8, marginBottom: 16 }}
             />
