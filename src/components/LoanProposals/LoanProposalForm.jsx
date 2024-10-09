@@ -237,11 +237,14 @@ export default function LoanProposalForm() {
                       {loading ? 'Submitting...' : 'Submit Proposal'}
                     </Button>
 
-                    <Button
-                    variant='contained'
-                    className='submit-button'
-                    sx={{background:'gray', width:'100%', mt:'2em','&:hover':{ background:'black' }}}
-                ><Link style={{color:'white'}}>Cancel</Link></Button>
+                    <Link style={{color:'white'}} to={`/lenders/${lender_id}/lenderdashboard`}>
+                      <Button
+                      variant='contained'
+                      className='submit-button'
+                      sx={{background:'gray', width:'100%', mt:'2em','&:hover':{ background:'black' }}}
+                      >Cancel
+                      </Button>
+                  </Link>
                 </Grid>
 
                 {errorMessage && (
