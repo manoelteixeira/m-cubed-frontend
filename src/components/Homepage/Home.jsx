@@ -271,9 +271,8 @@ import {
   Card,
   Grid,
 } from "@mui/material";
-import { MailOutline, ArrowForward } from "@mui/icons-material";
+import { ArrowForward } from "@mui/icons-material";
 import Slider from "react-slick";
-import QRCodeComponent from "../QRCodeComponent";
 import { motion } from "framer-motion";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -377,7 +376,8 @@ export default function Home() {
                 deliver fast, effective financing solutions.
               </Typography>
 
-              <Link to="/signup" style={{ textDecoration: "none" }}>
+              {/* Link to Borrower Signup */}
+              <Link to="/borrowers/signup" style={{ textDecoration: "none" }}>
                 <Button
                   variant="contained"
                   style={{ backgroundColor: "#00a250", marginTop: "60px" }}
