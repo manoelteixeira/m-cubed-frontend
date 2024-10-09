@@ -417,7 +417,7 @@ export default function Home() {
               Dashboard Images
             </Typography>
             <img
-              src="https://via.placeholder.com/300" // Replace with actual product image URLs
+              src="src/assets/LenderDashboard.png"
               alt="Product Placeholder"
               style={{ width: "100%", borderRadius: 8, marginBottom: 16 }}
             />
