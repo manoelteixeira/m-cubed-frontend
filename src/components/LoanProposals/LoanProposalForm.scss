@@ -1,12 +1,11 @@
-/* LoanProposalForm.scss */
 
 .loan-proposal-form-container {
   padding: 20px;
 }
 
 .loan-proposal-paper {
-  padding: 30px;
-  margin: 2em;
+  padding: 40px;
+  margin: 6em 0;
 }
 
 .borrower-info {
@@ -18,11 +17,10 @@
 }
 
 .form-title {
-  margin: 20px;
+  margin: 16px;
   text-align: center;
   padding: 10px;
   color: green;
-
 }
 
 .input-field {
@@ -47,22 +45,26 @@
 }
 
 .borrower-details-paper {
-  padding: 14px;
-  height: 32em;
+  margin-top: 2em;
+  padding: 29px;
+  height: 40em;
   width: 30em;
 }
 
 .borrower-info-title {
   padding-bottom: 2em;
   font-style: underline;
+  text-align: center;
 }
 
 .disclaimer {
-  padding-top: 5em;
-  color: gray;
+  padding-top: 8em;
+  color: rgb(97, 96, 96);
 }
 
 .borrower-details {
+  margin-top: 3em;
+  text-align: center;
   display: grid;
   gap: 2em;
 

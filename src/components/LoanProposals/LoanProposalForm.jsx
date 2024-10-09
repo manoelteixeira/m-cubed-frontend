@@ -34,7 +34,14 @@ export default function LoanProposalForm() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setLenderProposal({ ...lenderproposal, [name]: value });
+
+    if (name === 'accepted') {
+      setLenderProposal({ ...editProposal, [name]: value === 'true' });
+    } else if (name === 'loan_amount' || name === 'interest_rate' || name === 'repayment_term') {
+      setLenderProposal({ ...editProposal, [name]: Number(value) });
+    } else {
+      setLenderProposal({ ...editProposal, [name]: value });
+    }
   };
 
   useEffect(() => {
@@ -51,7 +58,6 @@ export default function LoanProposalForm() {
   }, [id]);
 
   const borrowerInfo = [borrowerForProposal]
-  // console.log (borrowerInfo)
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -68,13 +74,13 @@ export default function LoanProposalForm() {
         body: JSON.stringify({
           title: lenderproposal.title,
           description: lenderproposal.description,
-          loan_amount: Number(lenderproposal.loan_amount),
-          interest_rate: Number(lenderproposal.interest_rate),
-          repayment_term: Number(lenderproposal.repayment_term),
+          loan_amount: lenderproposal.loan_amount,
+          interest_rate: lenderproposal.interest_rate,
+          repayment_term: lenderproposal.repayment_term,
           created_at: lenderproposal.created_at,
           accepted: lenderproposal.accepted,
-          lender_id: Number(lender_id),
-          loan_request_id: Number(id),
+          lender_id: lender_id,
+          loan_request_id: id,
         }),
       });
   
@@ -83,7 +89,6 @@ export default function LoanProposalForm() {
         setErrorMessage(`Error: ${errorData.error || errorData.message}`);
         return;
       }
-      console.log(response)
       setSuccessMessage('Loan proposal submitted successfully!');
       setLenderProposal({
         title: '',
@@ -112,10 +117,8 @@ export default function LoanProposalForm() {
                 {borrowerInfo.map((info,id) => {
                   return (
                     <div className='borrower-details' key={id}>
-                      <Typography variant="h4" align="left" className="borrower-info">
-                        Industry: {info.industry}
-                      </Typography>
-
+                      {/*Left-side of Grid */}
+                      <Typography variant="h4" align="left" className="borrower-info">Industry: {info.industry}</Typography>
                       <Typography variant='h5'>Location: {info.city}, {info.state}</Typography>
                       <Typography variant='h5'>Credit Score: <em>{info.credit_score}</em></Typography>
                     </div>
@@ -129,9 +132,10 @@ export default function LoanProposalForm() {
             </Paper>
           </Grid>
           <Grid item xs={12} sm={6}>
+            {/* Right-side of Grid */}
             <Box component="form" onSubmit={handleSubmit} className="form-box">
-              <Paper>
-              <Typography className="form-title" sx={{m: '20px', fontSize:'2em', textAlign:'center'}}>Loan Proposal for {borrowerForProposal.business_name}</Typography>
+              <Paper sx={{margin: '2em'}}>
+              <Typography className="form-title" sx={{fontSize:'2em'}}>Loan Proposal for {borrowerForProposal.business_name}</Typography>
               </Paper>
               <Grid container spacing={4} sx={{borderLeft: '1px solid black'}}>
                 <Grid item xs={12}>
@@ -230,9 +234,7 @@ export default function LoanProposalForm() {
                       className="submit-button"
                       sx={{background: 'green'}}
                     >
-                  {/* <Link to={`/lenders/${lender_id}/lenderdashboard`}> */}
                       {loading ? 'Submitting...' : 'Submit Proposal'}
-                  {/* </Link> */}
                     </Button>
                 </Grid>
 
