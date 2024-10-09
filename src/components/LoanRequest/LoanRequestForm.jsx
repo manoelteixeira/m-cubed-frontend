@@ -40,7 +40,6 @@ const LoanRequestForm = () => {
     description: "",
     value: "",
     created_at: "",
-    funded_at: "",
     borrower_id: id,
   });
 
@@ -61,7 +60,6 @@ const LoanRequestForm = () => {
         description: formData.description,
         value: parseFloat(formData.value),
         created_at: formData.created_at,
-        funded_at: formData.funded_at || null,
         borrower_id: id,
       };
 
@@ -182,7 +180,7 @@ const LoanRequestForm = () => {
             }}
           />
 
-          <TextField
+          {/* <TextField
             label="Funded At"
             name="funded_at"
             type="date"
@@ -197,7 +195,7 @@ const LoanRequestForm = () => {
                 borderColor: "#00a250",
               },
             }}
-          />
+          /> */}
 
           <Box display="flex" justifyContent="space-between" marginTop="1.5rem">
             <Button

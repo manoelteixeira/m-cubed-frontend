@@ -486,10 +486,9 @@ const BDashboard = () => {
           
           <thead>
             <tr>
-              <th>Application #</th>
+              <th>Title</th>
               <th>Description</th>
               <th>Loan Amount</th>
-              <th>Created Date</th>
               <th>Status</th>
               <th>Actions</th>
             </tr>
@@ -498,10 +497,9 @@ const BDashboard = () => {
           <tbody>
               {requests.map((request) => (
                <tr key={request.id}>
-                <td>{request.id}</td>
+                <td>{request.title}</td>
                 <td>{request.description}</td>
                 <td>{request.value}</td>
-                <td>{request.created_at}</td>
                 <td>{request.status}</td>
                 <td>
 
