@@ -137,12 +137,10 @@ const handleSearchChangeLoanListings = (event) => {
         const res = await fetch(`${API}/lenders/${id}/proposals/${loanRequestId}`, {
             method: 'DELETE',
         });
-
         if (!res.ok) {
             const errorData = await res.json();
             throw new Error(errorData.message || 'Something went wrong during deletion');
         }
-
         alert("Proposal deleted successfully");
         window.location.reload();
     } catch (error) {
@@ -150,9 +148,20 @@ const handleSearchChangeLoanListings = (event) => {
         alert(`Failed to delete proposal: ${error.message}`);
     }
 };
+const loanListingValueTotal = () => {
 
+  let loanTotal = loanListings.reduce((total, loan) => {
+    return total + Number(loan.value);
+  }, 0);
+  
+  const valueTotalformat = loanTotal.toLocaleString("en-US", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
 
-  console.log(filteredloanProposals)
+  return valueTotalformat
+} 
+
 
   return (
     <div className="lender-dashboard">
@@ -203,6 +212,7 @@ const handleSearchChangeLoanListings = (event) => {
               >
                 {/* Left: Title */}
                 <Grid item>Available Loan Listings</Grid>
+                <Grid item >Total Loan Listing Value: <span style={{color:'green'}}>{loanListingValueTotal()}</span></Grid>
 
                 {/* Right: Search Bar */}
                 <Grid item>
@@ -225,6 +235,7 @@ const handleSearchChangeLoanListings = (event) => {
                   <TableRow className="table-header">
                     <TableCell>Title</TableCell>
                     <TableCell>Description</TableCell>
+                    <TableCell>Value</TableCell>
                     <TableCell>Created On</TableCell>
                     <TableCell>Action</TableCell>
                   </TableRow>
@@ -240,14 +251,11 @@ const handleSearchChangeLoanListings = (event) => {
                       <TableRow key={loan.id}>
                         <TableCell>{loan.title}</TableCell>
                         <TableCell >{loan.description}</TableCell>
-                        <TableCell>
-                          {new Date(loan.created_at).toLocaleDateString()}
-                        </TableCell>
+                        <TableCell>{loan.value}</TableCell>
+                        <TableCell>{new Date(loan.created_at).toLocaleDateString()}</TableCell>
                         <TableCell className="action-buttons"sx={{ textAlign: 'center'}}>
                           <Button className="action-btn-one">
-                            <Link
-                              to={`/lenders/${userlenderData.id}/requests/${loan.borrower_id}/newproposal`}
-                            >
+                            <Link to={`/lenders/${userlenderData.id}/requests/${loan.borrower_id}/newproposal`}>
                               Submit Offer
                             </Link>
                           </Button>
