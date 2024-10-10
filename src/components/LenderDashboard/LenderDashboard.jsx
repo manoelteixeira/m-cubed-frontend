@@ -166,8 +166,9 @@ const handleSearchChangeLoanListings = (event) => {
         alert(`Failed to delete proposal: ${error.message}`);
     }
 };
-const loanListingValueTotal = () => {
 
+// adds commas and converts the number into proper display. 
+const loanListingValueTotal = () => {
   let loanTotal = loanListings.reduce((total, loan) => {
     return total + Number(loan.value);
   }, 0);
