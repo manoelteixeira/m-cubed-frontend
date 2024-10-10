@@ -1,16 +1,7 @@
 import React from "react";
 import "./Home.scss";
-// import Footer from "../../components/Footer/Footer";
 import { Link } from "react-router-dom";
-import {
-  CardContent,
-  TextField,
-  Button,
-  Typography,
-  Card,
-  Grid,
-} from "@mui/material";
-import { ArrowForward } from "@mui/icons-material";
+import { CardContent, Button, Typography, Card, Grid } from "@mui/material";
 import Slider from "react-slick";
 import { motion } from "framer-motion";
 import "slick-carousel/slick/slick.css";
@@ -215,23 +206,25 @@ export default function Home() {
 
         <Grid container justifyContent="center" spacing={2}>
           <Grid item xs={6} sm={6} display="flex" justifyContent="center">
-            <img
-              src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1728581611/Add_a_heading_500_x_500_px_3_w06vz8.png"
-              alt="Borrowers"
-              style={{ width: 600, height: 600, borderRadius: 8 }}
-            />
+            <Link to="/borrowers/signup">
+              <img
+                src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1728581611/Add_a_heading_500_x_500_px_3_w06vz8.png"
+                alt="Borrowers"
+                style={{ width: 600, height: 600, borderRadius: 8 }}
+              />
+            </Link>
           </Grid>
           <Grid item xs={6} sm={6} display="flex" justifyContent="center">
-            <img
-              src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1728583550/Add_a_heading_500_x_500_px_4_zs06zy.png"
-              alt="Lenders"
-              style={{ width: 600, height: 600, borderRadius: 8 }}
-            />
+            <Link to="/lenders/signup">
+              <img
+                src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1728583550/Add_a_heading_500_x_500_px_4_zs06zy.png"
+                alt="Lenders"
+                style={{ width: 600, height: 600, borderRadius: 8 }}
+              />
+            </Link>
           </Grid>
         </Grid>
       </Grid>
-
-      {/* <Footer /> */}
     </main>
   );
 }
