@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { TextField, Button, Box, Typography } from "@mui/material";
+import { TextField, Button, Box, Typography, Paper, Grid } from "@mui/material";
+import MMMLogo from '../../assets/MMMLogo.png';
 
 const API = import.meta.env.VITE_BASE_URL;
 
@@ -9,7 +10,6 @@ export default function EditLenderForm() {
     const { id } = useParams(); 
     const [lender, setLender] = useState({
         email: '',
-        password: '',
         business_name: ''
     });
     
@@ -22,10 +22,7 @@ export default function EditLenderForm() {
             body: JSON.stringify(lender),
         })
         .then(response => {
-            if (!response.ok) {
-                throw new Error('Error updating lender');
-            }
-            return response.json();
+           response.json();
         })
         .then(() => {
             navigate(`/lenders/${id}/lenderdashboard`);
@@ -51,9 +48,9 @@ export default function EditLenderForm() {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        const { email, password, business_name } = lender;
+        const { email, business_name } = lender;
 
-        if (!email || !password || !business_name) {
+        if (!email || !business_name) {
             alert("All fields are required");
             return;
         }
@@ -62,67 +59,103 @@ export default function EditLenderForm() {
 
     useEffect(()=>{
         fetch(`${API}/lenders/${id}`)
-        .then(res=>res.json())
-        .then(res=> {
-            setLender(res)
+        .then(res => res.json())
+        .then(res => {
+            
+            setLender({
+                email: res.email ?? '',
+                business_name: res.business_name ?? ''
+            });
         })
-        .catch(err=> console.error(err))
-    },[id])
+        .catch(err => console.error(err));
+    }, [id]);
 
     return (
         <Box
             component="form"
             onSubmit={handleSubmit}
-            className="form-container"
+            sx={{ maxWidth: '50%', margin: "auto", padding: 2 }}
         >
-            <Typography variant="h4" component="h2">
-                Edit Lender Information
-            </Typography>
-            <Typography variant="h1">
-                Update your <em>Portfolio</em> and <strong>EXPAND!</strong>
-            </Typography>
-            <TextField
-                label="Email"
-                name="email"
-                type="email"
-                value={lender.email}
-                onChange={handleChange}
-                fullWidth
-                required
-            />
-            <TextField
-                label="Password"
-                name="password"
-                type="password"
-                value={lender.password}
-                onChange={handleChange}
-                fullWidth
-                required
-            />
-            <TextField
-                label="Business Name"
-                name="business_name"
-                value={lender.business_name}
-                onChange={handleChange}
-                fullWidth
-                required
-            />
-            <Button
-                variant="contained"
-                color="primary"
-                type="submit"
-                fullWidth
-            >
-                Update Information
-            </Button>
-            <Button
-                variant="outlined"
-                color="secondary"
-                onClick={handleCancel}
-                fullWidth
-            >
-                Cancel
-            </Button>
+            <Box sx={{ 
+                marginLeft: '25%', 
+                maxWidth: 400, 
+                height: "auto", 
+                padding: 2, 
+                display: "flex", 
+                flexDirection: "column", 
+                alignItems: "center", 
+                justifyContent: "space-between", 
+            }}>
+                <img src={MMMLogo} alt="Product Placeholder" style={{ width: "30%", borderRadius: 8, marginBottom: 16 }} />
+            </Box>
+            <Paper sx={{ p: '3em' }}>
+                <Typography variant="h5" component="h2" sx={{ mb: 2, color: 'green' }}>
+                    Edit Lender Information
+                </Typography>
+                <Typography variant="h7">
+                    Update your <em>Portfolio</em> and <strong>EXPAND!</strong>
+                </Typography>
+                
+                <Grid container spacing={2}>
+                    <Grid item xs={12} sm={6}>
+                        <TextField
+                            label="Email"
+                            name="email"
+                            type="email"
+                            value={lender.email ?? ''} 
+                            onChange={handleChange}
+                            fullWidth
+                            required
+                            margin="normal"
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <TextField
+                            label="Business Name"
+                            name="business_name"
+                            value={lender.business_name ?? ''}  
+                            onChange={handleChange}
+                            fullWidth
+                            required
+                            margin="normal"
+                        />
+                    </Grid>
+                </Grid>
+
+                <Grid display={'flex'}>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        type="submit"
+                        sx={{ 
+                          mt: 2, 
+                          width: '50%', 
+                          backgroundColor: 'green' 
+                        }}
+                    >
+                        Update Information
+                    </Button>
+
+                    <Button
+                        variant="outlined"
+                        color="secondary"
+                        onClick={handleCancel}
+                        sx={{
+                            mt: 2,
+                            ml: 2,
+                            width: '50%',
+                            color: 'black',
+                            border: '1px solid gray',
+                            '&:hover': {
+                                background: 'black',
+                                color: 'white'
+                            }
+                        }}
+                    >
+                        Cancel
+                    </Button>
+                </Grid>
+            </Paper>
         </Box>
     );
 }

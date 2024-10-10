@@ -50,15 +50,20 @@ export default function EditLoanProposalForm() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
-    if (name === 'accepted') {
-      setEditProposal({ ...editProposal, [name]: value === 'true' });
-    } else if (name === 'loan_amount' || name === 'interest_rate' || name === 'repayment_term') {
-      setEditProposal({ ...editProposal, [name]: Number(value) });
+    
+    if (name === 'loan_amount' || name === 'interest_rate' || name === 'repayment_term') {
+        setEditProposal((prev) => ({
+            ...prev,
+            [name]: name === 'repayment_term' ? parseInt(value, 10) || 0 : parseFloat(value) || 0
+        }));
     } else {
-      setEditProposal({ ...editProposal, [name]: value });
+        setEditProposal((prev) => ({
+            ...prev,
+            [name]: value
+        }));
     }
-  };
+};
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -181,7 +186,7 @@ export default function EditLoanProposalForm() {
                     label="Loan Amount"
                     name="loan_amount"
                     type="number"
-                    value={editProposal.loan_amount}
+                    value={Number(editProposal.loan_amount)}
                     onChange={handleChange}
                     className="input-field"
                     inputProps={{ step: '0.01', min: '0' }}
@@ -196,7 +201,7 @@ export default function EditLoanProposalForm() {
                     label="Interest Rate (%)"
                     name="interest_rate"
                     type="number"
-                    value={editProposal.interest_rate}
+                    value={Number(editProposal.interest_rate)}
                     onChange={handleChange}
                     className="input-field"
                     inputProps={{ step: '0.01', min: '0' }}
@@ -211,7 +216,7 @@ export default function EditLoanProposalForm() {
                     label="Repayment Term (Months)"
                     name="repayment_term"
                     type="number"
-                    value={editProposal.repayment_term}
+                    value={Number(editProposal.repayment_term)}
                     onChange={handleChange}
                     className="input-field"
                     inputProps={{ min: '0' }}

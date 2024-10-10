@@ -17,7 +17,6 @@ export default function EditBorrowerForm() {
 
   const [editBorrower, setEditBorrower] = useState({
     email: "",
-    password: "",
     city: "",
     street: "",
     state: "",

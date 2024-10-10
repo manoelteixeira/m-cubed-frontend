@@ -35,14 +35,11 @@ export default function LoanProposalForm() {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    if (name === 'accepted') {
-      setLenderProposal({ ...editProposal, [name]: value === 'true' });
-    } else if (name === 'loan_amount' || name === 'interest_rate' || name === 'repayment_term') {
-      setLenderProposal({ ...editProposal, [name]: Number(value) });
-    } else {
-      setLenderProposal({ ...editProposal, [name]: value });
-    }
-  };
+    setLenderProposal({
+        ...lenderproposal,
+        [name]: value,
+    });
+};
 
   useEffect(() => {
     const fetchBorrower = async () => {
@@ -64,29 +61,45 @@ export default function LoanProposalForm() {
     setLoading(true);
     setErrorMessage('');
     setSuccessMessage('');
-  
+
+    
+    const interestRate = parseFloat(lenderproposal.interest_rate);
+    const loanAmount = parseFloat(lenderproposal.loan_amount);
+    const repaymentTerm = parseInt(lenderproposal.repayment_term, 10);
+    console.log(interestRate, loanAmount, repaymentTerm)
+   
+    if (
+        isNaN(interestRate) || interestRate < 0 ||
+        isNaN(loanAmount) || loanAmount < 0 ||
+        isNaN(repaymentTerm) || repaymentTerm <= 0
+    ) {
+        setErrorMessage("Please enter valid positive numbers for interest rate, loan amount, and repayment term.");
+        setLoading(false); 
+        return; 
+    }
+
     try {
-      const response = await fetch(`${API}/lenders/${lender_id}/requests/${id}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          title: lenderproposal.title,
-          description: lenderproposal.description,
-          loan_amount: lenderproposal.loan_amount,
-          interest_rate: lenderproposal.interest_rate,
-          repayment_term: lenderproposal.repayment_term,
-          created_at: lenderproposal.created_at,
-          accepted: lenderproposal.accepted,
-          lender_id: lender_id,
-          loan_request_id: id,
-        }),
-      });
+        const response = await fetch(`${API}/lenders/${lender_id}/requests/${id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                title: lenderproposal.title,
+                description: lenderproposal.description,
+                loan_amount: loanAmount, 
+                interest_rate: interestRate, 
+                repayment_term: repaymentTerm, 
+                created_at: lenderproposal.created_at,
+                accepted: lenderproposal.accepted,
+                lender_id: lender_id,
+                loan_request_id: id,
+            }),
+        });
   
       if (!response.ok) {
         const errorData = await response.json();
-        setErrorMessage(`Error: ${errorData.error || errorData.message}`);
+        setErrorMessage(`Error: ${ errorData.error || errorData.message }`);
         return;
       }
       setSuccessMessage('Loan proposal submitted successfully!');
@@ -106,6 +119,7 @@ export default function LoanProposalForm() {
       setLoading(false);
     }
   };
+
   return (
     <Container className="loan-proposal-form-container">
       <Paper elevation={3} className="loan-proposal-paper">
