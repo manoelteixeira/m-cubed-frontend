@@ -268,7 +268,10 @@ const loanListingValueTotal = () => {
                       <TableRow key={loan.id}>
                         <TableCell>{loan.title}</TableCell>
                         <TableCell >{loan.description}</TableCell>
-                        <TableCell>{loan.value}</TableCell>
+                        <TableCell>{parseFloat(loan.value).toLocaleString("en-US", {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })}</TableCell>
                         <TableCell>{new Date(loan.created_at).toLocaleDateString()}</TableCell>
                         <TableCell className="action-buttons"sx={{ textAlign: 'center'}}>
                           <Button className="action-btn-one">
@@ -337,7 +340,8 @@ const loanListingValueTotal = () => {
               <TableCell>Title</TableCell>
               <TableCell >Description</TableCell>
               <TableCell>Created At</TableCell>
-              <TableCell colSpan={3}>Action</TableCell>
+              <TableCell>Loan Amount</TableCell>
+              <TableCell colSpan={2}>Action</TableCell>
             </TableRow>
           </TableHead>
           <TableBody className="table-body">
@@ -352,6 +356,12 @@ const loanListingValueTotal = () => {
                       <TableCell>{loan.title}</TableCell>
                       <TableCell sx={{ textAlign: 'center' }}>{loan.description}</TableCell>
                       <TableCell>{new Date(loan.created_at).toLocaleDateString()}</TableCell>
+                      <TableCell>
+                        {parseFloat(loan.loan_amount).toLocaleString("en-US", {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })}
+                      </TableCell>
                       <TableCell className="action-buttons"sx={{ textAlign: 'center' }}>
                         <Button className="action-btn-one">
                           <Link to={`/lenders/${id}/proposals/${loan.id}/edit`}>Review</Link>
