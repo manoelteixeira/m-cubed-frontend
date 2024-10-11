@@ -1,9 +1,9 @@
 import React from 'react'
-import EditLoanProposalForm from '../components/LoanProposals/EditLoanProposalForm'
+import EditLenderForm from '../components/EditUserFolder/EditLenderInfo'
 export default function EditLenderPage() {
   return (
     <div>
-      <EditLoanProposalForm/>
+      <EditLenderForm/>
     </div>
   )
 }

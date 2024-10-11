@@ -8,7 +8,7 @@ import Lenderpage from "./Pages/Lenderpage";
 import BDashboard from "./components/BDashboard/BDashboard";
 import NewBorrower from "./Pages/NewBorrower";
 import ListOfLenders from "./Pages/ListOfLenders";
-import EditLenderForm from "./components/EditUserFolder/EditLenderInfo";
+// import EditLenderForm from "./components/EditUserFolder/EditLenderInfo";
 import LoanRequestForm from "./components/LoanRequest/LoanRequestForm";
 import EmailNewsletter from "./Pages/EmailNewsletter";
 import EditBorrowerPage from "./Pages/EditBorrowerPage";
@@ -19,6 +19,7 @@ import EditLoanProposalPage from "./components/LoanProposals/EditLoanProposalFor
 import SignInForm from "./Pages/LoginPage.jsx";
 import ForgotCredentials from "./components/ForgotCredentials/ForgotCredentials.jsx";
 import Footer from "./components/Footer/Footer";
+import EditLenderPage from "./Pages/EditLenderPage.jsx";
 
 function App() {
   return (
@@ -40,8 +41,7 @@ function App() {
         <Route path="/lenders/:lender_id/proposals/:id/edit" element={<EditLoanProposalPage />}/>
         <Route path="/lenders/:id/lenderdashboard" element={<Lenderpage />} />
         <Route path="/lenders/:id/proposals" element={<LenderProposalPage />} />
-        <Route path="/lenders/:id/edit" element={<EditLenderForm />} />
-        <Route path="/lenders/:id/edit" element={<EditLenderForm />} />
+        <Route path="/lenders/:id/edit" element={<EditLenderPage />} />
         <Route path="/lenders/signup" element={<NewLender />} />
         <Route path="/signup/lender" element={<></>}></Route>
         <Route path="/lenders" element={<ListOfLenders />} />

@@ -39,6 +39,7 @@ export default function EditBorrowerForm() {
           throw new Error('Error fetching borrower data');
         }
         const data = await response.json();
+        console.log(data)
         setEditBorrower(data);
         setLoading(false);
       } catch (error) {
@@ -78,6 +79,7 @@ export default function EditBorrowerForm() {
     });
   };
 
+  
   // const handleConfirmPasswordChange = (e) => {
   //   setConfirmPassword(e.target.value); 
   // };
@@ -91,8 +93,8 @@ export default function EditBorrowerForm() {
     // }
 
     const creditScore = parseInt(editBorrower.credit_score, 10); 
-    if (creditScore < 300 || creditScore > 850) {
-      alert("Credit score must be between 300 and 850.");
+    if (isNaN(creditScore) || creditScore < 300 || creditScore > 850) {
+      alert("Credit score must be a number between 300 and 850.");
       return;
     }
 
