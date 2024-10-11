@@ -338,10 +338,14 @@
 // export default BDashboard;
 
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { getBorrower, getAllLoanRequests, deleteRequest, getProposalsByRequestId } from '../services/serviceRequest';
-import './BDashboard.css'
-
+import { useParams, useNavigate, Link } from "react-router-dom";
+import {
+  getBorrower,
+  getAllLoanRequests,
+  deleteRequest,
+  getProposalsByRequestId,
+} from "../services/serviceRequest";
+import "./BDashboard.css";
 
 const BDashboard = () => {
   const [requests, setRequests] = useState([]);
@@ -350,10 +354,18 @@ const BDashboard = () => {
   const [offers, setOffers] = useState([]);
   const [error, setError] = useState(null);
   const { id } = useParams();
-  
-  const navigate = useNavigate()
-  
-  
+
+  const navigate = useNavigate();
+
+  const getStatus = (status) => {
+    if (status == null) {
+      return "Pending";
+    } else if (!status) {
+      return "Denied";
+    } else {
+      return "Approved";
+    }
+  };
 
   useEffect(() => {
     const fetchBorrowerData = async () => {
@@ -369,13 +381,12 @@ const BDashboard = () => {
         setError("Error fetching borrower data.");
       }
     };
-  
+
     const fetchLoanRequestsData = async () => {
       try {
         const loanRequests = await getAllLoanRequests(id);
         if (loanRequests) {
           setRequests(loanRequests);
-        
         } else {
           setError("No loan requests data returned.");
         }
@@ -383,10 +394,8 @@ const BDashboard = () => {
         console.error("Error fetching loan requests:", error);
         setError("Error fetching loan requests.");
       }
-      
     };
-   
-   
+
     // const fetchLoanOffers = async () => {
     //   console.log(requests)
     //   try {
@@ -394,7 +403,7 @@ const BDashboard = () => {
     //     for (const request of requests) {
     //     console.log(request)
     //       const proposals = await getProposalsByRequestId(id, request.id);
-       
+
     //       loanOffers.push(...proposals);
     //     }
     //     setOffers(loanOffers)
@@ -403,42 +412,44 @@ const BDashboard = () => {
     //     setError('Error fetching loan offers.');
     //   }
     // };
-  
+
     const fetchData = async () => {
       await fetchBorrowerData();
       await fetchLoanRequestsData();
       // await fetchLoanOffers(requests)
       setLoading(false);
     };
-   
-      fetchData();
+
+    fetchData();
   }, [id]);
-  
+
   useEffect(() => {
     const fetchLoanOffers = async () => {
-      console.log(requests)
+      console.log(requests);
       try {
         const loanOffers = [];
         for (const request of requests) {
-        console.log(request)
+          console.log(request);
           const proposals = await getProposalsByRequestId(id, request.id);
-       
+
           loanOffers.push(...proposals);
         }
-        setOffers(loanOffers)
+        setOffers(loanOffers);
       } catch (error) {
-        console.error('Error fetching loan offers:', error);
-        setError('Error fetching loan offers.');
+        console.error("Error fetching loan offers:", error);
+        setError("Error fetching loan offers.");
       }
     };
-  fetchLoanOffers(requests)
-  },[requests])
-  console.log(offers)
+    fetchLoanOffers(requests);
+  }, [requests]);
+  console.log(offers);
   const handleDeleteRequest = async (requestId) => {
     try {
       const deletedId = await deleteRequest(id, requestId);
       if (deletedId) {
-        setRequests((prevRequests) => prevRequests.filter((req) => req.id !== deletedId));
+        setRequests((prevRequests) =>
+          prevRequests.filter((req) => req.id !== deletedId)
+        );
       }
     } catch (error) {
       setError("Error deleting loan request.");
@@ -449,73 +460,61 @@ const BDashboard = () => {
   const handleUpdateRequest = (requestId) => {
     navigate(`/borrowers/${id}/edit-request/${requestId}`);
   };
-  
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error fetching data!</p>;
 
   const openLoanApplicationForm = () => {
     navigate(`/borrowers/${id}/requests/new`);
-  }
- 
-
+  };
 
   return (
     <div className="borrower-dashboard">
-      
       <header className="dashboard-header">
         <img src="src/images/Logo.jpeg" alt="Logo" className="logo" />
         <h1>Welcome, {borrowerData.business_name}</h1>
         <p>Your loan applications and offers are listed below.</p>
-        <button className="new-application-btn" 
-            onClick={openLoanApplicationForm}>+ New Application</button>
-            
+        <button
+          className="new-application-btn"
+          onClick={openLoanApplicationForm}
+        >
+          + New Application
+        </button>
       </header>
 
-
       <div className="filters">
-        
         <div className="search-bar">
           <input type="text" placeholder="Search by application # or lender" />
         </div>
 
         <button className="reset-filters">Reset Filters</button>
-
       </div>
 
       <table className="applications-table">
-          
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Description</th>
-              <th>Loan Amount</th>
-              <th>Status</th>
-              <th>Actions</th>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Loan Amount</th>
+            <th>Status</th>
+            <th>Details</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {requests.map((request) => (
+            <tr key={request.id}>
+              <td>{request.title}</td>
+              <td>{request.value}</td>
+              <td>{getStatus(request.status)}</td>
+              <td>
+                <Link to={`/borrowers/${id}/borrowerloandetails/${request.id}`}>
+                  Details
+                </Link>
+              </td>
             </tr>
-          </thead>
-
-          <tbody>
-              {requests.map((request) => (
-               <tr key={request.id}>
-                <td>{request.title}</td>
-                <td>{request.description}</td>
-                <td>{request.value}</td>
-                <td>{request.status}</td>
-                <td>
-
-
-                  
-                <button onClick={() => handleUpdateRequest(request.id)}>Update</button>
-                 
-
-                  <button onClick={() => handleDeleteRequest(request.id)}>Delete</button>
-                </td>
-               </tr>
-              ))}
-          </tbody>
-
+          ))}
+        </tbody>
       </table>
-
 
       <div className="profile-section">
         <h2>Your Profile</h2>
@@ -523,18 +522,19 @@ const BDashboard = () => {
         <p>Email: {borrowerData.email}</p>
       </div>
 
-
       <div className="offers-section">
         <h2>Loan Offers</h2>
         <ul>
-          {offers.length > 0 ? ( 
+          {offers.length > 0 ? (
             offers.map((offer, index) => (
-              <li key={index}> 
-                {offer.lender_id}.- {offer.title} - ${offer.loan_amount} - {offer.repayment_terms}  - {offer.repayment_term} months - {offer.interest_rate}% interest
+              <li key={index}>
+                {offer.lender_id}.- {offer.title} - ${offer.loan_amount} -{" "}
+                {offer.repayment_terms} - {offer.repayment_term} months -{" "}
+                {offer.interest_rate}% interest
               </li>
             ))
           ) : (
-            <li>No loan offers available.</li> 
+            <li>No loan offers available.</li>
           )}
         </ul>
       </div>

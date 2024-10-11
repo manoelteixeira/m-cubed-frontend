@@ -37,30 +37,49 @@ function App() {
         <Route path="/team" element={<Cards />} />
         <Route path="/login" element={<SignInForm />} />
         <Route path="/forgotcredentials" element={<ForgotCredentials />} />{" "}
-        
         {/* Lender Section  */}
-        <Route path="/lenders/:lender_id/requests/:id/newproposal" element={<LenderProposalPage />}/>
-        <Route path="/lenders/:lender_id/proposals/:id/edit" element={<EditLoanProposalPage />}/>
+        <Route
+          path="/lenders/:lender_id/requests/:id/newproposal"
+          element={<LenderProposalPage />}
+        />
+        <Route
+          path="/lenders/:lender_id/proposals/:id/edit"
+          element={<EditLoanProposalPage />}
+        />
         <Route path="/lenders/:id/lenderdashboard" element={<Lenderpage />} />
         <Route path="/lenders/:id/proposals" element={<LenderProposalPage />} />
         <Route path="/lenders/:id/edit" element={<EditLenderPage />} />
         <Route path="/lenders/signup" element={<NewLender />} />
         <Route path="/signup/lender" element={<></>}></Route>
         <Route path="/lenders" element={<ListOfLenders />} />
-
         {/* Borrowers Section */}
-        <Route path="/borrowers/:id/edit-request/:requestId"element={<EditLoanRequestForm />}/>
+        <Route
+          path="/borrowers/:id/edit-request/:requestId"
+          element={<EditLoanRequestForm />}
+        />
         <Route path="borrowers/:borrower_id/requests/:id" element={<></>} />
-        <Route path="/borrowers/:id/borrowerloandetails" element={<ShowBorrowerLoanDetails/>}/>
-        <Route path="/borrowers/:id/borrowerdashboard" element={<BDashboard/>}/>
-        <Route path="/borrowers/:id/borrowerdetails" element={<ShowBorrowerDetails/>}/>
-        <Route path="/borrowers/:id/requests/new" element={<LoanRequestForm/>}/>
-        <Route path="/borrowers/:id/edit" element={<EditBorrowerPage/>} />
-        <Route path="/borrowers/:id/new" element={<LoanRequestForm/>} />
-        <Route path="/borrowers/signup" element={<NewBorrower/>} />
-        <Route path="/borrowers/:id" element={<BDashboard/>} />
+        <Route
+          path="/borrowers/:borrower_id/borrowerloandetails/:id"
+          element={<ShowBorrowerLoanDetails />}
+        />
+        <Route
+          path="/borrowers/:id/borrowerdashboard"
+          element={<BDashboard />}
+        />
+        <Route
+          path="/borrowers/:id/borrowerdetails"
+          element={<ShowBorrowerDetails />}
+        />
+        <Route
+          path="/borrowers/:id/requests/new"
+          element={<LoanRequestForm />}
+        />
+        <Route path="/borrowers/:id/edit" element={<EditBorrowerPage />} />
+        <Route path="/borrowers/:id/new" element={<LoanRequestForm />} />
+        <Route path="/borrowers/signup" element={<NewBorrower />} />
+        <Route path="/borrowers/:id" element={<BDashboard />} />
         <Route path="/disclaimer" element={<></>} />
-        <Route path="/newsletter" element={<EmailNewsletter/>}></Route>
+        <Route path="/newsletter" element={<EmailNewsletter />}></Route>
       </Routes>
 
       {/* Footer  */}
