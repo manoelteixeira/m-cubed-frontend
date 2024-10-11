@@ -59,7 +59,7 @@ const LoanRequestForm = () => {
         title: formData.title,
         description: formData.description,
         value: parseFloat(formData.value),
-        created_at: formData.created_at,
+        created_at: new Date().toISOString(),
         borrower_id: id,
       };
 
@@ -77,7 +77,7 @@ const LoanRequestForm = () => {
 
   const handleSaveDraft = () => {
     const now = new Date();
-    const formattedTimestamp = now.toLocaleString();
+    const formattedTimestamp = now.toISOString();
     setTimestamp(`Draft saved on: ${formattedTimestamp}`);
 
     localStorage.setItem("loanDraft", JSON.stringify(formData));
@@ -161,41 +161,6 @@ const LoanRequestForm = () => {
               },
             }}
           />
-
-          <TextField
-            label="Created At"
-            name="created_at"
-            type="date"
-            value={formData.created_at}
-            onChange={handleChange}
-            required
-            fullWidth
-            margin="normal"
-            variant="outlined"
-            InputLabelProps={{ style: { color: "#00a250" } }}
-            InputProps={{
-              style: {
-                borderColor: "#00a250",
-              },
-            }}
-          />
-
-          {/* <TextField
-            label="Funded At"
-            name="funded_at"
-            type="date"
-            value={formData.funded_at || ""}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-            variant="outlined"
-            InputLabelProps={{ style: { color: "#00a250" } }}
-            InputProps={{
-              style: {
-                borderColor: "#00a250",
-              },
-            }}
-          /> */}
 
           <Box display="flex" justifyContent="space-between" marginTop="1.5rem">
             <Button
