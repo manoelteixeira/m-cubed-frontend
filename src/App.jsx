@@ -20,6 +20,8 @@ import SignInForm from "./Pages/LoginPage.jsx";
 import ForgotCredentials from "./components/ForgotCredentials/ForgotCredentials.jsx";
 import Footer from "./components/Footer/Footer";
 import EditLenderPage from "./Pages/EditLenderPage.jsx";
+import ShowBorrowerDetails from "./components/ShowDetailsForBorrower/ShowBorrowerDetails";
+import ShowBorrowerLoanDetails from "./components/ShowDetailsForBorrower/ShowBorrowerLoanDetails";
 
 function App() {
   return (
@@ -49,10 +51,12 @@ function App() {
         {/* Borrowers Section */}
         <Route path="/borrowers/:id/edit-request/:requestId"element={<EditLoanRequestForm />}/>
         <Route path="borrowers/:borrower_id/requests/:id" element={<></>} />
+        <Route path="/borrowers/:id/borrowerloandetails" element={<ShowBorrowerLoanDetails/>}/>
         <Route path="/borrowers/:id/borrowerdashboard" element={<BDashboard/>}/>
+        <Route path="/borrowers/:id/borrowerdetails" element={<ShowBorrowerDetails/>}/>
         <Route path="/borrowers/:id/requests/new" element={<LoanRequestForm/>}/>
-        <Route path="/borrowers/:id/new" element={<LoanRequestForm/>} />
         <Route path="/borrowers/:id/edit" element={<EditBorrowerPage/>} />
+        <Route path="/borrowers/:id/new" element={<LoanRequestForm/>} />
         <Route path="/borrowers/signup" element={<NewBorrower/>} />
         <Route path="/borrowers/:id" element={<BDashboard/>} />
         <Route path="/disclaimer" element={<></>} />
