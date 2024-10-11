@@ -70,7 +70,6 @@ export const getBorrower = async (id) => {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
       });
-  
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
