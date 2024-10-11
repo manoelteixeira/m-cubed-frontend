@@ -91,7 +91,6 @@ export default function Home() {
                 sx={{
                   fontWeight: "bold",
                   textAlign: "justify",
-                  textAlign: "left",
                   mb: 1,
                   marginTop: 2,
                 }}
@@ -99,7 +98,7 @@ export default function Home() {
                 <span style={{ color: "#00a250", fontWeight: "bold" }}>
                   MMM
                 </span>{" "}
-                is a powerful platform designed for businesses seeking
+                is a game-changing platform designed for businesses seeking
                 small-ticket equipment financing. With one streamlined
                 application, minimal credit pulls, and direct access to a
                 network of lenders—no middlemen— we cut through the noise to
