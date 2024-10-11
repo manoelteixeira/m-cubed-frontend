@@ -110,7 +110,7 @@ import {
   Box,
   Typography,
 } from "@mui/material";
-import MMMIcon from "../../assets/MMMlogo.png";
+import MMMIcon from "../../assets/MMMF6F7F8bground.png";
 import { useNavigate } from "react-router-dom";
 
 const NavBar = () => {
