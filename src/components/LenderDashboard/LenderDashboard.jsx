@@ -57,22 +57,22 @@ export default function LenderDashboard() {
   const [userlenderData, setUserLenderData] = useState([]);
 
   useEffect(() => {
-    fetch(`${API}/lenders/${id}`) 
-      .then(res => res.json())
-      .then(data => setUserLenderData(data))
-      .catch(err => console.error(err));
+    fetch(`${API}/lenders/${id}`)
+      .then((res) => res.json())
+      .then((data) => setUserLenderData(data))
+      .catch((err) => console.error(err));
   }, []);
 
   useEffect(() => {
     const fetchLender = async () => {
       try {
-        const response = await fetch(`${API}/lenders/${id}`)
+        const response = await fetch(`${API}/lenders/${id}`);
         const data = await response.json();
-        setUserLenderData(data)
-      }catch(err){
-        console.error("Error fetching lender info: ", err)
+        setUserLenderData(data);
+      } catch (err) {
+        console.error("Error fetching lender info: ", err);
       }
-    }
+    };
 
     const fetchLoanProposals = async () => {
       try {
@@ -121,19 +121,18 @@ export default function LenderDashboard() {
   // PAGINATION CODE END!!!
 
   // Search bar for Loan Listings
-const handleSearchChangeLoanListings = (event) => {
-  const term = event.target.value.toLowerCase();
-  setSearchTermLoanListings(term);
+  const handleSearchChangeLoanListings = (event) => {
+    const term = event.target.value.toLowerCase();
+    setSearchTermLoanListings(term);
 
-  const filteredListings = loanListings.filter(
-    (listing) =>
-      listing.title.toLowerCase().includes(term) ||
-      listing.description.toLowerCase().includes(term)
-  );
+    const filteredListings = loanListings.filter(
+      (listing) =>
+        listing.title.toLowerCase().includes(term) ||
+        listing.description.toLowerCase().includes(term)
+    );
 
-  setFilteredLoanListings(filteredListings);
-};
-
+    setFilteredLoanListings(filteredListings);
+  };
 
   // Search bar for Loan Proposals
   const handleSearchChangeLoanProposals = (event) => {
@@ -148,37 +147,43 @@ const handleSearchChangeLoanListings = (event) => {
     setFilteredLoanProposals(filteredProposals);
   };
   const handleDelete = async (loanRequestId) => {
-    const confirmed = window.confirm("Are you sure you want to delete this Proposal?");
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this Proposal?"
+    );
     if (!confirmed) return;
 
     try {
-        const res = await fetch(`${API}/lenders/${id}/proposals/${loanRequestId}`, {
-            method: 'DELETE',
-        });
-        if (!res.ok) {
-            const errorData = await res.json();
-            throw new Error(errorData.message || 'Something went wrong during deletion');
+      const res = await fetch(
+        `${API}/lenders/${id}/proposals/${loanRequestId}`,
+        {
+          method: "DELETE",
         }
-        alert("Proposal deleted successfully");
-        window.location.reload();
+      );
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(
+          errorData.message || "Something went wrong during deletion"
+        );
+      }
+      alert("Proposal deleted successfully");
+      window.location.reload();
     } catch (error) {
-        console.error("Error deleting proposal:", error);
-        alert(`Failed to delete proposal: ${error.message}`);
+      console.error("Error deleting proposal:", error);
+      alert(`Failed to delete proposal: ${error.message}`);
     }
-};
+  };
 
-// adds commas and converts the number into proper display. 
-const loanListingValueTotal = () => {
-  let loanTotal = loanListings.reduce((total, loan) => {
-    return total + Number(loan.value);
-  }, 0);
-  const valueTotalformat = loanTotal.toLocaleString("en-US", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
-  return valueTotalformat
-} 
-
+  // adds commas and converts the number into proper display.
+  const loanListingValueTotal = () => {
+    let loanTotal = loanListings.reduce((total, loan) => {
+      return total + Number(loan.value);
+    }, 0);
+    const valueTotalformat = loanTotal.toLocaleString("en-US", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+    return valueTotalformat;
+  };
 
   return (
     <div className="lender-dashboard">
@@ -206,8 +211,13 @@ const loanListingValueTotal = () => {
             {/* Right Side: Total Loan Volume */}
             <Grid item>
               <Paper elevation={3} className="total-loan-volume">
-                <Typography variant="h6" >
-                  Portfolio Volume: $<span style={{color:'green', fontStyle:'italic'}}>{loanProposals.length === 0 ? 0 : calculateTotalLoanVolume()}</span>
+                <Typography variant="h6">
+                  Portfolio Volume: $
+                  <span style={{ color: "green", fontStyle: "italic" }}>
+                    {loanProposals.length === 0
+                      ? 0
+                      : calculateTotalLoanVolume()}
+                  </span>
                 </Typography>
               </Paper>
             </Grid>
@@ -229,7 +239,12 @@ const loanListingValueTotal = () => {
               >
                 {/* Left: Title */}
                 <Grid item>Available Loan Listings</Grid>
-                <Grid item >Current Loan Listing Value: <span style={{color:'green'}}>{loanListingValueTotal()}</span></Grid>
+                <Grid item>
+                  Current Loan Listing Value:{" "}
+                  <span style={{ color: "green" }}>
+                    {loanListingValueTotal()}
+                  </span>
+                </Grid>
 
                 {/* Right: Search Bar */}
                 <Grid item>
@@ -267,15 +282,19 @@ const loanListingValueTotal = () => {
                     .map((loan) => (
                       <TableRow key={loan.id}>
                         <TableCell>{loan.title}</TableCell>
-                        <TableCell >{loan.description}</TableCell>
-                        <TableCell>{parseFloat(loan.value).toLocaleString("en-US", {
-                          minimumFractionDigits: 2,
-                          maximumFractionDigits: 2,
-                        })}</TableCell>
-                        <TableCell>{new Date(loan.created_at).toLocaleDateString()}</TableCell>
-                        <TableCell className="action-buttons"sx={{ textAlign: 'center'}}>
+                        <TableCell>{loan.description}</TableCell>
+                        <TableCell>{loan.value}</TableCell>
+                        <TableCell>
+                          {new Date(loan.created_at).toLocaleDateString()}
+                        </TableCell>
+                        <TableCell
+                          className="action-buttons"
+                          sx={{ textAlign: "center" }}
+                        >
                           <Button className="action-btn-one">
-                            <Link to={`/lenders/${userlenderData.id}/requests/${loan.borrower_id}/newproposal`}>
+                            <Link
+                              to={`/lenders/${id}/requests/${loan.id}/newproposal`}
+                            >
                               Submit Offer
                             </Link>
                           </Button>
@@ -313,88 +332,101 @@ const loanListingValueTotal = () => {
                 {/* Left: Title */}
                 <Grid item>Pending Loan Proposals</Grid>
 
-        {/* Right: Search Bar */}
-        <Grid item>
-          <TextField
-            placeholder="Search Loan Proposals"
-            variant="outlined"
-            value={searchTermLoanProposals}
-            onChange={handleSearchChangeLoanProposals}
-            className="search-bar"
-            inputProps={{
-              style: { textAlign: 'center' },
-            }}
-          />
-        </Grid>
-      </Grid>
-    </Typography>
-    {filteredloanProposals.length === 0 ? (
-      <Typography variant="body1" textAlign="center" sx={{ padding: '20px' }}>
-        No Loan Proposals Available
-      </Typography>
-    ) : (
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow className="table-header">
-              <TableCell>Title</TableCell>
-              <TableCell >Description</TableCell>
-              <TableCell>Created At</TableCell>
-              <TableCell>Loan Amount</TableCell>
-              <TableCell colSpan={2}>Action</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody className="table-body">
-            {Array.isArray(filteredloanProposals) && filteredloanProposals.length > 0
-              ? filteredloanProposals
-                  .slice(
-                    pageloanProposals * rowsPerPageloanProposals,
-                    pageloanProposals * rowsPerPageloanProposals + rowsPerPageloanProposals
-                  )
-                  .map((loan) => (
-                    <TableRow key={loan.id}>
-                      <TableCell>{loan.title}</TableCell>
-                      <TableCell sx={{ textAlign: 'center' }}>{loan.description}</TableCell>
-                      <TableCell>{new Date(loan.created_at).toLocaleDateString()}</TableCell>
-                      <TableCell>
-                        {parseFloat(loan.loan_amount).toLocaleString("en-US", {
-                          minimumFractionDigits: 2,
-                          maximumFractionDigits: 2,
-                        })}
-                      </TableCell>
-                      <TableCell className="action-buttons"sx={{ textAlign: 'center' }}>
-                        <Button className="action-btn-one">
-                          <Link to={`/lenders/${id}/proposals/${loan.id}/edit`}>Review</Link>
-                        </Button>
-                        <Button className="action-btn-two" onClick={()=>handleDelete(loan.loan_request_id)}>
-                          Delete
-                        </Button>
-                      </TableCell>
-                      
+                {/* Right: Search Bar */}
+                <Grid item>
+                  <TextField
+                    placeholder="Search Loan Proposals"
+                    variant="outlined"
+                    value={searchTermLoanProposals}
+                    onChange={handleSearchChangeLoanProposals}
+                    className="search-bar"
+                    inputProps={{
+                      style: { textAlign: "center" },
+                    }}
+                  />
+                </Grid>
+              </Grid>
+            </Typography>
+            {filteredloanProposals.length === 0 ? (
+              <Typography
+                variant="body1"
+                textAlign="center"
+                sx={{ padding: "20px" }}
+              >
+                No Loan Proposals Available
+              </Typography>
+            ) : (
+              <TableContainer component={Paper}>
+                <Table>
+                  <TableHead>
+                    <TableRow className="table-header">
+                      <TableCell>Title</TableCell>
+                      <TableCell>Description</TableCell>
+                      <TableCell>Created At</TableCell>
+                      <TableCell colSpan={3}>Action</TableCell>
                     </TableRow>
-                  ))
-              : (
-                <TableRow>
-                  <TableCell colSpan={4} style={{ textAlign: 'center' }}>
-                    No Loan Proposals Available
-                  </TableCell>
-                </TableRow>
-              )
-            }
-          </TableBody>
-        </Table>
-      </TableContainer>
-    )}
-    <TablePagination
-      component="div"
-      count={filteredloanProposals.length}
-      page={pageloanProposals}
-      onPageChange={handleChangePageloanProposals}
-      rowsPerPage={rowsPerPageloanProposals}
-      onRowsPerPageChange={handleChangeRowsPerPageloanProposals}
-      rowsPerPageOptions={[0, 5, 10, 25, 50, 100]}
-    />
-  </Paper>
+                  </TableHead>
+                  <TableBody className="table-body">
+                    {Array.isArray(filteredloanProposals) &&
+                    filteredloanProposals.length > 0 ? (
+                      filteredloanProposals
+                        .slice(
+                          pageloanProposals * rowsPerPageloanProposals,
+                          pageloanProposals * rowsPerPageloanProposals +
+                            rowsPerPageloanProposals
+                        )
+                        .map((loan) => (
+                          <TableRow key={loan.id}>
+                            <TableCell>{loan.title}</TableCell>
+                            <TableCell sx={{ textAlign: "center" }}>
+                              {loan.description}
+                            </TableCell>
+                            <TableCell>
+                              {new Date(loan.created_at).toLocaleDateString()}
+                            </TableCell>
+                            <TableCell
+                              className="action-buttons"
+                              sx={{ textAlign: "center" }}
+                            >
+                              <Button className="action-btn-one">
+                                <Link
+                                  to={`/lenders/${id}/proposals/${loan.id}/edit`}
+                                >
+                                  Review
+                                </Link>
+                              </Button>
+                              <Button
+                                className="action-btn-two"
+                                onClick={() =>
+                                  handleDelete(loan.loan_request_id)
+                                }
+                              >
+                                Delete
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+                        ))
+                    ) : (
+                      <TableRow>
+                        <TableCell colSpan={4} style={{ textAlign: "center" }}>
+                          No Loan Proposals Available
+                        </TableCell>
+                      </TableRow>
+                    )}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            )}
+            <TablePagination
+              component="div"
+              count={filteredloanProposals.length}
+              page={pageloanProposals}
+              onPageChange={handleChangePageloanProposals}
+              rowsPerPage={rowsPerPageloanProposals}
+              onRowsPerPageChange={handleChangeRowsPerPageloanProposals}
+              rowsPerPageOptions={[0, 5, 10, 25, 50, 100]}
+            />
+          </Paper>
         </Grid>
       </Grid>
     </div>
