@@ -10,11 +10,15 @@ export default function EditLenderForm() {
     const { id } = useParams();
     const [editLender, setEditLender] = useState({
         email: '',
+        password: '',
         business_name: ''
     });
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
-    
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
     const updateLender = (editLender) => {
         fetch(`${API}/lenders/${id}`, {
             method: 'PUT',
@@ -47,6 +51,10 @@ export default function EditLenderForm() {
         }));
     };
 
+    const handleConfirmPasswordChange = (e) => {
+        setConfirmPassword(e.target.value);
+    };
+
     const handleCancel = () => {
         navigate(`/lenders/${id}/lenderdashboard`);
     };
@@ -54,10 +62,23 @@ export default function EditLenderForm() {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (!editLender.email || !editLender.business_name) {
-            setError("All fields are required");
+            setError("Email and Business Name are required");
             return;
         }
+        if (editLender.password && editLender.password !== confirmPassword) {
+            setError("Passwords do not match");
+            return;
+        }
+        console.log(editLender)
         updateLender(editLender);
+    };
+
+    const handleTogglePassword = () => {
+        setShowPassword(!showPassword);
+    };
+
+    const handleToggleConfirmPassword = () => {
+        setShowConfirmPassword(!showConfirmPassword);
     };
 
     useEffect(() => {
@@ -73,7 +94,8 @@ export default function EditLenderForm() {
             console.log(data)
             setEditLender({
                 email: data.email || '',
-                business_name: data.business_name || ''
+                business_name: data.business_name || '',
+                password: data.password || ''
             });
             setIsLoading(false);
         })
@@ -137,7 +159,48 @@ export default function EditLenderForm() {
                             margin="normal"
                         />
                     </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <TextField
+                            label="Password"
+                            name="password"
+                            type={showPassword ? "text" : "password"}
+                            value={editLender.password}
+                            onChange={handleChange}
+                            fullWidth
+                            margin="normal"
+                            InputProps={{
+                                endAdornment: (
+                                    <Button onClick={handleTogglePassword}>
+                                        {showPassword ? "Hide" : "Show"}
+                                    </Button>
+                                ),
+                            }}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <TextField
+                            label="Confirm Password"
+                            name="confirmPassword"
+                            type={showConfirmPassword ? "text" : "password"}
+                            value={confirmPassword}
+                            onChange={handleConfirmPasswordChange}
+                            fullWidth
+                            margin="normal"
+                            InputProps={{
+                                endAdornment: (
+                                    <Button onClick={handleToggleConfirmPassword}>
+                                        {showConfirmPassword ? "Hide" : "Show"}
+                                    </Button>
+                                ),
+                            }}
+                        />
+                    </Grid>
                 </Grid>
+                {error && (
+                    <Typography color="error" sx={{ mt: 2 }}>
+                        {error}
+                    </Typography>
+                )}
                 <Grid container spacing={2} sx={{ mt: 2 }}>
                     <Grid item xs={12} sm={6}>
                         <Button

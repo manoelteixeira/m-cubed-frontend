@@ -22,10 +22,10 @@ export default function LoanProposalForm() {
   const [lenderproposal, setLenderProposal] = useState({
     title: '',
     description: '',
+    created_at:'',
     loan_amount: '',
     interest_rate: '',
     repayment_term: '',
-    created_at:'',
     accepted: false,
   });
   const [loading, setLoading] = useState(false);
@@ -87,10 +87,10 @@ export default function LoanProposalForm() {
             body: JSON.stringify({
                 title: lenderproposal.title,
                 description: lenderproposal.description,
+                created_at: lenderproposal.created_at,
                 loan_amount: loanAmount, 
                 interest_rate: interestRate, 
                 repayment_term: repaymentTerm, 
-                created_at: lenderproposal.created_at,
                 accepted: lenderproposal.accepted,
                 lender_id: lender_id,
                 loan_request_id: id,
@@ -106,10 +106,10 @@ export default function LoanProposalForm() {
       setLenderProposal({
         title: '',
         description: '',
+        created_at: '',
         loan_amount: '',
         interest_rate: '',
         repayment_term: '',
-        created_at: '',
         accepted: false,
       });
       navigate(`/lenders/${lender_id}/lenderdashboard`)
