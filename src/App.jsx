@@ -22,8 +22,11 @@ import Footer from "./components/Footer/Footer";
 import EditLenderPage from "./Pages/EditLenderPage.jsx";
 import ShowBorrowerDetails from "./components/ShowDetailsForBorrower/ShowBorrowerDetails";
 import ShowBorrowerLoanDetails from "./components/ShowDetailsForBorrower/ShowBorrowerLoanDetails";
+import { useState } from "react";
 
 function App() {
+  const [user, setUser] = useState(null);
+  const [toke, setToken] = useState(null);
   return (
     <>
       {/* Navigation bar, displayed across all pages */}
@@ -35,7 +38,10 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<AboutUs />} />
         <Route path="/team" element={<Cards />} />
-        <Route path="/login" element={<SignInForm />} />
+        <Route
+          path="/login"
+          element={<SignInForm setUser={setUser} setToken={setToken} />}
+        />
         <Route path="/forgotcredentials" element={<ForgotCredentials />} />{" "}
         {/* Lender Section  */}
         <Route

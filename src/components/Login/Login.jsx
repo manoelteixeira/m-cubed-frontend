@@ -305,6 +305,7 @@
 // export default Login;
 
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import {
   TextField,
@@ -322,40 +323,73 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import GoogleIcon from "@mui/icons-material/Google";
 
-const Login = () => {
+const API = import.meta.env.VITE_BASE_URL;
+
+const Login = ({ setUser, setToken }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  const API = import.meta.env.VITE_BASE_URL;
 
-  const handleLogin = async (event) => {
+  // const handleLogin = async (event) => {
+  //   event.preventDefault();
+  //   setError("");
+  //   try {
+  //     const response = await fetch(`${API}/login`, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({ email, password }),
+  //     });
+  //     const data = await response.json();
+  //     if (response.ok) {
+  //       console.log("Login success:", data);
+  //       if (data.lender) {
+  //         navigate(`/lenders/${data.lender.id}/lenderdashboard`);
+  //       } else {
+  //         navigate(`/borrowers/${data.borrower.id}/borrowerdashboard`);
+  //       }
+  //     } else {
+  //       setError(data.error || "Login failed. Please check your credentials.");
+  //     }
+  //   } catch (error) {
+  //     console.error("Login failed:", error);
+  //     setError("An error occurred. Please try again later.");
+  //   }
+  // };
+  const handleLogin = (event) => {
     event.preventDefault();
     setError("");
-    try {
-      const response = await fetch(`${API}/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
-      const data = await response.json();
-      if (response.ok) {
-        console.log("Login success:", data);
-        if (data.lender) {
-          navigate(`/lenders/${data.lender.id}/lenderdashboard`);
+    const options = {
+      method: "POST",
+      body: JSON.stringify({ email, password }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    fetch(`${API}/login`, options)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.error) {
+          setError(data.error);
         } else {
-          navigate(`/borrowers/${data.borrower.id}/borrowerdashboard`);
+          const user = data.lender ? data.lender : data.borrower;
+          setUser(user);
+          setToken(data.token);
+          console.log(user);
+          const userType = Object.keys(data).includes("lender")
+            ? "lender"
+            : "borrower";
+
+          navigate(`/${userType}s/${user.id}/${userType}dashboard`);
         }
-      } else {
-        setError(data.error || "Login failed. Please check your credentials.");
-      }
-    } catch (error) {
-      console.error("Login failed:", error);
-      setError("An error occurred. Please try again later.");
-    }
+      })
+      .catch((err) => {
+        console.log(err);
+        setError("An error occurred. Please try again later.");
+      });
   };
 
   const handleGoogleSuccess = async (credentialResponse) => {
@@ -587,7 +621,7 @@ const Login = () => {
                   gap: 1,
                   mb: 2,
                 }}
-                onClick={() => { }}
+                onClick={() => {}}
               >
                 <GoogleIcon />
                 Sign in with Google
@@ -616,6 +650,11 @@ const Login = () => {
       </Grid>
     </Grid>
   );
+};
+
+Login.propTypes = {
+  setUser: PropTypes.func,
+  setToken: PropTypes.func,
 };
 
 export default Login;
