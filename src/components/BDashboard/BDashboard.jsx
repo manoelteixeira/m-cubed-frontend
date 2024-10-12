@@ -183,7 +183,10 @@ console.log(loanRequestsWithProposals)
                         navigate(`/borrowers/${id}/edit-request/${request.id}`)
                       }
                     >
-                      ${request.value.toLocaleString()}
+                      ${request.value.toLocaleString("en-US", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })}
                     </TableCell>
                     <TableCell
                       sx={{ cursor: "pointer" }}

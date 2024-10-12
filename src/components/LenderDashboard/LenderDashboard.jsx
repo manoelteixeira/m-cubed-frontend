@@ -43,16 +43,16 @@ export default function LenderDashboard() {
       return "0.00";
     }
     const total = loanProposals.reduce((total, loan) => {
-      const loanValue = isNaN(parseFloat(loan.loan_amount))
-        ? 0
-        : parseFloat(loan.loan_amount);
+      const loanValue = parseFloat(loan.loan_amount) || 0;
       return total + loanValue;
     }, 0);
 
-    return total.toLocaleString("en-US", {
+    return total.toLocaleString('en-US', {
+      style: 'currency',
+      currency: 'USD',
       minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    });
+      maximumFractionDigits: 2
+    }).replace('$', '');
   };
   const [userlenderData, setUserLenderData] = useState([]);
 
@@ -176,13 +176,14 @@ export default function LenderDashboard() {
   // adds commas and converts the number into proper display.
   const loanListingValueTotal = () => {
     let loanTotal = loanListings.reduce((total, loan) => {
-      return total + Number(loan.value);
+      return total + (parseFloat(loan.value) || 0);
     }, 0);
-    const valueTotalformat = loanTotal.toLocaleString("en-US", {
+    return loanTotal.toLocaleString('en-US', {
+      style: 'currency',
+      currency: 'USD',
       minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    });
-    return valueTotalformat;
+      maximumFractionDigits: 2
+    }).replace('$', '');
   };
 
   return (
@@ -283,7 +284,12 @@ export default function LenderDashboard() {
                       <TableRow key={loan.id}>
                         <TableCell>{loan.title}</TableCell>
                         <TableCell>{loan.description}</TableCell>
-                        <TableCell>{loan.value}</TableCell>
+                        <TableCell>{parseFloat(loan.value).toLocaleString('en-US', {
+                          style: 'currency',
+                          currency: 'USD',
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2
+                        }).replace('$', '')}</TableCell>
                         <TableCell>
                           {new Date(loan.created_at).toLocaleDateString()}
                         </TableCell>
