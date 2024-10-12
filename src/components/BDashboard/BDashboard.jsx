@@ -31,13 +31,13 @@ const BDashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log("Fetching borrower data with ID:", id); // Debugging log
+        console.log("Fetching borrower data with ID:", id);
         const borrower = await getBorrower(id);
         if (borrower) {
           setBorrowerData(borrower);
         } else {
           setError("No borrower data returned.");
-          return; // Prevent further API calls if borrower data is not found
+          return;
         }
         const loanRequests = await getAllLoanRequests(id);
         if (Array.isArray(loanRequests)) {
@@ -82,12 +82,15 @@ const BDashboard = () => {
         {error}
       </Typography>
     );
-    
+
   const totalLoanRequests = requests.length;
-  const loanRequestsWithProposals = requests.filter((request) =>
-    offers.some((offer) => offer.request_id === request.id)
-  ).length;
-console.log(loanRequestsWithProposals)
+  const loanRequestsWithProposals = requests.filter((request) => {
+    const requestProposals = offers.filter(
+      (offer) => offer.request_id === request.id
+    );
+    return requestProposals.length > 0;
+  }).length;
+  console.log(loanRequestsWithProposals);
   return (
     <Box sx={{ padding: "20px" }}>
       <Paper elevation={3} sx={{ padding: "20px", marginBottom: "20px" }}>

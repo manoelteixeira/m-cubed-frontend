@@ -250,6 +250,11 @@ import {
   createTheme,
   ThemeProvider,
   Grid,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
 } from "@mui/material";
 import SaveIcon from "@mui/icons-material/Save";
 import SendIcon from "@mui/icons-material/Send";
@@ -280,6 +285,7 @@ const LoanRequestForm = () => {
     value: "",
     borrower_id: id,
   });
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -306,8 +312,7 @@ const LoanRequestForm = () => {
       if (addedRequest) {
         setRequests((prevRequests) => [...prevRequests, addedRequest]);
         setSubmissionStatus("Loan request submitted successfully!");
-        // Navigate to borrower's dashboard to show the updated request
-        navigate(`/borrowers/${id}/borrowerdashboard`);
+        setDialogOpen(true);
       }
     } catch (err) {
       setError("Error adding request.");
@@ -327,6 +332,13 @@ const LoanRequestForm = () => {
   const handleCloseSnackbar = () => {
     setError(null);
     setSubmissionStatus("");
+  };
+
+  const handleCloseDialog = () => {
+    setDialogOpen(false);
+    navigate(`/borrowers/${id}/borrowerdashboard`, {
+      state: { shouldRefresh: true },
+    });
   };
 
   return (
@@ -445,7 +457,7 @@ const LoanRequestForm = () => {
         )}
 
         <Snackbar
-          open={!!submissionStatus}
+          open={!!submissionStatus && !dialogOpen}
           autoHideDuration={6000}
           onClose={handleCloseSnackbar}
           message={submissionStatus}
@@ -477,6 +489,27 @@ const LoanRequestForm = () => {
             </IconButton>
           }
         />
+
+        <Dialog
+          open={dialogOpen}
+          onClose={handleCloseDialog}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">
+            {"Loan Request Submitted"}
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              Your loan request has been submitted successfully!
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseDialog} color="primary" autoFocus>
+              OK
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Container>
     </ThemeProvider>
   );
