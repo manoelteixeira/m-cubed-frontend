@@ -101,7 +101,7 @@
 
 // export default NavBar;
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   AppBar,
   Toolbar,
@@ -111,9 +111,11 @@ import {
   Typography,
 } from "@mui/material";
 import MMMIcon from "../../assets/MMMF6F7F8bground.png";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const NavBar = () => {
+  const [navButtons, setNavButtons] = useState();
+  const location = useLocation();
   const navigate = useNavigate();
 
   const handleLogoClick = () => {
@@ -131,6 +133,99 @@ const NavBar = () => {
   const handleLoginClick = () => {
     navigate("/login");
   };
+
+  const handleLogoutClick = () => {
+    navigate("/");
+  };
+
+  useEffect(() => {
+    const { pathname } = location;
+    if (pathname == "/") {
+      setNavButtons(
+        <>
+          <>
+            <Button
+              variant="outlined"
+              onClick={() => handleSignUpClick("borrower")}
+              sx={{
+                borderColor: "#00a250",
+                color: "#00a250",
+                marginLeft: 2,
+                fontSize: "1rem",
+                fontWeight: "bold",
+              }}
+            >
+              SIGN UP BORROWER
+            </Button>
+
+            <Button
+              variant="outlined"
+              onClick={() => handleSignUpClick("lender")}
+              sx={{
+                borderColor: "#00a250",
+                color: "#00a250",
+                marginLeft: 2,
+                fontSize: "1rem",
+                fontWeight: "bold",
+              }}
+            >
+              SIGN UP LENDER
+            </Button>
+
+            <Button
+              variant="outlined"
+              onClick={handleLoginClick}
+              sx={{
+                borderColor: "#00a250",
+                color: "#00a250",
+                marginLeft: 2,
+                fontSize: "1rem",
+                fontWeight: "bold",
+              }}
+            >
+              LOG IN
+            </Button>
+          </>
+        </>
+      );
+    } else if (pathname.includes("singup")) {
+      setNavButtons(
+        <>
+          <Button
+            variant="outlined"
+            onClick={handleLoginClick}
+            sx={{
+              borderColor: "#00a250",
+              color: "#00a250",
+              marginLeft: 2,
+              fontSize: "1rem",
+              fontWeight: "bold",
+            }}
+          >
+            LOG IN
+          </Button>
+        </>
+      );
+    } else {
+      setNavButtons(
+        <>
+          <Button
+            variant="outlined"
+            onClick={handleLogoutClick}
+            sx={{
+              borderColor: "#00a250",
+              color: "#00a250",
+              marginLeft: 2,
+              fontSize: "1rem",
+              fontWeight: "bold",
+            }}
+          >
+            LOG OUT
+          </Button>
+        </>
+      );
+    }
+  }, [location]);
 
   return (
     <AppBar
@@ -176,47 +271,7 @@ const NavBar = () => {
 
         <Box sx={{ flexGrow: 1 }} />
 
-        <Button
-          variant="outlined"
-          onClick={() => handleSignUpClick("borrower")}
-          sx={{
-            borderColor: "#00a250",
-            color: "#00a250",
-            marginLeft: 2,
-            fontSize: "1rem",
-            fontWeight: "bold",
-          }}
-        >
-          SIGN UP BORROWER
-        </Button>
-
-        <Button
-          variant="outlined"
-          onClick={() => handleSignUpClick("lender")}
-          sx={{
-            borderColor: "#00a250",
-            color: "#00a250",
-            marginLeft: 2,
-            fontSize: "1rem",
-            fontWeight: "bold",
-          }}
-        >
-          SIGN UP LENDER
-        </Button>
-
-        <Button
-          variant="outlined"
-          onClick={handleLoginClick}
-          sx={{
-            borderColor: "#00a250",
-            color: "#00a250",
-            marginLeft: 2,
-            fontSize: "1rem",
-            fontWeight: "bold",
-          }}
-        >
-          LOG IN
-        </Button>
+        {navButtons}
       </Toolbar>
     </AppBar>
   );
