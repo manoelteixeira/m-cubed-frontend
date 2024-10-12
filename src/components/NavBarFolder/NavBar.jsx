@@ -140,6 +140,7 @@ const NavBar = () => {
 
   useEffect(() => {
     const { pathname } = location;
+    console.log(pathname.includes("signup"), pathname);
     if (pathname == "/") {
       setNavButtons(
         <>
@@ -188,7 +189,7 @@ const NavBar = () => {
           </>
         </>
       );
-    } else if (pathname.includes("singup")) {
+    } else if (pathname.includes("signup")) {
       setNavButtons(
         <>
           <Button
