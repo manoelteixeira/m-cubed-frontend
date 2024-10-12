@@ -20,7 +20,6 @@ import {
   deleteRequest,
   getProposalsByRequestId,
 } from "../services/serviceRequest";
-
 const BDashboard = () => {
   const [requests, setRequests] = useState([]);
   const [borrowerData, setBorrowerData] = useState({});
@@ -32,14 +31,13 @@ const BDashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log("Fetching borrower data with ID:", id); 
+        console.log("Fetching borrower data with ID:", id); // Debugging log
         const borrower = await getBorrower(id);
         if (borrower) {
-          console.log("Successfully fetched borrower data:", borrower);
           setBorrowerData(borrower);
         } else {
           setError("No borrower data returned.");
-          return; 
+          return; // Prevent further API calls if borrower data is not found
         }
         const loanRequests = await getAllLoanRequests(id);
         if (Array.isArray(loanRequests)) {
@@ -74,23 +72,9 @@ const BDashboard = () => {
       fetchLoanOffers();
     }
   }, [requests, id]);
-  const getRequestStatus = (request) => {
-    const requestProposals = offers.filter(
-      (offer) => offer.request_id === request.id
-    );
-    if (request.funded_at) {
-      return `Funded on ${new Date(request.funded_at).toLocaleDateString()}`;
-    } else if (requestProposals.length > 0) {
-      return "Active";
-    } else {
-      return "Pending";
-    }
-  };
-
   const openLoanApplicationForm = () => {
     navigate(`/borrowers/${id}/requests/new`);
   };
-
   if (loading) return <Typography variant="h6">Loading...</Typography>;
   if (error)
     return (
@@ -98,14 +82,12 @@ const BDashboard = () => {
         {error}
       </Typography>
     );
+    
   const totalLoanRequests = requests.length;
-  const loanRequestsWithProposals = requests.filter((request) => {
-    const requestProposals = offers.filter(
-      (offer) => offer.request_id === request.id
-    );
-    return requestProposals.length > 0;
-  }).length;
-  console.log(loanRequestsWithProposals)
+  const loanRequestsWithProposals = requests.filter((request) =>
+    offers.some((offer) => offer.request_id === request.id)
+  ).length;
+console.log(loanRequestsWithProposals)
   return (
     <Box sx={{ padding: "20px" }}>
       <Paper elevation={3} sx={{ padding: "20px", marginBottom: "20px" }}>
@@ -172,35 +154,45 @@ const BDashboard = () => {
           <TableBody>
             {Array.isArray(requests) &&
               requests.map((request) => {
-                const status = getRequestStatus(request);
+                const hasProposals = offers.some(
+                  (offer) => offer.request_id === request.id
+                );
                 return (
-                  <TableRow
-                    key={request.id}
-                    hover
-                    onClick={() =>
-                      navigate(`/borrowers/${id}/edit-request/${request.id}`)
-                    }
-                    sx={{
-                      cursor: "pointer",
-                      backgroundColor:
-                        status === "Active"
-                          ? "#e0f7e0"
-                          : status.startsWith("Funded")
-                          ? "#e0e0ff"
-                          : "#ffffff",
-                    }}
-                  >
-                    <TableCell>{request.title}</TableCell>
-                    <TableCell>{request.description}</TableCell>
-                    <TableCell>
-                      {parseFloat(request.value).toLocaleString("en-US", {
-                        style: "currency",
-                        currency: "USD",
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                      })}
+                  <TableRow key={request.id} hover>
+                    <TableCell
+                      sx={{ cursor: "pointer", color: "#00A250" }}
+                      onClick={() =>
+                        navigate(
+                          `/borrowers/${id}/borrowerloandetails/${request.id}`
+                        )
+                      }
+                    >
+                      {request.title}
                     </TableCell>
-                    <TableCell>{status}</TableCell>
+                    <TableCell
+                      sx={{ cursor: "pointer" }}
+                      onClick={() =>
+                        navigate(`/borrowers/${id}/edit-request/${request.id}`)
+                      }
+                    >
+                      {request.description}
+                    </TableCell>
+                    <TableCell
+                      sx={{ cursor: "pointer" }}
+                      onClick={() =>
+                        navigate(`/borrowers/${id}/edit-request/${request.id}`)
+                      }
+                    >
+                      ${request.value.toLocaleString()}
+                    </TableCell>
+                    <TableCell
+                      sx={{ cursor: "pointer" }}
+                      onClick={() =>
+                        navigate(`/borrowers/${id}/edit-request/${request.id}`)
+                      }
+                    >
+                      {hasProposals ? "Active" : "Pending"}
+                    </TableCell>
                   </TableRow>
                 );
               })}
@@ -210,5 +202,4 @@ const BDashboard = () => {
     </Box>
   );
 };
-
 export default BDashboard;
