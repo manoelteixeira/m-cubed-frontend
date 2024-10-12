@@ -183,7 +183,7 @@ console.log(loanRequestsWithProposals)
                         navigate(`/borrowers/${id}/edit-request/${request.id}`)
                       }
                     >
-                      ${request.value.toLocaleString("en-US", {
+                      ${parseFloat(request.value).toLocaleString("en-US", {
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 2,
                       })}
