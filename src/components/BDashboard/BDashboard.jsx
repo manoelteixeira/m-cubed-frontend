@@ -13,37 +13,28 @@ import {
   TableHead,
   TableRow,
   Collapse,
-  TextField,
   Card,
   CardContent,
-  CardActions,
-  IconButton,
-  Link,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import VerifiedIcon from "@mui/icons-material/Verified";
 import {
   getBorrower,
   getAllLoanRequests,
   getProposalsByRequestId,
-  updateRequest,
 } from "../services/serviceRequest";
 
 const BDashboard = () => {
   const [requests, setRequests] = useState([]);
   const [borrowerData, setBorrowerData] = useState({});
   const [loading, setLoading] = useState(true);
-  const [offers, setOffers] = useState([]);
+  const [proposals, setProposals] = useState({}); // Store proposals by request ID
   const [error, setError] = useState(null);
   const { id } = useParams();
-  const [expandedRow, setExpandedRow] = useState(null);
-  const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    value: "",
-  });
+  const [expandedRow, setExpandedRow] = useState(null); // Track expanded row
+
   const navigate = useNavigate();
 
+  // Fetch the borrower and all loan requests initially
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -54,9 +45,22 @@ const BDashboard = () => {
           setError("No borrower data returned.");
           return;
         }
+
+        // Fetch loan requests and then proposals for each request
         const loanRequests = await getAllLoanRequests(id);
         if (Array.isArray(loanRequests)) {
           setRequests(loanRequests);
+
+          // Fetch proposals for each request
+          const allProposals = {};
+          for (const request of loanRequests) {
+            const fetchedProposals = await getProposalsByRequestId(
+              id,
+              request.id
+            );
+            allProposals[request.id] = fetchedProposals;
+          }
+          setProposals(allProposals); // Store all proposals by request ID
         } else {
           setRequests([]);
         }
@@ -69,25 +73,6 @@ const BDashboard = () => {
     };
     fetchData();
   }, [id]);
-
-  useEffect(() => {
-    if (requests.length > 0) {
-      const fetchLoanOffers = async () => {
-        try {
-          const loanOffers = [];
-          for (const request of requests) {
-            const proposals = await getProposalsByRequestId(id, request.id);
-            loanOffers.push(...proposals);
-          }
-          setOffers(loanOffers);
-        } catch (error) {
-          console.error("Error fetching loan offers:", error);
-          setError("Error fetching loan offers.");
-        }
-      };
-      fetchLoanOffers();
-    }
-  }, [requests, id]);
 
   const openLoanApplicationForm = () => {
     navigate(`/borrowers/${id}/requests/new`);
@@ -103,11 +88,16 @@ const BDashboard = () => {
 
   const totalLoanRequests = requests.length;
   const loanRequestsWithProposals = requests.filter((request) => {
-    const requestProposals = offers.filter(
-      (offer) => offer.request_id === request.id
-    );
+    const requestProposals = proposals[request.id] || [];
     return requestProposals.length > 0;
   }).length;
+
+  // Determine the status of a loan request
+  const getLoanStatus = (requestId) => {
+    const hasProposals =
+      proposals[requestId] && proposals[requestId].length > 0;
+    return hasProposals ? "Active" : "Pending";
+  };
 
   const getStatusColor = (status) => {
     if (status === "Pending") return "#8B0000";
@@ -116,35 +106,8 @@ const BDashboard = () => {
     return "inherit";
   };
 
-  const handleRowClick = (rowId, request) => {
+  const handleRowClick = (rowId) => {
     setExpandedRow(expandedRow === rowId ? null : rowId);
-    setFormData({
-      title: request.title,
-      description: request.description,
-      value: request.value,
-    });
-  };
-
-  const handleInputChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleSubmit = async (requestId) => {
-    try {
-      const updatedRequest = await updateRequest(requestId, formData);
-
-      const updatedRequests = requests.map((request) =>
-        request.id === requestId ? { ...request, ...formData } : request
-      );
-      setRequests(updatedRequests);
-
-      setExpandedRow(null);
-    } catch (error) {
-      console.error("Error updating loan request:", error);
-    }
   };
 
   // const handleLinkClick = (e) => {
@@ -229,17 +192,10 @@ const BDashboard = () => {
           <TableBody>
             {Array.isArray(requests) &&
               requests.map((request) => {
-                const hasProposals = offers.some(
-                  (offer) => offer.request_id === request.id
-                );
-                const status = hasProposals ? "Active" : "Pending";
+                const status = getLoanStatus(request.id);
                 return (
-                  <>
-                    <TableRow
-                      key={request.id}
-                      hover
-                      onClick={() => handleRowClick(request.id, request)}
-                    >
+                  <React.Fragment key={request.id}>
+                    <TableRow hover onClick={() => handleRowClick(request.id)}>
                       <TableCell
                         align="left"
                         sx={{ cursor: "pointer", color: "#00A250" }}
@@ -251,10 +207,12 @@ const BDashboard = () => {
                       </TableCell>
                       <TableCell sx={{ cursor: "pointer" }}>
                         $
-                        {parseFloat(request.value).toLocaleString("en-US", {
-                          minimumFractionDigits: 2,
-                          maximumFractionDigits: 2,
-                        })}
+                        {request.value
+                          ? parseFloat(request.value).toLocaleString("en-US", {
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 2,
+                            })
+                          : "N/A"}
                       </TableCell>
                       <TableCell
                         sx={{
@@ -277,103 +235,62 @@ const BDashboard = () => {
                           <Card
                             elevation={2}
                             sx={{
-                              backgroundColor: "#75D481",
+                              backgroundColor: "#75D481", // Light mint green background
                               margin: 2,
                               border: "1px solid #00A250",
                             }}
                           >
                             <CardContent>
                               <Typography variant="h6">
-                                Edit Loan Request
+                                Loan Proposals
                               </Typography>
-                              <TextField
-                                label="Loan Title"
-                                name="title"
-                                value={formData.title}
-                                onChange={handleInputChange}
-                                fullWidth
-                                margin="normal"
-                              />
-                              <TextField
-                                label="Loan Description"
-                                name="description"
-                                value={formData.description}
-                                onChange={handleInputChange}
-                                fullWidth
-                                margin="normal"
-                              />
-                              <TextField
-                                label="Loan Amount"
-                                name="value"
-                                value={formData.value}
-                                onChange={handleInputChange}
-                                fullWidth
-                                margin="normal"
-                              />
-                              <Box sx={{ marginTop: 2 }}>
-                                <Typography variant="h6">
-                                  Attachments
+
+                              {/* Loan Proposals Section */}
+                              {proposals[request.id] &&
+                              proposals[request.id].length > 0 ? (
+                                proposals[request.id].map((offer) => (
+                                  <Box
+                                    key={offer.id}
+                                    sx={{
+                                      marginTop: 2,
+                                      backgroundColor: "#f6f7f8",
+                                      padding: "10px",
+                                      borderRadius: "4px",
+                                    }}
+                                  >
+                                    <Typography variant="body2">
+                                      Interest Rate: {offer.interest_rate}%
+                                    </Typography>
+                                    <Typography variant="body2">
+                                      Loan Amount Offered: $
+                                      {offer.loan_amount
+                                        ? parseFloat(
+                                            offer.loan_amount
+                                          ).toLocaleString("en-US", {
+                                            minimumFractionDigits: 2,
+                                            maximumFractionDigits: 2,
+                                          })
+                                        : "N/A"}
+                                    </Typography>
+                                    <Typography variant="body2">
+                                      Term Length:{" "}
+                                      {offer.repayment_term
+                                        ? `${offer.repayment_term} months`
+                                        : "N/A"}
+                                    </Typography>
+                                  </Box>
+                                ))
+                              ) : (
+                                <Typography variant="body2">
+                                  No proposals available.
                                 </Typography>
-                                <Grid
-                                  container
-                                  direction="row"
-                                  alignItems="center"
-                                  spacing={2}
-                                  sx={{ marginTop: 1 }}
-                                >
-                                  <Grid item>
-                                    <Button
-                                      variant="contained"
-                                      startIcon={<VerifiedIcon />}
-                                      sx={{
-                                        backgroundColor: "#00A250",
-                                        color: "#f6f7f8",
-                                        '&:hover': {
-                                          backgroundColor: "#008740",
-                                        }
-                                      }}
-                                      onClick={() => window.open(`/borrowers/${request.id}/approved-documents`, "_blank")}
-                                    >
-                                      View Approved Documents
-                                    </Button>
-                                  </Grid>
-                                </Grid>
-                              </Box>
+                              )}
                             </CardContent>
-                            <CardActions>
-                              <Button
-                                variant="contained"
-                                sx={{
-                                  backgroundColor: "#00A250",
-                                  color: "#f6f7f8",
-                                }}
-                                onClick={() => handleSubmit(request.id)} // Submit the form
-                              >
-                                Submit Edited Loan Request
-                              </Button>
-                              <Button
-                                variant="outlined"
-                                sx={{
-                                  color: "#00A250",
-                                  borderColor: "#00A250",
-                                }}
-                                onClick={() => setExpandedRow(null)} // Close the expanded row
-                              >
-                                Cancel
-                              </Button>
-                              <Button
-                                variant="text"
-                                sx={{ color: "#00A250" }}
-                                onClick={() => console.log("Save draft")}
-                              >
-                                Save Draft
-                              </Button>
-                            </CardActions>
                           </Card>
                         </Collapse>
                       </TableCell>
                     </TableRow>
-                  </>
+                  </React.Fragment>
                 );
               })}
           </TableBody>
