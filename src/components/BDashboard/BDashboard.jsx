@@ -1,6 +1,6 @@
 // src/components/BDashboard/BDashboard.jsx
 import PropTypes from "prop-types";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Paper,
@@ -27,7 +27,7 @@ const BDashboard = ({ user, token }) => {
   const [loading, setLoading] = useState(true);
   const [proposals, setProposals] = useState({}); // Store proposals by request ID
   const [error, setError] = useState(null);
-  const { id } = useParams();
+  // const { id } = useParams();
   const [expandedRow, setExpandedRow] = useState(null); // Track expanded row
 
   const navigate = useNavigate();
@@ -35,6 +35,7 @@ const BDashboard = ({ user, token }) => {
   // Fetch the borrower and all loan requests initially
   useEffect(() => {
     setLoading(true);
+
     const options = {
       headers: {
         Authorization: token,
@@ -48,12 +49,48 @@ const BDashboard = ({ user, token }) => {
           // do something
         }
       })
-      .then((data) => setRequests(data))
+      .then((data) => {
+        setRequests(data);
+        const requestsProposals = {};
+        for (const request of data) {
+          const { id } = request;
+          fetch(`${API}/borrowers/${user.id}/requests/${id}/proposals`, options)
+            .then((res) => res.json())
+            .then((data) => {
+              requestsProposals[id] = data;
+            });
+        }
+        console.log(requestsProposals);
+      })
       .catch((err) => console.error("Error fetching data:", err))
       .finally(() => {
         setLoading(false);
       });
   }, [user]);
+
+  // useEffect(() => {
+  //   const options = {
+  //     headers: {
+  //       Authorization: token,
+  //     },
+  //   };
+  //   const requestsProposals = {};
+  //   if (requests.length > 0) {
+  //     for (const request of requests) {
+  //       const { id } = request;
+  //       fetch(`${API}/borrowers/${user.id}/requests/${id}/proposals`, options)
+  //         .then((res) => res.json())
+  //         .then((data) => {
+  //           if (data.id) {
+  //             console.error(data);
+  //             requestsProposals[id] = data;
+  //           }
+  //         });
+  //     }
+  //   }
+  //   setProposals(requestsProposals);
+  //   console.error(proposals);
+  // }, [requests]);
 
   const openLoanApplicationForm = () => {
     navigate(`/borrowers/${user.id}/requests/new`);

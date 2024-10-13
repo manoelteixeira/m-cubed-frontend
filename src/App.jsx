@@ -25,7 +25,7 @@ import Footer from "./components/Footer/Footer";
 import EditLenderPage from "./Pages/EditLenderPage.jsx";
 import ShowBorrowerDetails from "./components/ShowDetailsForBorrower/ShowBorrowerDetails";
 import ShowBorrowerLoanDetails from "./components/ShowDetailsForBorrower/ShowBorrowerLoanDetails";
-import { useState } from "react";
+
 import ApprovedDocuments from "./components/ApprovedDocuments";
 function App() {
   const [user, setUser] = useState(null);
@@ -110,7 +110,6 @@ function App() {
         />
         <Route
           path="/borrower/"
-          // element={<BDashboard />}
           element={
             <ProtectedRoute
               element={BDashboard}
