@@ -326,8 +326,7 @@ import {
   DialogTitle,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-
-const API = import.meta.env.VITE_BASE_URL;
+import PropTypes from "prop-types";
 
 const API = import.meta.env.VITE_BASE_URL;
 
