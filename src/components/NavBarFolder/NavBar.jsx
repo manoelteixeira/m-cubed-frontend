@@ -11,7 +11,7 @@ import {
 import MMMIcon from "../../assets/MMMF6F7F8bground.png";
 import { useNavigate, useLocation } from "react-router-dom";
 
-const NavBar = ({ setUser, setToken }) => {
+const NavBar = ({ setUser, setToken, isAuthenticated }) => {
   const [navButtons, setNavButtons] = useState();
   const location = useLocation();
   const navigate = useNavigate();
@@ -183,6 +183,7 @@ const NavBar = ({ setUser, setToken }) => {
 NavBar.propTypes = {
   setUser: PropTypes.func,
   setToken: PropTypes.func,
+  isAuthenticated: PropTypes.bool,
 };
 
 export default NavBar;

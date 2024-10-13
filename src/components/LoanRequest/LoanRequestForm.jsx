@@ -1,5 +1,5 @@
 // src/components/LoanRequest/LoanRequestForm.jsx
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
   Paper,

@@ -104,32 +104,6 @@ export default function LenderDashboard({ user, token }) {
     setFilteredLoanProposals(filteredProposals);
   };
 
-  // const handleDelete = async (loanRequestId) => {
-  //   const confirmed = window.confirm(
-  //     "Are you sure you want to delete this Proposal?"
-  //   );
-  //   if (!confirmed) return;
-
-  //   try {
-  //     const res = await fetch(
-  //       `${API}/lenders/${id}/proposals/${loanRequestId}`,
-  //       {
-  //         method: "DELETE",
-  //       }
-  //     );
-  //     if (!res.ok) {
-  //       const errorData = await res.json();
-  //       throw new Error(
-  //         errorData.message || "Something went wrong during deletion"
-  //       );
-  //     }
-  //     alert("Proposal deleted successfully");
-  //     window.location.reload();
-  //   } catch (error) {
-  //     console.error("Error deleting proposal:", error);
-  //     alert(`Failed to delete proposal: ${error.message}`);
-  //   }
-  // };
   const handleDelete = (loanRequestId) => {
     const confirmed = window.confirm(
       "Are you sure you want to delete this Proposal?"
@@ -158,7 +132,7 @@ export default function LenderDashboard({ user, token }) {
         const proposalIdx = loanProposals.findIndex(
           (proposal) => proposal.id == res.id
         );
-        // remove item from loan
+
         let loanProposalsArr = filteredloanProposals;
         loanProposalsArr.splice(filteredIDX, 1);
         setFilteredLoanListings(loanProposals);

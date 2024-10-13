@@ -1,3 +1,4 @@
+// src/App.jsx
 import "./App.css";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -16,7 +17,7 @@ import EmailNewsletter from "./Pages/EmailNewsletter";
 import EditBorrowerPage from "./Pages/EditBorrowerPage";
 import LenderProposalPage from "./Pages/LenderProposalPage";
 import EditLoanRequestForm from "./components/editLoanRequestForm/editLoanRequestForm";
-import Cards from "./components/Cards/Cards";
+// import Cards from "./components/Cards/Cards";
 import EditLoanProposalPage from "./components/LoanProposals/EditLoanProposalForm";
 import SignInForm from "./Pages/LoginPage.jsx";
 import ForgotCredentials from "./components/ForgotCredentials/ForgotCredentials.jsx";
@@ -29,11 +30,9 @@ import ApprovedDocuments from "./components/ApprovedDocuments";
 function App() {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const credentials = JSON.parse(localStorage.getItem("credentials"));
-    console.log(credentials);
     if (credentials) {
       const { timestamp } = credentials;
       const time = new Date(timestamp);
@@ -42,14 +41,17 @@ function App() {
       if (timeDif < 12) {
         setUser(credentials.user);
         setToken(credentials.token);
-        navigate(`/${credentials.user_type}`);
       }
     }
   }, []);
   return (
     <>
       {/* Navigation bar, displayed across all pages */}
-      <NavBar setUser={setUser} setToken={setToken} />
+      <NavBar
+        setUser={setUser}
+        setToken={setToken}
+        isAuthenticated={!!user && !!token}
+      />
 
       {/* Main routes for different sections of the app */}
       <Routes>
