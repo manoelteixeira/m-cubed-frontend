@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { json, useNavigate } from "react-router-dom";
 import {
@@ -10,7 +10,7 @@ import {
   IconButton,
   InputAdornment,
   Divider,
-  Paper, 
+  Paper,
 } from "@mui/material";
 import { Visibility, VisibilityOff, Email, Lock } from "@mui/icons-material";
 import { GoogleOAuthProvider } from "@react-oauth/google";
@@ -21,8 +21,7 @@ import medicalEquipment from "../../assets/medicalEquipment.jpg";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import ApprovedLoan from '../../assets/ApprovedLoanApplicaiton.png'
-
+import ApprovedLoan from "../../assets/ApprovedLoanApplicaiton.png";
 
 const API = import.meta.env.VITE_BASE_URL;
 
@@ -119,6 +118,20 @@ const Login = ({ setUser, setToken }) => {
     adaptiveHeight: true,
   };
 
+  useEffect(() => {
+    const credentials = JSON.parse(localStorage.getItem("credentials"));
+    if (credentials) {
+      // console.log(credentials);
+      const { timestamp } = credentials;
+      const time = new Date(timestamp);
+      const now = new Date();
+      const timeDif = Math.abs(time - now) / (1000 * 60 * 60);
+      if (timeDif < 12) {
+        navigate(`/${credentials.user_type}`);
+      }
+    }
+  }, []);
+
   return (
     <Grid container sx={{ height: "100vh", backgroundColor: "#f6f7f8" }}>
       <Grid
@@ -131,15 +144,27 @@ const Login = ({ setUser, setToken }) => {
         }}
       >
         <Box sx={{ width: "80%", height: "45%", boxShadow: 10 }}>
-          <Slider {...carouselSettings} >
+          <Slider {...carouselSettings}>
             <div>
-              <img src={clothingStore} alt="Clothing Store" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+              <img
+                src={clothingStore}
+                alt="Clothing Store"
+                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              />
             </div>
             <div>
-              <img src={medicalEquipment} alt="Medical Equipment" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+              <img
+                src={medicalEquipment}
+                alt="Medical Equipment"
+                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              />
             </div>
             <div>
-              <img src={ApprovedLoan} alt="Approved-Loan-Application" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+              <img
+                src={ApprovedLoan}
+                alt="Approved-Loan-Application"
+                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              />
             </div>
           </Slider>
         </Box>
