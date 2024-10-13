@@ -42,8 +42,6 @@ const BDashboard = () => {
     description: "",
     value: "",
   });
-  const [showImage, setShowImage] = useState(false);
-
   const navigate = useNavigate();
 
   useEffect(() => {
