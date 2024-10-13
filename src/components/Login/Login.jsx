@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { json, useNavigate } from "react-router-dom";
+import './Login.scss'
 import {
   TextField,
   Button,
@@ -16,12 +17,15 @@ import { Visibility, VisibilityOff, Email, Lock } from "@mui/icons-material";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import GoogleIcon from "@mui/icons-material/Google";
-import clothingStore from "../../assets/clothingStore.jpg";
-import medicalEquipment from "../../assets/medicalEquipment.jpg";
+// import clothingStore from "../../assets/clothingStore.jpg";
+// import medicalEquipment from "../../assets/medicalEquipment.jpg";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import ApprovedLoan from "../../assets/ApprovedLoanApplicaiton.png";
+// import ApprovedLoan from '../../assets/ApprovedLoanApplicaiton.png'
+import Photographer from '../../assets/1.png'
+import MedicalEquipment from '../../assets/2.png'
+import ApprovedLoan from '../../assets/6.png'
 
 const API = import.meta.env.VITE_BASE_URL;
 
@@ -108,7 +112,7 @@ const Login = ({ setUser, setToken }) => {
   };
 
   const carouselSettings = {
-    dots: true,
+    dots: false,
     infinite: true,
     speed: 500,
     slidesToShow: 1,
@@ -133,7 +137,7 @@ const Login = ({ setUser, setToken }) => {
   }, []);
 
   return (
-    <Grid container sx={{ height: "100vh", backgroundColor: "#f6f7f8" }}>
+    <Grid container sx={{ height: "100vh", backgroundColor: "#def4df", zIndex: 1 }}>
       <Grid
         item
         xs={6}
@@ -143,28 +147,16 @@ const Login = ({ setUser, setToken }) => {
           alignItems: "center",
         }}
       >
-        <Box sx={{ width: "80%", height: "45%", boxShadow: 10 }}>
-          <Slider {...carouselSettings}>
+        <Box sx={{ width: "90%", height: "55%", boxShadow: 10, borderRadius: 10 }}>
+          <Slider {...carouselSettings} >
             <div>
-              <img
-                src={clothingStore}
-                alt="Clothing Store"
-                style={{ width: "100%", height: "100%", objectFit: "cover" }}
-              />
+              <img src={Photographer} alt="Clothing Store" style={{ width: "100%", height: "55vh", objectFit: "cover" }} />
             </div>
             <div>
-              <img
-                src={medicalEquipment}
-                alt="Medical Equipment"
-                style={{ width: "100%", height: "100%", objectFit: "cover" }}
-              />
+              <img src={MedicalEquipment} alt="Medical Equipment" style={{ width: "100%", height: "55vh", objectFit: "cover" }} />
             </div>
             <div>
-              <img
-                src={ApprovedLoan}
-                alt="Approved-Loan-Application"
-                style={{ width: "100%", height: "100%", objectFit: "cover" }}
-              />
+              <img src={ApprovedLoan} alt="Approved-Loan-Application" style={{ width: "100%", height: "55vh", objectFit: "cover" }} />
             </div>
           </Slider>
         </Box>
@@ -185,6 +177,7 @@ const Login = ({ setUser, setToken }) => {
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
+            backgroundColor: "#def4df",
           }}
         >
           <Typography

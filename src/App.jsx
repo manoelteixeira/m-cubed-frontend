@@ -8,7 +8,7 @@ import NavBar from "./components/NavBarFolder/NavBar";
 import AboutUs from "./components/AboutFolder/AboutUs";
 import NewLender from "./Pages/NewLender";
 import Lenderpage from "./Pages/Lenderpage";
-import BDashboard from "./components/BDashboard/BDashboard";
+// import BDashboard from "./components/BDashboard/BDashboard";
 import NewBorrower from "./Pages/NewBorrower";
 import ListOfLenders from "./Pages/ListOfLenders";
 // import EditLenderForm from "./components/EditUserFolder/EditLenderInfo";
@@ -109,7 +109,7 @@ function App() {
           path="/borrowers/:borrower_id/borrowerloandetails/:id"
           element={<ShowBorrowerLoanDetails />}
         />
-        <Route
+        {/* <Route
           path="/borrower/"
           element={
             <ProtectedRoute
@@ -119,7 +119,7 @@ function App() {
               token={token}
             />
           }
-        />
+        /> */}
         <Route
           path="/borrowers/:id/borrowerdetails"
           element={<ShowBorrowerDetails />}
@@ -131,7 +131,7 @@ function App() {
         <Route path="/borrowers/:id/edit" element={<EditBorrowerPage />} />
         <Route path="/borrowers/:id/new" element={<LoanRequestForm />} />
         <Route path="/borrowers/signup" element={<NewBorrower />} />
-        <Route path="/borrowers/:id" element={<BDashboard />} />
+        {/* <Route path="/borrowers/:id" element={<BDashboard />} /> */}
         <Route path="/disclaimer" element={<></>} />
         <Route path="/newsletter" element={<EmailNewsletter />}></Route>
       </Routes>
