@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { useNavigate } from "react-router-dom";
+import { json, useNavigate } from "react-router-dom";
 import {
   TextField,
   Button,
@@ -33,33 +33,6 @@ const Login = ({ setUser, setToken }) => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  // const handleLogin = async (event) => {
-  //   event.preventDefault();
-  //   setError("");
-  //   try {
-  //     const response = await fetch(`${API}/login`, {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({ email, password }),
-  //     });
-  //     const data = await response.json();
-  //     if (response.ok) {
-  //       console.log("Login success:", data);
-  //       if (data.lender) {
-  //         navigate(`/lenders/${data.lender.id}/lenderdashboard`);
-  //       } else {
-  //         navigate(`/borrowers/${data.borrower.id}/borrowerdashboard`);
-  //       }
-  //     } else {
-  //       setError(data.error || "Login failed. Please check your credentials.");
-  //     }
-  //   } catch (error) {
-  //     console.error("Login failed:", error);
-  //     setError("An error occurred. Please try again later.");
-  //   }
-  // };
   const handleLogin = (event) => {
     event.preventDefault();
     setError("");
@@ -79,12 +52,21 @@ const Login = ({ setUser, setToken }) => {
           const user = data.lender ? data.lender : data.borrower;
           setUser(user);
           setToken(data.token);
-          console.log(user);
+
           const userType = Object.keys(data).includes("lender")
             ? "lender"
             : "borrower";
-
-          navigate(`/${userType}s/${user.id}/${userType}dashboard`);
+          localStorage.setItem(
+            "credentials",
+            JSON.stringify({
+              user: data[userType],
+              token: data.token,
+              timestamp: new Date(),
+              user_type: userType,
+            })
+          );
+          // navigate(`/${userType}s/${user.id}/${userType}dashboard`);
+          navigate(`/${userType}`);
         }
       })
       .catch((err) => {

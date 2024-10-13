@@ -1,5 +1,7 @@
 import "./App.css";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import ProtectedRoute from "./Pages/ProtectedRoute.jsx";
 import Home from "./Pages/Homepage";
 import NavBar from "./components/NavBarFolder/NavBar";
 import AboutUs from "./components/AboutFolder/AboutUs";
@@ -23,14 +25,31 @@ import EditLenderPage from "./Pages/EditLenderPage.jsx";
 import ShowBorrowerDetails from "./components/ShowDetailsForBorrower/ShowBorrowerDetails";
 import ShowBorrowerLoanDetails from "./components/ShowDetailsForBorrower/ShowBorrowerLoanDetails";
 import { useState } from "react";
-  import ApprovedDocuments from "./components/ApprovedDocuments";
+import ApprovedDocuments from "./components/ApprovedDocuments";
 function App() {
   const [user, setUser] = useState(null);
-  const [toke, setToken] = useState(null);
+  const [token, setToken] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const credentials = JSON.parse(localStorage.getItem("credentials"));
+    console.log(credentials);
+    if (credentials) {
+      const { timestamp } = credentials;
+      const time = new Date(timestamp);
+      const now = new Date();
+      const timeDif = Math.abs(time - now) / (1000 * 60 * 60);
+      if (timeDif < 12) {
+        setUser(credentials.user);
+        setToken(credentials.token);
+        navigate(`/${credentials.user_type}`);
+      }
+    }
+  }, []);
   return (
     <>
       {/* Navigation bar, displayed across all pages */}
-      <NavBar />
+      <NavBar setUser={setUser} setToken={setToken} />
 
       {/* Main routes for different sections of the app */}
       <Routes>
@@ -52,7 +71,19 @@ function App() {
           path="/lenders/:lender_id/proposals/:id/edit"
           element={<EditLoanProposalPage />}
         />
-        <Route path="/lenders/:id/lenderdashboard" element={<Lenderpage />} />
+        {/* <Route path="/lenders/:id/lenderdashboard" element={<Lenderpage />} /> */}
+        <Route
+          // path="/lenders/:id/lenderdashboard"
+          path="/lender/"
+          element={
+            <ProtectedRoute
+              element={Lenderpage}
+              isAuthenticated={!!user && !!token}
+              user={user}
+              token={token}
+            />
+          }
+        />
         <Route path="/lenders/:id/proposals" element={<LenderProposalPage />} />
         <Route path="/lenders/:id/edit" element={<EditLenderPage />} />
         <Route path="/lenders/signup" element={<NewLender />} />
@@ -63,7 +94,10 @@ function App() {
           path="/borrowers/:id/edit-request/:requestId"
           element={<EditLoanRequestForm />}
         />
-        <Route path="/borrowers/:id/approved-documents" element={<ApprovedDocuments />} />
+        <Route
+          path="/borrowers/:id/approved-documents"
+          element={<ApprovedDocuments />}
+        />
         <Route path="borrowers/:borrower_id/requests/:id" element={<></>} />
         <Route
           path="/borrowers/:borrower_id/borrowerloandetails/:id"

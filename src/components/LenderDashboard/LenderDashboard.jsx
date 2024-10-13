@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+// src/components/LenderDashboard/LenderDashboard.jsx
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 import {
   AppBar,
   Toolbar,
@@ -20,9 +22,7 @@ import "./LenderDashboard.scss";
 
 const API = import.meta.env.VITE_BASE_URL;
 
-export default function LenderDashboard() {
-  const { id } = useParams();
-
+export default function LenderDashboard({ user, token }) {
   // states for listings
   const [loanProposals, setLoanProposals] = useState([]);
   const [loanListings, setLoanListings] = useState([]);
@@ -47,58 +47,15 @@ export default function LenderDashboard() {
       return total + loanValue;
     }, 0);
 
-    return total.toLocaleString('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
-    }).replace('$', '');
+    return total
+      .toLocaleString("en-US", {
+        style: "currency",
+        currency: "USD",
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      })
+      .replace("$", "");
   };
-  const [userlenderData, setUserLenderData] = useState([]);
-
-  useEffect(() => {
-    fetch(`${API}/lenders/${id}`)
-      .then((res) => res.json())
-      .then((data) => setUserLenderData(data))
-      .catch((err) => console.error(err));
-  }, []);
-
-  useEffect(() => {
-    const fetchLender = async () => {
-      try {
-        const response = await fetch(`${API}/lenders/${id}`);
-        const data = await response.json();
-        setUserLenderData(data);
-      } catch (err) {
-        console.error("Error fetching lender info: ", err);
-      }
-    };
-
-    const fetchLoanProposals = async () => {
-      try {
-        const response = await fetch(`${API}/lenders/${id}/proposals`);
-        const data = await response.json();
-        setLoanProposals(data);
-        setFilteredLoanProposals(data);
-      } catch (error) {
-        console.error("Error fetching loan requests:", error);
-      }
-    };
-
-    const fetchLoanListing = async () => {
-      try {
-        const response = await fetch(`${API}/lenders/${id}/requests`);
-        const data = await response.json();
-        setLoanListings(data);
-        setFilteredLoanListings(data);
-      } catch (error) {
-        console.error("Error fetching requests: ", error);
-      }
-    };
-    fetchLender();
-    fetchLoanProposals();
-    fetchLoanListing();
-  }, [id]);
 
   // PAGINATION CODE START!!
   const handleChangePageBorrowers = (event, newPage) => {
@@ -146,31 +103,73 @@ export default function LenderDashboard() {
     );
     setFilteredLoanProposals(filteredProposals);
   };
-  const handleDelete = async (loanRequestId) => {
+
+  // const handleDelete = async (loanRequestId) => {
+  //   const confirmed = window.confirm(
+  //     "Are you sure you want to delete this Proposal?"
+  //   );
+  //   if (!confirmed) return;
+
+  //   try {
+  //     const res = await fetch(
+  //       `${API}/lenders/${id}/proposals/${loanRequestId}`,
+  //       {
+  //         method: "DELETE",
+  //       }
+  //     );
+  //     if (!res.ok) {
+  //       const errorData = await res.json();
+  //       throw new Error(
+  //         errorData.message || "Something went wrong during deletion"
+  //       );
+  //     }
+  //     alert("Proposal deleted successfully");
+  //     window.location.reload();
+  //   } catch (error) {
+  //     console.error("Error deleting proposal:", error);
+  //     alert(`Failed to delete proposal: ${error.message}`);
+  //   }
+  // };
+  const handleDelete = (loanRequestId) => {
     const confirmed = window.confirm(
       "Are you sure you want to delete this Proposal?"
     );
-    if (!confirmed) return;
 
-    try {
-      const res = await fetch(
-        `${API}/lenders/${id}/proposals/${loanRequestId}`,
-        {
-          method: "DELETE",
+    if (!confirmed) return;
+    const options = {
+      method: "DELETE",
+      headers: {
+        Authorization: token,
+      },
+    };
+    console.log(`${API}/lenders/${user.id}/proposals/${loanRequestId}`);
+    fetch(`${API}/lenders/${user.id}/proposals/${loanRequestId}`, options)
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        } else {
+          alert("Something went wrong during deletion");
         }
-      );
-      if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(
-          errorData.message || "Something went wrong during deletion"
+      })
+      .then((res) => {
+        const filteredIDX = filteredloanProposals.findIndex(
+          (proposal) => proposal.id == res.id
         );
-      }
-      alert("Proposal deleted successfully");
-      window.location.reload();
-    } catch (error) {
-      console.error("Error deleting proposal:", error);
-      alert(`Failed to delete proposal: ${error.message}`);
-    }
+        const proposalIdx = loanProposals.findIndex(
+          (proposal) => proposal.id == res.id
+        );
+        // remove item from loan
+        let loanProposalsArr = filteredloanProposals;
+        loanProposalsArr.splice(filteredIDX, 1);
+        setFilteredLoanListings(loanProposals);
+
+        loanProposalsArr = loanProposals;
+        loanProposalsArr.slplice(proposalIdx, 1);
+        setLoanProposals(loanProposalsArr);
+      })
+      .catch((err) => {
+        alert(`Failed to delete proposal: ${err.message}`);
+      });
   };
 
   // adds commas and converts the number into proper display.
@@ -178,13 +177,39 @@ export default function LenderDashboard() {
     let loanTotal = loanListings.reduce((total, loan) => {
       return total + (parseFloat(loan.value) || 0);
     }, 0);
-    return loanTotal.toLocaleString('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
-    }).replace('$', '');
+    return loanTotal
+      .toLocaleString("en-US", {
+        style: "currency",
+        currency: "USD",
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      })
+      .replace("$", "");
   };
+
+  useEffect(() => {
+    const options = {
+      headers: {
+        Authorization: token,
+      },
+    };
+    // Load Proposals
+    fetch(`${API}/lenders/${user.id}/proposals`, options)
+      .then((res) => res.json())
+      .then((data) => {
+        setLoanProposals(data);
+        setFilteredLoanProposals(data);
+      })
+      .catch((err) => console.log(err));
+    // Load available requests
+    fetch(`${API}/lenders/${user.id}/requests`, options)
+      .then((res) => res.json())
+      .then((data) => {
+        setLoanListings(data);
+        setFilteredLoanListings(data);
+      })
+      .catch((err) => console.log(err));
+  }, [user]);
 
   return (
     <div className="lender-dashboard">
@@ -205,7 +230,8 @@ export default function LenderDashboard() {
                 ml={"4em"}
                 mb={"10px"}
               >
-                <em>{`${userlenderData.business_name}`}</em>
+                {/* <em>{`${userlenderData.business_name}`}</em> */}
+                <em>{`${user.business_name}`}</em>
               </Typography>
             </Grid>
 
@@ -284,12 +310,16 @@ export default function LenderDashboard() {
                       <TableRow key={loan.id}>
                         <TableCell>{loan.title}</TableCell>
                         <TableCell>{loan.description}</TableCell>
-                        <TableCell>{parseFloat(loan.value).toLocaleString('en-US', {
-                          style: 'currency',
-                          currency: 'USD',
-                          minimumFractionDigits: 2,
-                          maximumFractionDigits: 2
-                        }).replace('$', '')}</TableCell>
+                        <TableCell>
+                          {parseFloat(loan.value)
+                            .toLocaleString("en-US", {
+                              style: "currency",
+                              currency: "USD",
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 2,
+                            })
+                            .replace("$", "")}
+                        </TableCell>
                         <TableCell>
                           {new Date(loan.created_at).toLocaleDateString()}
                         </TableCell>
@@ -299,7 +329,7 @@ export default function LenderDashboard() {
                         >
                           <Button className="action-btn-one">
                             <Link
-                              to={`/lenders/${id}/requests/${loan.id}/newproposal`}
+                            // to={`/lenders/${id}/requests/${loan.id}/newproposal`}
                             >
                               Submit Offer
                             </Link>
@@ -396,16 +426,14 @@ export default function LenderDashboard() {
                             >
                               <Button className="action-btn-one">
                                 <Link
-                                  to={`/lenders/${id}/proposals/${loan.id}/edit`}
+                                // to={`/lenders/${id}/proposals/${loan.id}/edit`}
                                 >
                                   Review
                                 </Link>
                               </Button>
                               <Button
                                 className="action-btn-two"
-                                onClick={() =>
-                                  handleDelete(loan.loan_request_id)
-                                }
+                                onClick={() => handleDelete(loan.id)}
                               >
                                 Delete
                               </Button>
@@ -438,3 +466,8 @@ export default function LenderDashboard() {
     </div>
   );
 }
+
+LenderDashboard.propTypes = {
+  user: PropTypes.object,
+  token: PropTypes.string,
+};
