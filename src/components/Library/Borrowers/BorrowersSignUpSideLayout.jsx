@@ -35,7 +35,7 @@ const SignUpBorrowerLayout = () => {
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
-            backgroundColor: "#f5f5f5",
+            backgroundColor: "#f6f7f8",
             borderRight: "1px solid #e0e0e0",
           }}
         >

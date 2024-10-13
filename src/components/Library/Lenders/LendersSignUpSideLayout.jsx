@@ -27,7 +27,7 @@ const LenderSignUpSideLayout = () => {
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
-            backgroundColor: "#f5f5f5",
+            backgroundColor: "#f6f7f8",
           }}
         >
           <img
