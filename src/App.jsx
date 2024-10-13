@@ -47,6 +47,7 @@ function App() {
       }
     }
   }, []);
+
   return (
     <>
       {/* Navigation bar, displayed across all pages */}

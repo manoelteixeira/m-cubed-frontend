@@ -386,7 +386,6 @@ const BDashboard = () => {
         }
       })
       .then((data) => {
-        setRequests(data);
         let requestsProposals = {};
         for (const request of data) {
           const { id } = request;
@@ -396,37 +395,14 @@ const BDashboard = () => {
               requestsProposals[id] = data;
             });
         }
+        setRequests(data);
         setProposals(requestsProposals);
       })
       .catch((err) => console.error("Error fetching data:", err))
       .finally(() => {
         setLoading(false);
       });
-  }, [user]);
-
-  // useEffect(() => {
-  //   const options = {
-  //     headers: {
-  //       Authorization: token,
-  //     },
-  //   };
-  //   const requestsProposals = {};
-  //   if (requests.length > 0) {
-  //     for (const request of requests) {
-  //       const { id } = request;
-  //       fetch(`${API}/borrowers/${user.id}/requests/${id}/proposals`, options)
-  //         .then((res) => res.json())
-  //         .then((data) => {
-  //           if (data.id) {
-  //             console.error(data);
-  //             requestsProposals[id] = data;
-  //           }
-  //         });
-  //     }
-  //   }
-  //   setProposals(requestsProposals);
-  //   console.error(proposals);
-  // }, [requests]);
+  }, [user, token]);
 
   const openLoanApplicationForm = () => {
     navigate(`/borrowers/${user.id}/requests/new`);
