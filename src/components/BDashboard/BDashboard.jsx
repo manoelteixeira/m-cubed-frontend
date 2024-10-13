@@ -51,7 +51,7 @@ const BDashboard = ({ user, token }) => {
       })
       .then((data) => {
         setRequests(data);
-        const requestsProposals = {};
+        let requestsProposals = {};
         for (const request of data) {
           const { id } = request;
           fetch(`${API}/borrowers/${user.id}/requests/${id}/proposals`, options)
@@ -60,7 +60,7 @@ const BDashboard = ({ user, token }) => {
               requestsProposals[id] = data;
             });
         }
-        console.log(requestsProposals);
+        setProposals(requestsProposals);
       })
       .catch((err) => console.error("Error fetching data:", err))
       .finally(() => {
