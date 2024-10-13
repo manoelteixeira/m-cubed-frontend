@@ -262,6 +262,7 @@ import {
   CardContent,
   CardActions,
   IconButton,
+  Link,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import VerifiedIcon from "@mui/icons-material/Verified";
@@ -269,6 +270,7 @@ import {
   getBorrower,
   getAllLoanRequests,
   getProposalsByRequestId,
+  updateRequest,
 } from "../services/serviceRequest";
 
 const BDashboard = () => {
@@ -279,6 +281,11 @@ const BDashboard = () => {
   const [error, setError] = useState(null);
   const { id } = useParams();
   const [expandedRow, setExpandedRow] = useState(null); // Track expanded row
+  const [formData, setFormData] = useState({
+    title: "",
+    description: "",
+    value: "",
+  }); // Form data
 
   const navigate = useNavigate();
 
@@ -347,7 +354,6 @@ const BDashboard = () => {
     return requestProposals.length > 0;
   }).length;
 
-  // Function to apply status-specific color
   const getStatusColor = (status) => {
     if (status === "Pending") return "#8B0000";
     if (status === "Active") return "#056612";
@@ -355,19 +361,35 @@ const BDashboard = () => {
     return "inherit";
   };
 
-  // Function to toggle row expansion
-  const handleRowClick = (rowId) => {
-    setExpandedRow(expandedRow === rowId ? null : rowId); // Toggle expansion
+  const handleRowClick = (rowId, request) => {
+    setExpandedRow(expandedRow === rowId ? null : rowId);
+    setFormData({
+      title: request.title,
+      description: request.description,
+      value: request.value,
+    });
   };
 
-  // Function to submit the loan request
-  const handleSubmit = () => {
-    console.log("Submit loan request");
+  const handleInputChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
   };
 
-  // Function to save draft
-  const handleSaveDraft = () => {
-    console.log("Save loan request as draft");
+  const handleSubmit = async (requestId) => {
+    try {
+      const updatedRequest = await updateRequest(requestId, formData);
+
+      const updatedRequests = requests.map((request) =>
+        request.id === requestId ? { ...request, ...formData } : request
+      );
+      setRequests(updatedRequests);
+
+      setExpandedRow(null);
+    } catch (error) {
+      console.error("Error updating loan request:", error);
+    }
   };
 
   return (
@@ -455,7 +477,7 @@ const BDashboard = () => {
                     <TableRow
                       key={request.id}
                       hover
-                      onClick={() => handleRowClick(request.id)}
+                      onClick={() => handleRowClick(request.id, request)}
                     >
                       <TableCell
                         align="left"
@@ -494,7 +516,7 @@ const BDashboard = () => {
                           <Card
                             elevation={2}
                             sx={{
-                              backgroundColor: "#f6f7f8",
+                              backgroundColor: "#75D481", // Light mint green background
                               margin: 2,
                               border: "1px solid #00A250",
                             }}
@@ -505,19 +527,25 @@ const BDashboard = () => {
                               </Typography>
                               <TextField
                                 label="Loan Title"
-                                value={request.title}
+                                name="title"
+                                value={formData.title}
+                                onChange={handleInputChange}
                                 fullWidth
                                 margin="normal"
                               />
                               <TextField
                                 label="Loan Description"
-                                value={request.description}
+                                name="description"
+                                value={formData.description}
+                                onChange={handleInputChange}
                                 fullWidth
                                 margin="normal"
                               />
                               <TextField
                                 label="Loan Amount"
-                                value={request.value}
+                                name="value"
+                                value={formData.value}
+                                onChange={handleInputChange}
                                 fullWidth
                                 margin="normal"
                               />
@@ -527,31 +555,62 @@ const BDashboard = () => {
                                 </Typography>
                                 <Grid
                                   container
+                                  direction="column"
                                   spacing={2}
                                   sx={{ marginTop: 1 }}
                                 >
                                   <Grid item>
-                                    <Typography variant="subtitle1">
+                                    <Link
+                                      href="/mock_documents/fico_score.pdf"
+                                      target="_blank"
+                                      underline="hover"
+                                      sx={{ color: "#00A250" }}
+                                    >
                                       FICO Score
-                                    </Typography>
+                                    </Link>
                                     <IconButton>
-                                      <VerifiedIcon sx={{ color: "#00A250" }} />
+                                      <VerifiedIcon
+                                        sx={{
+                                          color: "#00A250",
+                                          marginLeft: "10px",
+                                        }}
+                                      />
                                     </IconButton>
                                   </Grid>
                                   <Grid item>
-                                    <Typography variant="subtitle1">
-                                      Secretary of State
-                                    </Typography>
+                                    <Link
+                                      href="/mock_documents/secretary_of_state.pdf"
+                                      target="_blank"
+                                      underline="hover"
+                                      sx={{ color: "#00A250" }}
+                                    >
+                                      Secretary of State Certificate
+                                    </Link>
                                     <IconButton>
-                                      <VerifiedIcon sx={{ color: "#00A250" }} />
+                                      <VerifiedIcon
+                                        sx={{
+                                          color: "#00A250",
+                                          marginLeft: "10px",
+                                        }}
+                                      />
                                     </IconButton>
                                   </Grid>
                                   <Grid item>
-                                    <Typography variant="subtitle1">
+                                    <Link
+                                      href="/mock_documents/drivers_license.pdf"
+                                      target="_blank"
+                                      underline="hover"
+                                      sx={{ color: "#00A250" }}
+                                    >
                                       Driver's License
-                                    </Typography>
+                                    </Link>
                                     <IconButton>
-                                      <VerifiedIcon sx={{ color: "#00A250" }} />
+                                      <VerifiedIcon
+                                        sx={{
+                                          color: "#00A250",
+                                          marginLeft: "10px",
+                                        }}
+                                      />
                                     </IconButton>
                                   </Grid>
                                 </Grid>
@@ -564,7 +623,7 @@ const BDashboard = () => {
                                   backgroundColor: "#00A250",
                                   color: "#f6f7f8",
                                 }}
-                                onClick={handleSubmit}
+                                onClick={() => handleSubmit(request.id)} // Submit the form
                               >
                                 Submit Edited Loan Request
                               </Button>
@@ -574,14 +633,14 @@ const BDashboard = () => {
                                   color: "#00A250",
                                   borderColor: "#00A250",
                                 }}
-                                onClick={() => setExpandedRow(null)}
+                                onClick={() => setExpandedRow(null)} // Close the expanded row
                               >
                                 Cancel
                               </Button>
                               <Button
                                 variant="text"
                                 sx={{ color: "#00A250" }}
-                                onClick={handleSaveDraft}
+                                onClick={() => console.log("Save draft")}
                               >
                                 Save Draft
                               </Button>
