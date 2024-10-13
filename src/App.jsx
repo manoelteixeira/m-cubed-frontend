@@ -34,6 +34,7 @@ function App() {
   useEffect(() => {
     const credentials = JSON.parse(localStorage.getItem("credentials"));
     if (credentials) {
+      // console.log(credentials);
       const { timestamp } = credentials;
       const time = new Date(timestamp);
       const now = new Date();
@@ -41,6 +42,8 @@ function App() {
       if (timeDif < 12) {
         setUser(credentials.user);
         setToken(credentials.token);
+      } else {
+        localStorage.removeItem("credentials");
       }
     }
   }, []);
@@ -106,8 +109,16 @@ function App() {
           element={<ShowBorrowerLoanDetails />}
         />
         <Route
-          path="/borrowers/:id/borrowerdashboard"
-          element={<BDashboard />}
+          path="/borrower/"
+          // element={<BDashboard />}
+          element={
+            <ProtectedRoute
+              element={BDashboard}
+              isAuthenticated={!!user && !!token}
+              user={user}
+              token={token}
+            />
+          }
         />
         <Route
           path="/borrowers/:id/borrowerdetails"

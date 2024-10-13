@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import {
   Container,
@@ -120,6 +120,7 @@ export default function LoanProposalForm() {
       });
       navigate(`/lenders/${lender_id}/lenderdashboard`);
     } catch (error) {
+      console.log(error);
       setErrorMessage("An error occurred while submitting the form.");
     } finally {
       setLoading(false);

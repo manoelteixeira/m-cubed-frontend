@@ -65,7 +65,7 @@ const Login = ({ setUser, setToken }) => {
               user_type: userType,
             })
           );
-          // navigate(`/${userType}s/${user.id}/${userType}dashboard`);
+
           navigate(`/${userType}`);
         }
       })
