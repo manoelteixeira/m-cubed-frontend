@@ -329,6 +329,8 @@ import AddIcon from "@mui/icons-material/Add";
 
 const API = import.meta.env.VITE_BASE_URL;
 
+const API = import.meta.env.VITE_BASE_URL;
+
 const BDashboard = () => {
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
