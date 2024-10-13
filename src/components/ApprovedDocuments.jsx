@@ -30,7 +30,7 @@ const labelStyle = {
   boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
   transition: 'background-color 0.3s ease-in-out',
   '&:hover': {
-    backgroundColor: '#115293',
+    backgroundColor: 'rgb(44, 101, 33)',
   },
 }
 
