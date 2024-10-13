@@ -37,7 +37,7 @@ function App() {
         {/* Home and General Info Pages */}
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<AboutUs />} />
-        <Route path="/team" element={<Cards />} />
+        {/* <Route path="/team" element={<Cards />} /> */}
         <Route
           path="/login"
           element={<SignInForm setUser={setUser} setToken={setToken} />}
