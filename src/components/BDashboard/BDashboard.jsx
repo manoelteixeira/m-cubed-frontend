@@ -137,21 +137,34 @@ const BDashboard = ({ user, token }) => {
   };
 
   // Handle accepting a proposal
-  const handleAcceptProposal = async (proposal, requestId) => {
-    try {
-      // Call backend to accept proposal
-      await acceptProposal(id, requestId, proposal.id);
-
-      setAcceptedProposals((prev) => ({
-        ...prev,
-        [requestId]: proposal.id, // Mark the proposal as accepted for this request
-      }));
-
-      setSelectedProposal(proposal); // Store selected proposal for dialog
-      setDialogOpen(true); // Open the dialog
-    } catch (error) {
-      console.error("Error accepting proposal:", error);
-    }
+  const handleAcceptProposal = async (proposalId, requestId) => {
+    console.log("user:", user.id);
+    console.log("request:", requestId);
+    console.log("proposal:", proposalId);
+    const options = {
+      method: "PUT",
+      body: JSON.stringify({ proposal_id: proposalId }),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token,
+      },
+    };
+    fetch(
+      `${API}/borrowers/${user.id}/requests/${requestId}/proposals/`,
+      options
+    )
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        } else {
+          // Do something =D
+        }
+      })
+      .then((data) => {
+        console.log(data);
+        setProposals({ ...proposals, [proposalId]: data.updatedProposals });
+      })
+      .catch((err) => console.log(err));
   };
 
   const handleDialogClose = () => {
@@ -328,7 +341,10 @@ const BDashboard = ({ user, token }) => {
                                         marginTop: "10px",
                                       }}
                                       onClick={() =>
-                                        handleAcceptProposal(offer, request.id)
+                                        handleAcceptProposal(
+                                          offer.id,
+                                          request.id
+                                        )
                                       }
                                       disabled={
                                         acceptedProposals[request.id] !==
