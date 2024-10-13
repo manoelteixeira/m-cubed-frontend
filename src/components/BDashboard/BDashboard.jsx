@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+// src/components/BDashboard/BDashboard.jsx
+import PropTypes from "prop-types";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Paper,
   Typography,
@@ -17,15 +19,11 @@ import {
   CardContent,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import {
-  getBorrower,
-  getAllLoanRequests,
-  getProposalsByRequestId,
-} from "../services/serviceRequest";
 
-const BDashboard = () => {
+const API = import.meta.env.VITE_BASE_URL;
+
+const BDashboard = ({ user, token }) => {
   const [requests, setRequests] = useState([]);
-  const [borrowerData, setBorrowerData] = useState({});
   const [loading, setLoading] = useState(true);
   const [proposals, setProposals] = useState({}); // Store proposals by request ID
   const [error, setError] = useState(null);
@@ -36,46 +34,29 @@ const BDashboard = () => {
 
   // Fetch the borrower and all loan requests initially
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const borrower = await getBorrower(id);
-        if (borrower) {
-          setBorrowerData(borrower);
-        } else {
-          setError("No borrower data returned.");
-          return;
-        }
-
-        // Fetch loan requests and then proposals for each request
-        const loanRequests = await getAllLoanRequests(id);
-        if (Array.isArray(loanRequests)) {
-          setRequests(loanRequests);
-
-          // Fetch proposals for each request
-          const allProposals = {};
-          for (const request of loanRequests) {
-            const fetchedProposals = await getProposalsByRequestId(
-              id,
-              request.id
-            );
-            allProposals[request.id] = fetchedProposals;
-          }
-          setProposals(allProposals); // Store all proposals by request ID
-        } else {
-          setRequests([]);
-        }
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setError("Error fetching data.");
-        setLoading(false);
-      }
+    setLoading(true);
+    const options = {
+      headers: {
+        Authorization: token,
+      },
     };
-    fetchData();
-  }, [id]);
+    fetch(`${API}/borrowers/${user.id}/requests`, options)
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        } else {
+          // do something
+        }
+      })
+      .then((data) => setRequests(data))
+      .catch((err) => console.error("Error fetching data:", err))
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [user]);
 
   const openLoanApplicationForm = () => {
-    navigate(`/borrowers/${id}/requests/new`);
+    navigate(`/borrowers/${user.id}/requests/new`);
   };
 
   if (loading) return <Typography variant="h6">Loading...</Typography>;
@@ -125,7 +106,7 @@ const BDashboard = () => {
               variant="h4"
               sx={{ color: "#00A250", textAlign: "center" }}
             >
-              Welcome, {borrowerData.business_name}
+              Welcome, {user.business_name}
             </Typography>
             <Typography
               variant="subtitle1"
@@ -298,6 +279,11 @@ const BDashboard = () => {
       </TableContainer>
     </Box>
   );
+};
+
+BDashboard.propTypes = {
+  user: PropTypes.object,
+  token: PropTypes.string,
 };
 
 export default BDashboard;
