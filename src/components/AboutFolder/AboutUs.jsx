@@ -89,7 +89,6 @@ import {
   Container,
   Grid,
   Card,
-  CardContent,
   Avatar,
   Link,
 } from "@mui/material";
@@ -104,7 +103,7 @@ import { styled } from "@mui/system";
 const MMMGreen = "#00a250";
 const MMMWhite = "#f6f7f8";
 
-// Styled components
+// Styled components for team cards
 const TeamCard = styled(Card)({
   maxWidth: 345,
   backgroundColor: MMMWhite,
@@ -116,21 +115,24 @@ const TeamCard = styled(Card)({
     boxShadow: "0px 10px 30px rgba(0, 0, 0, 0.15)",
   },
   textAlign: "center",
-  padding: "20px",
+  padding: "30px",
+  marginBottom: "60px",
 });
 
 const Paragraph = styled(Typography)({
   textAlign: "justify",
+  marginBottom: "60px",
 });
 
+// Team data
 const teamMembers = [
   {
     name: "Aaron Constant",
     role: "Fullstack Engineer",
-    bio: "Placeholder for bio",
+    bio: "Aaron Constant is currently a Residential Counselor, providing support to individuals with mental health conditions. In addition to his counseling work, he is an enthusiastic and self-taught cosmetic chemist, enjoying the creation of skincare and haircare products. Aaron is also pursuing a career in software engineering with a strong passion for technology and video game creation. Aaron is hoping to develop a game for others enjoyment such as the games that he has enjoyed since his youth. With this passion he plans to utilize his skill set to reach out to other communities, travel and experience diverse cultures firsthand in hopes to widen his reach of understanding of communities and in all aspects through the intricate and meticulous world of tech.",
     imageUrl: "Images/Aaron.jpeg",
-    github: "#",
-    linkedin: "#",
+    github: "https://github.com/AaronConstant",
+    linkedin: "https://www.linkedin.com/in/aaronconstant/",
   },
   {
     name: "Katlyn Winegardner",
@@ -143,75 +145,100 @@ const teamMembers = [
   {
     name: "Kubra Bodur",
     role: "Fullstack Engineer",
-    bio: "Placeholder for bio",
+    bio: "I’m Kübra, and I'm from Turkey. I taught physics for nine years before moving here. With my interest in technology and my husband’s support, I started my journey with Pursuit, which changed both my career and my life.",
     imageUrl: "/images/emily.jpg",
-    github: "#",
-    linkedin: "#",
+    github: "https://github.com/kbodur",
+    linkedin: "https://www.linkedin.com/in/kubra-bodur-6524b5297",
   },
   {
     name: "Manoel Alves Teixeira",
     role: "Fullstack Engineer",
     bio: "Placeholder for bio",
     imageUrl: "/images/jane.jpg",
-    github: "#",
-    linkedin: "#",
+    github: "https://github.com/manoelteixeira",
+    linkedin: "https://www.linkedin.com/in/manoel-alves-teixeira/",
   },
   {
     name: "Rizel Enad",
     role: "Fullstack Engineer",
-    bio: "Placeholder for bio",
+    bio: "For over two decades, Rizel helped build a small business. Now, she’s focused on creating solutions for consumers and businesses. In her free time, she’s working on her Villain Chess app.",
     imageUrl: "/images/john.jpg",
-    github: "#",
-    linkedin: "#",
+    github: "https://github.com/renad-lab",
+    linkedin: "https://www.linkedin.com/in/rizelenad/",
   },
 ];
 
+// Main About Us Component
 export default function AboutUs() {
   return (
-    <Box sx={{ backgroundColor: MMMWhite, paddingBottom: "50px" }}>
+    <Box
+      sx={{
+        backgroundColor: MMMWhite,
+        paddingBottom: "120px",
+        paddingTop: "100px",
+      }}
+    >
       <Container maxWidth="lg">
-        {/* Introduction Section */}
-        <Box sx={{ textAlign: "center", margin: "40px 0" }}>
+        {/* ELFA Market Data Section */}
+        <Box sx={{ textAlign: "center", margin: "60px 0" }}>
           <Typography variant="h4" component="h2" color={MMMGreen} gutterBottom>
-            From a Simple Idea to a Bold Mission – Discover Who We Are
+            WE'RE TRANSFORMING SMALL-TICKET EQUIPMENT FINANCING
           </Typography>
           <Paragraph variant="body1" color="textSecondary">
-            Our app transforms the small-ticket equipment financing market by
-            connecting borrowers and lenders seamlessly. Borrowers can list
-            their loan requirements easily, while lenders access real-time
-            opportunities tailored to their needs – all without multiple credit
-            pulls. Whether you’re starting or expanding, we simplify financing
-            so you can focus on growing your business.
+            According to the 2024 Survey of Equipment Finance Activity (SEFA)
+            conducted by the Equipment Leasing and Finance Association (ELFA),
+            the small-ticket equipment financing market contributes roughly $300
+            billion annually to the $1 trillion equipment finance industry. In
+            2023, the small-ticket segment, defined as transactions up to
+            $250,000, saw significant growth, highlighting its importance in
+            supporting businesses of all sizes. For more details, visit{" "}
+            <Link
+              href="https://www.elfaonline.org/SEFA"
+              target="_blank"
+              rel="noopener"
+            >
+              ELFA's SEFA Report
+            </Link>
+            .
           </Paragraph>
         </Box>
 
-        {/* Mission Section */}
+        {/* Platform Disruption Section */}
         <Box
           sx={{
             textAlign: "center",
-            margin: "40px 0",
+            margin: "60px 0",
             backgroundColor: MMMGreen,
             color: MMMWhite,
-            padding: "20px",
+            padding: "60px",
             borderRadius: "8px",
           }}
         >
           <Typography variant="h5" component="h3" gutterBottom>
-            Discover Our Mission
+            How We're Changing the Game
           </Typography>
           <Paragraph variant="body1" sx={{ color: MMMWhite }}>
-            Our team is dedicated to creating innovative solutions that help
-            small businesses grow. We are building a platform that connects
-            borrowers with lenders in a seamless, secure, and transparent way.
+            Our platform transforms the $300 billion small-ticket equipment
+            financing market by linking borrowers and lenders seamlessly.
+            Borrowers post their financing needs, while lenders access
+            pre-qualified deals instantly – without triggering multiple credit
+            checks. Whether launching or expanding, we simplify financing,
+            letting you focus on scaling your business.
           </Paragraph>
         </Box>
 
         {/* Team Section */}
-        <Box sx={{ textAlign: "center", marginBottom: "40px" }}>
-          <Typography variant="h4" component="h1" color={MMMGreen} gutterBottom>
+        <Box sx={{ textAlign: "center", marginBottom: "60px" }}>
+          <Typography
+            variant="h4"
+            component="h1"
+            color={MMMGreen}
+            gutterBottom
+            sx={{ marginBottom: "60px" }}
+          >
             The Team Behind MoneyMoneyMoney
           </Typography>
-          <Grid container spacing={6} justifyContent="center">
+          <Grid container spacing={10} justifyContent="center">
             {teamMembers.map((member, index) => (
               <Grid item key={index} xs={12} sm={6} md={4}>
                 <TeamCard>
@@ -223,17 +250,20 @@ export default function AboutUs() {
                   <Typography variant="h6" component="h3" color={MMMGreen}>
                     {member.name}
                   </Typography>
-                  <Typography variant="body2" color="textSecondary">
+                  <Typography
+                    variant="body2"
+                    color="textSecondary"
+                    sx={{ textAlign: "center", fontWeight: "bold" }}
+                  >
                     {member.role}
                   </Typography>
                   <Typography
                     variant="body2"
                     color="textSecondary"
-                    sx={{ margin: "10px 0" }}
+                    sx={{ margin: "10px 0", textAlign: "justify" }}
                   >
                     {member.bio}
                   </Typography>
-                  {/* GitHub and LinkedIn Links */}
                   <Box>
                     <Link
                       href={member.github}
@@ -253,16 +283,16 @@ export default function AboutUs() {
           </Grid>
         </Box>
 
-        {/* Bottom Section with Icons */}
-        <Box sx={{ textAlign: "center", marginTop: "50px" }}>
+        {/* Why Choose Us Section */}
+        <Box sx={{ textAlign: "center", marginTop: "60px" }}>
           <Typography variant="h5" component="h2" color={MMMGreen}>
             Why Choose Us?
           </Typography>
           <Grid
             container
-            spacing={6}
+            spacing={10}
             justifyContent="center"
-            sx={{ marginTop: "20px" }}
+            sx={{ marginTop: "60px" }}
           >
             <Grid item xs={12} sm={4}>
               <Box sx={{ textAlign: "center" }}>
