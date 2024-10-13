@@ -235,7 +235,7 @@ const BDashboard = () => {
                           <Card
                             elevation={2}
                             sx={{
-                              backgroundColor: "#75D481", // Light mint green background
+                              backgroundColor: "#75D481",
                               margin: 2,
                               border: "1px solid #00A250",
                             }}
