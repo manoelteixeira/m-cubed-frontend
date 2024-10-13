@@ -23,7 +23,7 @@ import EditLenderPage from "./Pages/EditLenderPage.jsx";
 import ShowBorrowerDetails from "./components/ShowDetailsForBorrower/ShowBorrowerDetails";
 import ShowBorrowerLoanDetails from "./components/ShowDetailsForBorrower/ShowBorrowerLoanDetails";
 import { useState } from "react";
-
+  import ApprovedDocuments from "./components/ApprovedDocuments";
 function App() {
   const [user, setUser] = useState(null);
   const [toke, setToken] = useState(null);
@@ -63,6 +63,7 @@ function App() {
           path="/borrowers/:id/edit-request/:requestId"
           element={<EditLoanRequestForm />}
         />
+        <Route path="/borrowers/:id/approved-documents" element={<ApprovedDocuments />} />
         <Route path="borrowers/:borrower_id/requests/:id" element={<></>} />
         <Route
           path="/borrowers/:borrower_id/borrowerloandetails/:id"
