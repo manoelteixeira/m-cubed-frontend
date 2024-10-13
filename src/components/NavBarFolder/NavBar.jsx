@@ -35,19 +35,25 @@ const NavBar = ({ setUser, setToken, isAuthenticated }) => {
   const handleLogoutClick = () => {
     setUser(null);
     setToken(null);
-    // localStorage.removeItem("credentials");
+    localStorage.removeItem("credentials");
     navigate("/");
+  };
+
+  const handleDashboardClick = () => {
+    const credentials = JSON.parse(localStorage.getItem("credentials"));
+    const userType = credentials.user_type;
+    navigate(`/${userType}`);
   };
 
   useEffect(() => {
     const { pathname } = location;
     if (pathname == "/") {
-      setNavButtons(
-        <>
+      if (isAuthenticated) {
+        setNavButtons(
           <>
             <Button
               variant="outlined"
-              onClick={() => handleSignUpClick("borrower")}
+              onClick={handleDashboardClick}
               sx={{
                 borderColor: "#00a250",
                 color: "#00a250",
@@ -56,12 +62,11 @@ const NavBar = ({ setUser, setToken, isAuthenticated }) => {
                 fontWeight: "bold",
               }}
             >
-              SIGN UP BORROWER
+              DASHBOARD
             </Button>
-
             <Button
               variant="outlined"
-              onClick={() => handleSignUpClick("lender")}
+              onClick={handleLogoutClick}
               sx={{
                 borderColor: "#00a250",
                 color: "#00a250",
@@ -70,25 +75,59 @@ const NavBar = ({ setUser, setToken, isAuthenticated }) => {
                 fontWeight: "bold",
               }}
             >
-              SIGN UP LENDER
-            </Button>
-
-            <Button
-              variant="outlined"
-              onClick={handleLoginClick}
-              sx={{
-                borderColor: "#00a250",
-                color: "#00a250",
-                marginLeft: 2,
-                fontSize: "1rem",
-                fontWeight: "bold",
-              }}
-            >
-              LOG IN
+              LOG OUT
             </Button>
           </>
-        </>
-      );
+        );
+      } else {
+        setNavButtons(
+          <>
+            <>
+              <Button
+                variant="outlined"
+                onClick={() => handleSignUpClick("borrower")}
+                sx={{
+                  borderColor: "#00a250",
+                  color: "#00a250",
+                  marginLeft: 2,
+                  fontSize: "1rem",
+                  fontWeight: "bold",
+                }}
+              >
+                SIGN UP BORROWER
+              </Button>
+
+              <Button
+                variant="outlined"
+                onClick={() => handleSignUpClick("lender")}
+                sx={{
+                  borderColor: "#00a250",
+                  color: "#00a250",
+                  marginLeft: 2,
+                  fontSize: "1rem",
+                  fontWeight: "bold",
+                }}
+              >
+                SIGN UP LENDER
+              </Button>
+
+              <Button
+                variant="outlined"
+                onClick={handleLoginClick}
+                sx={{
+                  borderColor: "#00a250",
+                  color: "#00a250",
+                  marginLeft: 2,
+                  fontSize: "1rem",
+                  fontWeight: "bold",
+                }}
+              >
+                LOG IN
+              </Button>
+            </>
+          </>
+        );
+      }
     } else if (pathname.includes("signup")) {
       setNavButtons(
         <>
