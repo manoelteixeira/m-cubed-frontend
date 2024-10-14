@@ -292,6 +292,7 @@ const BDashboard = ({ user, token }) => {
                               backgroundColor: "#75D481",
                               margin: 2,
                               border: "1px solid #00A250",
+                              textAlign: 'center',
                             }}
                           >
                             <CardContent>
@@ -302,63 +303,78 @@ const BDashboard = ({ user, token }) => {
                               {/* Loan Proposals Section */}
                               {proposals[request.id] &&
                               proposals[request.id].length > 0 ? (
-                                proposals[request.id].map((offer) => (
-                                  <Box
-                                    key={offer.id}
-                                    sx={{
-                                      marginTop: 2,
-                                      backgroundColor: "#f6f7f8",
-                                      padding: "10px",
-                                      borderRadius: "4px",
-                                    }}
-                                  >
-                                    <Typography variant="body2">
-                                      Interest Rate: {offer.interest_rate}%
-                                    </Typography>
-                                    <Typography variant="body2">
-                                      Loan Amount Offered: $
-                                      {offer.loan_amount
-                                        ? parseFloat(
-                                            offer.loan_amount
-                                          ).toLocaleString("en-US", {
-                                            minimumFractionDigits: 2,
-                                            maximumFractionDigits: 2,
-                                          })
-                                        : "N/A"}
-                                    </Typography>
-                                    <Typography variant="body2">
-                                      Term Length:{" "}
-                                      {offer.repayment_term
-                                        ? `${offer.repayment_term} months`
-                                        : "N/A"}
-                                    </Typography>
-                                    <Button
-                                      variant="contained"
+                                <Box sx={{ 
+                                  display: 'flex', 
+                                  flexWrap: 'wrap', 
+                                  gap: 3, 
+                                  justifyContent: 'start',
+                                  '& > *': { // This targets all immediate children
+                                    marginLeft: 0,
+                                    marginRight: 0,
+                                  }
+                                }}>
+                                  {proposals[request.id].map((offer) => (
+                                    <Box
+                                      key={offer.id}
                                       sx={{
-                                        backgroundColor: "#00A250",
-                                        color: "#f6f7f8",
-                                        marginTop: "10px",
+                                        width: '300px', // Set a fixed width
+                                        marginTop: 2,
+                                        backgroundColor: "#f6f7f8",
+                                        padding: "10px",
+                                        borderRadius: "4px",
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        alignItems: 'center',
                                       }}
-                                      onClick={() =>
-                                        handleAcceptProposal(
-                                          offer.id,
-                                          request.id
-                                        )
-                                      }
-                                      disabled={
-                                        acceptedProposals[request.id] !==
-                                          undefined &&
-                                        acceptedProposals[request.id] !==
-                                          offer.id
-                                      } // Disable for other proposals once one is accepted
                                     >
-                                      {acceptedProposals[request.id] ===
-                                      offer.id
-                                        ? "Accepted"
-                                        : "Accept Proposal"}
-                                    </Button>
-                                  </Box>
-                                ))
+                                      <Typography variant="body2">
+                                        Interest Rate: {offer.interest_rate}%
+                                      </Typography>
+                                      <Typography variant="body2">
+                                        Loan Amount Offered: $
+                                        {offer.loan_amount
+                                          ? parseFloat(
+                                              offer.loan_amount
+                                            ).toLocaleString("en-US", {
+                                              minimumFractionDigits: 2,
+                                              maximumFractionDigits: 2,
+                                            })
+                                          : "N/A"}
+                                      </Typography>
+                                      <Typography variant="body2">
+                                        Term Length:{" "}
+                                        {offer.repayment_term
+                                          ? `${offer.repayment_term} months`
+                                          : "N/A"}
+                                      </Typography>
+                                      <Button
+                                        variant="contained"
+                                        sx={{
+                                          backgroundColor: "#00A250",
+                                          color: "#f6f7f8",
+                                          marginTop: "10px",
+                                        }}
+                                        onClick={() =>
+                                          handleAcceptProposal(
+                                            offer.id,
+                                            request.id
+                                          )
+                                        }
+                                        disabled={
+                                          acceptedProposals[request.id] !==
+                                            undefined &&
+                                          acceptedProposals[request.id] !==
+                                            offer.id
+                                        }
+                                      >
+                                        {acceptedProposals[request.id] ===
+                                        offer.id
+                                          ? "Accepted"
+                                          : "Accept Proposal"}
+                                      </Button>
+                                    </Box>
+                                  ))}
+                                </Box>
                               ) : (
                                 <Typography variant="body2">
                                   No proposals available.
