@@ -15,7 +15,9 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router";
 import { Email, Lock, Phone, Business, CreditScore } from "@mui/icons-material";
-import peopleInGreenField from "../../assets/6.png";
+// import peopleInGreenField from "../../assets/6.png";
+import CoffeeShop from "../../assets/7.png";
+
 
 // Base API URL
 const API = import.meta.env.VITE_BASE_URL;
@@ -127,7 +129,7 @@ const BorrowerForm = ({ setUser, setToken }) => {
           maxWidth: "100%",
           margin: "auto",
           padding: 21,
-          backgroundImage: `url(${peopleInGreenField})`,
+          backgroundImage: `url(${CoffeeShop})`,
           backgroundSize: 'cover',
           backgroundPosition: 'bottom',
           backgroundRepeat: 'no-repeat',
