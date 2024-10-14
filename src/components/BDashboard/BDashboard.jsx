@@ -23,6 +23,7 @@ import {
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import PropTypes from "prop-types";
+import GreenleavesAndPeople from "../../assets/8.png";
 
 const API = import.meta.env.VITE_BASE_URL;
 
@@ -292,10 +293,16 @@ const BDashboard = ({ user, token }) => {
                               backgroundColor: "#75D481",
                               margin: 2,
                               border: "1px solid #00A250",
-                              textAlign: 'center',
+                              textAlign: "center",
                             }}
                           >
-                            <CardContent>
+                            <CardContent
+                              sx={{
+                                backgroundImage: `url(${GreenleavesAndPeople})`,
+                                backgroundSize: "cover",
+                                backgroundPosition: "center",
+                              }}
+                            >
                               <Typography variant="h6">
                                 Loan Proposals
                               </Typography>
@@ -303,28 +310,32 @@ const BDashboard = ({ user, token }) => {
                               {/* Loan Proposals Section */}
                               {proposals[request.id] &&
                               proposals[request.id].length > 0 ? (
-                                <Box sx={{ 
-                                  display: 'flex', 
-                                  flexWrap: 'wrap', 
-                                  gap: 3, 
-                                  justifyContent: 'start',
-                                  '& > *': { // This targets all immediate children
-                                    marginLeft: 0,
-                                    marginRight: 0,
-                                  }
-                                }}>
+                                <Box
+                                  sx={{
+                                    display: "flex",
+                                    flexWrap: "wrap",
+                                    gap: 3,
+                                    justifyContent: "start",
+                                    "& > *": {
+                                      marginLeft: 0,
+                                      marginRight: 0,
+                                      backgroundColor: '#def4df',
+                                      border: '2px solid #00A250',
+                                    },
+                                  }}
+                                >
                                   {proposals[request.id].map((offer) => (
                                     <Box
                                       key={offer.id}
                                       sx={{
-                                        width: '300px', // Set a fixed width
+                                        width: "300px",
                                         marginTop: 2,
                                         backgroundColor: "#f6f7f8",
                                         padding: "10px",
                                         borderRadius: "4px",
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        alignItems: 'center',
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        alignItems: "center",
                                       }}
                                     >
                                       <Typography variant="body2">
