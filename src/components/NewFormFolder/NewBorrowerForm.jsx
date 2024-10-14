@@ -16,6 +16,8 @@ import {
   ThemeProvider,
   createTheme,
   InputAdornment,
+  Alert,
+  AlertTitle,
 } from "@mui/material";
 import { useNavigate } from "react-router";
 import { Email, Lock, Phone, Business, CreditScore } from "@mui/icons-material";
@@ -27,6 +29,9 @@ const API = import.meta.env.VITE_BASE_URL;
 const BorrowerForm = ({ setUser, setToken }) => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
+  const cancelButtonRef = React.useRef(null);
+  const closeDialogButtonRef = React.useRef(null);
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   const [newborrower, setNewBorrower] = useState({
     email: "",
@@ -91,15 +96,19 @@ const BorrowerForm = ({ setUser, setToken }) => {
   };
 
   const handleCancel = () => {
-    setOpen(true);
+    setShowConfirmation(true);
   };
 
   const handleConfirmCancel = () => {
-    setOpen(false);
     navigate("/");
   };
 
+  const handleCancelConfirmation = () => {
+    setShowConfirmation(false);
+  };
+
   const handleClose = () => {
+    console.log("Closing dialog");
     setOpen(false);
   };
 
@@ -129,10 +138,10 @@ const BorrowerForm = ({ setUser, setToken }) => {
           margin: "auto",
           padding: 2,
           backgroundColor: "#f6f7f8",
-          marginBottom: "40px",
+          marginBottom: "40px", 
         }}
       >
-        <Grid container sx={{ height: "100vh" }} spacing={0}>
+        <Grid container sx={{ height: "100vh", mb: 30}} spacing={0}>
           {/* Left side with the image */}
           <Grid item xs={12} md={6}>
             <Box sx={{ mt: -2 }}>
@@ -144,6 +153,7 @@ const BorrowerForm = ({ setUser, setToken }) => {
                   height: "100%",
                   objectFit: "cover",
                   border: "none",
+                  
                 }}
               />
             </Box>
@@ -189,7 +199,6 @@ const BorrowerForm = ({ setUser, setToken }) => {
                     }}
                   />
                 </Grid>
-                {/* Email and Password on one line */}
                 <Grid container item xs={12} spacing={2}>
                   <Grid item xs={6}>
                     <TextField
@@ -249,7 +258,6 @@ const BorrowerForm = ({ setUser, setToken }) => {
                     />
                   </Grid>
                 </Grid>
-                {/* Business Start Date and Credit Score on top */}
                 <Grid container item xs={12} spacing={2}>
                   <Grid item xs={6}>
                     <TextField
@@ -299,7 +307,6 @@ const BorrowerForm = ({ setUser, setToken }) => {
                     margin="normal"
                   />
                 </Grid>
-                {/* Zip Code and Phone on the same line */}
                 <Grid container item xs={12} spacing={2}>
                   <Grid item xs={6}>
                     <TextField
@@ -318,6 +325,7 @@ const BorrowerForm = ({ setUser, setToken }) => {
                     <TextField
                       label="Phone"
                       name="phone"
+                      type="tel"
                       value={newborrower.phone}
                       onChange={handleChange}
                       fullWidth
@@ -429,67 +437,68 @@ const BorrowerForm = ({ setUser, setToken }) => {
                     <MenuItem value="Technology">Technology</MenuItem>
                     <MenuItem value="Manufacturing">Manufacturing</MenuItem>
                     <MenuItem value="Healthcare">Healthcare</MenuItem>
-                    {/* Add more industries as needed */}
                   </TextField>
                 </Grid>
-                <Grid item xs={12}>
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    fullWidth
-                    sx={{
-                      backgroundColor: "#00a250",
-                      color: "#f6f7f8",
-                      "&:hover": {
-                        backgroundColor: "#008740",
-                      },
-                    }}
-                  >
-                    Register
-                  </Button>
-                </Grid>
-                <Grid item xs={12}>
-                  <Button
-                    variant="outlined"
-                    fullWidth
-                    onClick={handleCancel}
-                    sx={{
-                      color: "#00a250",
-                      borderColor: "#00a250",
-                      "&:hover": {
-                        backgroundColor: "#f6f7f8",
-                      },
-                    }}
-                  >
-                    Cancel
-                  </Button>
+                <Grid container item xs={12} spacing={2}>
+                  <Grid item xs={6}>
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      sx={{
+                        backgroundColor: "#00a250",
+                        color: "#f6f7f8",
+                        "&:hover": {
+                          backgroundColor: "#008740",
+                        },
+                        width: '100%', 
+                      }}
+                    >
+                      Register
+                    </Button>
+                  </Grid>
+                  <Grid item xs={6}>
+                    {showConfirmation ? (
+                      <Alert 
+                        severity="warning"
+                        sx={{ width: '48%' }} 
+                        action={
+                          <Box>
+                            <Button color="inherit" size="small" onClick={handleCancelConfirmation}>
+                              No, continue
+                            </Button>
+                            <Button color="inherit" size="small" onClick={handleConfirmCancel}>
+                              Yes, cancel
+                            </Button>
+                          </Box>
+                        }
+                      >
+                        <AlertTitle>Are you sure you want to cancel?</AlertTitle>
+                        You will be taken back to the homepage.
+                      </Alert>
+                    ) : (
+                      <Button
+                        variant="outlined"
+                        fullWidth
+                        onClick={handleCancel}
+                        sx={{
+                          color: "#00a250",
+                          borderColor: "#00a250",
+                          "&:hover": {
+                            backgroundColor: "#f6f7f8",
+                          },
+                          width: '100%',
+                        }}
+                      >
+                        Cancel
+                      </Button>
+                    )}
+                  </Grid>
                 </Grid>
               </Grid>
             </Box>
           </Grid>
         </Grid>
       </Box>
-
-      {/* Confirmation Dialog */}
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        TransitionComponent={Transition}
-      >
-        <DialogTitle>Cancel Registration</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Are you sure you want to cancel the registration? You will be taken
-            back to the homepage.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Close</Button>
-          <Button onClick={handleConfirmCancel} color="primary">
-            Confirm
-          </Button>
-        </DialogActions>
-      </Dialog>
     </ThemeProvider>
   );
 };

@@ -116,12 +116,11 @@ const LenderForm = ({ setUser, setToken }) => {
           backgroundColor: "#f6f7f8",
         }}
       >
-        <Grid container sx={{ height: "100vh" }} spacing={0}>
+        <Grid container sx={{ height: "100%" }} spacing={0}>
           {/* Left Side with the Image */}
           <Grid item xs={12} md={6}>
             <Box sx={{ mt: -2 }}>
               {" "}
-              {/* Use negative margin to move image up */}
               <img
                 src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1728325843/Hey_there_Friend_5_bgxdye.png"
                 alt="Welcome to MoneyMoneyMoney"
@@ -130,6 +129,8 @@ const LenderForm = ({ setUser, setToken }) => {
                   height: "100%",
                   objectFit: "cover",
                   border: "none",
+                  marginBottom: "40px", 
+
                 }}
               />
             </Box>
