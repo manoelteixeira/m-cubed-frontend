@@ -26,6 +26,7 @@ import {
   TableSortLabel,
   Link,
 } from "@mui/material";
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const API = import.meta.env.VITE_BASE_URL;
 
@@ -232,6 +233,36 @@ export default function LenderDashboard({ user, token }) {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
+  };
+
+  const handleDeleteProposal = async (proposalId) => {
+    const endpoint = `${API}/lenders/${user.id}/proposals/${proposalId}`;
+    try {
+      const response = await fetch(endpoint, {
+        method: "DELETE",
+        headers: {
+          Authorization: token,
+        },
+      });
+
+      if (response.ok) {
+        setDialogTitle("Success");
+        setDialogMessage("Proposal deleted successfully.");
+        // Remove the deleted proposal from the state
+        setLoanProposals(loanProposals.filter(proposal => proposal.id !== proposalId));
+        setFilteredLoanProposals(filteredLoanProposals.filter(proposal => proposal.id !== proposalId));
+        setExpandedRowId(null);
+      } else {
+        const result = await response.json();
+        setDialogTitle("Error");
+        setDialogMessage(result.error || "Error deleting proposal.");
+      }
+    } catch (error) {
+      setDialogTitle("Error");
+      setDialogMessage(error.message || "Failed to delete the proposal.");
+    } finally {
+      setDialogOpen(true);
+    }
   };
 
   useEffect(() => {
@@ -628,6 +659,7 @@ export default function LenderDashboard({ user, token }) {
                         </TableSortLabel>
                       </TableCell>
                     ))}
+                    <TableCell align="center">Actions</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -679,12 +711,25 @@ export default function LenderDashboard({ user, token }) {
                               ? "Accepted"
                               : "Rejected"}
                           </TableCell>
+                          <TableCell align="center">
+                            <Button
+                              variant="contained"
+                              color="error"
+                              startIcon={<DeleteIcon />}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleDeleteProposal(loan.id);
+                              }}
+                            >
+                              Delete
+                            </Button>
+                          </TableCell>
                         </TableRow>
 
                         {/* Collapsible row for borrower details and RESEND proposal form */}
                         {expandedRowId === loan.id && (
                           <TableRow key={`${loan.id}-collapse`}>
-                            <TableCell colSpan={7}>
+                            <TableCell colSpan={8}>
                               <Collapse in={expandedRowId === loan.id}>
                                 <Box
                                   margin={2}
@@ -828,20 +873,50 @@ export default function LenderDashboard({ user, token }) {
                                           onChange={handleProposalChange}
                                           sx={{ marginBottom: 2 }}
                                         />
-                                        <Button
-                                          variant="contained"
-                                          sx={{
-                                            backgroundColor: "#00a250",
-                                            color: "#fff",
-                                            marginRight: 2,
-                                            "&:hover": {
-                                              backgroundColor: "#007a3e",
-                                            },
-                                          }}
-                                          onClick={handleResubmitProposal} // RESEND Proposal for Pending Loan Proposals
-                                        >
-                                          Resend Proposal
-                                        </Button>
+                                        <Box sx={{ display: 'flex', justifyContent: 'flex-start', marginTop: 2 }}>
+                                          <Button
+                                            variant="contained"
+                                            sx={{
+                                              backgroundColor: "#00a250",
+                                              color: "#fff",
+                                              marginRight: 2,
+                                              "&:hover": {
+                                                backgroundColor: "#007a3e",
+                                              },
+                                            }}
+                                            onClick={handleResubmitProposal}
+                                          >
+                                            Resend Proposal
+                                          </Button>
+                                          <Button
+                                            variant="contained"
+                                            color="error"
+                                            startIcon={<DeleteIcon />}
+                                            sx={{
+                                              marginRight: 2,
+                                              backgroundColor: "darkred",
+                                              "&:hover": {
+                                                backgroundColor: "#b30000",
+                                              },
+                                            }}
+                                            onClick={() => handleDeleteProposal(loan.id)}
+                                          >
+                                            Delete
+                                          </Button>
+                                          <Button
+                                            variant="contained"
+                                            sx={{
+                                              backgroundColor: "gray",
+                                              color: "#fff",
+                                              "&:hover": {
+                                                backgroundColor: "black",
+                                              },
+                                            }}
+                                            onClick={() => setExpandedRowId(null)}
+                                          >
+                                            Cancel
+                                          </Button>
+                                        </Box>
                                       </Box>
                                     </Grid>
                                   </Grid>
