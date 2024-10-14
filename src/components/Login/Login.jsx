@@ -25,7 +25,7 @@ import "slick-carousel/slick/slick-theme.css";
 // import ApprovedLoan from '../../assets/ApprovedLoanApplicaiton.png'
 import Photographer from '../../assets/1.png'
 import MedicalEquipment from '../../assets/2.png'
-import ApprovedLoan from '../../assets/6.png'
+import ApprovedLoan from '../../assets/5.png'
 
 const API = import.meta.env.VITE_BASE_URL;
 
@@ -137,7 +137,7 @@ const Login = ({ setUser, setToken }) => {
   }, []);
 
   return (
-    <Grid container sx={{ height: "100vh", backgroundColor: "#def4df", zIndex: 1 }}>
+    <Grid container sx={{ height: "100vh", backgroundColor: "#def4df", zIndex: 1}}>
       <Grid
         item
         xs={6}
@@ -147,16 +147,16 @@ const Login = ({ setUser, setToken }) => {
           alignItems: "center",
         }}
       >
-        <Box sx={{ width: "90%", height: "55%", boxShadow: 10, borderRadius: 10 }}>
+        <Box sx={{ width: "90%", height: "55%", boxShadow: 10 }}>
           <Slider {...carouselSettings} >
             <div>
-              <img src={Photographer} alt="Clothing Store" style={{ width: "100%", height: "55vh", objectFit: "cover" }} />
+              <img src={Photographer} alt="Clothing Store" style={{ width: "100%", height: "55vh", objectFit: "cover", borderRadius: 10 }} />
             </div>
             <div>
-              <img src={MedicalEquipment} alt="Medical Equipment" style={{ width: "100%", height: "55vh", objectFit: "cover" }} />
+              <img src={MedicalEquipment} alt="Medical Equipment" style={{ width: "100%", height: "55vh", objectFit: "cover", borderRadius: 10 }} />
             </div>
             <div>
-              <img src={ApprovedLoan} alt="Approved-Loan-Application" style={{ width: "100%", height: "55vh", objectFit: "cover" }} />
+              <img src={ApprovedLoan} alt="Approved-Loan-Application" style={{ width: "100%", height: "55vh", objectFit: "cover", borderRadius: 10 }} />
             </div>
           </Slider>
         </Box>
