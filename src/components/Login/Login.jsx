@@ -181,14 +181,13 @@ const Login = ({ setUser, setToken }) => {
           elevation={0}
           sx={{
             padding: 2,
-            backgroundColor: "#f6f7f8",
+            backgroundColor: "#def4df", //peppermint green background
             height: "80%",
             width: "80%",
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
-            backgroundColor: "#def4df",
           }}
         >
           <Typography

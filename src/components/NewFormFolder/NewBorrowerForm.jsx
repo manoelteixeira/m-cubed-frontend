@@ -1,17 +1,11 @@
 import PropTypes from "prop-types";
 import React, { useState } from "react";
 import {
-  Slide,
   Box,
   Typography,
   Grid,
   TextField,
   Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
   MenuItem,
   ThemeProvider,
   createTheme,
@@ -21,6 +15,7 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router";
 import { Email, Lock, Phone, Business, CreditScore } from "@mui/icons-material";
+import peopleInGreenField from "../../assets/6.png";
 
 // Base API URL
 const API = import.meta.env.VITE_BASE_URL;
@@ -123,11 +118,6 @@ const BorrowerForm = ({ setUser, setToken }) => {
       },
     },
   });
-
-  const Transition = React.forwardRef(function Transition(props, ref) {
-    return <Slide direction="up" ref={ref} {...props} />;
-  });
-
   return (
     <ThemeProvider theme={theme}>
       <Box
@@ -136,15 +126,25 @@ const BorrowerForm = ({ setUser, setToken }) => {
         sx={{
           maxWidth: "100%",
           margin: "auto",
-          padding: 2,
-          backgroundColor: "#f6f7f8",
-          marginBottom: "40px", 
+          padding: 21,
+          backgroundImage: `url(${peopleInGreenField})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'bottom',
+          backgroundRepeat: 'no-repeat',
+          minHeight: '100vh'
+
         }}
       >
-        <Grid container sx={{ height: "100vh", mb: 30}} spacing={0}>
+        <Grid container sx={{ height: "100vh", mb: 25}} spacing={0}>
           {/* Left side with the image */}
           <Grid item xs={12} md={6}>
-            <Box sx={{ mt: -2 }}>
+            <Box sx={{ 
+              height: '97.5vh', 
+              padding: '0em 4em 3em 0em',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}>
               <img
                 src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1728411151/Hey_there_Friend_4_snyiql.png"
                 alt="Welcome to MoneyMoneyMoney"
@@ -152,8 +152,8 @@ const BorrowerForm = ({ setUser, setToken }) => {
                   width: "100%",
                   height: "100%",
                   objectFit: "cover",
-                  border: "none",
-                  
+                  borderRadius: "20px",
+                  boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.4)"
                 }}
               />
             </Box>
@@ -161,7 +161,7 @@ const BorrowerForm = ({ setUser, setToken }) => {
 
           {/* Right side with the form */}
           <Grid item xs={12} md={6}>
-            <Box sx={{ p: 4, backgroundColor: "#f6f7f8" }}>
+            <Box sx={{ p: 4, backgroundColor: "#def4df", boxShadow: 14, borderRadius: "20px" }}>
               <Typography
                 variant="h5"
                 component="h2"
@@ -196,6 +196,7 @@ const BorrowerForm = ({ setUser, setToken }) => {
                           <Business />
                         </InputAdornment>
                       ),
+                      style: { backgroundColor: 'white' },
                     }}
                   />
                 </Grid>
@@ -216,6 +217,7 @@ const BorrowerForm = ({ setUser, setToken }) => {
                             <Email />
                           </InputAdornment>
                         ),
+                        style: { backgroundColor: 'white' },
                       }}
                     />
                   </Grid>
@@ -235,6 +237,7 @@ const BorrowerForm = ({ setUser, setToken }) => {
                             <Lock />
                           </InputAdornment>
                         ),
+                        style: { backgroundColor: 'white' },
                       }}
                     />
                   </Grid>
@@ -272,6 +275,9 @@ const BorrowerForm = ({ setUser, setToken }) => {
                       InputLabelProps={{
                         shrink: true,
                       }}
+                      InputProps={{
+                        style: { backgroundColor: 'white' },
+                      }}
                     />
                   </Grid>
                   <Grid item xs={6}>
@@ -292,6 +298,7 @@ const BorrowerForm = ({ setUser, setToken }) => {
                             <CreditScore />
                           </InputAdornment>
                         ),
+                        style: { backgroundColor: 'white' },
                       }}
                     />
                   </Grid>
@@ -305,6 +312,9 @@ const BorrowerForm = ({ setUser, setToken }) => {
                     fullWidth
                     required
                     margin="normal"
+                    InputProps={{
+                      style: { backgroundColor: 'white' },
+                    }}
                   />
                 </Grid>
                 <Grid container item xs={12} spacing={2}>
@@ -319,6 +329,9 @@ const BorrowerForm = ({ setUser, setToken }) => {
                       margin="normal"
                       inputProps={{ maxLength: 10 }}
                       placeholder="e.g. 12345"
+                      InputProps={{
+                        style: { backgroundColor: 'white' },
+                      }}
                     />
                   </Grid>
                   <Grid item xs={6}>
@@ -339,6 +352,7 @@ const BorrowerForm = ({ setUser, setToken }) => {
                             <Phone />
                           </InputAdornment>
                         ),
+                        style: { backgroundColor: 'white' },
                       }}
                     />
                   </Grid>
@@ -353,6 +367,9 @@ const BorrowerForm = ({ setUser, setToken }) => {
                       fullWidth
                       required
                       margin="normal"
+                      InputProps={{
+                        style: { backgroundColor: 'white' },
+                      }}
                     />
                   </Grid>
                   <Grid item xs={6}>
@@ -365,6 +382,9 @@ const BorrowerForm = ({ setUser, setToken }) => {
                       fullWidth
                       required
                       margin="normal"
+                      InputProps={{
+                        style: { backgroundColor: 'white' },
+                      }}
                     >
                       {/* Complete list of U.S. States */}
                       <MenuItem value="AL">Alabama</MenuItem>
@@ -431,6 +451,9 @@ const BorrowerForm = ({ setUser, setToken }) => {
                     fullWidth
                     required
                     margin="normal"
+                    InputProps={{
+                      style: { backgroundColor: 'white' },
+                    }}
                   >
                     <MenuItem value="Retail">Retail</MenuItem>
                     <MenuItem value="Food Service">Food Service</MenuItem>
