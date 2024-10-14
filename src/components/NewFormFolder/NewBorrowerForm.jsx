@@ -129,7 +129,7 @@ const BorrowerForm = ({ setUser, setToken }) => {
           margin: "auto",
           padding: 2,
           backgroundColor: "#f6f7f8",
-          marginBottom: "40px", // Space between form and footer
+          marginBottom: "40px",
         }}
       >
         <Grid container sx={{ height: "100vh" }} spacing={0}>
