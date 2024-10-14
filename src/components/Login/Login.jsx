@@ -13,6 +13,7 @@ import {
   Divider,
   Paper,
 } from "@mui/material";
+import { Fade } from "@mui/material";
 import { Visibility, VisibilityOff, Email, Lock } from "@mui/icons-material";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import FacebookIcon from "@mui/icons-material/Facebook";
@@ -115,8 +116,10 @@ const Login = ({ setUser, setToken }) => {
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,
-    autoplaySpeed: 3000,
+    autoplaySpeed: 5000, 
     adaptiveHeight: true,
+    fade: true, 
+    cssEase: 'linear'
   };
 
   useEffect(() => {
@@ -143,27 +146,27 @@ const Login = ({ setUser, setToken }) => {
           alignItems: "center",
         }}
       >
-        <Box sx={{ width: "90%", height: "55%", boxShadow: 10 }}>
+        <Box sx={{ width: "90%", height: "55%", boxShadow: 10, overflow: 'hidden' }}>
           <Slider {...carouselSettings}>
-            <div>
+            <div className="slide-item">
               <img
                 src={Photographer}
                 alt="Clothing Store"
-                style={{ width: "100%", height: "55vh", objectFit: "cover" }}
+                className="slide-image"
               />
             </div>
-            <div>
+            <div className="slide-item">
               <img
                 src={MedicalEquipment}
                 alt="Medical Equipment"
-                style={{ width: "100%", height: "55vh", objectFit: "cover" }}
+                className="slide-image"
               />
             </div>
-            <div>
+            <div className="slide-item">
               <img
                 src={ApprovedLoan}
                 alt="Approved-Loan-Application"
-                style={{ width: "100%", height: "55vh", objectFit: "cover" }}
+                className="slide-image"
               />
             </div>
           </Slider>
