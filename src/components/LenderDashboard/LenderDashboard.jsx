@@ -469,6 +469,8 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  TableSortLabel,
+  Link,
 } from "@mui/material";
 
 const API = import.meta.env.VITE_BASE_URL;
@@ -480,11 +482,13 @@ export default function LenderDashboard({ user, token }) {
   const [filteredLoanListings, setFilteredLoanListings] = useState([]);
   const [pageBorrowers, setPageBorrowers] = useState(0);
   const [rowsPerPageBorrowers, setRowsPerPageBorrowers] = useState(5);
-  const [pageloanProposals, setPageloanProposals] = useState(0);
-  const [rowsPerPageloanProposals, setRowsPerPageloanProposals] = useState(5);
+  const [pageLoanProposals, setPageLoanProposals] = useState(0);
+  const [rowsPerPageLoanProposals, setRowsPerPageLoanProposals] = useState(5);
   const [searchTermLoanListings, setSearchTermLoanListings] = useState("");
   const [searchTermLoanProposals, setSearchTermLoanProposals] = useState("");
   const [expandedRowId, setExpandedRowId] = useState(null);
+  const [order, setOrder] = useState("asc");
+  const [orderBy, setOrderBy] = useState("title");
 
   const [borrowerDetails, setBorrowerDetails] = useState({
     business_name: "",
@@ -494,6 +498,9 @@ export default function LenderDashboard({ user, token }) {
     city: "",
     state: "",
     zip_code: "",
+    fico_score_link: "#",
+    secretary_of_state_link: "#",
+    drivers_license_link: "#",
   });
 
   const [lenderProposal, setLenderProposal] = useState({
@@ -509,10 +516,18 @@ export default function LenderDashboard({ user, token }) {
   const [dialogMessage, setDialogMessage] = useState("");
   const [dialogTitle, setDialogTitle] = useState("");
 
-  const toggleRowExpansion = (rowId, borrowerId) => {
+  const toggleRowExpansion = (rowId, borrowerId, proposal) => {
     setExpandedRowId(expandedRowId === rowId ? null : rowId);
     if (borrowerId && expandedRowId !== rowId) {
       fetchBorrowerDetails(borrowerId);
+      setLenderProposal({
+        title: proposal.title,
+        description: proposal.description,
+        loan_amount: proposal.loan_amount.toString(),
+        interest_rate: proposal.interest_rate.toString(),
+        repayment_term: proposal.repayment_term.toString(),
+        created_at: proposal.created_at,
+      });
     }
   };
 
@@ -522,7 +537,12 @@ export default function LenderDashboard({ user, token }) {
         headers: { Authorization: token },
       });
       const data = await res.json();
-      setBorrowerDetails(data);
+      setBorrowerDetails({
+        ...data,
+        fico_score_link: "/mock-fico-score.pdf",
+        secretary_of_state_link: "/mock-sos-certificate.pdf",
+        drivers_license_link: "/mock-drivers-license.pdf",
+      });
     } catch (error) {
       console.error("Failed to fetch borrower details", error);
     }
@@ -532,16 +552,12 @@ export default function LenderDashboard({ user, token }) {
     setLenderProposal({ ...lenderProposal, [e.target.name]: e.target.value });
   };
 
-  const handlePass = () => {
-    setExpandedRowId(null);
-  };
-
   const handleSubmitProposal = async () => {
     const proposalData = {
       ...lenderProposal,
-      loan_amount: parseFloat(lenderProposal.loan_amount), // Ensure it's a number
-      interest_rate: parseFloat(lenderProposal.interest_rate), // Ensure it's a number
-      repayment_term: parseInt(lenderProposal.repayment_term, 10), // Ensure it's an integer
+      loan_amount: parseFloat(lenderProposal.loan_amount),
+      interest_rate: parseFloat(lenderProposal.interest_rate),
+      repayment_term: parseInt(lenderProposal.repayment_term, 10),
       created_at: new Date().toISOString(),
     };
 
@@ -569,7 +585,7 @@ export default function LenderDashboard({ user, token }) {
       setDialogTitle("Error");
       setDialogMessage(error.message || "Failed to submit the proposal.");
     } finally {
-      setDialogOpen(true); // Show dialog regardless of success or failure
+      setDialogOpen(true);
     }
   };
 
@@ -590,31 +606,14 @@ export default function LenderDashboard({ user, token }) {
     });
   };
 
-  const calculateTotalLoanVolume = () => {
-    if (!Array.isArray(loanProposals) || loanProposals.length === 0) {
-      return "0.00";
-    }
-    const total = loanProposals.reduce((total, loan) => {
-      const loanValue = parseFloat(loan.loan_amount) || 0;
-      return total + loanValue;
-    }, 0);
-
-    return total.toLocaleString("en-US", {
-      style: "currency",
-      currency: "USD",
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    });
-  };
-
   const handleSearchChangeLoanListings = (event) => {
     const term = event.target.value.toLowerCase();
     setSearchTermLoanListings(term);
 
     const filteredListings = loanListings.filter(
       (listing) =>
-        listing.title.toLowerCase().includes(term) ||
-        listing.description.toLowerCase().includes(term)
+        listing.title?.toLowerCase().includes(term) ||
+        listing.description?.toLowerCase().includes(term)
     );
 
     setFilteredLoanListings(filteredListings);
@@ -626,10 +625,16 @@ export default function LenderDashboard({ user, token }) {
 
     const filteredProposals = loanProposals.filter(
       (loan) =>
-        loan.title.toLowerCase().includes(term) ||
-        loan.description.toLowerCase().includes(term)
+        loan.title?.toLowerCase().includes(term) ||
+        loan.description?.toLowerCase().includes(term)
     );
     setFilteredLoanProposals(filteredProposals);
+  };
+
+  const handleRequestSort = (property) => {
+    const isAsc = orderBy === property && order === "asc";
+    setOrder(isAsc ? "desc" : "asc");
+    setOrderBy(property);
   };
 
   useEffect(() => {
@@ -707,10 +712,29 @@ export default function LenderDashboard({ user, token }) {
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell align="center">Title</TableCell>
-                    <TableCell align="center">Purpose of Loan</TableCell>
-                    <TableCell align="right">Loan Amount</TableCell>
-                    <TableCell align="left">Date</TableCell>
+                    {["Title", "Purpose of Loan", "Loan Amount", "Date"].map(
+                      (header) => (
+                        <TableCell
+                          key={header}
+                          align="center"
+                          sortDirection={
+                            orderBy === header.toLowerCase() ? order : false
+                          }
+                        >
+                          <TableSortLabel
+                            active={orderBy === header.toLowerCase()}
+                            direction={
+                              orderBy === header.toLowerCase() ? order : "asc"
+                            }
+                            onClick={() =>
+                              handleRequestSort(header.toLowerCase())
+                            }
+                          >
+                            {header}
+                          </TableSortLabel>
+                        </TableCell>
+                      )
+                    )}
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -729,12 +753,10 @@ export default function LenderDashboard({ user, token }) {
                             toggleRowExpansion(loan.id, loan.borrower_id)
                           }
                         >
-                          <TableCell align="center" sx={{ color: "#00a250" }}>
+                          <TableCell align="left" sx={{ color: "#00a250" }}>
                             {loan.title}
                           </TableCell>
-                          <TableCell align="center">
-                            {loan.description}
-                          </TableCell>
+                          <TableCell align="left">{loan.description}</TableCell>
                           <TableCell align="right">
                             {parseFloat(loan.value).toLocaleString("en-US", {
                               style: "currency",
@@ -743,7 +765,7 @@ export default function LenderDashboard({ user, token }) {
                               maximumFractionDigits: 2,
                             })}
                           </TableCell>
-                          <TableCell>
+                          <TableCell align="center">
                             {new Date(loan.created_at).toLocaleDateString()}
                           </TableCell>
                         </TableRow>
@@ -792,6 +814,49 @@ export default function LenderDashboard({ user, token }) {
                                           {borrowerDetails.state}{" "}
                                           {borrowerDetails.zip_code}
                                         </Typography>
+                                        {/* Verified Documents */}
+                                        <Typography>
+                                          <strong>Verified Documents:</strong>
+                                        </Typography>
+                                        <ul>
+                                          <li>
+                                            <Link
+                                              href={
+                                                borrowerDetails.fico_score_link
+                                              }
+                                              target="_blank"
+                                              rel="noopener"
+                                              sx={{ color: "#00a250" }}
+                                            >
+                                              FICO Score - Verified
+                                            </Link>
+                                          </li>
+                                          <li>
+                                            <Link
+                                              href={
+                                                borrowerDetails.secretary_of_state_link
+                                              }
+                                              target="_blank"
+                                              rel="noopener"
+                                              sx={{ color: "#00a250" }}
+                                            >
+                                              Secretary of State Certificate -
+                                              Verified
+                                            </Link>
+                                          </li>
+                                          <li>
+                                            <Link
+                                              href={
+                                                borrowerDetails.drivers_license_link
+                                              }
+                                              target="_blank"
+                                              rel="noopener"
+                                              sx={{ color: "#00a250" }}
+                                            >
+                                              Driver's License - Verified
+                                            </Link>
+                                          </li>
+                                        </ul>
                                       </Box>
                                     </Grid>
                                     <Grid item xs={6}>
@@ -870,7 +935,7 @@ export default function LenderDashboard({ user, token }) {
                                               backgroundColor: "#b30000",
                                             },
                                           }}
-                                          onClick={handlePass}
+                                          onClick={() => setExpandedRowId(null)}
                                         >
                                           PASS
                                         </Button>
@@ -929,44 +994,262 @@ export default function LenderDashboard({ user, token }) {
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell align="center">Title</TableCell>
-                    <TableCell align="center">Purpose of Loan</TableCell>
-                    <TableCell align="right">Loan Amount</TableCell>
-                    <TableCell align="left">Date</TableCell>
+                    {[
+                      "Title",
+                      "Description",
+                      "Loan Amount",
+                      "Interest Rate",
+                      "Repayment Term",
+                      "Created At",
+                      "Status",
+                    ].map((header) => (
+                      <TableCell
+                        key={header}
+                        align={
+                          header === "Loan Amount" || header === "Interest Rate"
+                            ? "right"
+                            : "center"
+                        }
+                        sortDirection={
+                          orderBy === header.toLowerCase() ? order : false
+                        }
+                      >
+                        <TableSortLabel
+                          active={orderBy === header.toLowerCase()}
+                          direction={
+                            orderBy === header.toLowerCase() ? order : "asc"
+                          }
+                          onClick={() =>
+                            handleRequestSort(header.toLowerCase())
+                          }
+                        >
+                          {header}
+                        </TableSortLabel>
+                      </TableCell>
+                    ))}
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {filteredLoanProposals
                     .slice(
-                      pageloanProposals * rowsPerPageloanProposals,
-                      pageloanProposals * rowsPerPageloanProposals +
-                        rowsPerPageloanProposals
+                      pageLoanProposals * rowsPerPageLoanProposals,
+                      pageLoanProposals * rowsPerPageLoanProposals +
+                        rowsPerPageLoanProposals
                     )
                     .map((loan) => (
-                      <TableRow
-                        key={loan.id}
-                        hover
-                        style={{ cursor: "pointer" }}
-                      >
-                        <TableCell align="center" sx={{ color: "#00a250" }}>
-                          {loan.title}
-                        </TableCell>
-                        <TableCell align="center">{loan.description}</TableCell>
-                        <TableCell align="right">
-                          {parseFloat(loan.loan_amount).toLocaleString(
-                            "en-US",
-                            {
-                              style: "currency",
-                              currency: "USD",
-                              minimumFractionDigits: 2,
-                              maximumFractionDigits: 2,
-                            }
-                          )}
-                        </TableCell>
-                        <TableCell>
-                          {new Date(loan.created_at).toLocaleDateString()}
-                        </TableCell>
-                      </TableRow>
+                      <React.Fragment key={loan.id}>
+                        <TableRow
+                          hover
+                          style={{ cursor: "pointer" }}
+                          onClick={() =>
+                            toggleRowExpansion(loan.id, loan.borrower_id, loan)
+                          }
+                        >
+                          <TableCell align="center" sx={{ color: "#00a250" }}>
+                            {loan.title}
+                          </TableCell>
+                          <TableCell align="center">
+                            {loan.description}
+                          </TableCell>
+                          <TableCell align="right">
+                            {parseFloat(loan.loan_amount).toLocaleString(
+                              "en-US",
+                              {
+                                style: "currency",
+                                currency: "USD",
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2,
+                              }
+                            )}
+                          </TableCell>
+                          <TableCell align="right">
+                            {parseFloat(loan.interest_rate).toFixed(2)}%
+                          </TableCell>
+                          <TableCell align="center">
+                            {loan.repayment_term} months
+                          </TableCell>
+                          <TableCell align="center">
+                            {new Date(loan.created_at).toLocaleDateString()}
+                          </TableCell>
+                          <TableCell align="center">
+                            {loan.accepted === null
+                              ? "Pending"
+                              : loan.accepted
+                              ? "Accepted"
+                              : "Rejected"}
+                          </TableCell>
+                        </TableRow>
+
+                        {/* Collapsible row for borrower details and loan proposal form */}
+                        {expandedRowId === loan.id && (
+                          <TableRow key={`${loan.id}-collapse`}>
+                            <TableCell colSpan={7}>
+                              <Collapse in={expandedRowId === loan.id}>
+                                <Box
+                                  margin={2}
+                                  sx={{
+                                    backgroundColor: "#fff",
+                                    padding: 2,
+                                    borderRadius: 2,
+                                    display: "flex",
+                                    justifyContent: "space-between",
+                                  }}
+                                >
+                                  <Grid container spacing={2}>
+                                    {/* Borrower Info on Left */}
+                                    <Grid item xs={6}>
+                                      <Typography
+                                        variant="h6"
+                                        sx={{
+                                          color: "#00a250",
+                                          marginBottom: 1,
+                                        }}
+                                      >
+                                        Borrower Details
+                                      </Typography>
+                                      <Box sx={{ marginTop: 2 }}>
+                                        <Typography>
+                                          <strong>Business Name:</strong>{" "}
+                                          {borrowerDetails.business_name}
+                                        </Typography>
+                                        <Typography>
+                                          <strong>Industry:</strong>{" "}
+                                          {borrowerDetails.industry}
+                                        </Typography>
+                                        <Typography>
+                                          <strong>Credit Score:</strong>{" "}
+                                          {borrowerDetails.credit_score}
+                                        </Typography>
+                                        <Typography>
+                                          <strong>Location:</strong>{" "}
+                                          {borrowerDetails.street},{" "}
+                                          {borrowerDetails.city},{" "}
+                                          {borrowerDetails.state}{" "}
+                                          {borrowerDetails.zip_code}
+                                        </Typography>
+                                        {/* Verified Documents */}
+                                        <Typography>
+                                          <strong>Verified Documents:</strong>
+                                        </Typography>
+                                        <ul>
+                                          <li>
+                                            <Link
+                                              href={
+                                                borrowerDetails.fico_score_link
+                                              }
+                                              target="_blank"
+                                              rel="noopener"
+                                              sx={{ color: "#00a250" }}
+                                            >
+                                              FICO Score - Verified
+                                            </Link>
+                                          </li>
+                                          <li>
+                                            <Link
+                                              href={
+                                                borrowerDetails.secretary_of_state_link
+                                              }
+                                              target="_blank"
+                                              rel="noopener"
+                                              sx={{ color: "#00a250" }}
+                                            >
+                                              Secretary of State Certificate -
+                                              Verified
+                                            </Link>
+                                          </li>
+                                          <li>
+                                            <Link
+                                              href={
+                                                borrowerDetails.drivers_license_link
+                                              }
+                                              target="_blank"
+                                              rel="noopener"
+                                              sx={{ color: "#00a250" }}
+                                            >
+                                              Driver's License - Verified
+                                            </Link>
+                                          </li>
+                                        </ul>
+                                      </Box>
+                                    </Grid>
+
+                                    {/* Proposal Form on Right */}
+                                    <Grid item xs={6}>
+                                      <Typography
+                                        variant="h6"
+                                        sx={{
+                                          color: "#00a250",
+                                          marginBottom: 1,
+                                        }}
+                                      >
+                                        Edit Loan Proposal
+                                      </Typography>
+                                      <Box sx={{ marginTop: 2 }}>
+                                        <TextField
+                                          label="Title"
+                                          fullWidth
+                                          name="title"
+                                          value={lenderProposal.title}
+                                          onChange={handleProposalChange}
+                                          sx={{ marginBottom: 2 }}
+                                        />
+                                        <TextField
+                                          label="Description"
+                                          fullWidth
+                                          name="description"
+                                          value={lenderProposal.description}
+                                          onChange={handleProposalChange}
+                                          multiline
+                                          rows={3}
+                                          sx={{ marginBottom: 2 }}
+                                        />
+                                        <TextField
+                                          label="Loan Amount"
+                                          fullWidth
+                                          name="loan_amount"
+                                          value={lenderProposal.loan_amount}
+                                          onChange={handleProposalChange}
+                                          sx={{ marginBottom: 2 }}
+                                        />
+                                        <TextField
+                                          label="Interest Rate"
+                                          fullWidth
+                                          name="interest_rate"
+                                          value={lenderProposal.interest_rate}
+                                          onChange={handleProposalChange}
+                                          sx={{ marginBottom: 2 }}
+                                        />
+                                        <TextField
+                                          label="Repayment Term"
+                                          fullWidth
+                                          name="repayment_term"
+                                          value={lenderProposal.repayment_term}
+                                          onChange={handleProposalChange}
+                                          sx={{ marginBottom: 2 }}
+                                        />
+                                        <Button
+                                          variant="contained"
+                                          sx={{
+                                            backgroundColor: "#00a250",
+                                            color: "#fff",
+                                            marginRight: 2,
+                                            "&:hover": {
+                                              backgroundColor: "#007a3e",
+                                            },
+                                          }}
+                                          onClick={handleSubmitProposal}
+                                        >
+                                          Resend Proposal
+                                        </Button>
+                                      </Box>
+                                    </Grid>
+                                  </Grid>
+                                </Box>
+                              </Collapse>
+                            </TableCell>
+                          </TableRow>
+                        )}
+                      </React.Fragment>
                     ))}
                 </TableBody>
               </Table>
@@ -974,11 +1257,11 @@ export default function LenderDashboard({ user, token }) {
             <TablePagination
               component="div"
               count={filteredLoanProposals.length}
-              page={pageloanProposals}
-              onPageChange={(event, newPage) => setPageloanProposals(newPage)}
-              rowsPerPage={rowsPerPageloanProposals}
+              page={pageLoanProposals}
+              onPageChange={(event, newPage) => setPageLoanProposals(newPage)}
+              rowsPerPage={rowsPerPageLoanProposals}
               onRowsPerPageChange={(event) =>
-                setRowsPerPageloanProposals(parseInt(event.target.value, 10))
+                setRowsPerPageLoanProposals(parseInt(event.target.value, 10))
               }
               rowsPerPageOptions={[5, 10, 25, 50, 100]}
             />
