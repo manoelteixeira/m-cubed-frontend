@@ -1,12 +1,16 @@
-import React from 'react'
-import NewLenderForm from '../components/NewFormFolder/NewLenderForm'
-import LenderSignUpSideLayout from '../components/Library/Lenders/LendersSignUpSideLayout'
-export default function NewLender() {
+// src/Pages/NewLender.jsx
+import PropTypes from "prop-types";
+import NewLenderForm from "../components/NewFormFolder/NewLenderForm";
+
+export default function NewLender({ setUser, setToken }) {
   return (
     <div>
-        <NewLenderForm/>
-        {/* <LenderSignUpSideLayout/> */}
+      <NewLenderForm setUser={setUser} setToken={setToken} />
     </div>
-  )
+  );
 }
 
+NewLender.propTypes = {
+  setUser: PropTypes.func,
+  setToken: PropTypes.func,
+};

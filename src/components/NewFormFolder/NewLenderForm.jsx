@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import React, { useState } from "react";
 import {
   Slide,
@@ -17,16 +18,18 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router";
 import { Email, Lock, Business } from "@mui/icons-material";
+import { a } from "framer-motion/client";
 
 const API = import.meta.env.VITE_BASE_URL;
 
-const LenderForm = () => {
+const LenderForm = ({ setUser, setToken }) => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
   const [newLender, setNewLender] = useState({
     email: "",
     password: "",
+    confirm_password: "",
     business_name: "",
   });
 
@@ -40,10 +43,14 @@ const LenderForm = () => {
         body: JSON.stringify(newLender),
       });
       const results = await response.json();
-      const id = results.lender?.id;
 
-      console.log(`Lender created with ID: ${id}`);
-      navigate(`/lenders/${id}/lenderdashboard`);
+      if (!results.error) {
+        setUser(results.lender);
+        setToken(results.token);
+        navigate("/lender");
+      } else {
+        alert(results.error);
+      }
     } catch (error) {
       console.error("Error creating lender:", error);
     }
@@ -59,8 +66,13 @@ const LenderForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form submitted:", newLender);
-    createNewLender(newLender);
+    if (newLender.password !== newLender.confirm_password) {
+      alert("Password do not match");
+    } else {
+      console.log("Form submitted:", newLender);
+      delete newLender.confirm_password;
+      createNewLender(newLender);
+    }
   };
 
   const handleCancel = () => {
@@ -185,6 +197,25 @@ const LenderForm = () => {
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
+                    label="Confirm Password"
+                    name="confirm_password"
+                    type="password"
+                    value={newLender.confirm_password}
+                    onChange={handleChange}
+                    fullWidth
+                    required
+                    margin="normal"
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <Lock />
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
                     label="Business Name"
                     name="business_name"
                     value={newLender.business_name}
@@ -247,6 +278,11 @@ const LenderForm = () => {
       </Box>
     </ThemeProvider>
   );
+};
+
+LenderForm.propTypes = {
+  setUser: PropTypes.func,
+  setToken: PropTypes.func,
 };
 
 export default LenderForm;

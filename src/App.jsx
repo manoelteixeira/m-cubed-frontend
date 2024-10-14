@@ -92,7 +92,10 @@ function App() {
         />
         <Route path="/lenders/:id/proposals" element={<LenderProposalPage />} />
         <Route path="/lenders/:id/edit" element={<EditLenderPage />} />
-        <Route path="/lenders/signup" element={<NewLender />} />
+        <Route
+          path="/lenders/signup"
+          element={<NewLender setUser={setUser} setToken={setToken} />}
+        />
         <Route path="/signup/lender" element={<></>}></Route>
         <Route path="/lenders" element={<ListOfLenders />} />
         {/* Borrowers Section */}
