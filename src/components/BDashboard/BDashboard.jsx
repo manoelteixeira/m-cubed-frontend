@@ -102,7 +102,7 @@ const BDashboard = ({ user, token }) => {
   }, [user, token]);
 
   const openLoanApplicationForm = () => {
-    navigate(`/borrowers/${user.id}/requests/new`);
+    navigate(`/borrowers/new-request`);
   };
 
   if (loading) return <Typography variant="h6">Loading...</Typography>;

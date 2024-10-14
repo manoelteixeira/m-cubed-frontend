@@ -128,8 +128,15 @@ function App() {
           element={<ShowBorrowerDetails />}
         />
         <Route
-          path="/borrowers/:id/requests/new"
-          element={<LoanRequestForm />}
+          path="/borrowers/new-request"
+          element={
+            <ProtectedRoute
+              element={LoanRequestForm}
+              isAuthenticated={!!user && !!token}
+              user={user}
+              token={token}
+            />
+          }
         />
         <Route path="/borrowers/:id/edit" element={<EditBorrowerPage />} />
         <Route path="/borrowers/:id/new" element={<LoanRequestForm />} />
