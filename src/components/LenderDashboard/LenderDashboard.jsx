@@ -520,14 +520,17 @@ export default function LenderDashboard({ user, token }) {
     setExpandedRowId(expandedRowId === rowId ? null : rowId);
     if (borrowerId && expandedRowId !== rowId) {
       fetchBorrowerDetails(borrowerId);
-      setLenderProposal({
-        title: proposal.title,
-        description: proposal.description,
-        loan_amount: proposal.loan_amount.toString(),
-        interest_rate: proposal.interest_rate.toString(),
-        repayment_term: proposal.repayment_term.toString(),
-        created_at: proposal.created_at,
-      });
+      if (proposal) {
+        // Only for the Resend Proposal case
+        setLenderProposal({
+          title: proposal.title,
+          description: proposal.description,
+          loan_amount: proposal.loan_amount.toString(),
+          interest_rate: proposal.interest_rate.toString(),
+          repayment_term: proposal.repayment_term.toString(),
+          created_at: proposal.created_at,
+        });
+      }
     }
   };
 
@@ -552,7 +555,8 @@ export default function LenderDashboard({ user, token }) {
     setLenderProposal({ ...lenderProposal, [e.target.name]: e.target.value });
   };
 
-  const handleSubmitProposal = async () => {
+  // SEND Proposal Function for Loans Marketplace Table (POST)
+  const handleSendProposal = async () => {
     const proposalData = {
       ...lenderProposal,
       loan_amount: parseFloat(lenderProposal.loan_amount),
@@ -575,15 +579,53 @@ export default function LenderDashboard({ user, token }) {
       const result = await response.json();
       if (response.ok) {
         setDialogTitle("Success");
-        setDialogMessage("Proposal submitted successfully.");
+        setDialogMessage("Proposal sent successfully.");
         setExpandedRowId(null);
       } else {
         setDialogTitle("Error");
-        setDialogMessage(result.error || "Error submitting proposal.");
+        setDialogMessage(result.error || "Error sending proposal.");
       }
     } catch (error) {
       setDialogTitle("Error");
-      setDialogMessage(error.message || "Failed to submit the proposal.");
+      setDialogMessage(error.message || "Failed to send the proposal.");
+    } finally {
+      setDialogOpen(true);
+    }
+  };
+
+  // RESUBMIT Proposal Function for Pending Loan Proposals Table (PUT)
+  const handleResubmitProposal = async () => {
+    const proposalData = {
+      ...lenderProposal,
+      loan_amount: parseFloat(lenderProposal.loan_amount),
+      interest_rate: parseFloat(lenderProposal.interest_rate),
+      repayment_term: parseInt(lenderProposal.repayment_term, 10),
+      created_at: new Date().toISOString(),
+    };
+
+    const endpoint = `${API}/lenders/${user.id}/proposals/${expandedRowId}`;
+    try {
+      const response = await fetch(endpoint, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
+        body: JSON.stringify(proposalData),
+      });
+
+      const result = await response.json();
+      if (response.ok) {
+        setDialogTitle("Success");
+        setDialogMessage("Proposal resubmitted successfully.");
+        setExpandedRowId(null);
+      } else {
+        setDialogTitle("Error");
+        setDialogMessage(result.error || "Error resubmitting proposal.");
+      }
+    } catch (error) {
+      setDialogTitle("Error");
+      setDialogMessage(error.message || "Failed to resubmit the proposal.");
     } finally {
       setDialogOpen(true);
     }
@@ -675,7 +717,7 @@ export default function LenderDashboard({ user, token }) {
       </AppBar>
 
       <Grid container spacing={3} sx={{ padding: 3 }}>
-        {/* Loan Listings Table */}
+        {/* Loan Listings Table - SEND Proposal (POST) */}
         <Grid item xs={12}>
           <Paper elevation={3} sx={{ padding: 3, backgroundColor: "#f6f7f8" }}>
             <Typography
@@ -770,7 +812,7 @@ export default function LenderDashboard({ user, token }) {
                           </TableCell>
                         </TableRow>
 
-                        {/* Collapsible row for borrower details and loan proposal form */}
+                        {/* Collapsible row for borrower details and SEND proposal form */}
                         {expandedRowId === loan.id && (
                           <TableRow key={`${loan.id}-collapse`}>
                             <TableCell colSpan={4}>
@@ -922,9 +964,9 @@ export default function LenderDashboard({ user, token }) {
                                               backgroundColor: "#007a3e",
                                             },
                                           }}
-                                          onClick={handleSubmitProposal}
+                                          onClick={handleSendProposal} // SEND Proposal for Loans Marketplace
                                         >
-                                          Submit Proposal
+                                          Send Proposal
                                         </Button>
                                         <Button
                                           variant="contained"
@@ -937,7 +979,7 @@ export default function LenderDashboard({ user, token }) {
                                           }}
                                           onClick={() => setExpandedRowId(null)}
                                         >
-                                          PASS
+                                          Cancel
                                         </Button>
                                       </Box>
                                     </Grid>
@@ -966,7 +1008,7 @@ export default function LenderDashboard({ user, token }) {
           </Paper>
         </Grid>
 
-        {/* Loan Proposals Table */}
+        {/* Loan Proposals Table - RESUBMIT Proposal (PUT) */}
         <Grid item xs={12}>
           <Paper elevation={3} sx={{ padding: 3, backgroundColor: "#f6f7f8" }}>
             <Typography variant="h5" sx={{ color: "#00a250", marginBottom: 2 }}>
@@ -1080,7 +1122,7 @@ export default function LenderDashboard({ user, token }) {
                           </TableCell>
                         </TableRow>
 
-                        {/* Collapsible row for borrower details and loan proposal form */}
+                        {/* Collapsible row for borrower details and RESEND proposal form */}
                         {expandedRowId === loan.id && (
                           <TableRow key={`${loan.id}-collapse`}>
                             <TableCell colSpan={7}>
@@ -1237,7 +1279,7 @@ export default function LenderDashboard({ user, token }) {
                                               backgroundColor: "#007a3e",
                                             },
                                           }}
-                                          onClick={handleSubmitProposal}
+                                          onClick={handleResubmitProposal} // RESEND Proposal for Pending Loan Proposals
                                         >
                                           Resend Proposal
                                         </Button>
