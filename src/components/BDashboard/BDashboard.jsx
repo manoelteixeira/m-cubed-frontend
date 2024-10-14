@@ -31,7 +31,6 @@ const BDashboard = ({ user, token }) => {
   const [loading, setLoading] = useState(true);
   const [proposals, setProposals] = useState({}); // Store proposals by request ID
   const [error, setError] = useState(null);
-  // const { id } = useParams();
   const [expandedRow, setExpandedRow] = useState(null); // Track expanded row
   const [selectedProposal, setSelectedProposal] = useState(null); // Track selected proposal for dialog
   const [dialogOpen, setDialogOpen] = useState(false); // Track dialog open state
@@ -73,31 +72,33 @@ const BDashboard = ({ user, token }) => {
         Authorization: token,
       },
     };
+
     fetch(`${API}/borrowers/${user.id}/requests`, options)
       .then((res) => {
-        if (res.ok) {
-          return res.json();
-        } else {
-          // do something
-        }
+        if (!res.ok) throw new Error("Error fetching requests");
+        return res.json();
       })
       .then((data) => {
         let requestsProposals = {};
-        for (const request of data) {
-          const { id } = request;
-          fetch(`${API}/borrowers/${user.id}/requests/${id}/proposals`, options)
+        let fetchPromises = data.map((request) =>
+          fetch(
+            `${API}/borrowers/${user.id}/requests/${request.id}/proposals`,
+            options
+          )
             .then((res) => res.json())
-            .then((data) => {
-              requestsProposals[id] = data;
-            });
-        }
-        setRequests(data);
-        setProposals(requestsProposals);
+            .then((proposalData) => {
+              requestsProposals[request.id] = proposalData;
+            })
+        );
+
+        // Wait for all proposals to be fetched
+        Promise.all(fetchPromises).then(() => {
+          setRequests(data);
+          setProposals(requestsProposals);
+        });
       })
-      .catch((err) => console.error("Error fetching data:", err))
-      .finally(() => {
-        setLoading(false);
-      });
+      .catch((err) => setError("Error fetching data: " + err.message))
+      .finally(() => setLoading(false));
   }, [user, token]);
 
   const openLoanApplicationForm = () => {
@@ -113,10 +114,9 @@ const BDashboard = ({ user, token }) => {
     );
 
   const totalLoanRequests = requests.length;
-  const loanRequestsWithProposals = requests.filter((request) => {
-    const requestProposals = proposals[request.id] || [];
-    return requestProposals.length > 0;
-  }).length;
+  const loanRequestsWithProposals = requests.filter(
+    (request) => proposals[request.id] && proposals[request.id].length > 0
+  ).length;
 
   // Determine the status of a loan request
   const getLoanStatus = (requestId) => {
@@ -138,9 +138,7 @@ const BDashboard = ({ user, token }) => {
 
   // Handle accepting a proposal
   const handleAcceptProposal = async (proposalId, requestId) => {
-    console.log("user:", user.id);
-    console.log("request:", requestId);
-    console.log("proposal:", proposalId);
+    const selected = proposals[requestId].find((p) => p.id === proposalId); // Find the selected proposal
     const options = {
       method: "PUT",
       body: JSON.stringify({ proposal_id: proposalId }),
@@ -149,22 +147,23 @@ const BDashboard = ({ user, token }) => {
         Authorization: token,
       },
     };
-    fetch(
-      `${API}/borrowers/${user.id}/requests/${requestId}/proposals/`,
-      options
-    )
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        } else {
-          // Do something =D
-        }
-      })
-      .then((data) => {
-        console.log(data);
-        setProposals({ ...proposals, [proposalId]: data.updatedProposals });
-      })
-      .catch((err) => console.log(err));
+    try {
+      const response = await fetch(
+        `${API}/borrowers/${user.id}/requests/${requestId}/proposals/`,
+        options
+      );
+      if (response.ok) {
+        const data = await response.json();
+        setAcceptedProposals((prev) => ({ ...prev, [requestId]: proposalId }));
+        setSelectedProposal(selected); // Set the selected proposal for the dialog
+        setDialogOpen(true); // Open the dialog
+      } else {
+        throw new Error("Failed to accept proposal.");
+      }
+    } catch (err) {
+      console.error(err);
+      setError(err.message);
+    }
   };
 
   const handleDialogClose = () => {
@@ -382,15 +381,26 @@ const BDashboard = ({ user, token }) => {
         <DialogTitle>Proposal Accepted</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            You have successfully accepted the proposal with an interest rate of{" "}
-            {selectedProposal?.interest_rate}% for a loan amount of $
-            {selectedProposal?.loan_amount
-              ? parseFloat(selectedProposal.loan_amount).toLocaleString(
-                  "en-US",
-                  { minimumFractionDigits: 2, maximumFractionDigits: 2 }
-                )
-              : "N/A"}
-            .
+            You have successfully accepted the proposal with:
+            <ul>
+              <li>
+                <strong>Interest Rate:</strong>{" "}
+                {selectedProposal?.interest_rate}%
+              </li>
+              <li>
+                <strong>Loan Amount:</strong> $
+                {selectedProposal?.loan_amount
+                  ? parseFloat(selectedProposal.loan_amount).toLocaleString(
+                      "en-US",
+                      { minimumFractionDigits: 2, maximumFractionDigits: 2 }
+                    )
+                  : "N/A"}
+              </li>
+              <li>
+                <strong>Term Length:</strong> {selectedProposal?.repayment_term}{" "}
+                months
+              </li>
+            </ul>
           </DialogContentText>
         </DialogContent>
         <DialogActions>
