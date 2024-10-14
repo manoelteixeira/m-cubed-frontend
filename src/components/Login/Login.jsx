@@ -125,7 +125,6 @@ const Login = ({ setUser, setToken }) => {
   useEffect(() => {
     const credentials = JSON.parse(localStorage.getItem("credentials"));
     if (credentials) {
-      // console.log(credentials);
       const { timestamp } = credentials;
       const time = new Date(timestamp);
       const now = new Date();
@@ -137,7 +136,7 @@ const Login = ({ setUser, setToken }) => {
   }, []);
 
   return (
-    <Grid container sx={{ height: "100vh", backgroundColor: "#def4df", zIndex: 1}}>
+    <Grid container sx={{ height: "100vh", backgroundColor: "#def4df"}}>
       <Grid
         item
         xs={6}
@@ -150,13 +149,13 @@ const Login = ({ setUser, setToken }) => {
         <Box sx={{ width: "90%", height: "55%", boxShadow: 10 }}>
           <Slider {...carouselSettings} >
             <div>
-              <img src={Photographer} alt="Clothing Store" style={{ width: "100%", height: "55vh", objectFit: "cover", borderRadius: 10 }} />
+              <img src={Photographer} alt="Clothing Store" style={{ width: "100%", height: "55vh", objectFit: "cover"}} />
             </div>
             <div>
-              <img src={MedicalEquipment} alt="Medical Equipment" style={{ width: "100%", height: "55vh", objectFit: "cover", borderRadius: 10 }} />
+              <img src={MedicalEquipment} alt="Medical Equipment" style={{ width: "100%", height: "55vh", objectFit: "cover"}} />
             </div>
             <div>
-              <img src={ApprovedLoan} alt="Approved-Loan-Application" style={{ width: "100%", height: "55vh", objectFit: "cover", borderRadius: 10 }} />
+              <img src={ApprovedLoan} alt="Approved-Loan-Application" style={{ width: "100%", height: "55vh", objectFit: "cover"}} />
             </div>
           </Slider>
         </Box>
