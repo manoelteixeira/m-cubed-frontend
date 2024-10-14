@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import React, { useState } from "react";
 import {
   Slide,
@@ -23,13 +24,14 @@ import { Email, Lock, Phone, Business, CreditScore } from "@mui/icons-material";
 const API = import.meta.env.VITE_BASE_URL;
 
 // Borrower Form Component
-const BorrowerForm = () => {
+const BorrowerForm = ({ setUser, setToken }) => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
   const [newborrower, setNewBorrower] = useState({
     email: "",
     password: "",
+    confirm_password: "",
     city: "",
     street: "",
     state: "",
@@ -51,10 +53,14 @@ const BorrowerForm = () => {
         body: JSON.stringify(newborrower),
       });
       const results = await response.json();
-      const id = results.borrower?.id;
 
-      console.log(`Borrower created with ID: ${id}`);
-      navigate(`/borrowers/${id}/borrowerdashboard`);
+      if (results.error) {
+        alert(results.error);
+      } else {
+        setUser(results.borrower);
+        setToken(results.token);
+        navigate("/borrower");
+      }
     } catch (error) {
       console.error("Error creating borrower:", error);
     }
@@ -72,12 +78,16 @@ const BorrowerForm = () => {
     e.preventDefault();
     console.log("Form submitted:", newborrower);
 
-    const updatedBorrower = {
-      ...newborrower,
-      credit_score: parseInt(newborrower.credit_score),
-    };
+    if (newborrower.confirm_password != newborrower.password) {
+      alert("Password does not match");
+    } else {
+      const updatedBorrower = {
+        ...newborrower,
+        credit_score: parseInt(newborrower.credit_score),
+      };
 
-    createNewBorrower(updatedBorrower);
+      createNewBorrower(updatedBorrower);
+    }
   };
 
   const handleCancel = () => {
@@ -206,6 +216,25 @@ const BorrowerForm = () => {
                       name="password"
                       type="password"
                       value={newborrower.password}
+                      onChange={handleChange}
+                      fullWidth
+                      required
+                      margin="normal"
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <Lock />
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <TextField
+                      label="Confirm Password"
+                      name="confirm_password"
+                      type="password"
+                      value={newborrower.confirm_password}
                       onChange={handleChange}
                       fullWidth
                       required
@@ -465,4 +494,8 @@ const BorrowerForm = () => {
   );
 };
 
+BorrowerForm.propTypes = {
+  user: PropTypes.object,
+  token: PropTypes.string,
+};
 export default BorrowerForm;

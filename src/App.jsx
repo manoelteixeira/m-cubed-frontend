@@ -133,7 +133,10 @@ function App() {
         />
         <Route path="/borrowers/:id/edit" element={<EditBorrowerPage />} />
         <Route path="/borrowers/:id/new" element={<LoanRequestForm />} />
-        <Route path="/borrowers/signup" element={<NewBorrower />} />
+        <Route
+          path="/borrowers/signup"
+          element={<NewBorrower setUser={setUser} setToken={setToken} />}
+        />
         {/* <Route path="/borrowers/:id" element={<BDashboard />} /> */}
         <Route path="/disclaimer" element={<></>} />
         <Route path="/newsletter" element={<EmailNewsletter />}></Route>
