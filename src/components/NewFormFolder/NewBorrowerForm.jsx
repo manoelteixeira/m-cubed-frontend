@@ -202,27 +202,27 @@ const BorrowerForm = ({ setUser, setToken }) => {
                     }}
                   />
                 </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    label="Email"
+                    name="email"
+                    type="email"
+                    value={newborrower.email}
+                    onChange={handleChange}
+                    fullWidth
+                    required
+                    margin="normal"
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <Email />
+                        </InputAdornment>
+                      ),
+                      style: { backgroundColor: 'white' },
+                    }}
+                  />
+                </Grid>
                 <Grid container item xs={12} spacing={2}>
-                  <Grid item xs={6}>
-                    <TextField
-                      label="Email"
-                      name="email"
-                      type="email"
-                      value={newborrower.email}
-                      onChange={handleChange}
-                      fullWidth
-                      required
-                      margin="normal"
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <Email />
-                          </InputAdornment>
-                        ),
-                        style: { backgroundColor: 'white' },
-                      }}
-                    />
-                  </Grid>
                   <Grid item xs={6}>
                     <TextField
                       label="Password"
@@ -259,6 +259,7 @@ const BorrowerForm = ({ setUser, setToken }) => {
                             <Lock />
                           </InputAdornment>
                         ),
+                        style: { backgroundColor: 'white' },
                       }}
                     />
                   </Grid>

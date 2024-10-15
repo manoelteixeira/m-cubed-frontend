@@ -69,10 +69,12 @@ export default function LenderDashboard({ user, token }) {
     created_at: new Date().toLocaleDateString(),
   });
 
+  // Dialog for Success or Error Messages
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
   const [dialogTitle, setDialogTitle] = useState("");
 
+  // Sorting Loan Listings and Proposals
   const [sortByLoanListings, setSortByLoanListings] = useState('created_at');
   const [sortOrderLoanListings, setSortOrderLoanListings] = useState('desc');
   const [sortByLoanProposals, setSortByLoanProposals] = useState('created_at');
@@ -197,6 +199,7 @@ export default function LenderDashboard({ user, token }) {
     setDialogOpen(false);
   };
 
+  // Loan Listing Value Total Function
   const loanListingValueTotal = () => {
     let loanTotal = loanListings.reduce((total, loan) => {
       return total + (parseFloat(loan.value) || 0);
@@ -209,7 +212,7 @@ export default function LenderDashboard({ user, token }) {
       maximumFractionDigits: 2,
     });
   };
-
+  // Search Loan Listings Function
   const handleSearchChangeLoanListings = (event) => {
     const term = event.target.value.toLowerCase();
     setSearchTermLoanListings(term);
@@ -223,6 +226,7 @@ export default function LenderDashboard({ user, token }) {
     setFilteredLoanListings(filteredListings);
   };
 
+  // Search Loan Proposals Function
   const handleSearchChangeLoanProposals = (event) => {
     const term = event.target.value.toLowerCase();
     setSearchTermLoanProposals(term);
@@ -239,6 +243,7 @@ export default function LenderDashboard({ user, token }) {
   const handleDeleteProposal = async (proposalId) => {
     const endpoint = `${API}/lenders/${user.id}/proposals/${proposalId}`;
     try {
+      // DELETE Proposal Function for Pending Loan Proposals Table (DELETE)
       const response = await fetch(endpoint, {
         method: "DELETE",
         headers: {
@@ -266,17 +271,20 @@ export default function LenderDashboard({ user, token }) {
     }
   };
 
+  // Sorting Loan Listings Function
   const handleSortChangeLoanListings = (event) => {
     setSortByLoanListings(event.target.value);
     sortLoanListings(event.target.value, sortOrderLoanListings);
   };
 
+  // Sorting Loan Listings Order Function
   const handleSortOrderChangeLoanListings = () => {
     const newOrder = sortOrderLoanListings === 'asc' ? 'desc' : 'asc';
     setSortOrderLoanListings(newOrder);
     sortLoanListings(sortByLoanListings, newOrder);
   };
 
+  // Sorting Loan Listings Function
   const sortLoanListings = (sortBy, sortOrder) => {
     const sorted = [...filteredLoanListings].sort((a, b) => {
       if (sortBy === 'value') {
@@ -293,18 +301,20 @@ export default function LenderDashboard({ user, token }) {
     });
     setFilteredLoanListings(sorted);
   };
-
+// Sorting Loan Proposals Function
   const handleSortChangeLoanProposals = (event) => {
     setSortByLoanProposals(event.target.value);
     sortLoanProposals(event.target.value, sortOrderLoanProposals);
   };
 
+  // Sorting Loan Proposals Order Function
   const handleSortOrderChangeLoanProposals = () => {
     const newOrder = sortOrderLoanProposals === 'asc' ? 'desc' : 'asc';
     setSortOrderLoanProposals(newOrder);
     sortLoanProposals(sortByLoanProposals, newOrder);
   };
 
+  // Sorting Loan Proposals Function
   const sortLoanProposals = (sortBy, sortOrder) => {
     const sorted = [...filteredLoanProposals].sort((a, b) => {
       if (sortBy === 'loan_amount' || sortBy === 'interest_rate') {
@@ -816,7 +826,7 @@ export default function LenderDashboard({ user, token }) {
                                 },
                               }}
                             >
-                              <DeleteIcon />
+                              <DeleteIcon/>
                             </Button>
                           </TableCell>
                         </TableRow>
@@ -996,7 +1006,7 @@ export default function LenderDashboard({ user, token }) {
                                             }}
                                             onClick={() => handleDeleteProposal(loan.id)}
                                           >
-                                            <DeleteIcon />
+                                            DELETE
                                           </Button>
                                           <Button
                                             variant="contained"

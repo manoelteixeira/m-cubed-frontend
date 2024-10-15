@@ -298,9 +298,7 @@ const BDashboard = ({ user, token }) => {
                           >
                             <CardContent
                               sx={{
-                                backgroundImage: `url(${GreenleavesAndPeople})`,
-                                backgroundSize: "cover",
-                                backgroundPosition: "center",
+                                backgroundColor: "#def4df", 
                               }}
                             >
                               <Typography variant="h6">
