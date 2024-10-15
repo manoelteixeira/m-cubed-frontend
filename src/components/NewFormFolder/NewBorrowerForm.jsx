@@ -203,7 +203,7 @@ const BorrowerForm = ({ setUser, setToken }) => {
                   />
                 </Grid>
                 <Grid container item xs={12} spacing={2}>
-                  <Grid item xs={6}>
+                  <Grid item xs={12}>
                     <TextField
                       label="Email"
                       name="email"
@@ -259,6 +259,7 @@ const BorrowerForm = ({ setUser, setToken }) => {
                             <Lock />
                           </InputAdornment>
                         ),
+                        style: { backgroundColor: 'white' },
                       }}
                     />
                   </Grid>
