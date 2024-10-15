@@ -62,7 +62,7 @@ const NavBar = ({ setUser, setToken, isAuthenticated }) => {
                 fontWeight: "bold",
               }}
             >
-              DASHBOARD
+              YOUR DASHBOARD
             </Button>
             <Button
               variant="outlined"
@@ -208,7 +208,7 @@ const NavBar = ({ setUser, setToken, isAuthenticated }) => {
             fontWeight: "bold",
           }}
         >
-          Here at MMM, we&apos;re obsessed with getting you funded.
+          Here at MMM, we are obsessed with getting you funded.
         </Typography>
 
         <Box sx={{ flexGrow: 1 }} />
