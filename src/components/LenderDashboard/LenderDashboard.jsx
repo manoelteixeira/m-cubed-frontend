@@ -1,4 +1,4 @@
-// // src/components/LenderDashboard/LenderDashboard.jsx
+// src/components/LenderDashboard/LenderDashboard.jsx
 import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
 import {
@@ -23,10 +23,14 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  TableSortLabel,
   Link,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
 } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
+import SortIcon from '@mui/icons-material/Sort';
 
 const API = import.meta.env.VITE_BASE_URL;
 
@@ -42,8 +46,6 @@ export default function LenderDashboard({ user, token }) {
   const [searchTermLoanListings, setSearchTermLoanListings] = useState("");
   const [searchTermLoanProposals, setSearchTermLoanProposals] = useState("");
   const [expandedRowId, setExpandedRowId] = useState(null);
-  const [order, setOrder] = useState("asc");
-  const [orderBy, setOrderBy] = useState("title");
 
   const [borrowerDetails, setBorrowerDetails] = useState({
     business_name: "",
@@ -70,6 +72,11 @@ export default function LenderDashboard({ user, token }) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
   const [dialogTitle, setDialogTitle] = useState("");
+
+  const [sortByLoanListings, setSortByLoanListings] = useState('created_at');
+  const [sortOrderLoanListings, setSortOrderLoanListings] = useState('desc');
+  const [sortByLoanProposals, setSortByLoanProposals] = useState('created_at');
+  const [sortOrderLoanProposals, setSortOrderLoanProposals] = useState('desc');
 
   const toggleRowExpansion = (rowId, borrowerId, proposal) => {
     setExpandedRowId(expandedRowId === rowId ? null : rowId);
@@ -229,12 +236,6 @@ export default function LenderDashboard({ user, token }) {
     setFilteredLoanProposals(filteredProposals);
   };
 
-  const handleRequestSort = (property) => {
-    const isAsc = orderBy === property && order === "asc";
-    setOrder(isAsc ? "desc" : "asc");
-    setOrderBy(property);
-  };
-
   const handleDeleteProposal = async (proposalId) => {
     const endpoint = `${API}/lenders/${user.id}/proposals/${proposalId}`;
     try {
@@ -263,6 +264,62 @@ export default function LenderDashboard({ user, token }) {
     } finally {
       setDialogOpen(true);
     }
+  };
+
+  const handleSortChangeLoanListings = (event) => {
+    setSortByLoanListings(event.target.value);
+    sortLoanListings(event.target.value, sortOrderLoanListings);
+  };
+
+  const handleSortOrderChangeLoanListings = () => {
+    const newOrder = sortOrderLoanListings === 'asc' ? 'desc' : 'asc';
+    setSortOrderLoanListings(newOrder);
+    sortLoanListings(sortByLoanListings, newOrder);
+  };
+
+  const sortLoanListings = (sortBy, sortOrder) => {
+    const sorted = [...filteredLoanListings].sort((a, b) => {
+      if (sortBy === 'value') {
+        return sortOrder === 'asc' ? a.value - b.value : b.value - a.value;
+      } else if (sortBy === 'created_at') {
+        return sortOrder === 'asc' 
+          ? new Date(a.created_at) - new Date(b.created_at)
+          : new Date(b.created_at) - new Date(a.created_at);
+      } else {
+        return sortOrder === 'asc'
+          ? a[sortBy].localeCompare(b[sortBy])
+          : b[sortBy].localeCompare(a[sortBy]);
+      }
+    });
+    setFilteredLoanListings(sorted);
+  };
+
+  const handleSortChangeLoanProposals = (event) => {
+    setSortByLoanProposals(event.target.value);
+    sortLoanProposals(event.target.value, sortOrderLoanProposals);
+  };
+
+  const handleSortOrderChangeLoanProposals = () => {
+    const newOrder = sortOrderLoanProposals === 'asc' ? 'desc' : 'asc';
+    setSortOrderLoanProposals(newOrder);
+    sortLoanProposals(sortByLoanProposals, newOrder);
+  };
+
+  const sortLoanProposals = (sortBy, sortOrder) => {
+    const sorted = [...filteredLoanProposals].sort((a, b) => {
+      if (sortBy === 'loan_amount' || sortBy === 'interest_rate') {
+        return sortOrder === 'asc' ? a[sortBy] - b[sortBy] : b[sortBy] - a[sortBy];
+      } else if (sortBy === 'created_at') {
+        return sortOrder === 'asc' 
+          ? new Date(a.created_at) - new Date(b.created_at)
+          : new Date(b.created_at) - new Date(a.created_at);
+      } else {
+        return sortOrder === 'asc'
+          ? a[sortBy].localeCompare(b[sortBy])
+          : b[sortBy].localeCompare(a[sortBy]);
+      }
+    });
+    setFilteredLoanProposals(sorted);
   };
 
   useEffect(() => {
@@ -322,7 +379,7 @@ export default function LenderDashboard({ user, token }) {
             >
               Current Loans Marketplace Volume: {loanListingValueTotal()}
             </Typography>
-            <Grid container justifyContent="space-between" alignItems="center">
+            <Grid container justifyContent="space-between" alignItems="center" sx={{ marginBottom: 2 }}>
               <Grid item>
                 <TextField
                   placeholder="Search Loan Listings"
@@ -339,6 +396,36 @@ export default function LenderDashboard({ user, token }) {
                   }}
                 />
               </Grid>
+              <Grid item>
+                <FormControl sx={{ minWidth: 120, marginRight: 2 }}>
+                  <InputLabel id="sort-loan-listings-label">Sort By</InputLabel>
+                  <Select
+                    labelId="sort-loan-listings-label"
+                    value={sortByLoanListings}
+                    onChange={handleSortChangeLoanListings}
+                    label="Sort By"
+                  >
+                    <MenuItem value="title">Title</MenuItem>
+                    <MenuItem value="description">Purpose of Loan</MenuItem>
+                    <MenuItem value="value">Loan Amount</MenuItem>
+                    <MenuItem value="created_at">Date</MenuItem>
+                  </Select>
+                </FormControl>
+                <Button
+                  variant="contained"
+                  onClick={handleSortOrderChangeLoanListings}
+                  startIcon={<SortIcon />}
+                  sx={{
+                    backgroundColor: "#00a250",
+                    color: "#fff",
+                    "&:hover": {
+                      backgroundColor: "#007a3e",
+                    },
+                  }}
+                >
+                  {sortOrderLoanListings === 'asc' ? 'Ascending' : 'Descending'}
+                </Button>
+              </Grid>
             </Grid>
             <TableContainer>
               <Table>
@@ -346,24 +433,8 @@ export default function LenderDashboard({ user, token }) {
                   <TableRow>
                     {["Title", "Purpose of Loan", "Loan Amount", "Date"].map(
                       (header) => (
-                        <TableCell
-                          key={header}
-                          align="center"
-                          sortDirection={
-                            orderBy === header.toLowerCase() ? order : false
-                          }
-                        >
-                          <TableSortLabel
-                            active={orderBy === header.toLowerCase()}
-                            direction={
-                              orderBy === header.toLowerCase() ? order : "asc"
-                            }
-                            onClick={() =>
-                              handleRequestSort(header.toLowerCase())
-                            }
-                          >
-                            {header}
-                          </TableSortLabel>
+                        <TableCell key={header} align="center">
+                          {header}
                         </TableCell>
                       )
                     )}
@@ -373,8 +444,7 @@ export default function LenderDashboard({ user, token }) {
                   {filteredLoanListings
                     .slice(
                       pageBorrowers * rowsPerPageBorrowers,
-                      pageBorrowers * rowsPerPageBorrowers +
-                        rowsPerPageBorrowers
+                      pageBorrowers * rowsPerPageBorrowers + rowsPerPageBorrowers
                     )
                     .map((loan) => (
                       <React.Fragment key={loan.id}>
@@ -604,7 +674,7 @@ export default function LenderDashboard({ user, token }) {
             <Typography variant="h5" sx={{ color: "#00a250", marginBottom: 2 }}>
               Pending Loan Proposals
             </Typography>
-            <Grid container justifyContent="flex-end">
+            <Grid container justifyContent="space-between" alignItems="center" sx={{ marginBottom: 2 }}>
               <Grid item>
                 <TextField
                   placeholder="Search Loan Proposals"
@@ -620,6 +690,38 @@ export default function LenderDashboard({ user, token }) {
                     },
                   }}
                 />
+              </Grid>
+              <Grid item>
+                <FormControl sx={{ minWidth: 120, marginRight: 2 }}>
+                  <InputLabel id="sort-loan-proposals-label">Sort By</InputLabel>
+                  <Select
+                    labelId="sort-loan-proposals-label"
+                    value={sortByLoanProposals}
+                    onChange={handleSortChangeLoanProposals}
+                    label="Sort By"
+                  >
+                    <MenuItem value="title">Title</MenuItem>
+                    <MenuItem value="description">Description</MenuItem>
+                    <MenuItem value="loan_amount">Loan Amount</MenuItem>
+                    <MenuItem value="interest_rate">Interest Rate</MenuItem>
+                    <MenuItem value="repayment_term">Repayment Term</MenuItem>
+                    <MenuItem value="created_at">Created At</MenuItem>
+                  </Select>
+                </FormControl>
+                <Button
+                  variant="contained"
+                  onClick={handleSortOrderChangeLoanProposals}
+                  startIcon={<SortIcon />}
+                  sx={{
+                    backgroundColor: "#00a250",
+                    color: "#fff",
+                    "&:hover": {
+                      backgroundColor: "#007a3e",
+                    },
+                  }}
+                >
+                  {sortOrderLoanProposals === 'asc' ? 'Ascending' : 'Descending'}
+                </Button>
               </Grid>
             </Grid>
             <TableContainer>
@@ -642,21 +744,8 @@ export default function LenderDashboard({ user, token }) {
                             ? "right"
                             : "center"
                         }
-                        sortDirection={
-                          orderBy === header.toLowerCase() ? order : false
-                        }
                       >
-                        <TableSortLabel
-                          active={orderBy === header.toLowerCase()}
-                          direction={
-                            orderBy === header.toLowerCase() ? order : "asc"
-                          }
-                          onClick={() =>
-                            handleRequestSort(header.toLowerCase())
-                          }
-                        >
-                          {header}
-                        </TableSortLabel>
+                        {header}
                       </TableCell>
                     ))}
                     <TableCell align="center">Actions</TableCell>
@@ -666,8 +755,7 @@ export default function LenderDashboard({ user, token }) {
                   {filteredLoanProposals
                     .slice(
                       pageLoanProposals * rowsPerPageLoanProposals,
-                      pageLoanProposals * rowsPerPageLoanProposals +
-                        rowsPerPageLoanProposals
+                      pageLoanProposals * rowsPerPageLoanProposals + rowsPerPageLoanProposals
                     )
                     .map((loan) => (
                       <React.Fragment key={loan.id}>
@@ -715,13 +803,20 @@ export default function LenderDashboard({ user, token }) {
                             <Button
                               variant="contained"
                               color="error"
-                              startIcon={<DeleteIcon />}
                               onClick={(e) => {
                                 e.stopPropagation();
                                 handleDeleteProposal(loan.id);
+                                
+                              }}
+                              sx={{
+                                marginRight: 2,
+                                backgroundColor: "darkred",
+                                "&:hover": {
+                                  backgroundColor: "#red",
+                                },
                               }}
                             >
-                              Delete
+                              <DeleteIcon />
                             </Button>
                           </TableCell>
                         </TableRow>
@@ -891,7 +986,7 @@ export default function LenderDashboard({ user, token }) {
                                           <Button
                                             variant="contained"
                                             color="error"
-                                            startIcon={<DeleteIcon />}
+                                            // startIcon={<DeleteIcon />}
                                             sx={{
                                               marginRight: 2,
                                               backgroundColor: "darkred",
@@ -901,7 +996,7 @@ export default function LenderDashboard({ user, token }) {
                                             }}
                                             onClick={() => handleDeleteProposal(loan.id)}
                                           >
-                                            Delete
+                                            <DeleteIcon />
                                           </Button>
                                           <Button
                                             variant="contained"

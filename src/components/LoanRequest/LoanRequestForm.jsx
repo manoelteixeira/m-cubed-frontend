@@ -19,6 +19,7 @@ import SaveIcon from "@mui/icons-material/Save";
 import SendIcon from "@mui/icons-material/Send";
 import CloseIcon from "@mui/icons-material/Close";
 import "./LoanRequest.css";
+// import GreenleavesAndPeople from '../../assets/8.png';
 
 const theme = createTheme({
   palette: {
@@ -99,14 +100,16 @@ const LoanRequestForm = ({ user, token }) => {
   };
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={theme} sx={{ backgroundColor: '#def4df' }}>
       <Container
         maxWidth="sm"
         sx={{
           backgroundColor: "#f6f7f8",
-          padding: "2rem",
+          padding: "4rem",
           borderRadius: "8px",
-          boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
+          border: '2px solid #00A250',
+          boxShadow: "0 4px 10px rgba(0, 0, 0, .4)",
+          m: '10rem 24rem',
         }}
       >
         <Typography

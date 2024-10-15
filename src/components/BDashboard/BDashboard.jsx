@@ -30,12 +30,12 @@ const API = import.meta.env.VITE_BASE_URL;
 const BDashboard = ({ user, token }) => {
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [proposals, setProposals] = useState({}); // Store proposals by request ID
+  const [proposals, setProposals] = useState({}); 
   const [error, setError] = useState(null);
-  const [expandedRow, setExpandedRow] = useState(null); // Track expanded row
-  const [selectedProposal, setSelectedProposal] = useState(null); // Track selected proposal for dialog
-  const [dialogOpen, setDialogOpen] = useState(false); // Track dialog open state
-  const [acceptedProposals, setAcceptedProposals] = useState({}); // Track accepted proposals by request ID
+  const [expandedRow, setExpandedRow] = useState(null);
+  const [selectedProposal, setSelectedProposal] = useState(null); 
+  const [dialogOpen, setDialogOpen] = useState(false); 
+  const [acceptedProposals, setAcceptedProposals] = useState({}); 
 
   const navigate = useNavigate();
 
@@ -320,7 +320,7 @@ const BDashboard = ({ user, token }) => {
                                       marginLeft: 0,
                                       marginRight: 0,
                                       backgroundColor: '#def4df',
-                                      border: '2px solid #00A250',
+                                    border: '2px solid #00A250',
                                     },
                                   }}
                                 >
