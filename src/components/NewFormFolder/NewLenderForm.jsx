@@ -1,24 +1,23 @@
 import PropTypes from "prop-types";
 import React, { useState } from "react";
 import {
-  Slide,
   Box,
   Typography,
   Grid,
   TextField,
   Button,
+  InputAdornment,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
-  InputAdornment,
   ThemeProvider,
   createTheme,
+  Slide,
 } from "@mui/material";
 import { useNavigate } from "react-router";
 import { Email, Lock, Business } from "@mui/icons-material";
-import { a } from "framer-motion/client";
 
 const API = import.meta.env.VITE_BASE_URL;
 
@@ -67,11 +66,11 @@ const LenderForm = ({ setUser, setToken }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (newLender.password !== newLender.confirm_password) {
-      alert("Password do not match");
+      alert("Passwords do not match");
     } else {
-      console.log("Form submitted:", newLender);
-      delete newLender.confirm_password;
-      createNewLender(newLender);
+      const lenderData = { ...newLender };
+      delete lenderData.confirm_password;
+      createNewLender(lenderData);
     }
   };
 
@@ -112,33 +111,51 @@ const LenderForm = ({ setUser, setToken }) => {
         sx={{
           maxWidth: "100%",
           margin: "auto",
-          padding: 2,
-          backgroundColor: "#f6f7f8",
+          padding: 4,
+          paddingTop: 2, // Reduced padding at the top
+          marginBottom: 8, // Add margin to push the form away from the footer
+          minHeight: "100vh",
         }}
       >
-        <Grid container sx={{ height: "100%" }} spacing={0}>
-          {/* Left Side with the Image */}
+        <Grid container spacing={0}>
+          {/* Left side with the image */}
           <Grid item xs={12} md={6}>
-            <Box sx={{ mt: -2 }}>
-              {" "}
+            <Box
+              sx={{
+                height: "100vh",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
               <img
                 src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1728325843/Hey_there_Friend_5_bgxdye.png"
                 alt="Welcome to MoneyMoneyMoney"
                 style={{
-                  width: "100%",
-                  height: "100%",
+                  width: "600px",
+                  height: "800px",
                   objectFit: "cover",
-                  border: "none",
-                  marginBottom: "40px", 
-
+                  borderRadius: "20px",
+                  boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.4)",
                 }}
               />
             </Box>
           </Grid>
 
-          {/* Right Side with Form */}
+          {/* Right side with the form */}
           <Grid item xs={12} md={6}>
-            <Box sx={{ p: 4, backgroundColor: "#f6f7f8" }}>
+            <Box
+              sx={{
+                p: 4,
+                backgroundColor: "#def4df",
+                boxShadow: 14,
+                borderRadius: "20px",
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+              }}
+            >
               <Typography
                 variant="h5"
                 component="h2"
@@ -149,11 +166,9 @@ const LenderForm = ({ setUser, setToken }) => {
                   fontWeight: 600,
                 }}
               >
-                <strong style={{ color: "#00a250" }}>
-                  Lender Registration
-                </strong>
+                <strong>Lender Registration</strong>
                 <br />
-                <strong style={{ color: "#00a250" }}>
+                <strong>
                   Welcome to <span style={{ color: "#00a250" }}>MMM</span>
                 </strong>
               </Typography>
@@ -174,6 +189,7 @@ const LenderForm = ({ setUser, setToken }) => {
                           <Email />
                         </InputAdornment>
                       ),
+                      style: { backgroundColor: "white" },
                     }}
                   />
                 </Grid>
@@ -193,6 +209,7 @@ const LenderForm = ({ setUser, setToken }) => {
                           <Lock />
                         </InputAdornment>
                       ),
+                      style: { backgroundColor: "white" },
                     }}
                   />
                 </Grid>
@@ -212,6 +229,7 @@ const LenderForm = ({ setUser, setToken }) => {
                           <Lock />
                         </InputAdornment>
                       ),
+                      style: { backgroundColor: "white" },
                     }}
                   />
                 </Grid>
@@ -230,6 +248,7 @@ const LenderForm = ({ setUser, setToken }) => {
                           <Business />
                         </InputAdornment>
                       ),
+                      style: { backgroundColor: "white" },
                     }}
                   />
                 </Grid>
@@ -239,7 +258,7 @@ const LenderForm = ({ setUser, setToken }) => {
                 color="primary"
                 type="submit"
                 fullWidth
-                sx={{ mt: 2 }}
+                sx={{ mt: 2, backgroundColor: "#00a250", color: "#f6f7f8" }}
               >
                 <strong>Get Started!</strong>
               </Button>
@@ -248,7 +267,7 @@ const LenderForm = ({ setUser, setToken }) => {
                 color="inherit"
                 onClick={handleCancel}
                 fullWidth
-                sx={{ mt: 2 }}
+                sx={{ mt: 2, borderColor: "#00a250", color: "#00a250" }}
               >
                 <strong>Cancel</strong>
               </Button>
@@ -256,6 +275,7 @@ const LenderForm = ({ setUser, setToken }) => {
           </Grid>
         </Grid>
 
+        {/* Cancel Dialog */}
         <Dialog
           open={open}
           onClose={handleClose}
@@ -282,8 +302,8 @@ const LenderForm = ({ setUser, setToken }) => {
 };
 
 LenderForm.propTypes = {
-  setUser: PropTypes.func,
-  setToken: PropTypes.func,
+  setUser: PropTypes.func.isRequired,
+  setToken: PropTypes.func.isRequired,
 };
 
 export default LenderForm;
