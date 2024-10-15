@@ -18,3 +18,11 @@
 
 #backgroundwhite
 #f6f7f8
+
+#butterywhite
+#FFFBEA
+
+#chromewhite
+#DEF0CA
+
+#firefly
