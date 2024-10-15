@@ -107,6 +107,17 @@ const LoanRequestForm = ({ user, token }) => {
           justifyContent: 'center',
           alignItems: 'center',
           minHeight: '100vh',
+          position: 'relative',
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(255, 255, 255, 0.4)',
+            zIndex: 1,
+          },
           backgroundImage: `url(${LoanProposal})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
@@ -120,6 +131,8 @@ const LoanRequestForm = ({ user, token }) => {
             borderRadius: "8px",
             border: '2px solid #00A250',
             boxShadow: "0 4px 10px rgba(0, 0, 0, .4)",
+            position: 'relative',
+            zIndex: 2,
           }}
         >
           <Typography
