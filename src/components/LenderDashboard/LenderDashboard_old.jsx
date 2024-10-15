@@ -38,14 +38,13 @@ export default function LenderDashboard({ user, token }) {
   const [loanListings, setLoanListings] = useState([]);
   const [filteredLoanProposals, setFilteredLoanProposals] = useState([]);
   const [filteredLoanListings, setFilteredLoanListings] = useState([]);
+  const [pageBorrowers, setPageBorrowers] = useState(0);
+  const [rowsPerPageBorrowers, setRowsPerPageBorrowers] = useState(5);
   const [pageLoanProposals, setPageLoanProposals] = useState(0);
   const [rowsPerPageLoanProposals, setRowsPerPageLoanProposals] = useState(5);
   const [searchTermLoanListings, setSearchTermLoanListings] = useState("");
   const [searchTermLoanProposals, setSearchTermLoanProposals] = useState("");
   const [expandedRowId, setExpandedRowId] = useState(null);
-  const [loanListingsLimit, setLoanListingsLimit] = useState(5);
-  const [loanListingsOffset, setLoanListingsOffset] = useState(0);
-  const [loanListingsTotal, setLoanListingsTotal] = useState(null);
 
   const [borrowerDetails, setBorrowerDetails] = useState({
     business_name: "",
@@ -221,11 +220,14 @@ export default function LenderDashboard({ user, token }) {
   const handleSearchChangeLoanListings = (event) => {
     const term = event.target.value.toLowerCase();
     setSearchTermLoanListings(term);
-    if (searchTermLoanListings.length >= 3) {
-      loadLoanListings();
-    } else if (searchTermLoanListings.length <= 1) {
-      loadLoanListings();
-    }
+
+    const filteredListings = loanListings.filter(
+      (listing) =>
+        listing.title?.toLowerCase().includes(term) ||
+        listing.description?.toLowerCase().includes(term)
+    );
+
+    setFilteredLoanListings(filteredListings);
   };
 
   const handleSearchChangeLoanProposals = (event) => {
@@ -277,14 +279,30 @@ export default function LenderDashboard({ user, token }) {
 
   const handleSortChangeLoanListings = (event) => {
     setSortByLoanListings(event.target.value);
-    console.log(sortByLoanListings);
-    loadLoanListings();
+    sortLoanListings(event.target.value, sortOrderLoanListings);
   };
 
   const handleSortOrderChangeLoanListings = () => {
     const newOrder = sortOrderLoanListings === "asc" ? "desc" : "asc";
     setSortOrderLoanListings(newOrder);
-    loadLoanListings();
+    sortLoanListings(sortByLoanListings, newOrder);
+  };
+
+  const sortLoanListings = (sortBy, sortOrder) => {
+    const sorted = [...filteredLoanListings].sort((a, b) => {
+      if (sortBy === "value") {
+        return sortOrder === "asc" ? a.value - b.value : b.value - a.value;
+      } else if (sortBy === "created_at") {
+        return sortOrder === "asc"
+          ? new Date(a.created_at) - new Date(b.created_at)
+          : new Date(b.created_at) - new Date(a.created_at);
+      } else {
+        return sortOrder === "asc"
+          ? a[sortBy].localeCompare(b[sortBy])
+          : b[sortBy].localeCompare(a[sortBy]);
+      }
+    });
+    setFilteredLoanListings(sorted);
   };
 
   const handleSortChangeLoanProposals = (event) => {
@@ -295,9 +313,7 @@ export default function LenderDashboard({ user, token }) {
   const handleSortOrderChangeLoanProposals = () => {
     const newOrder = sortOrderLoanProposals === "asc" ? "desc" : "asc";
     setSortOrderLoanProposals(newOrder);
-    // console.log(sortOrderLoanProposal);
-    // sortLoanProposals(sortByLoanProposals, newOrder);
-    // loadLoanListings();
+    sortLoanProposals(sortByLoanProposals, newOrder);
   };
 
   const sortLoanProposals = (sortBy, sortOrder) => {
@@ -319,30 +335,10 @@ export default function LenderDashboard({ user, token }) {
     setFilteredLoanProposals(sorted);
   };
 
-  const loadLoanListings = () => {
-    let url = `${API}/lenders/${user.id}/requests?limit=${loanListingsLimit}&offset=${loanListingsOffset}&sort=${sortByLoanListings}&order=${sortOrderLoanListings}`;
-    if (searchTermLoanListings.length >= 3) {
-      url += `&search=${searchTermLoanListings}`;
-    }
-
+  useEffect(() => {
     const options = {
       headers: { Authorization: token },
     };
-    fetch(url, options)
-      .then((res) => res.json())
-      .then((data) => {
-        setLoanListings(data.loan_requests);
-        // setFilteredLoanListings(data.loan_requests);
-        setLoanListingsTotal(data.total);
-      })
-      .catch((err) => console.log(err));
-  };
-
-  const loadLoanProposals = () => {
-    const options = {
-      headers: { Authorization: token },
-    };
-    // Fetch Proposals
     fetch(`${API}/lenders/${user.id}/proposals`, options)
       .then((res) => res.json())
       .then((data) => {
@@ -353,16 +349,15 @@ export default function LenderDashboard({ user, token }) {
         }
       })
       .catch((err) => console.log(err));
-  };
+    fetch(`${API}/lenders/${user.id}/requests`, options)
+      .then((res) => res.json())
+      .then((data) => {
+        setLoanListings(data);
 
-  useEffect(() => {
-    loadLoanProposals();
-    loadLoanListings();
+        setFilteredLoanListings(data);
+      })
+      .catch((err) => console.log(err));
   }, [user]);
-
-  useEffect(() => {
-    loadLoanListings();
-  }, [loanListingsLimit, loanListingsOffset]);
 
   return (
     <div className="lender-dashboard" style={{ backgroundColor: "#f6f7f8" }}>
@@ -429,12 +424,9 @@ export default function LenderDashboard({ user, token }) {
                     label="Sort By"
                   >
                     <MenuItem value="title">Title</MenuItem>
-                    {/* <MenuItem value="description">Purpose of Loan</MenuItem> */}
+                    <MenuItem value="description">Purpose of Loan</MenuItem>
                     <MenuItem value="value">Loan Amount</MenuItem>
                     <MenuItem value="created_at">Date</MenuItem>
-                    <MenuItem value="industry">Industry</MenuItem>
-                    <MenuItem value="state">State</MenuItem>
-                    <MenuItem value="credit_score">Credit Score</MenuItem>
                   </Select>
                 </FormControl>
                 <Button
@@ -467,223 +459,228 @@ export default function LenderDashboard({ user, token }) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {/* Loan Listings Table Controls */}
-                  {loanListings.map((loan) => (
-                    <React.Fragment key={loan.id}>
-                      <TableRow
-                        hover
-                        style={{ cursor: "pointer" }}
-                        onClick={() =>
-                          toggleRowExpansion(loan.id, loan.borrower_id)
-                        }
-                      >
-                        <TableCell align="left" sx={{ color: "#00a250" }}>
-                          {loan.title}
-                        </TableCell>
-                        <TableCell align="left">{loan.description}</TableCell>
-                        <TableCell align="right">
-                          {parseFloat(loan.value).toLocaleString("en-US", {
-                            style: "currency",
-                            currency: "USD",
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2,
-                          })}
-                        </TableCell>
-                        <TableCell align="center">
-                          {new Date(loan.created_at).toLocaleDateString()}
-                        </TableCell>
-                      </TableRow>
-
-                      {/* Collapsible row for borrower details and SEND proposal form */}
-                      {expandedRowId === loan.id && (
-                        <TableRow key={`${loan.id}-collapse`}>
-                          <TableCell colSpan={4}>
-                            <Collapse in={expandedRowId === loan.id}>
-                              <Box
-                                margin={2}
-                                sx={{
-                                  backgroundColor: "#fff",
-                                  padding: 2,
-                                  borderRadius: 2,
-                                }}
-                              >
-                                <Grid container spacing={2}>
-                                  <Grid item xs={6}>
-                                    <Typography
-                                      variant="h6"
-                                      sx={{
-                                        color: "#00a250",
-                                        marginBottom: 1,
-                                      }}
-                                    >
-                                      Borrower Details
-                                    </Typography>
-                                    <Box sx={{ marginTop: 2 }}>
-                                      <Typography>
-                                        <strong>Business Name:</strong>{" "}
-                                        {borrowerDetails.business_name}
-                                      </Typography>
-                                      <Typography>
-                                        <strong>Industry:</strong>{" "}
-                                        {borrowerDetails.industry}
-                                      </Typography>
-                                      <Typography>
-                                        <strong>Credit Score:</strong>{" "}
-                                        {borrowerDetails.credit_score}
-                                      </Typography>
-                                      <Typography>
-                                        <strong>Location:</strong>{" "}
-                                        {borrowerDetails.street},{" "}
-                                        {borrowerDetails.city},{" "}
-                                        {borrowerDetails.state}{" "}
-                                        {borrowerDetails.zip_code}
-                                      </Typography>
-                                      {/* Verified Documents */}
-                                      <Typography>
-                                        <strong>Verified Documents:</strong>
-                                      </Typography>
-                                      <ul>
-                                        <li>
-                                          <Link
-                                            href={
-                                              borrowerDetails.fico_score_link
-                                            }
-                                            target="_blank"
-                                            rel="noopener"
-                                            sx={{ color: "#00a250" }}
-                                          >
-                                            FICO Score - Verified
-                                          </Link>
-                                        </li>
-                                        <li>
-                                          <Link
-                                            href={
-                                              borrowerDetails.secretary_of_state_link
-                                            }
-                                            target="_blank"
-                                            rel="noopener"
-                                            sx={{ color: "#00a250" }}
-                                          >
-                                            Secretary of State Certificate -
-                                            Verified
-                                          </Link>
-                                        </li>
-                                        <li>
-                                          <Link
-                                            href={
-                                              borrowerDetails.drivers_license_link
-                                            }
-                                            target="_blank"
-                                            rel="noopener"
-                                            sx={{ color: "#00a250" }}
-                                          >
-                                            Driver's License - Verified
-                                          </Link>
-                                        </li>
-                                      </ul>
-                                    </Box>
-                                  </Grid>
-                                  <Grid item xs={6}>
-                                    <Typography
-                                      variant="h6"
-                                      sx={{
-                                        color: "#00a250",
-                                        marginBottom: 1,
-                                      }}
-                                    >
-                                      Loan Proposal Form
-                                    </Typography>
-                                    <Box sx={{ marginTop: 2 }}>
-                                      <TextField
-                                        label="Title"
-                                        fullWidth
-                                        name="title"
-                                        value={lenderProposal.title}
-                                        onChange={handleProposalChange}
-                                        sx={{ marginBottom: 2 }}
-                                      />
-                                      <TextField
-                                        label="Description"
-                                        fullWidth
-                                        name="description"
-                                        value={lenderProposal.description}
-                                        onChange={handleProposalChange}
-                                        multiline
-                                        rows={3}
-                                        sx={{ marginBottom: 2 }}
-                                      />
-                                      <TextField
-                                        label="Loan Amount"
-                                        fullWidth
-                                        name="loan_amount"
-                                        value={lenderProposal.loan_amount}
-                                        onChange={handleProposalChange}
-                                        sx={{ marginBottom: 2 }}
-                                      />
-                                      <TextField
-                                        label="Interest Rate"
-                                        fullWidth
-                                        name="interest_rate"
-                                        value={lenderProposal.interest_rate}
-                                        onChange={handleProposalChange}
-                                        sx={{ marginBottom: 2 }}
-                                      />
-                                      <TextField
-                                        label="Repayment Term"
-                                        fullWidth
-                                        name="repayment_term"
-                                        value={lenderProposal.repayment_term}
-                                        onChange={handleProposalChange}
-                                        sx={{ marginBottom: 2 }}
-                                      />
-                                      <Button
-                                        variant="contained"
-                                        sx={{
-                                          backgroundColor: "#00a250",
-                                          color: "#fff",
-                                          marginRight: 2,
-                                          "&:hover": {
-                                            backgroundColor: "#007a3e",
-                                          },
-                                        }}
-                                        onClick={handleSendProposal} // SEND Proposal for Loans Marketplace
-                                      >
-                                        Send Proposal
-                                      </Button>
-                                      <Button
-                                        variant="contained"
-                                        sx={{
-                                          backgroundColor: "darkred",
-                                          color: "#fff",
-                                          "&:hover": {
-                                            backgroundColor: "#b30000",
-                                          },
-                                        }}
-                                        onClick={() => setExpandedRowId(null)}
-                                      >
-                                        Cancel
-                                      </Button>
-                                    </Box>
-                                  </Grid>
-                                </Grid>
-                              </Box>
-                            </Collapse>
+                  {filteredLoanListings
+                    .slice(
+                      pageBorrowers * rowsPerPageBorrowers,
+                      pageBorrowers * rowsPerPageBorrowers +
+                        rowsPerPageBorrowers
+                    )
+                    .map((loan) => (
+                      <React.Fragment key={loan.id}>
+                        <TableRow
+                          hover
+                          style={{ cursor: "pointer" }}
+                          onClick={() =>
+                            toggleRowExpansion(loan.id, loan.borrower_id)
+                          }
+                        >
+                          <TableCell align="left" sx={{ color: "#00a250" }}>
+                            {loan.title}
+                          </TableCell>
+                          <TableCell align="left">{loan.description}</TableCell>
+                          <TableCell align="right">
+                            {parseFloat(loan.value).toLocaleString("en-US", {
+                              style: "currency",
+                              currency: "USD",
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 2,
+                            })}
+                          </TableCell>
+                          <TableCell align="center">
+                            {new Date(loan.created_at).toLocaleDateString()}
                           </TableCell>
                         </TableRow>
-                      )}
-                    </React.Fragment>
-                  ))}
+
+                        {/* Collapsible row for borrower details and SEND proposal form */}
+                        {expandedRowId === loan.id && (
+                          <TableRow key={`${loan.id}-collapse`}>
+                            <TableCell colSpan={4}>
+                              <Collapse in={expandedRowId === loan.id}>
+                                <Box
+                                  margin={2}
+                                  sx={{
+                                    backgroundColor: "#fff",
+                                    padding: 2,
+                                    borderRadius: 2,
+                                  }}
+                                >
+                                  <Grid container spacing={2}>
+                                    <Grid item xs={6}>
+                                      <Typography
+                                        variant="h6"
+                                        sx={{
+                                          color: "#00a250",
+                                          marginBottom: 1,
+                                        }}
+                                      >
+                                        Borrower Details
+                                      </Typography>
+                                      <Box sx={{ marginTop: 2 }}>
+                                        <Typography>
+                                          <strong>Business Name:</strong>{" "}
+                                          {borrowerDetails.business_name}
+                                        </Typography>
+                                        <Typography>
+                                          <strong>Industry:</strong>{" "}
+                                          {borrowerDetails.industry}
+                                        </Typography>
+                                        <Typography>
+                                          <strong>Credit Score:</strong>{" "}
+                                          {borrowerDetails.credit_score}
+                                        </Typography>
+                                        <Typography>
+                                          <strong>Location:</strong>{" "}
+                                          {borrowerDetails.street},{" "}
+                                          {borrowerDetails.city},{" "}
+                                          {borrowerDetails.state}{" "}
+                                          {borrowerDetails.zip_code}
+                                        </Typography>
+                                        {/* Verified Documents */}
+                                        <Typography>
+                                          <strong>Verified Documents:</strong>
+                                        </Typography>
+                                        <ul>
+                                          <li>
+                                            <Link
+                                              href={
+                                                borrowerDetails.fico_score_link
+                                              }
+                                              target="_blank"
+                                              rel="noopener"
+                                              sx={{ color: "#00a250" }}
+                                            >
+                                              FICO Score - Verified
+                                            </Link>
+                                          </li>
+                                          <li>
+                                            <Link
+                                              href={
+                                                borrowerDetails.secretary_of_state_link
+                                              }
+                                              target="_blank"
+                                              rel="noopener"
+                                              sx={{ color: "#00a250" }}
+                                            >
+                                              Secretary of State Certificate -
+                                              Verified
+                                            </Link>
+                                          </li>
+                                          <li>
+                                            <Link
+                                              href={
+                                                borrowerDetails.drivers_license_link
+                                              }
+                                              target="_blank"
+                                              rel="noopener"
+                                              sx={{ color: "#00a250" }}
+                                            >
+                                              Driver's License - Verified
+                                            </Link>
+                                          </li>
+                                        </ul>
+                                      </Box>
+                                    </Grid>
+                                    <Grid item xs={6}>
+                                      <Typography
+                                        variant="h6"
+                                        sx={{
+                                          color: "#00a250",
+                                          marginBottom: 1,
+                                        }}
+                                      >
+                                        Loan Proposal Form
+                                      </Typography>
+                                      <Box sx={{ marginTop: 2 }}>
+                                        <TextField
+                                          label="Title"
+                                          fullWidth
+                                          name="title"
+                                          value={lenderProposal.title}
+                                          onChange={handleProposalChange}
+                                          sx={{ marginBottom: 2 }}
+                                        />
+                                        <TextField
+                                          label="Description"
+                                          fullWidth
+                                          name="description"
+                                          value={lenderProposal.description}
+                                          onChange={handleProposalChange}
+                                          multiline
+                                          rows={3}
+                                          sx={{ marginBottom: 2 }}
+                                        />
+                                        <TextField
+                                          label="Loan Amount"
+                                          fullWidth
+                                          name="loan_amount"
+                                          value={lenderProposal.loan_amount}
+                                          onChange={handleProposalChange}
+                                          sx={{ marginBottom: 2 }}
+                                        />
+                                        <TextField
+                                          label="Interest Rate"
+                                          fullWidth
+                                          name="interest_rate"
+                                          value={lenderProposal.interest_rate}
+                                          onChange={handleProposalChange}
+                                          sx={{ marginBottom: 2 }}
+                                        />
+                                        <TextField
+                                          label="Repayment Term"
+                                          fullWidth
+                                          name="repayment_term"
+                                          value={lenderProposal.repayment_term}
+                                          onChange={handleProposalChange}
+                                          sx={{ marginBottom: 2 }}
+                                        />
+                                        <Button
+                                          variant="contained"
+                                          sx={{
+                                            backgroundColor: "#00a250",
+                                            color: "#fff",
+                                            marginRight: 2,
+                                            "&:hover": {
+                                              backgroundColor: "#007a3e",
+                                            },
+                                          }}
+                                          onClick={handleSendProposal} // SEND Proposal for Loans Marketplace
+                                        >
+                                          Send Proposal
+                                        </Button>
+                                        <Button
+                                          variant="contained"
+                                          sx={{
+                                            backgroundColor: "darkred",
+                                            color: "#fff",
+                                            "&:hover": {
+                                              backgroundColor: "#b30000",
+                                            },
+                                          }}
+                                          onClick={() => setExpandedRowId(null)}
+                                        >
+                                          Cancel
+                                        </Button>
+                                      </Box>
+                                    </Grid>
+                                  </Grid>
+                                </Box>
+                              </Collapse>
+                            </TableCell>
+                          </TableRow>
+                        )}
+                      </React.Fragment>
+                    ))}
                 </TableBody>
               </Table>
             </TableContainer>
             <TablePagination
               component="div"
-              count={loanListingsTotal}
-              page={loanListingsOffset}
-              onPageChange={(event, newPage) => setLoanListingsOffset(newPage)}
-              rowsPerPage={loanListingsLimit}
+              count={filteredLoanListings.length}
+              page={pageBorrowers}
+              onPageChange={(event, newPage) => setPageBorrowers(newPage)}
+              rowsPerPage={rowsPerPageBorrowers}
               onRowsPerPageChange={(event) =>
-                setLoanListingsLimit(event.target.value)
+                setRowsPerPageBorrowers(parseInt(event.target.value, 10))
               }
               rowsPerPageOptions={[5, 10, 25, 50, 100]}
             />
@@ -1065,9 +1062,7 @@ export default function LenderDashboard({ user, token }) {
                     ))}
                 </TableBody>
               </Table>
-              {/* CHANGE HERE */}
             </TableContainer>
-            {/* Loan Proposals Table Control */}
             <TablePagination
               component="div"
               count={filteredLoanProposals.length}

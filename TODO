@@ -4,6 +4,21 @@ Todo:
   ☐ Padronize routes urls
   ☐ Fix header
   ☐ Add loan proposal show page
-    ☐ Add proposals
-Bugs To Fix:
+  ☐ Add proposals
+  
+  Bugs To Fix:
+    New Borrower:
+      ☐ Fix confirm password field 
+      ☐ Add date check
+    Borrower Dashboard:
+      ☐ Add Edit Loan request
+    Borrower New Request:
+      ☐ Add a go back to dashboard
+    Lender Dashboard:
+      ☐ Fix Loan Market Place Fetches
+      ☐ Pending Loan Proposals not updating after proposal added
+    Lender Dashboard Loan Proposals:
+      ☐ Edit proposal not geting borrower data
+      ☐ Edit proposal form not popoulated
+
 
