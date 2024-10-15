@@ -170,16 +170,22 @@ export default function Home() {
             <Typography variant="h6" gutterBottom>
               Dashboard Images
             </Typography>
+            <Typography variant="h6" gutterBottom>
+              Borrower Dashboard
             <img
-              src="https://via.placeholder.com/300"
+              src={BorrowerDashboard}
               alt="Product Placeholder"
               style={{ width: "100%", borderRadius: 8, marginBottom: 16 }}
             />
+            </Typography>
+            <Typography variant="h6" gutterBottom>
+              Lender Dashboard
             <img
-              src="src/assets/LenderDashboard.png"
+              src={LenderDashboard}
               alt="Product Placeholder"
               style={{ width: "100%", borderRadius: 8, marginBottom: 16 }}
             />
+            </Typography>
           </Card>
         </Grid>
       </Grid>
