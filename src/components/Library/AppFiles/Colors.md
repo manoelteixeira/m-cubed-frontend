@@ -26,6 +26,7 @@
 #DEF0CA
 
 #firefly
+#0B2626
 
 #peppermint
 #DEF4DF

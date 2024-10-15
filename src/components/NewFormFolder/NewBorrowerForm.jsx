@@ -15,9 +15,6 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router";
 import { Email, Lock, Phone, Business, CreditScore } from "@mui/icons-material";
-// import peopleInGreenField from "../../assets/6.png";
-import CoffeeShop from "../../assets/7.png";
-
 
 // Base API URL
 const API = import.meta.env.VITE_BASE_URL;
@@ -26,8 +23,6 @@ const API = import.meta.env.VITE_BASE_URL;
 const BorrowerForm = ({ setUser, setToken }) => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
-  const cancelButtonRef = React.useRef(null);
-  const closeDialogButtonRef = React.useRef(null);
   const [showConfirmation, setShowConfirmation] = useState(false);
 
   const [newborrower, setNewBorrower] = useState({
@@ -80,7 +75,7 @@ const BorrowerForm = ({ setUser, setToken }) => {
     e.preventDefault();
     console.log("Form submitted:", newborrower);
 
-    if (newborrower.confirm_password != newborrower.password) {
+    if (newborrower.confirm_password !== newborrower.password) {
       alert("Password does not match");
     } else {
       const updatedBorrower = {
@@ -104,11 +99,6 @@ const BorrowerForm = ({ setUser, setToken }) => {
     setShowConfirmation(false);
   };
 
-  const handleClose = () => {
-    console.log("Closing dialog");
-    setOpen(false);
-  };
-
   const theme = createTheme({
     palette: {
       primary: {
@@ -120,6 +110,7 @@ const BorrowerForm = ({ setUser, setToken }) => {
       },
     },
   });
+
   return (
     <ThemeProvider theme={theme}>
       <Box
@@ -128,34 +119,30 @@ const BorrowerForm = ({ setUser, setToken }) => {
         sx={{
           maxWidth: "100%",
           margin: "auto",
-          padding: 21,
-          backgroundImage: `url(${CoffeeShop})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'bottom',
-          backgroundRepeat: 'no-repeat',
-          minHeight: '100vh'
-
+          padding: 4,
+          minHeight: "100vh",
         }}
       >
-        <Grid container sx={{ height: "100vh", mb: 25}} spacing={0}>
-          {/* Left side with the image */}
+        <Grid container spacing={0}>
           <Grid item xs={12} md={6}>
-            <Box sx={{ 
-              height: '97.5vh', 
-              padding: '0em 4em 3em 0em',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}>
+            <Box
+              sx={{
+                height: "100vh",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              {/* Actual Image */}
               <img
                 src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1728411151/Hey_there_Friend_4_snyiql.png"
                 alt="Welcome to MoneyMoneyMoney"
                 style={{
-                  width: "100%",
-                  height: "100%",
+                  width: "600px",
+                  height: "800px",
                   objectFit: "cover",
                   borderRadius: "20px",
-                  boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.4)"
+                  boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.4)",
                 }}
               />
             </Box>
@@ -163,7 +150,18 @@ const BorrowerForm = ({ setUser, setToken }) => {
 
           {/* Right side with the form */}
           <Grid item xs={12} md={6}>
-            <Box sx={{ p: 4, backgroundColor: "#def4df", boxShadow: 14, borderRadius: "20px" }}>
+            <Box
+              sx={{
+                p: 4,
+                backgroundColor: "#def4df",
+                boxShadow: 14,
+                borderRadius: "20px",
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+              }}
+            >
               <Typography
                 variant="h5"
                 component="h2"
@@ -174,11 +172,9 @@ const BorrowerForm = ({ setUser, setToken }) => {
                   fontWeight: 600,
                 }}
               >
-                <strong style={{ color: "#00a250" }}>
-                  Borrower Registration
-                </strong>
+                <strong>Borrower Registration</strong>
                 <br />
-                <strong style={{ color: "#00a250" }}>
+                <strong>
                   Welcome to <span style={{ color: "#00a250" }}>MMM</span>
                 </strong>
               </Typography>
@@ -198,7 +194,7 @@ const BorrowerForm = ({ setUser, setToken }) => {
                           <Business />
                         </InputAdornment>
                       ),
-                      style: { backgroundColor: 'white' },
+                      style: { backgroundColor: "white" },
                     }}
                   />
                 </Grid>
@@ -219,7 +215,7 @@ const BorrowerForm = ({ setUser, setToken }) => {
                             <Email />
                           </InputAdornment>
                         ),
-                        style: { backgroundColor: 'white' },
+                        style: { backgroundColor: "white" },
                       }}
                     />
                   </Grid>
@@ -239,7 +235,7 @@ const BorrowerForm = ({ setUser, setToken }) => {
                             <Lock />
                           </InputAdornment>
                         ),
-                        style: { backgroundColor: 'white' },
+                        style: { backgroundColor: "white" },
                       }}
                     />
                   </Grid>
@@ -259,7 +255,7 @@ const BorrowerForm = ({ setUser, setToken }) => {
                             <Lock />
                           </InputAdornment>
                         ),
-                        style: { backgroundColor: 'white' },
+                        style: { backgroundColor: "white" },
                       }}
                     />
                   </Grid>
@@ -279,7 +275,7 @@ const BorrowerForm = ({ setUser, setToken }) => {
                         shrink: true,
                       }}
                       InputProps={{
-                        style: { backgroundColor: 'white' },
+                        style: { backgroundColor: "white" },
                       }}
                     />
                   </Grid>
@@ -301,7 +297,7 @@ const BorrowerForm = ({ setUser, setToken }) => {
                             <CreditScore />
                           </InputAdornment>
                         ),
-                        style: { backgroundColor: 'white' },
+                        style: { backgroundColor: "white" },
                       }}
                     />
                   </Grid>
@@ -316,7 +312,7 @@ const BorrowerForm = ({ setUser, setToken }) => {
                     required
                     margin="normal"
                     InputProps={{
-                      style: { backgroundColor: 'white' },
+                      style: { backgroundColor: "white" },
                     }}
                   />
                 </Grid>
@@ -333,7 +329,7 @@ const BorrowerForm = ({ setUser, setToken }) => {
                       inputProps={{ maxLength: 10 }}
                       placeholder="e.g. 12345"
                       InputProps={{
-                        style: { backgroundColor: 'white' },
+                        style: { backgroundColor: "white" },
                       }}
                     />
                   </Grid>
@@ -355,7 +351,7 @@ const BorrowerForm = ({ setUser, setToken }) => {
                             <Phone />
                           </InputAdornment>
                         ),
-                        style: { backgroundColor: 'white' },
+                        style: { backgroundColor: "white" },
                       }}
                     />
                   </Grid>
@@ -371,7 +367,7 @@ const BorrowerForm = ({ setUser, setToken }) => {
                       required
                       margin="normal"
                       InputProps={{
-                        style: { backgroundColor: 'white' },
+                        style: { backgroundColor: "white" },
                       }}
                     />
                   </Grid>
@@ -386,7 +382,7 @@ const BorrowerForm = ({ setUser, setToken }) => {
                       required
                       margin="normal"
                       InputProps={{
-                        style: { backgroundColor: 'white' },
+                        style: { backgroundColor: "white" },
                       }}
                     >
                       {/* Complete list of U.S. States */}
@@ -455,7 +451,7 @@ const BorrowerForm = ({ setUser, setToken }) => {
                     required
                     margin="normal"
                     InputProps={{
-                      style: { backgroundColor: 'white' },
+                      style: { backgroundColor: "white" },
                     }}
                   >
                     <MenuItem value="Retail">Retail</MenuItem>
@@ -463,6 +459,7 @@ const BorrowerForm = ({ setUser, setToken }) => {
                     <MenuItem value="Technology">Technology</MenuItem>
                     <MenuItem value="Manufacturing">Manufacturing</MenuItem>
                     <MenuItem value="Healthcare">Healthcare</MenuItem>
+                    {/* Add more industries as needed */}
                   </TextField>
                 </Grid>
                 <Grid container item xs={12} spacing={2}>
@@ -476,7 +473,7 @@ const BorrowerForm = ({ setUser, setToken }) => {
                         "&:hover": {
                           backgroundColor: "#008740",
                         },
-                        width: '100%', 
+                        width: "100%",
                       }}
                     >
                       Register
@@ -484,21 +481,31 @@ const BorrowerForm = ({ setUser, setToken }) => {
                   </Grid>
                   <Grid item xs={6}>
                     {showConfirmation ? (
-                      <Alert 
+                      <Alert
                         severity="warning"
-                        sx={{ width: '48%' }} 
+                        sx={{ width: "100%" }}
                         action={
                           <Box>
-                            <Button color="inherit" size="small" onClick={handleCancelConfirmation}>
+                            <Button
+                              color="inherit"
+                              size="small"
+                              onClick={handleCancelConfirmation}
+                            >
                               No, continue
                             </Button>
-                            <Button color="inherit" size="small" onClick={handleConfirmCancel}>
+                            <Button
+                              color="inherit"
+                              size="small"
+                              onClick={handleConfirmCancel}
+                            >
                               Yes, cancel
                             </Button>
                           </Box>
                         }
                       >
-                        <AlertTitle>Are you sure you want to cancel?</AlertTitle>
+                        <AlertTitle>
+                          Are you sure you want to cancel?
+                        </AlertTitle>
                         You will be taken back to the homepage.
                       </Alert>
                     ) : (
@@ -512,7 +519,7 @@ const BorrowerForm = ({ setUser, setToken }) => {
                           "&:hover": {
                             backgroundColor: "#f6f7f8",
                           },
-                          width: '100%',
+                          width: "100%",
                         }}
                       >
                         Cancel
@@ -530,7 +537,8 @@ const BorrowerForm = ({ setUser, setToken }) => {
 };
 
 BorrowerForm.propTypes = {
-  user: PropTypes.object,
-  token: PropTypes.string,
+  setUser: PropTypes.func.isRequired,
+  setToken: PropTypes.func.isRequired,
 };
+
 export default BorrowerForm;
