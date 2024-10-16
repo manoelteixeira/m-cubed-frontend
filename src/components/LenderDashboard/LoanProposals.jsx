@@ -25,9 +25,16 @@ import PropTypes from "prop-types";
 
 const API = import.meta.env.VITE_BASE_URL;
 
-export default function LoanProposals({ user, token }) {
-  const [loanProposals, setLoanProposals] = useState([]);
-  const [filteredLoanProposals, setFilteredLoanProposals] = useState([]);
+export default function LoanProposals({
+  user,
+  token,
+  loanProposals,
+  loadLoanProposals,
+  filteredLoanProposals,
+  setFilteredLoanProposals,
+}) {
+  // const [loanProposals, setLoanProposals] = useState([]);
+  // const [filteredLoanProposals, setFilteredLoanProposals] = useState([]);
   const [pageLoanProposals, setPageLoanProposals] = useState(0);
   const [rowsPerPageLoanProposals, setRowsPerPageLoanProposals] = useState(5);
   const [searchTermLoanProposals, setSearchTermLoanProposals] = useState("");
@@ -58,18 +65,18 @@ export default function LoanProposals({ user, token }) {
   });
 
   // Fetch loan proposals from the API
-  const loadLoanProposals = () => {
-    const options = {
-      headers: { Authorization: token },
-    };
-    fetch(`${API}/lenders/${user.id}/proposals`, options)
-      .then((res) => res.json())
-      .then((data) => {
-        setLoanProposals(data);
-        setFilteredLoanProposals(data);
-      })
-      .catch((err) => console.log(err));
-  };
+  // const loadLoanProposals = () => {
+  //   const options = {
+  //     headers: { Authorization: token },
+  //   };
+  //   fetch(`${API}/lenders/${user.id}/proposals`, options)
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       setLoanProposals(data);
+  //       setFilteredLoanProposals(data);
+  //     })
+  //     .catch((err) => console.log(err));
+  // };
 
   // Fetch borrower details for expanded rows
   const fetchBorrowerDetails = async (borrowerId) => {
@@ -550,4 +557,8 @@ export default function LoanProposals({ user, token }) {
 LoanProposals.propTypes = {
   user: PropTypes.object,
   token: PropTypes.string,
+  loanProposals: PropTypes.array,
+  loadLoanProposals: PropTypes.func,
+  filteredLoanProposals: PropTypes.array,
+  setFilteredLoanProposals: PropTypes.func,
 };

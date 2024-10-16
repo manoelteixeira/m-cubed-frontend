@@ -1,14 +1,52 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import LoansMarketplace from "./LoansMarketplace";
 import LoanProposals from "./LoanProposals";
 
+const API = import.meta.env.VITE_BASE_URL;
 const LenderDashboard = ({ user, token }) => {
+  const [loanProposals, setLoanProposals] = useState([]);
+  const [filteredLoanProposals, setFilteredLoanProposals] = useState([]);
+
+  const loadLoanProposals = () => {
+    const options = {
+      headers: { Authorization: token },
+    };
+    fetch(`${API}/lenders/${user.id}/proposals`, options)
+      .then((res) => res.json())
+      .then((data) => {
+        setLoanProposals(data);
+        setFilteredLoanProposals(data);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  useEffect(() => {
+    loadLoanProposals();
+  }, []);
+
   return (
     <div className="lender-dashboard" style={{ backgroundColor: "#f6f7f8" }}>
-      <LoansMarketplace user={user} token={token} />
-      <LoanProposals user={user} token={token} />
+      <LoansMarketplace
+        user={user}
+        token={token}
+        loadLoanProposals={loadLoanProposals}
+      />
+      <LoanProposals
+        user={user}
+        token={token}
+        loanProposals={loanProposals}
+        loadLoanProposals={loadLoanProposals}
+        filteredLoanProposals={filteredLoanProposals}
+        setFilteredLoanProposals={setFilteredLoanProposals}
+      />
     </div>
   );
+};
+
+LenderDashboard.propTypes = {
+  user: PropTypes.object,
+  token: PropTypes.string,
 };
 
 export default LenderDashboard;

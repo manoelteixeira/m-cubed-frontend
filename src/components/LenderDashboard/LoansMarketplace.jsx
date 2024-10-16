@@ -26,7 +26,7 @@ import PropTypes from "prop-types";
 
 const API = import.meta.env.VITE_BASE_URL;
 
-export default function LoansMarketplace({ user, token }) {
+export default function LoansMarketplace({ user, token, loadLoanProposals }) {
   const [loanListings, setLoanListings] = useState([]);
   const [loanListingsLimit, setLoanListingsLimit] = useState(5);
   const [loanListingsOffset, setLoanListingsOffset] = useState(0);
@@ -121,6 +121,7 @@ export default function LoansMarketplace({ user, token }) {
       if (response.ok) {
         alert("Proposal sent successfully");
         setExpandedRowId(null);
+        loadLoanProposals();
       } else {
         alert(result.error || "Error sending proposal.");
       }
@@ -475,4 +476,5 @@ export default function LoansMarketplace({ user, token }) {
 LoansMarketplace.propTypes = {
   user: PropTypes.object,
   token: PropTypes.string,
+  loadLoanProposals: PropTypes.func,
 };
