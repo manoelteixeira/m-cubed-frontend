@@ -113,7 +113,7 @@ const BDashboard = ({ user, token }) => {
   };
 
   return (
-    <Box sx={{ padding: "20px", paddingTop: "50px" }}>
+    <Box sx={{ padding: "20px", paddingTop: "50px", paddingBottom: "80px" }}>
       {/* Gradient Header Section */}
       <Paper
         elevation={3}
@@ -134,8 +134,7 @@ const BDashboard = ({ user, token }) => {
             </Typography>
             <Typography
               variant="subtitle1"
-              color="textSecondary"
-              sx={{ textAlign: "center" }}
+              sx={{ color: "#FFFBEA", textAlign: "center" }}
             >
               Your loan applications and offers are listed below.
             </Typography>
@@ -282,23 +281,22 @@ const BDashboard = ({ user, token }) => {
                         <Card
                           elevation={2}
                           sx={{
-                            backgroundColor: "#75D481",
+                            backgroundColor: "#f6f7f8",
                             margin: 2,
-                            border: "1px solid #9acd32",
                             boxShadow: "0px 4px 8px rgba(0, 162, 80, 0.1)",
                             textAlign: "center",
                           }}
                         >
                           <CardContent
                             sx={{
-                              backgroundColor: "#def4df",
+                              backgroundColor: "#f6f7f8",
                             }}
                           >
                             <Typography
                               variant="h5"
                               sx={{
                                 fontWeight: "bold",
-                                color: "black",
+                                color: "#056612",
                                 marginBottom: "20px",
                               }}
                             >
@@ -318,8 +316,7 @@ const BDashboard = ({ user, token }) => {
                                   >
                                     <Card
                                       sx={{
-                                        backgroundColor: "#f6f7f8",
-                                        border: "2px solid #9acd32",
+                                        backgroundColor: "#def4df",
                                         boxShadow:
                                           "0px 4px 8px rgba(0, 162, 80, 0.1)",
                                       }}
