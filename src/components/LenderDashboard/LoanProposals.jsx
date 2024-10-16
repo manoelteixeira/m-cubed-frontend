@@ -80,6 +80,7 @@ export default function LoanProposals({ user, token }) {
       });
       if (!res.ok) throw new Error("Failed to fetch borrower details");
       const data = await res.json();
+
       setBorrowerDetails({
         business_name: data.business_name || "N/A",
         industry: data.industry || "N/A",
@@ -105,7 +106,8 @@ export default function LoanProposals({ user, token }) {
       setExpandedRowId(null);
     } else {
       setExpandedRowId(rowId);
-      fetchBorrowerDetails(borrowerId); // Fetch details when the row is expanded
+      fetchBorrowerDetails(borrowerId); // Fetch details when the row is expandedw
+
       if (proposal) {
         setLenderProposal({
           title: proposal.title,

@@ -59,7 +59,6 @@ export default function LoansMarketplace({ user, token }) {
     fetch(url, options)
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         setLoanListings(data.loan_requests);
         setLoanListingsTotal(data.total);
         setLoanListingsValue(data.value);
