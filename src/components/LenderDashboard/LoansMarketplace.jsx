@@ -31,6 +31,7 @@ export default function LoansMarketplace({ user, token }) {
   const [loanListingsLimit, setLoanListingsLimit] = useState(5);
   const [loanListingsOffset, setLoanListingsOffset] = useState(0);
   const [loanListingsTotal, setLoanListingsTotal] = useState(null);
+  const [loanListingsValue, setLoanListingsValue] = useState(0);
   const [searchTermLoanListings, setSearchTermLoanListings] = useState("");
   const [sortByLoanListings, setSortByLoanListings] = useState("created_at");
   const [sortOrderLoanListings, setSortOrderLoanListings] = useState("desc");
@@ -58,8 +59,10 @@ export default function LoansMarketplace({ user, token }) {
     fetch(url, options)
       .then((res) => res.json())
       .then((data) => {
+        console.log(data);
         setLoanListings(data.loan_requests);
         setLoanListingsTotal(data.total);
+        setLoanListingsValue(data.value);
       })
       .catch((err) => console.log(err));
   };
@@ -169,15 +172,13 @@ export default function LoansMarketplace({ user, token }) {
           variant="h6"
           sx={{ color: "#00a250", marginBottom: 2, textAlign: "center" }}
         >
-          Current Marketplace Volume:{" "}
-          {loanListings
-            .reduce((total, loan) => total + (parseFloat(loan.value) || 0), 0)
-            .toLocaleString("en-US", {
-              style: "currency",
-              currency: "USD",
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            })}
+          Current Marketplace Volume:
+          {loanListingsValue.toLocaleString("en-US", {
+            style: "currency",
+            currency: "USD",
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          })}
         </Typography>
         {/* Search, Sorting, and Table */}
         <Grid
@@ -214,9 +215,10 @@ export default function LoansMarketplace({ user, token }) {
                 <MenuItem value="title">Title</MenuItem>
                 <MenuItem value="value">Loan Amount</MenuItem>
                 <MenuItem value="created_at">Date</MenuItem>
-                <MenuItem value="industry">Industry</MenuItem>
-                <MenuItem value="state">State</MenuItem>
-                <MenuItem value="credit_score">Credit Score</MenuItem>
+                <MenuItem value="description">Purpose of Loan</MenuItem>
+                {/* <MenuItem value="industry">Industry</MenuItem> */}
+                {/* <MenuItem value="state">State</MenuItem> */}
+                {/* <MenuItem value="credit_score">Credit Score</MenuItem> */}
               </Select>
             </FormControl>
             <Button
