@@ -8,14 +8,14 @@ Todo:
   
   Bugs To Fix:
     New Borrower:
-      ☐ Fix confirm password field 
+      ✔ Fix confirm password field @done(24-10-16 10:24)
       ☐ Add date check
     Borrower Dashboard:
       ☐ Add Edit Loan request
     Borrower New Request:
       ☐ Add a go back to dashboard
     Lender Dashboard:
-      ☐ Fix Loan Market Place Fetches
+      ☐´ Fix Loan Market Place Fetches
       ☐ Pending Loan Proposals not updating after proposal added
     Lender Dashboard Loan Proposals:
       ☐ Edit proposal not geting borrower data
