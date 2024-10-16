@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { json, useNavigate } from "react-router-dom";
-import "./Login.scss";
+import { useNavigate } from "react-router-dom";
 import {
   TextField,
   Button,
@@ -11,9 +10,8 @@ import {
   IconButton,
   InputAdornment,
   Divider,
-  Paper,
+  Card,
 } from "@mui/material";
-import { Fade } from "@mui/material";
 import { Visibility, VisibilityOff, Email, Lock } from "@mui/icons-material";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import FacebookIcon from "@mui/icons-material/Facebook";
@@ -76,35 +74,6 @@ const Login = ({ setUser, setToken }) => {
       });
   };
 
-  const handleGoogleSuccess = async (credentialResponse) => {
-    const { credential } = credentialResponse;
-
-    const response = await fetch(`${API}/google-login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ idToken: credential }),
-    });
-
-    const data = await response.json();
-    if (response.ok) {
-      console.log("Google login success:", data);
-      if (data.lender) {
-        navigate(`/lenders/${data.lender.id}/lenderdashboard`);
-      } else {
-        navigate(`/borrowers/${data.borrower.id}/borrowerdashboard`);
-      }
-    } else {
-      setError(data.error || "Google login failed. Please try again.");
-    }
-  };
-
-  const handleGoogleFailure = (response) => {
-    console.error("Google Login failed:", response);
-    setError("Google login failed. Please try again.");
-  };
-
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);
   };
@@ -116,10 +85,10 @@ const Login = ({ setUser, setToken }) => {
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,
-    autoplaySpeed: 5000, 
+    autoplaySpeed: 5000,
     adaptiveHeight: true,
-    fade: true, 
-    cssEase: 'linear'
+    fade: true,
+    cssEase: "linear",
   };
 
   useEffect(() => {
@@ -136,7 +105,7 @@ const Login = ({ setUser, setToken }) => {
   }, []);
 
   return (
-    <Grid container sx={{ height: "100vh", backgroundColor: "#def4df" }}>
+    <Grid container sx={{ height: "100vh", backgroundColor: "#f6f7f8" }}>
       <Grid
         item
         xs={6}
@@ -146,7 +115,14 @@ const Login = ({ setUser, setToken }) => {
           alignItems: "center",
         }}
       >
-        <Box sx={{ width: "90%", height: "55%", boxShadow: 10, overflow: 'hidden' }}>
+        <Box
+          sx={{
+            width: "90%",
+            height: "55%",
+            boxShadow: 10,
+            overflow: "hidden",
+          }}
+        >
           <Slider {...carouselSettings}>
             <div className="slide-item">
               <img
@@ -172,22 +148,24 @@ const Login = ({ setUser, setToken }) => {
           </Slider>
         </Box>
       </Grid>
+
       <Grid
         item
         xs={6}
         sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
       >
-        <Paper
-          elevation={0}
+        <Card
+          elevation={3}
           sx={{
-            padding: 2,
-            backgroundColor: "#def4df", //peppermint green background
-            height: "80%",
+            padding: 4,
+            backgroundColor: "#def4df",
+            borderRadius: "20px",
             width: "80%",
+            boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)",
             display: "flex",
             flexDirection: "column",
-            justifyContent: "center",
             alignItems: "center",
+            justifyContent: "center",
           }}
         >
           <Typography
@@ -197,6 +175,7 @@ const Login = ({ setUser, setToken }) => {
           >
             Welcome Back!
           </Typography>
+
           <Box
             component="form"
             onSubmit={handleLogin}
@@ -218,7 +197,6 @@ const Login = ({ setUser, setToken }) => {
                   onChange={(e) => setEmail(e.target.value)}
                   fullWidth
                   required
-                  margin="normal"
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
@@ -229,13 +207,13 @@ const Login = ({ setUser, setToken }) => {
                       backgroundColor: "#fff",
                       "& .MuiOutlinedInput-root": {
                         "& fieldset": {
-                          borderColor: "#00a250", // MMM green border
+                          borderColor: "#00a250",
                         },
                         "&:hover fieldset": {
-                          borderColor: "#00a250", // MMM green on hover
+                          borderColor: "#00a250",
                         },
                         "&.Mui-focused fieldset": {
-                          borderColor: "#00a250", // MMM green when focused
+                          borderColor: "#00a250",
                         },
                       },
                     },
@@ -251,7 +229,6 @@ const Login = ({ setUser, setToken }) => {
                   onChange={(e) => setPassword(e.target.value)}
                   fullWidth
                   required
-                  margin="normal"
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
@@ -262,13 +239,13 @@ const Login = ({ setUser, setToken }) => {
                       backgroundColor: "#fff",
                       "& .MuiOutlinedInput-root": {
                         "& fieldset": {
-                          borderColor: "#00a250", // MMM green border
+                          borderColor: "#00a250",
                         },
                         "&:hover fieldset": {
-                          borderColor: "#00a250", // MMM green on hover
+                          borderColor: "#00a250",
                         },
                         "&.Mui-focused fieldset": {
-                          borderColor: "#00a250", // MMM green when focused
+                          borderColor: "#00a250",
                         },
                       },
                     },
@@ -287,11 +264,13 @@ const Login = ({ setUser, setToken }) => {
                 />
               </Grid>
             </Grid>
+
             {error && (
               <Typography color="error" sx={{ mt: 1, textAlign: "center" }}>
                 {error}
               </Typography>
             )}
+
             <Button
               variant="contained"
               type="submit"
@@ -307,36 +286,18 @@ const Login = ({ setUser, setToken }) => {
 
             <Divider sx={{ width: "100%", my: 2 }} />
 
-            <Grid container spacing={1} sx={{ mb: 2 }}>
-              <Grid item xs={6}>
-                <Button
-                  variant="text"
-                  sx={{
-                    color: "#00a250",
-                    textTransform: "none",
-                    fontSize: "0.9rem",
-                    width: "100%",
-                  }}
-                  onClick={() => navigate("/forgotcredentials")}
-                >
-                  Forgot Email?
-                </Button>
-              </Grid>
-              <Grid item xs={6}>
-                <Button
-                  variant="text"
-                  sx={{
-                    color: "#00a250",
-                    textTransform: "none",
-                    fontSize: "0.9rem",
-                    width: "100%",
-                  }}
-                  onClick={() => navigate("/forgotcredentials")}
-                >
-                  Forgot Password?
-                </Button>
-              </Grid>
-            </Grid>
+            <Button
+              variant="text"
+              sx={{
+                color: "#00a250",
+                textTransform: "none",
+                fontSize: "0.9rem",
+                width: "100%",
+              }}
+              onClick={() => navigate("/forgotcredentials")}
+            >
+              Forgot Email/Password?
+            </Button>
 
             <GoogleOAuthProvider clientId="YOUR_GOOGLE_CLIENT_ID">
               <Button
@@ -352,7 +313,6 @@ const Login = ({ setUser, setToken }) => {
                   gap: 1,
                   mb: 2,
                 }}
-                onClick={() => {}}
               >
                 <GoogleIcon />
                 Sign in with Google
@@ -377,7 +337,7 @@ const Login = ({ setUser, setToken }) => {
               Sign in with Facebook
             </Button>
           </Box>
-        </Paper>
+        </Card>
       </Grid>
     </Grid>
   );
