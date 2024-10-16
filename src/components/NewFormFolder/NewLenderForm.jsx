@@ -260,7 +260,7 @@ const LenderForm = ({ setUser, setToken }) => {
                 fullWidth
                 sx={{ mt: 2, backgroundColor: "#00a250", color: "#f6f7f8" }}
               >
-                <strong>Get Started!</strong>
+                <strong>Start Your Trial Period Today!</strong>
               </Button>
               <Button
                 variant="outlined"

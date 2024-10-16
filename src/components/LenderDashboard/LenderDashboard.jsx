@@ -389,13 +389,13 @@ export default function LenderDashboard({ user, token }) {
               variant="h5"
               sx={{ color: "#00a250", marginBottom: 2, textAlign: "center" }}
             >
-              The Loans Marketplace
+              The MMM Loans Marketplace
             </Typography>
             <Typography
               variant="h6"
               sx={{ color: "#00a250", marginBottom: 2, textAlign: "center" }}
             >
-              Current Loans Marketplace Volume: {loanListingValueTotal()}
+              Current Marketplace Volume: {loanListingValueTotal()}
             </Typography>
             <Grid
               container
