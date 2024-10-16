@@ -11,74 +11,160 @@ import { Email, Lock } from "@mui/icons-material";
 
 const ForgotCredentials = () => {
   const [email, setEmail] = useState("");
+  const [newPassword, setNewPassword] = useState("");
   const [message, setMessage] = useState("");
   const [isPassword, setIsPassword] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // API call logic here to handle password reset process
-    if (email) {
-      // Simulate an API call
+    if (isPassword && newPassword) {
+      setMessage(`Your password has been reset.`);
+      setNewPassword("");
+    } else if (!isPassword && email) {
       setMessage(
-        `Instructions to reset your ${
-          isPassword ? "password" : "email"
-        } have been sent to your email.`
+        `Instructions to recover your email have been sent to ${email}.`
       );
       setEmail("");
     } else {
-      setMessage("Please provide your email.");
+      setMessage("Please fill in the required field.");
     }
   };
 
   return (
-    <Container maxWidth="xs">
+    <Container
+      maxWidth="xs"
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        minHeight: "100vh",
+        backgroundColor: "#f6f7f8",
+        pb: 8,
+      }}
+    >
       <Paper
         elevation={3}
-        style={{
-          padding: "20px",
-          marginTop: "30px",
-          backgroundColor: "#f6f7f8",
+        sx={{
+          padding: 4,
+          borderRadius: "20px",
+          backgroundColor: "#def4df",
+          boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          width: "100%",
         }}
       >
-        <Typography variant="h5" align="center" style={{ color: "#00a250" }}>
-          Forgot Your {isPassword ? "Password" : "Email?"}
+        <Typography
+          variant="h5"
+          align="center"
+          sx={{ color: "#00a250", fontWeight: 600, mb: 2 }}
+        >
+          {isPassword ? "Reset Your Password" : "Recover Your Email"}
         </Typography>
-        <form onSubmit={handleSubmit}>
-          <TextField
-            label="Email"
-            variant="outlined"
-            fullWidth
-            margin="normal"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Enter your email"
-            required
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <Email />
-                </InputAdornment>
-              ),
-            }}
-          />
-          <Typography variant="body2" align="center">
+
+        <form onSubmit={handleSubmit} style={{ width: "100%" }}>
+          {/* Only show email input if not resetting password */}
+          {!isPassword && (
+            <TextField
+              label="Email"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter your email"
+              required
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Email />
+                  </InputAdornment>
+                ),
+                sx: {
+                  backgroundColor: "#fff",
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": {
+                      borderColor: "#00a250",
+                    },
+                    "&:hover fieldset": {
+                      borderColor: "#00a250",
+                    },
+                    "&.Mui-focused fieldset": {
+                      borderColor: "#00a250",
+                    },
+                  },
+                },
+              }}
+            />
+          )}
+
+          {/* Show password input only when resetting password */}
+          {isPassword && (
+            <TextField
+              label="New Password"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              type="password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              placeholder="Enter new password"
+              required
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Lock />
+                  </InputAdornment>
+                ),
+                sx: {
+                  backgroundColor: "#fff",
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": {
+                      borderColor: "#00a250",
+                    },
+                    "&:hover fieldset": {
+                      borderColor: "#00a250",
+                    },
+                    "&.Mui-focused fieldset": {
+                      borderColor: "#00a250",
+                    },
+                  },
+                },
+              }}
+            />
+          )}
+
+          <Typography variant="body2" align="center" sx={{ mb: 2 }}>
             {isPassword
-              ? "Enter your email to reset your password."
+              ? "Enter your new password to reset your account."
               : "Enter your email to recover your account."}
           </Typography>
+
           <Button
             type="submit"
             variant="contained"
-            style={{ backgroundColor: "#00a250", color: "white" }}
             fullWidth
+            sx={{
+              backgroundColor: "#00a250",
+              color: "white",
+              mb: 2,
+              "&:hover": { backgroundColor: "#007a3e" },
+            }}
           >
             Submit
           </Button>
+
           <Button
-            onClick={() => setIsPassword((prev) => !prev)}
-            style={{
-              marginTop: "10px",
+            onClick={() => {
+              setIsPassword((prev) => !prev);
+              setMessage("");
+            }}
+            fullWidth
+            sx={{
               color: "#00a250",
               textTransform: "none",
               background: "transparent",
@@ -87,12 +173,9 @@ const ForgotCredentials = () => {
             {isPassword ? "Forgot Email?" : "Forgot Password?"}
           </Button>
         </form>
+
         {message && (
-          <Typography
-            color="textSecondary"
-            align="center"
-            style={{ marginTop: "15px" }}
-          >
+          <Typography color="textSecondary" align="center" sx={{ mt: 2 }}>
             {message}
           </Typography>
         )}
