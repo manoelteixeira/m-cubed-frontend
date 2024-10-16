@@ -18,6 +18,7 @@ import {
 import SaveIcon from "@mui/icons-material/Save";
 import SendIcon from "@mui/icons-material/Send";
 import CloseIcon from "@mui/icons-material/Close";
+import UploadIcon from "@mui/icons-material/Upload";
 
 const theme = createTheme({
   palette: {
@@ -124,15 +125,17 @@ const LoanRequestForm = ({ user, token }) => {
           sx={{
             display: "flex",
             justifyContent: "space-between",
-            gap: "20px", // Adjust spacing between form and next steps card
+            gap: "20px",
           }}
         >
           {/* Next Steps Card */}
           <Card
             sx={{
-              width: "35%", // Increased the width of the Next Steps card
+              width: "35%",
               boxShadow: "0 4px 10px rgba(0, 0, 0, .2)",
-              padding: "30px", // Increased padding for more room
+              padding: "30px",
+              borderRadius: "20px",
+              backgroundColor: "#def4df",
             }}
           >
             <CardContent>
@@ -149,7 +152,7 @@ const LoanRequestForm = ({ user, token }) => {
               </Typography>
               <Typography
                 variant="body1"
-                sx={{ color: "#00a250", lineHeight: "2" }} // Spacing between lines
+                sx={{ color: "#00a250", lineHeight: "2" }}
               >
                 1. As soon as we receive your payment, we’ll kick off the
                 verification of your business documents! <br />
@@ -167,179 +170,205 @@ const LoanRequestForm = ({ user, token }) => {
           </Card>
 
           {/* Loan Application Form */}
-          <Container
-            maxWidth="sm"
+          <Card
             sx={{
-              backgroundColor: "#f6f7f8",
-              padding: "2rem", // Reduce padding to shrink the card
-              borderRadius: "8px",
-              boxShadow: "0 4px 10px rgba(0, 0, 0, .4)",
+              width: "55%",
+              boxShadow: "0 4px 10px rgba(0, 0, 0, .2)",
+              padding: "30px",
+              borderRadius: "20px",
+              backgroundColor: "#def4df",
             }}
           >
-            <Typography
-              variant="h4"
-              align="center"
-              gutterBottom
-              sx={{ color: "#00a250" }}
-            >
-              Loan Application Form
-            </Typography>
-
-            <form onSubmit={handleSubmit}>
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  <TextField
-                    label="Title"
-                    name="title"
-                    value={formData.title}
-                    onChange={handleChange}
-                    required
-                    fullWidth
-                    margin="normal"
-                    variant="outlined"
-                    InputLabelProps={{ style: { color: "#00a250" } }}
-                    InputProps={{
-                      style: {
-                        borderColor: "#00a250",
-                      },
-                    }}
-                  />
-                </Grid>
-
-                <Grid item xs={12}>
-                  <TextField
-                    label="Purpose of Loan"
-                    name="description"
-                    value={formData.description}
-                    onChange={handleChange}
-                    required
-                    fullWidth
-                    margin="normal"
-                    variant="outlined"
-                    InputLabelProps={{ style: { color: "#00a250" } }}
-                    InputProps={{
-                      style: {
-                        borderColor: "#00a250",
-                      },
-                    }}
-                  />
-                </Grid>
-
-                <Grid item xs={12}>
-                  <TextField
-                    label="Loan Amount Requested"
-                    name="value"
-                    type="number"
-                    value={formData.value}
-                    onChange={handleChange}
-                    required
-                    fullWidth
-                    margin="normal"
-                    variant="outlined"
-                    InputLabelProps={{ style: { color: "#00a250" } }}
-                    InputProps={{
-                      style: {
-                        borderColor: "#00a250",
-                      },
-                    }}
-                  />
-                </Grid>
-
-                {/* Upload Driver's License */}
-                <Grid item xs={12}>
-                  <Typography variant="body1" sx={{ color: "#00a250" }}>
-                    Upload Driver's License
-                  </Typography>
-                  <input
-                    type="file"
-                    accept="image/*, .pdf"
-                    onChange={handleFileChange}
-                    style={{ marginTop: "8px" }}
-                  />
-                </Grid>
-              </Grid>
-
-              <Box
-                display="flex"
-                justifyContent="space-between"
-                marginTop="1.5rem"
-              >
-                <Button
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  startIcon={<SendIcon />}
-                  sx={{ backgroundColor: "#00a250", color: "white" }}
-                >
-                  Submit Application
-                </Button>
-
-                <Button
-                  type="button"
-                  onClick={handleSaveDraft}
-                  variant="outlined"
-                  startIcon={<SaveIcon />}
-                  sx={{ borderColor: "#00a250", color: "#00a250" }}
-                >
-                  Save Draft
-                </Button>
-              </Box>
-            </form>
-
-            {timestamp && (
+            <CardContent>
               <Typography
-                variant="body2"
-                color="textSecondary"
+                variant="h5"
                 align="center"
-                sx={{ marginTop: "1rem" }}
+                gutterBottom
+                sx={{ color: "#00a250", fontWeight: "bold", marginBottom: 2 }}
               >
-                {timestamp}
+                Loan Application Form
               </Typography>
-            )}
 
-            <Snackbar
-              open={!!submissionStatus}
-              autoHideDuration={6000}
-              onClose={handleCloseSnackbar}
-              message={submissionStatus}
-              action={
-                <IconButton
-                  size="small"
-                  aria-label="close"
-                  color="inherit"
-                  onClick={handleCloseSnackbar}
-                >
-                  <CloseIcon fontSize="small" />
-                </IconButton>
-              }
-            />
+              <form onSubmit={handleSubmit}>
+                <Grid container spacing={2}>
+                  <Grid item xs={12}>
+                    <TextField
+                      label="Title"
+                      name="title"
+                      value={formData.title}
+                      onChange={handleChange}
+                      required
+                      fullWidth
+                      margin="normal"
+                      variant="outlined"
+                      InputLabelProps={{ style: { color: "#00a250" } }}
+                      InputProps={{
+                        style: {
+                          borderColor: "#00a250",
+                        },
+                      }}
+                    />
+                  </Grid>
 
-            <Snackbar
-              open={!!error}
-              autoHideDuration={6000}
-              onClose={handleCloseSnackbar}
-              message={error}
-              action={
-                <IconButton
-                  size="small"
-                  aria-label="close"
-                  color="inherit"
-                  onClick={handleCloseSnackbar}
+                  <Grid item xs={12}>
+                    <TextField
+                      label="Purpose of Loan"
+                      name="description"
+                      value={formData.description}
+                      onChange={handleChange}
+                      required
+                      fullWidth
+                      margin="normal"
+                      variant="outlined"
+                      InputLabelProps={{ style: { color: "#00a250" } }}
+                      InputProps={{
+                        style: {
+                          borderColor: "#00a250",
+                        },
+                      }}
+                    />
+                  </Grid>
+
+                  <Grid item xs={12}>
+                    <TextField
+                      label="Loan Amount Requested"
+                      name="value"
+                      type="number"
+                      value={formData.value}
+                      onChange={handleChange}
+                      required
+                      fullWidth
+                      margin="normal"
+                      variant="outlined"
+                      InputLabelProps={{ style: { color: "#00a250" } }}
+                      InputProps={{
+                        style: {
+                          borderColor: "#00a250",
+                        },
+                      }}
+                    />
+                  </Grid>
+
+                  {/* Upload Driver's License */}
+                  <Grid item xs={12}>
+                    <Typography variant="body1" sx={{ color: "#00a250" }}>
+                      Upload Driver's License
+                    </Typography>
+                    <Button
+                      variant="outlined"
+                      component="label"
+                      sx={{
+                        marginTop: "10px",
+                        borderColor: "#00a250",
+                        color: "#00a250",
+                        "&:hover": {
+                          borderColor: "#00a250",
+                          backgroundColor: "#def4df",
+                        },
+                      }}
+                      startIcon={<UploadIcon />} // Add an upload icon
+                    >
+                      Choose File
+                      <input
+                        type="file"
+                        hidden
+                        accept="image/*, .pdf"
+                        onChange={handleFileChange}
+                      />
+                    </Button>
+                    {formData.driverLicense && (
+                      <Typography
+                        variant="body2"
+                        sx={{ color: "#00a250", marginTop: "8px" }}
+                      >
+                        File Selected: {formData.driverLicense.name}
+                      </Typography>
+                    )}
+                  </Grid>
+                </Grid>
+
+                <Box
+                  display="flex"
+                  justifyContent="space-between"
+                  marginTop="1.5rem"
                 >
-                  <CloseIcon fontSize="small" />
-                </IconButton>
-              }
-            />
-          </Container>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    startIcon={<SendIcon />}
+                    sx={{ backgroundColor: "#00a250", color: "white" }}
+                  >
+                    Submit Application
+                  </Button>
+
+                  <Button
+                    type="button"
+                    onClick={handleSaveDraft}
+                    variant="outlined"
+                    startIcon={<SaveIcon />}
+                    sx={{ borderColor: "#00a250", color: "#00a250" }}
+                  >
+                    Save Draft
+                  </Button>
+                </Box>
+              </form>
+
+              {timestamp && (
+                <Typography
+                  variant="body2"
+                  color="textSecondary"
+                  align="center"
+                  sx={{ marginTop: "1rem" }}
+                >
+                  {timestamp}
+                </Typography>
+              )}
+
+              <Snackbar
+                open={!!submissionStatus}
+                autoHideDuration={6000}
+                onClose={handleCloseSnackbar}
+                message={submissionStatus}
+                action={
+                  <IconButton
+                    size="small"
+                    aria-label="close"
+                    color="inherit"
+                    onClick={handleCloseSnackbar}
+                  >
+                    <CloseIcon fontSize="small" />
+                  </IconButton>
+                }
+              />
+
+              <Snackbar
+                open={!!error}
+                autoHideDuration={6000}
+                onClose={handleCloseSnackbar}
+                message={error}
+                action={
+                  <IconButton
+                    size="small"
+                    aria-label="close"
+                    color="inherit"
+                    onClick={handleCloseSnackbar}
+                  >
+                    <CloseIcon fontSize="small" />
+                  </IconButton>
+                }
+              />
+            </CardContent>
+          </Card>
         </Container>
       </Box>
     </ThemeProvider>
   );
 };
 
-export default LoanRequestForm;
-
 LoanRequestForm.propTypes = {
   user: PropTypes.object,
   token: PropTypes.string,
 };
+
+export default LoanRequestForm;
