@@ -375,7 +375,9 @@ const BDashboard = ({ user, token }) => {
                                         </TableSortLabel>
                                       </Tooltip>
                                     </TableCell>
-                                    <TableCell>Decision</TableCell>
+                                    <TableCell align="center">
+                                      Decision
+                                    </TableCell>
                                   </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -388,7 +390,7 @@ const BDashboard = ({ user, token }) => {
 
                                       return (
                                         <TableRow key={offer.id}>
-                                          <TableCell>
+                                          <TableCell align="center">
                                             $
                                             {parseFloat(
                                               offer.loan_amount
@@ -397,13 +399,13 @@ const BDashboard = ({ user, token }) => {
                                               maximumFractionDigits: 2,
                                             })}
                                           </TableCell>
-                                          <TableCell>
+                                          <TableCell align="center">
                                             {offer.interest_rate}%
                                           </TableCell>
-                                          <TableCell>
+                                          <TableCell align="center">
                                             {offer.repayment_term}
                                           </TableCell>
-                                          <TableCell>
+                                          <TableCell align="center">
                                             $
                                             {monthlyPayment.toLocaleString(
                                               "en-US",
@@ -413,7 +415,7 @@ const BDashboard = ({ user, token }) => {
                                               }
                                             )}
                                           </TableCell>
-                                          <TableCell>
+                                          <TableCell align="center">
                                             <Button
                                               variant="contained"
                                               sx={{
@@ -429,7 +431,7 @@ const BDashboard = ({ user, token }) => {
                                               disabled={
                                                 acceptedProposals[
                                                   request.id
-                                                ] === offer.id
+                                                ] !== undefined
                                               }
                                             >
                                               {acceptedProposals[request.id] ===
