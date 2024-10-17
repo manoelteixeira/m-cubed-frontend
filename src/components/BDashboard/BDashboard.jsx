@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import {
   Paper,
   Typography,
@@ -14,14 +13,16 @@ import {
   TableRow,
   Collapse,
   Card,
-  CardContent,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
+  TableSortLabel,
+  Tooltip,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
+import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 
 const API = import.meta.env.VITE_BASE_URL;
@@ -35,6 +36,7 @@ const BDashboard = ({ user, token }) => {
   const [selectedProposal, setSelectedProposal] = useState(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [acceptedProposals, setAcceptedProposals] = useState({});
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
 
   const navigate = useNavigate();
 
@@ -46,10 +48,7 @@ const BDashboard = ({ user, token }) => {
       },
     };
     fetch(`${API}/borrowers/${user.id}/requests`, options)
-      .then((res) => {
-        if (!res.ok) throw new Error("Error fetching requests");
-        return res.json();
-      })
+      .then((res) => res.json())
       .then((data) => {
         let requestsProposals = {};
         let fetchPromises = data.map((request) =>
@@ -71,10 +70,6 @@ const BDashboard = ({ user, token }) => {
       .catch((err) => setError("Error fetching data: " + err.message))
       .finally(() => setLoading(false));
   }, [user, token]);
-
-  const openLoanApplicationForm = () => {
-    navigate(`/borrowers/new-request`);
-  };
 
   const handleRowClick = (rowId) => {
     setExpandedRow(expandedRow === rowId ? null : rowId);
@@ -108,33 +103,64 @@ const BDashboard = ({ user, token }) => {
     }
   };
 
+  const handleSort = (column) => {
+    let direction = "asc";
+    if (sortConfig.key === column && sortConfig.direction === "asc") {
+      direction = "desc";
+    }
+    setSortConfig({ key: column, direction });
+  };
+
+  const sortProposals = (proposals) => {
+    const sortedProposals = [...proposals];
+    if (sortConfig.key) {
+      sortedProposals.sort((a, b) => {
+        const valA =
+          sortConfig.key === "monthlyPayment"
+            ? (a.loan_amount * (1 + a.interest_rate / 100)) / a.repayment_term
+            : a[sortConfig.key];
+        const valB =
+          sortConfig.key === "monthlyPayment"
+            ? (b.loan_amount * (1 + b.interest_rate / 100)) / b.repayment_term
+            : b[sortConfig.key];
+
+        if (valA < valB) return sortConfig.direction === "asc" ? -1 : 1;
+        if (valA > valB) return sortConfig.direction === "asc" ? 1 : -1;
+        return 0;
+      });
+    }
+    return sortedProposals;
+  };
+
   const handleDialogClose = () => {
     setDialogOpen(false);
   };
 
+  const openLoanApplicationForm = () => {
+    navigate(`/borrowers/new-request`);
+  };
+
   return (
     <Box sx={{ padding: "20px", paddingTop: "50px", paddingBottom: "80px" }}>
-      {/* Gradient Header Section */}
+      {/* Header Section */}
       <Paper
         elevation={3}
         sx={{
           padding: "20px",
           marginBottom: "20px",
-          background: "linear-gradient(90deg, #00A250, #75D481, #c8e265)",
+          backgroundColor: "#f6f7f8",
+          boxShadow: "0 0 20px rgba(255, 255, 255, 0.7)",
         }}
       >
         <Grid container justifyContent="space-between" alignItems="center">
           <Grid item>
-            <Typography
-              variant="h4"
-              sx={{ color: "#FFFBEA", textAlign: "left" }}
-            >
+            <Typography variant="h4" sx={{ color: "black", textAlign: "left" }}>
               Welcome,{" "}
-              <span style={{ color: "#FFFBEA" }}>{user.business_name}</span>
+              <span style={{ color: "#00A250" }}>{user.business_name}</span>
             </Typography>
             <Typography
               variant="subtitle1"
-              sx={{ color: "#FFFBEA", textAlign: "left" }}
+              sx={{ color: "black", textAlign: "left" }}
             >
               What can we do to get your funding moving today? Your loan details
               and updates are ready below.
@@ -143,7 +169,16 @@ const BDashboard = ({ user, token }) => {
           <Grid item>
             <Button
               variant="contained"
-              sx={{ backgroundColor: "#00A250", color: "#f6f7f8" }}
+              sx={{
+                backgroundColor: "#00A250",
+                color: "#f6f7f8",
+                transition: "transform 0.3s ease, box-shadow 0.3s ease",
+                "&:hover": {
+                  transform: "scale(1.05)",
+                  boxShadow: "0 8px 20px rgba(0, 162, 80, 0.5)",
+                  backgroundColor: "#75D481",
+                },
+              }}
               startIcon={<AddIcon />}
               onClick={openLoanApplicationForm}
             >
@@ -154,38 +189,23 @@ const BDashboard = ({ user, token }) => {
       </Paper>
 
       {/* KPI Section */}
-      <Grid
-        container
-        spacing={3}
-        sx={{ marginBottom: "20px" }}
-        justifyContent="space-between"
-      >
+      <Grid container spacing={3} sx={{ marginBottom: "20px" }}>
         <Grid item xs={12} sm={4}>
-          <Paper
-            elevation={3}
-            sx={{
-              padding: "20px",
-              backgroundColor: "#00A250",
-              color: "#f6f7f8",
-              textAlign: "center",
-            }}
-          >
-            <Typography variant="h6">Total Loan Requests</Typography>
-            <Typography variant="h4">{requests.length}</Typography>
+          <Paper elevation={3} sx={{ padding: "20px", textAlign: "center" }}>
+            <Typography variant="h6" sx={{ color: "#00A250" }}>
+              Total Loan Requests
+            </Typography>
+            <Typography variant="h4" sx={{ color: "#00A250" }}>
+              {requests.length}
+            </Typography>
           </Paper>
         </Grid>
         <Grid item xs={12} sm={4}>
-          <Paper
-            elevation={3}
-            sx={{
-              padding: "20px",
-              backgroundColor: "#008740",
-              color: "#f6f7f8",
-              textAlign: "center",
-            }}
-          >
-            <Typography variant="h6">Loan Requests with Proposals</Typography>
-            <Typography variant="h4">
+          <Paper elevation={3} sx={{ padding: "20px", textAlign: "center" }}>
+            <Typography variant="h6" sx={{ color: "#00A250" }}>
+              Loan Requests with Proposals
+            </Typography>
+            <Typography variant="h4" sx={{ color: "#00A250" }}>
               {
                 requests.filter(
                   (request) =>
@@ -196,17 +216,11 @@ const BDashboard = ({ user, token }) => {
           </Paper>
         </Grid>
         <Grid item xs={12} sm={4}>
-          <Paper
-            elevation={3}
-            sx={{
-              padding: "20px",
-              backgroundColor: "#009150",
-              color: "#f6f7f8",
-              textAlign: "center",
-            }}
-          >
-            <Typography variant="h6">Total Loan Amount Requested</Typography>
-            <Typography variant="h4">
+          <Paper elevation={3} sx={{ padding: "20px", textAlign: "center" }}>
+            <Typography variant="h6" sx={{ color: "#00A250" }}>
+              Total Loan Amount Requested
+            </Typography>
+            <Typography variant="h4" sx={{ color: "#00A250" }}>
               $
               {requests
                 .reduce((total, request) => {
@@ -224,190 +238,260 @@ const BDashboard = ({ user, token }) => {
       {/* Loan Requests Table */}
       <TableContainer component={Paper} elevation={3}>
         <Table>
-          <TableHead sx={{ backgroundColor: "#15A452" }}>
+          <TableHead>
             <TableRow>
-              <TableCell align="center" sx={{ color: "#FFFBEA" }}>
+              <TableCell align="center" sx={{ color: "#00A250" }}>
                 Title
               </TableCell>
-              <TableCell align="center" sx={{ color: "#FFFBEA" }}>
+              <TableCell align="center" sx={{ color: "#00A250" }}>
                 Purpose of Loan
               </TableCell>
-              <TableCell sx={{ color: "#FFFBEA" }}>Loan Amount</TableCell>
-              <TableCell sx={{ color: "#FFFBEA" }}>Status</TableCell>
+              <TableCell sx={{ color: "#00A250" }}>Loan Amount</TableCell>
+              <TableCell sx={{ color: "#00A250" }}>Status</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {Array.isArray(requests) &&
-              requests.map((request) => (
-                <React.Fragment key={request.id}>
-                  <TableRow hover onClick={() => handleRowClick(request.id)}>
-                    <TableCell
-                      align="left"
-                      sx={{ cursor: "pointer", color: "#00A250" }}
-                    >
-                      {request.title}
-                    </TableCell>
-                    <TableCell align="left" sx={{ cursor: "pointer" }}>
-                      {request.description}
-                    </TableCell>
-                    <TableCell sx={{ cursor: "pointer" }}>
-                      $
-                      {request.value
-                        ? parseFloat(request.value).toLocaleString("en-US", {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2,
-                          })
-                        : "N/A"}
-                    </TableCell>
-                    <TableCell
-                      sx={{
-                        cursor: "pointer",
-                        color: proposals[request.id]?.length
-                          ? "#056612"
-                          : "#8B0000",
-                      }}
-                    >
-                      {proposals[request.id]?.length ? "Active" : "Pending"}
-                    </TableCell>
-                  </TableRow>
+            {requests.map((request) => (
+              <React.Fragment key={request.id}>
+                <TableRow hover onClick={() => handleRowClick(request.id)}>
+                  <TableCell
+                    align="left"
+                    sx={{ cursor: "pointer", color: "#00A250" }}
+                  >
+                    {request.title}
+                  </TableCell>
+                  <TableCell align="left" sx={{ cursor: "pointer" }}>
+                    {request.description}
+                  </TableCell>
+                  <TableCell sx={{ cursor: "pointer" }}>
+                    $
+                    {request.value
+                      ? parseFloat(request.value).toLocaleString("en-US", {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })
+                      : "N/A"}
+                  </TableCell>
+                  <TableCell
+                    sx={{
+                      cursor: "pointer",
+                      color: proposals[request.id]?.length
+                        ? "#056612"
+                        : "#8B0000",
+                    }}
+                  >
+                    {proposals[request.id]?.length ? "Active" : "Pending"}
+                  </TableCell>
+                </TableRow>
 
-                  {/* Expanded Row Content in a Card */}
-                  <TableRow>
-                    <TableCell colSpan={4} sx={{ padding: 0, border: 0 }}>
-                      <Collapse
-                        in={expandedRow === request.id}
-                        timeout="auto"
-                        unmountOnExit
+                <TableRow>
+                  <TableCell colSpan={4} sx={{ padding: 0, border: 0 }}>
+                    <Collapse
+                      in={expandedRow === request.id}
+                      timeout="auto"
+                      unmountOnExit
+                    >
+                      <Card
+                        elevation={2}
+                        sx={{
+                          backgroundColor: "#fff",
+                          margin: 2,
+                          textAlign: "center",
+                        }}
                       >
-                        <Card
-                          elevation={2}
-                          sx={{
-                            backgroundColor: "#f6f7f8",
-                            margin: 2,
-                            boxShadow: "0px 4px 8px rgba(0, 162, 80, 0.1)",
-                            textAlign: "center",
-                          }}
-                        >
-                          <CardContent
+                        <Box sx={{ padding: "20px" }}>
+                          <Typography
+                            variant="h5"
                             sx={{
-                              backgroundColor: "#f6f7f8",
+                              fontWeight: "bold",
+                              color: "#056612",
+                              marginBottom: "20px",
                             }}
                           >
-                            <Typography
-                              variant="h5"
-                              sx={{
-                                fontWeight: "bold",
-                                color: "#056612",
-                                marginBottom: "20px",
-                              }}
-                            >
-                              LOAN PROPOSALS
-                            </Typography>
-
-                            {proposals[request.id] &&
-                            proposals[request.id].length > 0 ? (
-                              <Grid container spacing={3}>
-                                {proposals[request.id].map((offer) => (
-                                  <Grid
-                                    item
-                                    xs={12}
-                                    sm={6}
-                                    md={4}
-                                    key={offer.id}
-                                  >
-                                    <Card
-                                      sx={{
-                                        backgroundColor: "#def4df",
-                                        boxShadow:
-                                          "0px 4px 8px rgba(0, 162, 80, 0.1)",
-                                      }}
-                                    >
-                                      <CardContent>
-                                        <Typography variant="body2">
-                                          Interest Rate: {offer.interest_rate}%
-                                        </Typography>
-                                        <Typography variant="body2">
-                                          Loan Amount Offered: $
-                                          {parseFloat(
-                                            offer.loan_amount
-                                          ).toLocaleString("en-US", {
-                                            minimumFractionDigits: 2,
-                                            maximumFractionDigits: 2,
-                                          })}
-                                        </Typography>
-                                        <Typography variant="body2">
-                                          Term Length: {offer.repayment_term}{" "}
-                                          months
-                                        </Typography>
-                                        <Button
-                                          variant="contained"
-                                          sx={{
-                                            backgroundColor: "#00A250",
-                                            color: "#f6f7f8",
-                                            marginTop: "10px",
-                                          }}
-                                          onClick={() =>
-                                            handleAcceptProposal(
-                                              offer.id,
-                                              request.id
-                                            )
+                            LOAN PROPOSALS
+                          </Typography>
+                          {proposals[request.id]?.length > 0 ? (
+                            <TableContainer component={Paper}>
+                              <Table>
+                                <TableHead>
+                                  <TableRow>
+                                    <TableCell>
+                                      <Tooltip title="Sort">
+                                        <TableSortLabel
+                                          active={
+                                            sortConfig.key === "loan_amount"
                                           }
-                                          disabled={
-                                            acceptedProposals[request.id] !==
-                                              undefined &&
-                                            acceptedProposals[request.id] !==
-                                              offer.id
+                                          direction={sortConfig.direction}
+                                          onClick={() =>
+                                            handleSort("loan_amount")
                                           }
                                         >
-                                          {acceptedProposals[request.id] ===
-                                          offer.id
-                                            ? "Accepted"
-                                            : "Accept Proposal"}
-                                        </Button>
-                                      </CardContent>
-                                    </Card>
-                                  </Grid>
-                                ))}
-                              </Grid>
-                            ) : (
-                              <Typography variant="body2">
-                                No proposals available yet.
-                              </Typography>
-                            )}
-                          </CardContent>
-                        </Card>
-                      </Collapse>
-                    </TableCell>
-                  </TableRow>
-                </React.Fragment>
-              ))}
+                                          Loan Amount Offered
+                                        </TableSortLabel>
+                                      </Tooltip>
+                                    </TableCell>
+                                    <TableCell>
+                                      <Tooltip title="Sort">
+                                        <TableSortLabel
+                                          active={
+                                            sortConfig.key === "interest_rate"
+                                          }
+                                          direction={sortConfig.direction}
+                                          onClick={() =>
+                                            handleSort("interest_rate")
+                                          }
+                                        >
+                                          Interest Rate
+                                        </TableSortLabel>
+                                      </Tooltip>
+                                    </TableCell>
+                                    <TableCell>
+                                      <Tooltip title="Sort">
+                                        <TableSortLabel
+                                          active={
+                                            sortConfig.key === "repayment_term"
+                                          }
+                                          direction={sortConfig.direction}
+                                          onClick={() =>
+                                            handleSort("repayment_term")
+                                          }
+                                        >
+                                          Term Length (months)
+                                        </TableSortLabel>
+                                      </Tooltip>
+                                    </TableCell>
+                                    <TableCell>
+                                      <Tooltip title="Sort">
+                                        <TableSortLabel
+                                          active={
+                                            sortConfig.key === "monthlyPayment"
+                                          }
+                                          direction={sortConfig.direction}
+                                          onClick={() =>
+                                            handleSort("monthlyPayment")
+                                          }
+                                        >
+                                          Monthly Payment
+                                        </TableSortLabel>
+                                      </Tooltip>
+                                    </TableCell>
+                                    <TableCell>Decision</TableCell>
+                                  </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                  {sortProposals(proposals[request.id]).map(
+                                    (offer) => {
+                                      const monthlyPayment =
+                                        (offer.loan_amount *
+                                          (1 + offer.interest_rate / 100)) /
+                                        offer.repayment_term;
+
+                                      return (
+                                        <TableRow key={offer.id}>
+                                          <TableCell>
+                                            $
+                                            {parseFloat(
+                                              offer.loan_amount
+                                            ).toLocaleString("en-US", {
+                                              minimumFractionDigits: 2,
+                                              maximumFractionDigits: 2,
+                                            })}
+                                          </TableCell>
+                                          <TableCell>
+                                            {offer.interest_rate}%
+                                          </TableCell>
+                                          <TableCell>
+                                            {offer.repayment_term}
+                                          </TableCell>
+                                          <TableCell>
+                                            $
+                                            {monthlyPayment.toLocaleString(
+                                              "en-US",
+                                              {
+                                                minimumFractionDigits: 2,
+                                                maximumFractionDigits: 2,
+                                              }
+                                            )}
+                                          </TableCell>
+                                          <TableCell>
+                                            <Button
+                                              variant="contained"
+                                              sx={{
+                                                backgroundColor: "#00A250",
+                                                color: "#f6f7f8",
+                                              }}
+                                              onClick={() =>
+                                                handleAcceptProposal(
+                                                  offer.id,
+                                                  request.id
+                                                )
+                                              }
+                                              disabled={
+                                                acceptedProposals[
+                                                  request.id
+                                                ] === offer.id
+                                              }
+                                            >
+                                              {acceptedProposals[request.id] ===
+                                              offer.id
+                                                ? "Accepted"
+                                                : "Accept"}
+                                            </Button>
+                                          </TableCell>
+                                        </TableRow>
+                                      );
+                                    }
+                                  )}
+                                </TableBody>
+                              </Table>
+                            </TableContainer>
+                          ) : (
+                            <Typography variant="body2">
+                              No proposals available yet.
+                            </Typography>
+                          )}
+                        </Box>
+                      </Card>
+                    </Collapse>
+                  </TableCell>
+                </TableRow>
+              </React.Fragment>
+            ))}
           </TableBody>
         </Table>
       </TableContainer>
 
-      {/* Accept Proposal Dialog */}
       <Dialog open={dialogOpen} onClose={handleDialogClose}>
         <DialogTitle>Proposal Accepted</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            It's a match! You have successfully accepted the proposal with:
+            You have accepted the following proposal:
             <ul>
+              <li>
+                <strong>Loan Amount Offered:</strong> $
+                {selectedProposal?.loan_amount.toLocaleString("en-US", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
+              </li>
               <li>
                 <strong>Interest Rate:</strong>{" "}
                 {selectedProposal?.interest_rate}%
               </li>
               <li>
-                <strong>Loan Amount:</strong> $
-                {selectedProposal?.loan_amount
-                  ? parseFloat(selectedProposal.loan_amount).toLocaleString(
-                      "en-US",
-                      { minimumFractionDigits: 2, maximumFractionDigits: 2 }
-                    )
-                  : "N/A"}
-              </li>
-              <li>
                 <strong>Term Length:</strong> {selectedProposal?.repayment_term}{" "}
                 months
+              </li>
+              <li>
+                <strong>Monthly Payment:</strong> $
+                {(
+                  (selectedProposal?.loan_amount *
+                    (1 + selectedProposal?.interest_rate / 100)) /
+                  selectedProposal?.repayment_term
+                ).toLocaleString("en-US", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
               </li>
             </ul>
           </DialogContentText>
