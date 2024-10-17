@@ -127,16 +127,17 @@ const BDashboard = ({ user, token }) => {
           <Grid item>
             <Typography
               variant="h4"
-              sx={{ color: "#FFFBEA", textAlign: "center" }}
+              sx={{ color: "#FFFBEA", textAlign: "left" }}
             >
               Welcome,{" "}
               <span style={{ color: "#FFFBEA" }}>{user.business_name}</span>
             </Typography>
             <Typography
               variant="subtitle1"
-              sx={{ color: "#FFFBEA", textAlign: "center" }}
+              sx={{ color: "#FFFBEA", textAlign: "left" }}
             >
-              Your loan applications and offers are listed below.
+              What can we do to get your funding moving today? Your loan details
+              and updates are ready below.
             </Typography>
           </Grid>
           <Grid item>
@@ -146,7 +147,7 @@ const BDashboard = ({ user, token }) => {
               startIcon={<AddIcon />}
               onClick={openLoanApplicationForm}
             >
-              New Application
+              Start your Loan Request
             </Button>
           </Grid>
         </Grid>
@@ -229,7 +230,7 @@ const BDashboard = ({ user, token }) => {
                 Title
               </TableCell>
               <TableCell align="center" sx={{ color: "#FFFBEA" }}>
-                Description
+                Purpose of Loan
               </TableCell>
               <TableCell sx={{ color: "#FFFBEA" }}>Loan Amount</TableCell>
               <TableCell sx={{ color: "#FFFBEA" }}>Status</TableCell>
@@ -370,7 +371,7 @@ const BDashboard = ({ user, token }) => {
                               </Grid>
                             ) : (
                               <Typography variant="body2">
-                                No proposals available.
+                                No proposals available yet.
                               </Typography>
                             )}
                           </CardContent>
@@ -389,7 +390,7 @@ const BDashboard = ({ user, token }) => {
         <DialogTitle>Proposal Accepted</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            You have successfully accepted the proposal with:
+            It's a match! You have successfully accepted the proposal with:
             <ul>
               <li>
                 <strong>Interest Rate:</strong>{" "}
