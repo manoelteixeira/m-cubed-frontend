@@ -431,12 +431,17 @@ const BDashboard = ({ user, token }) => {
                                               disabled={
                                                 acceptedProposals[
                                                   request.id
-                                                ] !== undefined
+                                                ] !== undefined &&
+                                                acceptedProposals[
+                                                  request.id
+                                                ] !== offer.id
                                               }
                                             >
                                               {acceptedProposals[request.id] ===
                                               offer.id
                                                 ? "Accepted"
+                                                : acceptedProposals[request.id]
+                                                ? "Rejected"
                                                 : "Accept"}
                                             </Button>
                                           </TableCell>
