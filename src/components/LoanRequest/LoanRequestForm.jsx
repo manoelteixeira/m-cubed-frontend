@@ -128,55 +128,28 @@ const LoanRequestForm = ({ user, token }) => {
             gap: "20px",
           }}
         >
-          {/* Next Steps Card */}
-          <Card
+          <Box
+            component="img"
             sx={{
-              width: "35%",
+              width: "40%",
               boxShadow: "0 4px 10px rgba(0, 0, 0, .2)",
-              padding: "30px",
               borderRadius: "20px",
-              backgroundColor: "#def4df",
+              transition: "box-shadow 0.3s ease", // Smooth transition
+              "&:hover": {
+                boxShadow: "0 0 20px 5px rgba(255, 255, 255, 0.7)", // White glow effect on hover
+              },
             }}
-          >
-            <CardContent>
-              <Typography
-                variant="h5"
-                sx={{
-                  color: "#00a250",
-                  fontWeight: "bold",
-                  marginBottom: 2,
-                  textAlign: "center",
-                }}
-              >
-                Next Steps to Get Funded
-              </Typography>
-              <Typography
-                variant="body1"
-                sx={{ color: "#00a250", lineHeight: "2" }}
-              >
-                1. As soon as we receive your payment, we’ll kick off the
-                verification of your business documents! <br />
-                2. You’ll hear from us as soon as the verification is complete.
-                <br />
-                3. Once everything checks out, you’re all set to submit your
-                application, and your loan request will go LIVE for lenders to
-                see. <br />
-                4. If we find any issues with your documents, no worries! Just
-                reach out to the appropriate agencies to get them corrected.
-                Your application will be saved and ready for you to finish once
-                everything’s in order.
-              </Typography>
-            </CardContent>
-          </Card>
+            alt="Next Steps Placeholder"
+            src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1729188220/moneymoneymoney_4_dkxska.png"
+          />
 
-          {/* Loan Application Form */}
           <Card
             sx={{
               width: "55%",
               boxShadow: "0 4px 10px rgba(0, 0, 0, .2)",
               padding: "30px",
               borderRadius: "20px",
-              backgroundColor: "#def4df",
+              backgroundColor: "#f6f7f8",
             }}
           >
             <CardContent>
@@ -249,7 +222,6 @@ const LoanRequestForm = ({ user, token }) => {
                     />
                   </Grid>
 
-                  {/* Upload Driver's License */}
                   <Grid item xs={12}>
                     <Typography variant="body1" sx={{ color: "#00a250" }}>
                       Upload Driver's License
@@ -266,7 +238,7 @@ const LoanRequestForm = ({ user, token }) => {
                           backgroundColor: "#def4df",
                         },
                       }}
-                      startIcon={<UploadIcon />} // Add an upload icon
+                      startIcon={<UploadIcon />}
                     >
                       Choose File
                       <input
