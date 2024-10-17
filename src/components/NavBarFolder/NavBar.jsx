@@ -94,7 +94,7 @@ const NavBar = ({ setUser, setToken, isAuthenticated }) => {
                   fontWeight: "bold",
                 }}
               >
-                SIGN UP BORROWER
+                Find a Lender
               </Button>
 
               <Button
@@ -108,7 +108,7 @@ const NavBar = ({ setUser, setToken, isAuthenticated }) => {
                   fontWeight: "bold",
                 }}
               >
-                SIGN UP LENDER
+                Find a Borrower
               </Button>
 
               <Button
