@@ -115,7 +115,7 @@ const BorrowerForm = ({ setUser, setToken }) => {
           padding: 4,
           minHeight: "100vh",
           backgroundColor: "#f6f7f8",
-          paddingTop: "40px", // Distance from navbar
+          paddingTop: "40px",
         }}
       >
         <Grid container spacing={2} sx={{ marginTop: "50px" }}>
@@ -128,7 +128,7 @@ const BorrowerForm = ({ setUser, setToken }) => {
                 justifyContent: "center",
                 backgroundColor: "#f6f7f8",
                 padding: 4,
-                borderRadius: "0", // No border radius to make it part of the page
+                borderRadius: "0",
               }}
             >
               <img
@@ -148,7 +148,7 @@ const BorrowerForm = ({ setUser, setToken }) => {
               sx={{
                 p: 4,
                 backgroundColor: "#f6f7f8",
-                borderRadius: "0", // No border radius to blend into the page
+                borderRadius: "0",
                 height: "100%",
                 display: "flex",
                 flexDirection: "column",
@@ -527,7 +527,6 @@ const BorrowerForm = ({ setUser, setToken }) => {
           </Grid>
         </Grid>
         <Box sx={{ height: "100px" }}></Box>{" "}
-        {/* Space between form and footer */}
       </Box>
     </ThemeProvider>
   );
