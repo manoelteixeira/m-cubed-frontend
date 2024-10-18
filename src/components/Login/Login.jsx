@@ -10,7 +10,6 @@ import {
   IconButton,
   InputAdornment,
   Divider,
-  Card,
 } from "@mui/material";
 import { Visibility, VisibilityOff, Email, Lock } from "@mui/icons-material";
 import { GoogleOAuthProvider } from "@react-oauth/google";
@@ -113,13 +112,14 @@ const Login = ({ setUser, setToken }) => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          backgroundColor: "#f6f7f8",
+          padding: "4px",
         }}
       >
         <Box
           sx={{
             width: "90%",
             height: "55%",
-            boxShadow: 10,
             overflow: "hidden",
           }}
         >
@@ -152,16 +152,18 @@ const Login = ({ setUser, setToken }) => {
       <Grid
         item
         xs={6}
-        sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          paddingTop: "10px",
+        }}
       >
-        <Card
-          elevation={3}
+        <Box
           sx={{
             padding: 4,
-            backgroundColor: "#def4df",
-            borderRadius: "20px",
+            backgroundColor: "#f6f7f8",
             width: "80%",
-            boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
@@ -337,7 +339,7 @@ const Login = ({ setUser, setToken }) => {
               Sign in with Facebook
             </Button>
           </Box>
-        </Card>
+        </Box>
       </Grid>
     </Grid>
   );
