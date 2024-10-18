@@ -112,31 +112,30 @@ const LenderForm = ({ setUser, setToken }) => {
           maxWidth: "100%",
           margin: "auto",
           padding: 4,
-          paddingTop: 2, // Reduced padding at the top
-          marginBottom: 8, // Add margin to push the form away from the footer
+          paddingTop: "20px",
+          marginBottom: "100px",
           minHeight: "100vh",
         }}
       >
-        <Grid container spacing={0}>
+        <Grid container spacing={0} sx={{ marginTop: "40px" }}>
           {/* Left side with the image */}
           <Grid item xs={12} md={6}>
             <Box
               sx={{
-                height: "100vh",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
+                backgroundColor: "#f6f7f8",
+                padding: 4,
               }}
             >
               <img
                 src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1728325843/Hey_there_Friend_5_bgxdye.png"
-                alt="Welcome to MoneyMoneyMoney"
+                alt="Expand Your Opportunities"
                 style={{
                   width: "600px",
                   height: "800px",
                   objectFit: "cover",
-                  borderRadius: "20px",
-                  boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.4)",
                 }}
               />
             </Box>
@@ -146,11 +145,7 @@ const LenderForm = ({ setUser, setToken }) => {
           <Grid item xs={12} md={6}>
             <Box
               sx={{
-                p: 4,
-                backgroundColor: "#def4df",
-                boxShadow: 14,
-                borderRadius: "20px",
-                height: "100%",
+                backgroundColor: "#f6f7f8",
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "center",
