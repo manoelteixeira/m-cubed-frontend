@@ -14,12 +14,11 @@ import {
   AlertTitle,
 } from "@mui/material";
 import { useNavigate } from "react-router";
-import { Email, Lock, Phone, Business, CreditScore } from "@mui/icons-material";
+import { Email, Lock, Phone, Business, Domain } from "@mui/icons-material";
 
 // Base API URL
 const API = import.meta.env.VITE_BASE_URL;
 
-// Borrower Form Component
 const BorrowerForm = ({ setUser, setToken }) => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
@@ -35,7 +34,7 @@ const BorrowerForm = ({ setUser, setToken }) => {
     zip_code: "",
     phone: "",
     business_name: "",
-    credit_score: 0,
+    ein: "",
     start_date: "",
     industry: "",
   });
@@ -73,17 +72,11 @@ const BorrowerForm = ({ setUser, setToken }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form submitted:", newborrower);
 
     if (newborrower.confirm_password !== newborrower.password) {
       alert("Password does not match");
     } else {
-      const updatedBorrower = {
-        ...newborrower,
-        credit_score: parseInt(newborrower.credit_score),
-      };
-
-      createNewBorrower(updatedBorrower);
+      createNewBorrower(newborrower);
     }
   };
 
@@ -121,9 +114,10 @@ const BorrowerForm = ({ setUser, setToken }) => {
           margin: "auto",
           padding: 4,
           minHeight: "100vh",
+          backgroundColor: "#f6f7f8",
         }}
       >
-        <Grid container spacing={0}>
+        <Grid container spacing={2}>
           <Grid item xs={12} md={6}>
             <Box
               sx={{
@@ -133,7 +127,6 @@ const BorrowerForm = ({ setUser, setToken }) => {
                 justifyContent: "center",
               }}
             >
-              {/* Actual Image */}
               <img
                 src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1728411151/Hey_there_Friend_4_snyiql.png"
                 alt="Welcome to MoneyMoneyMoney"
@@ -148,12 +141,11 @@ const BorrowerForm = ({ setUser, setToken }) => {
             </Box>
           </Grid>
 
-          {/* Right side with the form */}
           <Grid item xs={12} md={6}>
             <Box
               sx={{
                 p: 4,
-                backgroundColor: "#def4df",
+                backgroundColor: "#fff",
                 boxShadow: 14,
                 borderRadius: "20px",
                 height: "100%",
@@ -260,48 +252,6 @@ const BorrowerForm = ({ setUser, setToken }) => {
                     />
                   </Grid>
                 </Grid>
-                <Grid container item xs={12} spacing={2}>
-                  <Grid item xs={6}>
-                    <TextField
-                      label="Business Start Date"
-                      name="start_date"
-                      type="date"
-                      value={newborrower.start_date}
-                      onChange={handleChange}
-                      fullWidth
-                      required
-                      margin="normal"
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                      InputProps={{
-                        style: { backgroundColor: "white" },
-                      }}
-                    />
-                  </Grid>
-                  <Grid item xs={6}>
-                    <TextField
-                      label="Credit Score"
-                      name="credit_score"
-                      type="number"
-                      value={newborrower.credit_score}
-                      onChange={handleChange}
-                      fullWidth
-                      required
-                      margin="normal"
-                      inputProps={{ min: 300, max: 850 }}
-                      placeholder="e.g. 700"
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <CreditScore />
-                          </InputAdornment>
-                        ),
-                        style: { backgroundColor: "white" },
-                      }}
-                    />
-                  </Grid>
-                </Grid>
                 <Grid item xs={12}>
                   <TextField
                     label="Street"
@@ -315,46 +265,6 @@ const BorrowerForm = ({ setUser, setToken }) => {
                       style: { backgroundColor: "white" },
                     }}
                   />
-                </Grid>
-                <Grid container item xs={12} spacing={2}>
-                  <Grid item xs={6}>
-                    <TextField
-                      label="Zip Code"
-                      name="zip_code"
-                      value={newborrower.zip_code}
-                      onChange={handleChange}
-                      fullWidth
-                      required
-                      margin="normal"
-                      inputProps={{ maxLength: 10 }}
-                      placeholder="e.g. 12345"
-                      InputProps={{
-                        style: { backgroundColor: "white" },
-                      }}
-                    />
-                  </Grid>
-                  <Grid item xs={6}>
-                    <TextField
-                      label="Phone"
-                      name="phone"
-                      type="tel"
-                      value={newborrower.phone}
-                      onChange={handleChange}
-                      fullWidth
-                      required
-                      margin="normal"
-                      inputProps={{ maxLength: 10 }}
-                      placeholder="e.g. 0123456789"
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <Phone />
-                          </InputAdornment>
-                        ),
-                        style: { backgroundColor: "white" },
-                      }}
-                    />
-                  </Grid>
                 </Grid>
                 <Grid container item xs={12} spacing={2}>
                   <Grid item xs={6}>
@@ -385,7 +295,6 @@ const BorrowerForm = ({ setUser, setToken }) => {
                         style: { backgroundColor: "white" },
                       }}
                     >
-                      {/* Complete list of U.S. States */}
                       <MenuItem value="AL">Alabama</MenuItem>
                       <MenuItem value="AK">Alaska</MenuItem>
                       <MenuItem value="AZ">Arizona</MenuItem>
@@ -440,6 +349,87 @@ const BorrowerForm = ({ setUser, setToken }) => {
                     </TextField>
                   </Grid>
                 </Grid>
+                <Grid container item xs={12} spacing={2}>
+                  <Grid item xs={6}>
+                    <TextField
+                      label="Zip Code"
+                      name="zip_code"
+                      value={newborrower.zip_code}
+                      onChange={handleChange}
+                      fullWidth
+                      required
+                      margin="normal"
+                      inputProps={{ maxLength: 10 }}
+                      placeholder="e.g. 12345"
+                      InputProps={{
+                        style: { backgroundColor: "white" },
+                      }}
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <TextField
+                      label="Phone"
+                      name="phone"
+                      type="tel"
+                      value={newborrower.phone}
+                      onChange={handleChange}
+                      fullWidth
+                      required
+                      margin="normal"
+                      inputProps={{ maxLength: 10 }}
+                      placeholder="e.g. 0123456789"
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <Phone />
+                          </InputAdornment>
+                        ),
+                        style: { backgroundColor: "white" },
+                      }}
+                    />
+                  </Grid>
+                </Grid>
+                <Grid container item xs={12} spacing={2}>
+                  <Grid item xs={6}>
+                    <TextField
+                      label="Business Start Date"
+                      name="start_date"
+                      type="date"
+                      value={newborrower.start_date}
+                      onChange={handleChange}
+                      fullWidth
+                      required
+                      margin="normal"
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      InputProps={{
+                        style: { backgroundColor: "white" },
+                      }}
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <TextField
+                      label="EIN (Employer Identification Number)"
+                      name="ein"
+                      type="text"
+                      value={newborrower.ein}
+                      onChange={handleChange}
+                      fullWidth
+                      required
+                      margin="normal"
+                      placeholder="e.g. 12-3456789"
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <Domain />
+                          </InputAdornment>
+                        ),
+                        style: { backgroundColor: "white" },
+                      }}
+                    />
+                  </Grid>
+                </Grid>
                 <Grid item xs={12}>
                   <TextField
                     label="Industry"
@@ -454,12 +444,16 @@ const BorrowerForm = ({ setUser, setToken }) => {
                       style: { backgroundColor: "white" },
                     }}
                   >
-                    <MenuItem value="Retail">Retail</MenuItem>
-                    <MenuItem value="Food Service">Food Service</MenuItem>
-                    <MenuItem value="Technology">Technology</MenuItem>
-                    <MenuItem value="Manufacturing">Manufacturing</MenuItem>
+                    <MenuItem value="Agriculture">Agriculture</MenuItem>
+                    <MenuItem value="Construction">Construction</MenuItem>
                     <MenuItem value="Healthcare">Healthcare</MenuItem>
-                    {/* Add more industries as needed */}
+                    <MenuItem value="Hospitality">Hospitality</MenuItem>
+                    <MenuItem value="Manufacturing">Manufacturing</MenuItem>
+                    <MenuItem value="Renewable Energy">
+                      Renewable Energy
+                    </MenuItem>
+                    <MenuItem value="Technology">Technology</MenuItem>
+                    <MenuItem value="More">More</MenuItem>
                   </TextField>
                 </Grid>
                 <Grid container item xs={12} spacing={2}>
@@ -531,6 +525,7 @@ const BorrowerForm = ({ setUser, setToken }) => {
             </Box>
           </Grid>
         </Grid>
+        <Box sx={{ height: "50px" }}></Box>
       </Box>
     </ThemeProvider>
   );
