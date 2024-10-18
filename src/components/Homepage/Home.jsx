@@ -179,6 +179,14 @@ export default function Home() {
           />
         </Grid>
       </Grid>
+      <Grid container spacing={4} justifyContent="center" sx={{ padding: 5 }}>
+        <Grid item xs={12} display="flex" justifyContent="center">
+          <img
+            src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1728576656/How_This_Works_2_tg9j17.png"
+            alt="Why Choose MMM"
+            style={{ width: "100%", maxWidth: 1200, borderRadius: 8 }}
+          />
+        </Grid>
 
       {/* How This Works Section */}
       <Grid container spacing={4} justifyContent="center" sx={{ padding: 18 }}>
@@ -189,6 +197,7 @@ export default function Home() {
             style={{ width: "100%", maxWidth: 1200, borderRadius: 8 }}
           />
         </Grid>
+        
 
         <Grid container justifyContent="center" spacing={2}>
           <Grid item xs={4} sm={4} display="flex" justifyContent="center">
