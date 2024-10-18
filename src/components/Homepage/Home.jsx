@@ -50,6 +50,7 @@ export default function Home() {
             display: "flex",
             justifyContent: "center",
             flexDirection: "column",
+            
           }}
         >
           <Card
@@ -58,8 +59,9 @@ export default function Home() {
               maxWidth: 1200,
               height: "auto",
               padding: 0,
-              backgroundColor: "transparent",
+              backgroundColor: "#fffff",
               border: "none",
+              borderRadius: 5,
               boxShadow: "none",
               marginLeft: 10,
               marginRight: 10,
@@ -164,7 +166,7 @@ export default function Home() {
               justifyContent: "space-between",
               border: "1px solid #e0e0e0",
               borderRadius: 2,
-              backgroundColor: "transparent",
+              backgroundColor: "fffff",
             }}
           >
             <Typography variant="h6" gutterBottom>
@@ -189,7 +191,37 @@ export default function Home() {
           </Card>
         </Grid>
       </Grid>
+      <Grid container spacing={4} justifyContent="center" sx={{ padding: 5 }}>
+        <Grid item xs={12} display="flex" justifyContent="center">
+          <img
+            src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1728576656/How_This_Works_2_tg9j17.png"
+            alt="Why Choose MMM"
+            style={{ width: "100%", maxWidth: 1200, borderRadius: 8 }}
+          />
+        </Grid>
 
+        <Grid container justifyContent="center" spacing={2}>
+          <Grid item xs={6} sm={6} display="flex" justifyContent="center">
+            <Link to="/borrowers/signup">
+              <img
+                src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1728581611/Add_a_heading_500_x_500_px_3_w06vz8.png"
+                alt="Borrowers"
+                style={{ width: 600, height: 600, borderRadius: 8 }}
+              />
+            </Link>
+          </Grid>
+          <Grid item xs={6} sm={6} display="flex" justifyContent="center">
+            <Link to="/lenders/signup">
+              <img
+                src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1728583550/Add_a_heading_500_x_500_px_4_zs06zy.png"
+                alt="Lenders"
+                style={{ width: 600, height: 600, borderRadius: 8 }}
+              />
+            </Link>
+          </Grid>
+        </Grid>
+      </Grid>
+{/* placement for above section */}
       <Grid container spacing={4} justifyContent="center" sx={{ padding: 18 }}>
         <Grid item xs={12} display="flex" justifyContent="center">
           <img
@@ -198,6 +230,7 @@ export default function Home() {
             style={{ width: "100%", maxWidth: 1200, borderRadius: 8 }}
           />
         </Grid>
+        
 
         <Grid container justifyContent="center" spacing={2}>
           <Grid item xs={4} sm={4} display="flex" justifyContent="center">
