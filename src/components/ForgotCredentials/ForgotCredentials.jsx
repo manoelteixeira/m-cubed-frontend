@@ -4,7 +4,7 @@ import {
   Button,
   Typography,
   Container,
-  Paper,
+  Box,
   InputAdornment,
 } from "@mui/material";
 import { Email, Lock } from "@mui/icons-material";
@@ -44,13 +44,10 @@ const ForgotCredentials = () => {
         pb: 8,
       }}
     >
-      <Paper
-        elevation={3}
+      <Box
         sx={{
           padding: 4,
-          borderRadius: "20px",
-          backgroundColor: "#def4df",
-          boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)",
+          backgroundColor: "#f6f7f8", // Removed shadows and borders
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -67,7 +64,6 @@ const ForgotCredentials = () => {
         </Typography>
 
         <form onSubmit={handleSubmit} style={{ width: "100%" }}>
-          {/* Only show email input if not resetting password */}
           {!isPassword && (
             <TextField
               label="Email"
@@ -102,7 +98,6 @@ const ForgotCredentials = () => {
             />
           )}
 
-          {/* Show password input only when resetting password */}
           {isPassword && (
             <TextField
               label="New Password"
@@ -179,7 +174,7 @@ const ForgotCredentials = () => {
             {message}
           </Typography>
         )}
-      </Paper>
+      </Box>
     </Container>
   );
 };
