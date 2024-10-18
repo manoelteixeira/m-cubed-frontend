@@ -12,9 +12,6 @@ import {
   Divider,
 } from "@mui/material";
 import { Visibility, VisibilityOff, Email, Lock } from "@mui/icons-material";
-import { GoogleOAuthProvider } from "@react-oauth/google";
-import FacebookIcon from "@mui/icons-material/Facebook";
-import GoogleIcon from "@mui/icons-material/Google";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -299,44 +296,6 @@ const Login = ({ setUser, setToken }) => {
               onClick={() => navigate("/forgotcredentials")}
             >
               Forgot Email/Password?
-            </Button>
-
-            <GoogleOAuthProvider clientId="YOUR_GOOGLE_CLIENT_ID">
-              <Button
-                fullWidth
-                variant="outlined"
-                sx={{
-                  borderColor: "#00a250",
-                  color: "#00a250",
-                  textTransform: "none",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: 1,
-                  mb: 2,
-                }}
-              >
-                <GoogleIcon />
-                Sign in with Google
-              </Button>
-            </GoogleOAuthProvider>
-
-            <Button
-              fullWidth
-              variant="outlined"
-              sx={{
-                borderColor: "#00a250",
-                color: "#00a250",
-                textTransform: "none",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: 1,
-                mb: 2,
-              }}
-            >
-              <FacebookIcon />
-              Sign in with Facebook
             </Button>
           </Box>
         </Box>
