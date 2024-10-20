@@ -4,8 +4,10 @@ import { Link } from "react-router-dom";
 import { CardContent, Button, Typography, Card, Grid } from "@mui/material";
 import Slider from "react-slick";
 import { motion } from "framer-motion";
-import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import "slick-carousel/slick/slick.css";
+import { Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 export default function Home() {
   const equipmentItems = [
@@ -58,7 +60,6 @@ export default function Home() {
             }}
           >
             <CardContent>
-              {/* Equipment Slider */}
               <Slider {...settings}>
                 {equipmentItems.map((item, index) => (
                   <motion.div
@@ -85,7 +86,6 @@ export default function Home() {
                 ))}
               </Slider>
 
-              {/* MMM Description */}
               <Typography
                 variant="h6"
                 color="black"
@@ -102,11 +102,10 @@ export default function Home() {
                 is a game-changing platform designed for businesses seeking
                 small-ticket equipment financing. With one streamlined
                 application, minimal credit pulls, and direct access to a
-                network of lenders—no middlemen— we cut through the noise to
+                network of lenders—no middlemen—we cut through the noise to
                 deliver fast, effective financing solutions.
               </Typography>
 
-              {/* Link to Borrower Signup */}
               <Link to="/borrowers/signup" style={{ textDecoration: "none" }}>
                 <Button
                   variant="contained"
@@ -127,7 +126,6 @@ export default function Home() {
           md={6}
           sx={{ display: "flex", justifyContent: "center", padding: 0 }}
         >
-          {/* Placeholder for Product Images */}
           <Card
             sx={{
               width: "100%",
@@ -194,7 +192,6 @@ export default function Home() {
         </Grid>
       </Grid>
 
-      {/* New Banner Section */}
       <Grid container spacing={4} justifyContent="center" sx={{ padding: 5 }}>
         <Grid item xs={12} display="flex" justifyContent="center">
           <img
@@ -223,6 +220,232 @@ export default function Home() {
               />
             </Link>
           </Grid>
+        </Grid>
+      </Grid>
+
+      {/* Accordion Section */}
+      <Grid container spacing={4} justifyContent="center" sx={{ padding: 5 }}>
+        <Grid item xs={12} display="flex" justifyContent="center">
+          <Card
+            sx={{
+              width: "100%",
+              maxWidth: 1200,
+              backgroundColor: "#f6f7f8",
+              borderRadius: 8,
+              boxShadow: "none",
+              padding: "20px",
+            }}
+          >
+            <Accordion>
+              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                <Typography
+                  sx={{
+                    fontWeight: "bold",
+                    color: "#00a250",
+                    fontSize: "1.8rem",
+                  }}
+                >
+                  Understanding the $300 Billion Small-Ticket Equipment
+                  Financing Industry
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Typography
+                  variant="body1"
+                  color="black"
+                  sx={{ textAlign: "justify", mb: 2 }}
+                >
+                  The small-ticket equipment financing industry, according to
+                  the Equipment Leasing and Finance Association (ELFA), is
+                  valued at over $300 billion and is growing at a 7.2% CAGR. For
+                  more information, you can access the{" "}
+                  <a
+                    href="https://www.elfaonline.org/knowledge-hub/survey-of-equipment-finance-activity"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ color: "#00a250", textDecoration: "underline" }}
+                  >
+                    ELFA SEFA Survey
+                  </a>{" "}
+                  and the{" "}
+                  <a
+                    href="https://www.nefassociation.org/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ color: "#00a250", textDecoration: "underline" }}
+                  >
+                    National Equipment Finance Association (NEFA)
+                  </a>
+                  .
+                </Typography>
+                <Typography
+                  variant="body1"
+                  color="black"
+                  sx={{ textAlign: "justify" }}
+                >
+                  Businesses face long approval times and high costs due to
+                  intermediaries, but the demand for streamlined, direct
+                  solutions is growing fast as companies look for efficiency.
+                </Typography>
+              </AccordionDetails>
+            </Accordion>
+
+            <Accordion>
+              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                <Typography
+                  sx={{
+                    fontWeight: "bold",
+                    color: "#00a250",
+                    fontSize: "1.8rem",
+                  }}
+                >
+                  Transforming Borrowers’ Access to Equipment Financing with{" "}
+                  <span style={{ color: "#00a250" }}>MMM</span>
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Typography
+                  variant="body1"
+                  color="black"
+                  sx={{ textAlign: "justify", mb: 2 }}
+                >
+                  At{" "}
+                  <span style={{ color: "#00a250", fontWeight: "bold" }}>
+                    MMM
+                  </span>
+                  , we provide small businesses with a direct and simple way to
+                  connect with lenders for equipment financing. Borrowers can
+                  benefit from streamlined applications, minimal credit pulls,
+                  and fast approvals, all while avoiding the hassle and cost of
+                  dealing with traditional middlemen.
+                </Typography>
+                <Typography
+                  variant="body1"
+                  color="black"
+                  sx={{ textAlign: "justify" }}
+                >
+                  <span style={{ color: "#00a250", fontWeight: "bold" }}>
+                    MMM
+                  </span>{" "}
+                  enables businesses to secure financing for transportation, IT,
+                  industrial equipment, and more—all with competitive rates and
+                  tailored solutions. We help businesses focus on growth, not
+                  bureaucracy.
+                </Typography>
+              </AccordionDetails>
+            </Accordion>
+
+            <Accordion>
+              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                <Typography
+                  sx={{
+                    fontWeight: "bold",
+                    color: "#00a250",
+                    fontSize: "1.8rem",
+                  }}
+                >
+                  Powering New Lending Opportunities with{" "}
+                  <span style={{ color: "#00a250" }}>MMM</span> for Lenders
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Typography
+                  variant="body1"
+                  color="black"
+                  sx={{ textAlign: "justify", mb: 2 }}
+                >
+                  <span style={{ color: "#00a250", fontWeight: "bold" }}>
+                    MMM
+                  </span>{" "}
+                  offers lenders access to a pre-qualified borrower pool,
+                  reducing administrative burdens and enabling faster
+                  decision-making. Lenders can view loans that meet their
+                  specific criteria and approve them in just a few clicks,
+                  creating new opportunities in a growing market.
+                </Typography>
+                <Typography
+                  variant="body1"
+                  color="black"
+                  sx={{ textAlign: "justify" }}
+                >
+                  With{" "}
+                  <span style={{ color: "#00a250", fontWeight: "bold" }}>
+                    MMM
+                  </span>
+                  , lenders can diversify their portfolios, reduce risk, and
+                  maximize return on investment, all while helping small
+                  businesses thrive.
+                </Typography>
+              </AccordionDetails>
+            </Accordion>
+
+            {/* Fourth Accordion: Our Mission */}
+            <Accordion>
+              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                <Typography
+                  sx={{
+                    fontWeight: "bold",
+                    color: "#00a250",
+                    fontSize: "1.8rem",
+                  }}
+                >
+                  Our Mission: Empowering Businesses Everywhere with{" "}
+                  <span style={{ color: "#00a250" }}>MMM</span>
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Typography
+                  variant="body1"
+                  color="black"
+                  sx={{ textAlign: "justify", mb: 2 }}
+                >
+                  At{" "}
+                  <span style={{ color: "#00a250", fontWeight: "bold" }}>
+                    MMM
+                  </span>
+                  , we believe in empowering businesses to thrive by making
+                  financing simple, fast, and accessible. Whether you’re a
+                  borrower looking for growth or a lender seeking new
+                  opportunities, our mission is to make the process smoother,
+                  more transparent, and tailored to your needs. Join us on this
+                  mission to simplify financing for everyone!
+                </Typography>
+              </AccordionDetails>
+            </Accordion>
+
+            {/* Fifth Accordion: Future Features */}
+            <Accordion>
+              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                <Typography
+                  sx={{
+                    fontWeight: "bold",
+                    color: "#00a250",
+                    fontSize: "1.8rem",
+                  }}
+                >
+                  Future Features: Get Ready for More with{" "}
+                  <span style={{ color: "#00a250" }}>MMM</span>!
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Typography
+                  variant="body1"
+                  color="black"
+                  sx={{ textAlign: "justify", mb: 2 }}
+                >
+                  We’re just getting started! Keep an eye out for exciting
+                  features like real-time loan tracking, enhanced
+                  borrower-lender messaging, AI-powered document verification,
+                  and more! Want to shape the future of{" "}
+                  <span style={{ color: "#00a250", fontWeight: "bold" }}>
+                    MMM
+                  </span>
+                  ? We’re inviting you to be a part of our journey as we roll
+                  out these exciting updates. Stay tuned—big things are coming!
+                </Typography>
+              </AccordionDetails>
+            </Accordion>
+          </Card>
         </Grid>
       </Grid>
     </main>
