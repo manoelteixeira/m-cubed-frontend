@@ -36,7 +36,7 @@ export default function Home() {
     <main
       style={{
         backgroundColor: "#f6f7f8",
-        marginTop: "64px",
+        marginTop: "32px",
         paddingBottom: "80px",
       }}
     >
@@ -94,13 +94,26 @@ export default function Home() {
               </Slider>
 
               <Typography
+                variant="h3"
+                color="black"
+                sx={{
+                  fontWeight: "1000",
+                  textAlign: "left",
+                  mt: 0,
+                  ml: 2.5,
+                }}
+              >
+                Equipment Financing
+              </Typography>
+
+              <Typography
                 variant="h6"
                 color="black"
                 sx={{
                   fontWeight: "bold",
                   textAlign: "justify",
                   mb: 1,
-                  marginTop: 2,
+                  mt: 3,
                   fontSize: "1.2rem",
                   lineHeight: 1.5,
                 }}
@@ -236,7 +249,6 @@ export default function Home() {
         </Grid>
       </Grid>
 
-      {/* Accordion Section */}
       <Grid container spacing={4} justifyContent="center" sx={{ padding: 5 }}>
         <Grid item xs={12} display="flex" justifyContent="center">
           <Card
@@ -247,7 +259,7 @@ export default function Home() {
               borderRadius: 8,
               boxShadow: "none",
               padding: "20px",
-              marginBottom: "40px", // Adding space between accordion and footer
+              marginBottom: "40px",
             }}
           >
             <Accordion>
@@ -393,7 +405,6 @@ export default function Home() {
               </AccordionDetails>
             </Accordion>
 
-            {/* Fourth Accordion: Our Mission */}
             <Accordion>
               <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                 <Typography
@@ -427,7 +438,6 @@ export default function Home() {
               </AccordionDetails>
             </Accordion>
 
-            {/* Fifth Accordion: Future Features */}
             <Accordion>
               <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                 <Typography
