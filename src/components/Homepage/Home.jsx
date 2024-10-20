@@ -33,7 +33,13 @@ export default function Home() {
   };
 
   return (
-    <main style={{ backgroundColor: "#f6f7f8", marginTop: "64px" }}>
+    <main
+      style={{
+        backgroundColor: "#f6f7f8",
+        marginTop: "64px",
+        paddingBottom: "80px",
+      }}
+    >
       <Grid container spacing={1} justifyContent="center" sx={{ padding: 5 }}>
         <Grid
           item
@@ -78,6 +84,7 @@ export default function Home() {
                         textAlign: "left",
                         fontWeight: "bold",
                         fontSize: { xs: "2.5rem", sm: "3.5rem" },
+                        lineHeight: 1.2,
                       }}
                     >
                       {item}
@@ -94,6 +101,8 @@ export default function Home() {
                   textAlign: "justify",
                   mb: 1,
                   marginTop: 2,
+                  fontSize: "1.2rem",
+                  lineHeight: 1.5,
                 }}
               >
                 <span style={{ color: "#00a250", fontWeight: "bold" }}>
@@ -109,7 +118,11 @@ export default function Home() {
               <Link to="/borrowers/signup" style={{ textDecoration: "none" }}>
                 <Button
                   variant="contained"
-                  style={{ backgroundColor: "#00a250", marginTop: "60px" }}
+                  style={{
+                    backgroundColor: "#00a250",
+                    marginTop: "60px",
+                    padding: "12px",
+                  }}
                   fullWidth
                 >
                   Get Started Today!
@@ -234,6 +247,7 @@ export default function Home() {
               borderRadius: 8,
               boxShadow: "none",
               padding: "20px",
+              marginBottom: "40px", // Adding space between accordion and footer
             }}
           >
             <Accordion>
