@@ -8,6 +8,7 @@ import {
   TextField,
   Button,
 } from "@mui/material";
+import QRCodeComponent from "../QRCodeComponent";
 
 const Footer = () => {
   return (
@@ -21,7 +22,7 @@ const Footer = () => {
     >
       <Container>
         <Grid container spacing={4}>
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} md={4}>
             <Typography variant="h6" gutterBottom>
               About Us
             </Typography>
@@ -39,7 +40,7 @@ const Footer = () => {
           </Grid>
 
           {/* Subscribe Section */}
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} md={4}>
             <Typography variant="h6" gutterBottom>
               Subscribe to Our Mailing List
             </Typography>
@@ -64,6 +65,11 @@ const Footer = () => {
             >
               Subscribe
             </Button>
+          </Grid>
+
+          {/* QR Code Section */}
+          <Grid item xs={12} md={4} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <QRCodeComponent size={150} />
           </Grid>
         </Grid>
         <Typography variant="body2" align="center" sx={{ marginTop: "20px" }}>
