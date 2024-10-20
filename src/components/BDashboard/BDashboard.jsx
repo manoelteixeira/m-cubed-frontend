@@ -1,4 +1,3 @@
-// export default BDashboard;
 import React, { useState, useEffect } from "react";
 import {
   Paper,
@@ -376,22 +375,6 @@ const BDashboard = ({ user, token }) => {
                                         </TableSortLabel>
                                       </Tooltip>
                                     </TableCell>
-                                    <TableCell>
-                                      <Tooltip title="Sort">
-                                        <TableSortLabel
-                                          active={
-                                            sortConfig.key ===
-                                            "totalInterestPaid"
-                                          }
-                                          direction={sortConfig.direction}
-                                          onClick={() =>
-                                            handleSort("totalInterestPaid")
-                                          }
-                                        >
-                                          Total Interest Paid
-                                        </TableSortLabel>
-                                      </Tooltip>
-                                    </TableCell>
                                     <TableCell align="center">
                                       Decision
                                     </TableCell>
@@ -404,9 +387,6 @@ const BDashboard = ({ user, token }) => {
                                         (offer.loan_amount *
                                           (1 + offer.interest_rate / 100)) /
                                         offer.repayment_term;
-                                      const totalInterestPaid =
-                                        monthlyPayment * offer.repayment_term -
-                                        offer.loan_amount;
 
                                       return (
                                         <TableRow key={offer.id}>
@@ -420,7 +400,10 @@ const BDashboard = ({ user, token }) => {
                                             })}
                                           </TableCell>
                                           <TableCell align="center">
-                                            {offer.interest_rate}%
+                                            {(
+                                              offer.interest_rate * 100
+                                            ).toFixed(2)}
+                                            %
                                           </TableCell>
                                           <TableCell align="center">
                                             {offer.repayment_term}
@@ -435,16 +418,7 @@ const BDashboard = ({ user, token }) => {
                                               }
                                             )}
                                           </TableCell>
-                                          <TableCell align="center">
-                                            $
-                                            {totalInterestPaid.toLocaleString(
-                                              "en-US",
-                                              {
-                                                minimumFractionDigits: 2,
-                                                maximumFractionDigits: 2,
-                                              }
-                                            )}
-                                          </TableCell>
+
                                           <TableCell align="center">
                                             <Button
                                               variant="contained"
@@ -513,7 +487,7 @@ const BDashboard = ({ user, token }) => {
               </li>
               <li>
                 <strong>Interest Rate:</strong>{" "}
-                {selectedProposal?.interest_rate}%
+                {(selectedProposal?.interest_rate * 100).toFixed(2)}%
               </li>
               <li>
                 <strong>Term Length:</strong> {selectedProposal?.repayment_term}{" "}
@@ -525,19 +499,6 @@ const BDashboard = ({ user, token }) => {
                   (selectedProposal?.loan_amount *
                     (1 + selectedProposal?.interest_rate / 100)) /
                   selectedProposal?.repayment_term
-                ).toLocaleString("en-US", {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}
-              </li>
-              <li>
-                <strong>Total Interest Paid:</strong> $
-                {(
-                  ((selectedProposal?.loan_amount *
-                    (1 + selectedProposal?.interest_rate / 100)) /
-                    selectedProposal?.repayment_term) *
-                    selectedProposal?.repayment_term -
-                  selectedProposal?.loan_amount
                 ).toLocaleString("en-US", {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
