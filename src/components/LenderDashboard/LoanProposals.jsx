@@ -11,16 +11,13 @@ import {
   TextField,
   Grid,
   Button,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  TablePagination,
   Collapse,
   Box,
   Link,
+  Checkbox,
+  FormControlLabel,
+  TablePagination,
 } from "@mui/material";
-import SortIcon from "@mui/icons-material/Sort";
 import PropTypes from "prop-types";
 
 const API = import.meta.env.VITE_BASE_URL;
@@ -33,27 +30,12 @@ export default function LoanProposals({
   filteredLoanProposals,
   setFilteredLoanProposals,
 }) {
-  // const [loanProposals, setLoanProposals] = useState([]);
-  // const [filteredLoanProposals, setFilteredLoanProposals] = useState([]);
   const [pageLoanProposals, setPageLoanProposals] = useState(0);
   const [rowsPerPageLoanProposals, setRowsPerPageLoanProposals] = useState(5);
   const [searchTermLoanProposals, setSearchTermLoanProposals] = useState("");
   const [expandedRowId, setExpandedRowId] = useState(null);
-  const [sortByLoanProposals, setSortByLoanProposals] = useState("created_at");
-  const [sortOrderLoanProposals, setSortOrderLoanProposals] = useState("desc");
-
-  const [borrowerDetails, setBorrowerDetails] = useState({
-    business_name: "",
-    industry: "",
-    credit_score: "",
-    street: "",
-    city: "",
-    state: "",
-    zip_code: "",
-    fico_score_link: "#",
-    secretary_of_state_link: "#",
-    drivers_license_link: "#",
-  });
+  const [borrowerDetails, setBorrowerDetails] = useState({});
+  const [creditReports, setCreditReports] = useState([]);
 
   const [lenderProposal, setLenderProposal] = useState({
     title: "",
@@ -61,26 +43,15 @@ export default function LoanProposals({
     loan_amount: "",
     interest_rate: "",
     repayment_term: "",
-    created_at: new Date().toLocaleDateString(),
+    additional_requirements: {
+      downpayment: false,
+      personal_guarantee: false,
+      others: false,
+    },
   });
 
-  // Fetch loan proposals from the API
-  // const loadLoanProposals = () => {
-  //   const options = {
-  //     headers: { Authorization: token },
-  //   };
-  //   fetch(`${API}/lenders/${user.id}/proposals`, options)
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       setLoanProposals(data);
-  //       setFilteredLoanProposals(data);
-  //     })
-  //     .catch((err) => console.log(err));
-  // };
-
-  // Fetch borrower details for expanded rows
   const fetchBorrowerDetails = async (borrowerId) => {
-    if (!borrowerId) return; // Ensure borrowerId is not null or undefined
+    if (!borrowerId) return;
     try {
       const res = await fetch(`${API}/borrowers/${borrowerId}`, {
         headers: { Authorization: token },
@@ -89,32 +60,31 @@ export default function LoanProposals({
       const data = await res.json();
 
       setBorrowerDetails({
-        business_name: data.business_name || "N/A",
-        industry: data.industry || "N/A",
-        credit_score: data.credit_score || "N/A",
-        street: data.street || "N/A",
-        city: data.city || "N/A",
-        state: data.state || "N/A",
-        zip_code: data.zip_code || "N/A",
-        fico_score_link: data.fico_score_link || "/mock-fico-score.pdf",
+        business_name: data.borrower.business_name || "N/A",
+        industry: data.borrower.industry || "N/A",
+        street: data.borrower.street || "N/A",
+        city: data.borrower.city || "N/A",
+        state: data.borrower.state || "N/A",
+        zip_code: data.borrower.zip_code || "N/A",
+        fico_score_link:
+          data.borrower.fico_score_link || "/mock-fico-score.pdf",
         secretary_of_state_link:
-          data.secretary_of_state_link || "/mock-sos-certificate.pdf",
+          data.borrower.secretary_of_state_link || "/mock-sos-certificate.pdf",
         drivers_license_link:
-          data.drivers_license_link || "/mock-drivers-license.pdf",
+          data.borrower.drivers_license_link || "/mock-drivers-license.pdf",
       });
+      setCreditReports(data.credit_reports);
     } catch (error) {
       console.error("Failed to fetch borrower details", error);
     }
   };
 
-  // Handle row expansion and fetch borrower details
   const toggleRowExpansion = (rowId, borrowerId, proposal) => {
     if (expandedRowId === rowId) {
       setExpandedRowId(null);
     } else {
       setExpandedRowId(rowId);
-      fetchBorrowerDetails(borrowerId); // Fetch details when the row is expandedw
-
+      fetchBorrowerDetails(borrowerId);
       if (proposal) {
         setLenderProposal({
           title: proposal.title,
@@ -122,13 +92,12 @@ export default function LoanProposals({
           loan_amount: proposal.loan_amount.toString(),
           interest_rate: proposal.interest_rate.toString(),
           repayment_term: proposal.repayment_term.toString(),
-          created_at: proposal.created_at,
+          additional_requirements: proposal.additional_requirements || {},
         });
       }
     }
   };
 
-  // Handle input changes for lender proposal form
   const handleProposalChange = (event) => {
     const { name, value } = event.target;
     setLenderProposal((prevProposal) => ({
@@ -137,14 +106,22 @@ export default function LoanProposals({
     }));
   };
 
-  // Resubmit (edit) loan proposal function (PUT)
+  const handleCheckboxChange = (event) => {
+    setLenderProposal((prevProposal) => ({
+      ...prevProposal,
+      additional_requirements: {
+        ...prevProposal.additional_requirements,
+        [event.target.name]: event.target.checked,
+      },
+    }));
+  };
+
   const handleResubmitProposal = async () => {
     const proposalData = {
       ...lenderProposal,
       loan_amount: parseFloat(lenderProposal.loan_amount),
       interest_rate: parseFloat(lenderProposal.interest_rate),
       repayment_term: parseInt(lenderProposal.repayment_term, 10),
-      created_at: new Date().toISOString(),
     };
 
     const endpoint = `${API}/lenders/${user.id}/proposals/${expandedRowId}`;
@@ -170,39 +147,6 @@ export default function LoanProposals({
     }
   };
 
-  // Handle sorting
-  const sortLoanProposals = (sortBy, sortOrder) => {
-    const sorted = [...filteredLoanProposals].sort((a, b) => {
-      if (sortBy === "loan_amount" || sortBy === "interest_rate") {
-        return sortOrder === "asc"
-          ? a[sortBy] - b[sortBy]
-          : b[sortBy] - a[sortBy];
-      } else if (sortBy === "created_at") {
-        return sortOrder === "asc"
-          ? new Date(a.created_at) - new Date(b.created_at)
-          : new Date(b.created_at) - new Date(a.created_at);
-      } else {
-        return sortOrder === "asc"
-          ? a[sortBy].localeCompare(b[sortBy])
-          : b[sortBy].localeCompare(a[sortBy]);
-      }
-    });
-    setFilteredLoanProposals(sorted);
-  };
-
-  // Sorting function
-  const handleSortChangeLoanProposals = (event) => {
-    setSortByLoanProposals(event.target.value);
-    sortLoanProposals(event.target.value, sortOrderLoanProposals);
-  };
-
-  const handleSortOrderChangeLoanProposals = () => {
-    const newOrder = sortOrderLoanProposals === "asc" ? "desc" : "asc";
-    setSortOrderLoanProposals(newOrder);
-    sortLoanProposals(sortByLoanProposals, newOrder);
-  };
-
-  // Handle search
   const handleSearchChangeLoanProposals = (event) => {
     const term = event.target.value.toLowerCase();
     setSearchTermLoanProposals(term);
@@ -248,58 +192,20 @@ export default function LoanProposals({
               }}
             />
           </Grid>
-          <Grid item>
-            <FormControl sx={{ minWidth: 120, marginRight: 2 }}>
-              <InputLabel id="sort-loan-proposals-label">Sort By</InputLabel>
-              <Select
-                labelId="sort-loan-proposals-label"
-                value={sortByLoanProposals}
-                onChange={handleSortChangeLoanProposals}
-                label="Sort By"
-              >
-                <MenuItem value="title">Title</MenuItem>
-                <MenuItem value="loan_amount">Loan Amount</MenuItem>
-                <MenuItem value="interest_rate">Interest Rate</MenuItem>
-                <MenuItem value="created_at">Created At</MenuItem>
-              </Select>
-            </FormControl>
-            <Button
-              variant="contained"
-              onClick={handleSortOrderChangeLoanProposals}
-              startIcon={<SortIcon />}
-              sx={{
-                backgroundColor: "#00a250",
-                color: "#fff",
-                "&:hover": {
-                  backgroundColor: "#007a3e",
-                },
-              }}
-            >
-              {sortOrderLoanProposals === "asc" ? "Ascending" : "Descending"}
-            </Button>
-          </Grid>
         </Grid>
         <TableContainer>
           <Table>
             <TableHead>
               <TableRow>
                 {[
-                  "Title",
-                  "Description",
-                  "Loan Amount",
-                  "Interest Rate",
-                  "Repayment Term",
-                  "Created At",
-                  "Status",
-                ].map((header) => (
-                  <TableCell
-                    key={header}
-                    align={
-                      header === "Loan Amount" || header === "Interest Rate"
-                        ? "right"
-                        : "center"
-                    }
-                  >
+                  { header: "Title", align: "left" },
+                  { header: "Description", align: "left" },
+                  { header: "Loan Amount", align: "right" },
+                  { header: "Interest Rate", align: "right" },
+                  { header: "Repayment Term", align: "center" },
+                  { header: "Status", align: "center" },
+                ].map(({ header, align }) => (
+                  <TableCell key={header} align={align}>
                     {header}
                   </TableCell>
                 ))}
@@ -321,16 +227,14 @@ export default function LoanProposals({
                         toggleRowExpansion(loan.id, loan.borrower_id, loan)
                       }
                     >
-                      <TableCell align="center" sx={{ color: "#00a250" }}>
+                      <TableCell align="left" sx={{ color: "#00a250" }}>
                         {loan.title}
                       </TableCell>
-                      <TableCell align="center">{loan.description}</TableCell>
+                      <TableCell align="left">{loan.description}</TableCell>
                       <TableCell align="right">
                         {parseFloat(loan.loan_amount).toLocaleString("en-US", {
                           style: "currency",
                           currency: "USD",
-                          minimumFractionDigits: 2,
-                          maximumFractionDigits: 2,
                         })}
                       </TableCell>
                       <TableCell align="right">
@@ -338,9 +242,6 @@ export default function LoanProposals({
                       </TableCell>
                       <TableCell align="center">
                         {loan.repayment_term} months
-                      </TableCell>
-                      <TableCell align="center">
-                        {new Date(loan.created_at).toLocaleDateString()}
                       </TableCell>
                       <TableCell align="center">
                         {loan.accepted === null
@@ -351,10 +252,9 @@ export default function LoanProposals({
                       </TableCell>
                     </TableRow>
 
-                    {/* Collapsible row for borrower details and RESEND proposal form */}
                     {expandedRowId === loan.id && (
                       <TableRow key={`${loan.id}-collapse`}>
-                        <TableCell colSpan={8}>
+                        <TableCell colSpan={6}>
                           <Collapse in={expandedRowId === loan.id}>
                             <Box
                               margin={2}
@@ -367,7 +267,6 @@ export default function LoanProposals({
                               }}
                             >
                               <Grid container spacing={2}>
-                                {/* Borrower Info on Left */}
                                 <Grid item xs={6}>
                                   <Typography
                                     variant="h6"
@@ -385,30 +284,84 @@ export default function LoanProposals({
                                       {borrowerDetails.industry}
                                     </Typography>
                                     <Typography>
-                                      <strong>Credit Score:</strong>{" "}
-                                      {borrowerDetails.credit_score}
-                                    </Typography>
-                                    <Typography>
                                       <strong>Location:</strong>{" "}
                                       {borrowerDetails.street},{" "}
                                       {borrowerDetails.city},{" "}
                                       {borrowerDetails.state}{" "}
                                       {borrowerDetails.zip_code}
                                     </Typography>
-                                    {/* Verified Documents */}
-                                    <Typography>
-                                      <strong>Verified Documents:</strong>
+
+                                    <Typography
+                                      variant="subtitle1"
+                                      sx={{ marginTop: 2 }}
+                                    >
+                                      Credit Reports:
+                                    </Typography>
+                                    {creditReports.length > 0 ? (
+                                      <ul>
+                                        {creditReports.map((report, index) => {
+                                          const isExpired =
+                                            new Date(report.expire_at) <
+                                            new Date();
+                                          return (
+                                            <li
+                                              key={index}
+                                              style={{
+                                                color: isExpired
+                                                  ? "red"
+                                                  : "black",
+                                              }}
+                                            >
+                                              Bureau: {report.credit_bureau},
+                                              Score:{" "}
+                                              <Link
+                                                href={
+                                                  borrowerDetails.fico_score_link
+                                                }
+                                                target="_blank"
+                                                sx={{ color: "#00a250" }}
+                                              >
+                                                {report.score}
+                                              </Link>
+                                              , Expires on:{" "}
+                                              {new Date(
+                                                report.expire_at
+                                              ).toLocaleDateString()}{" "}
+                                              {isExpired && "(EXPIRED)"}
+                                            </li>
+                                          );
+                                        })}
+                                      </ul>
+                                    ) : (
+                                      <Typography>
+                                        No reports available
+                                      </Typography>
+                                    )}
+
+                                    <Typography
+                                      variant="subtitle1"
+                                      sx={{ marginTop: 2 }}
+                                    >
+                                      Verified Documents:
                                     </Typography>
                                     <ul>
-                                      <li>
-                                        <Link
-                                          href={borrowerDetails.fico_score_link}
-                                          target="_blank"
-                                          rel="noopener"
-                                          sx={{ color: "#00a250" }}
-                                        >
-                                          FICO Score - Verified
-                                        </Link>
+                                      <li
+                                        style={{
+                                          color: creditReports.some(
+                                            (report) =>
+                                              new Date(report.expire_at) <
+                                              new Date()
+                                          )
+                                            ? "red"
+                                            : "#00a250",
+                                        }}
+                                      >
+                                        Credit Score - Verified{" "}
+                                        {creditReports.some(
+                                          (report) =>
+                                            new Date(report.expire_at) <
+                                            new Date()
+                                        ) && "(EXPIRED)"}
                                       </li>
                                       <li>
                                         <Link
@@ -439,7 +392,6 @@ export default function LoanProposals({
                                   </Box>
                                 </Grid>
 
-                                {/* Proposal Form on Right */}
                                 <Grid item xs={6}>
                                   <Typography
                                     variant="h6"
@@ -457,28 +409,28 @@ export default function LoanProposals({
                                       sx={{ marginBottom: 2 }}
                                     />
                                     <TextField
-                                      label="Description"
-                                      fullWidth
-                                      name="description"
-                                      value={lenderProposal.description}
-                                      onChange={handleProposalChange}
-                                      multiline
-                                      rows={3}
-                                      sx={{ marginBottom: 2 }}
-                                    />
-                                    <TextField
                                       label="Loan Amount"
                                       fullWidth
                                       name="loan_amount"
-                                      value={lenderProposal.loan_amount}
-                                      onChange={handleProposalChange}
+                                      value={parseFloat(
+                                        lenderProposal.loan_amount
+                                      ).toLocaleString("en-US", {
+                                        style: "currency",
+                                        currency: "USD",
+                                      })}
+                                      InputProps={{
+                                        readOnly: true,
+                                        sx: { color: "gray" },
+                                      }}
                                       sx={{ marginBottom: 2 }}
                                     />
                                     <TextField
                                       label="Interest Rate"
                                       fullWidth
                                       name="interest_rate"
-                                      value={lenderProposal.interest_rate}
+                                      value={`${parseFloat(
+                                        lenderProposal.interest_rate
+                                      ).toFixed(2)}%`}
                                       onChange={handleProposalChange}
                                       sx={{ marginBottom: 2 }}
                                     />
@@ -490,10 +442,83 @@ export default function LoanProposals({
                                       onChange={handleProposalChange}
                                       sx={{ marginBottom: 2 }}
                                     />
+                                    <Typography variant="subtitle1">
+                                      Additional Requirements
+                                    </Typography>
+                                    <FormControlLabel
+                                      control={
+                                        <Checkbox
+                                          checked={
+                                            lenderProposal
+                                              .additional_requirements
+                                              .downpayment
+                                          }
+                                          onChange={handleCheckboxChange}
+                                          name="downpayment"
+                                          sx={{
+                                            color: "#00a250",
+                                            "&.Mui-checked": {
+                                              color: "#00a250",
+                                            },
+                                          }}
+                                        />
+                                      }
+                                      label="Downpayment"
+                                    />
+                                    <FormControlLabel
+                                      control={
+                                        <Checkbox
+                                          checked={
+                                            lenderProposal
+                                              .additional_requirements
+                                              .personal_guarantee
+                                          }
+                                          onChange={handleCheckboxChange}
+                                          name="personal_guarantee"
+                                          sx={{
+                                            color: "#00a250",
+                                            "&.Mui-checked": {
+                                              color: "#00a250",
+                                            },
+                                          }}
+                                        />
+                                      }
+                                      label="Personal Guarantee"
+                                    />
+                                    <FormControlLabel
+                                      control={
+                                        <Checkbox
+                                          checked={
+                                            lenderProposal
+                                              .additional_requirements.others
+                                          }
+                                          onChange={handleCheckboxChange}
+                                          name="others"
+                                          sx={{
+                                            color: "#00a250",
+                                            "&.Mui-checked": {
+                                              color: "#00a250",
+                                            },
+                                          }}
+                                        />
+                                      }
+                                      label="Others"
+                                    />
+                                    <TextField
+                                      label="Description"
+                                      fullWidth
+                                      name="description"
+                                      value={lenderProposal.description}
+                                      onChange={handleProposalChange}
+                                      multiline
+                                      rows={3}
+                                      sx={{ marginTop: 2, marginBottom: 2 }}
+                                    />
                                     <Box
                                       sx={{
                                         display: "flex",
                                         justifyContent: "flex-start",
+                                        gap: "10px",
                                         marginTop: 2,
                                       }}
                                     >
@@ -502,7 +527,6 @@ export default function LoanProposals({
                                         sx={{
                                           backgroundColor: "#00a250",
                                           color: "#fff",
-                                          marginRight: 2,
                                           "&:hover": {
                                             backgroundColor: "#007a3e",
                                           },
