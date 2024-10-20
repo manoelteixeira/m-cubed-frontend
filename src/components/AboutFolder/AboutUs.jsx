@@ -8,9 +8,6 @@ import {
   Avatar,
   Link,
 } from "@mui/material";
-import BusinessIcon from "@mui/icons-material/Business";
-import PeopleIcon from "@mui/icons-material/People";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import { styled } from "@mui/system";
@@ -32,11 +29,6 @@ const TeamCard = styled(Card)({
   },
   textAlign: "center",
   padding: "30px",
-  marginBottom: "60px",
-});
-
-const Paragraph = styled(Typography)({
-  textAlign: "justify",
   marginBottom: "60px",
 });
 
@@ -95,57 +87,6 @@ export default function AboutUs() {
       }}
     >
       <Container maxWidth="lg">
-        {/* ELFA Market Data Section */}
-        <Box sx={{ textAlign: "center", margin: "60px 0" }}>
-          <Typography variant="h4" component="h2" color={MMMGreen} gutterBottom>
-            WE'RE TRANSFORMING SMALL-TICKET EQUIPMENT FINANCING
-          </Typography>
-          <Paragraph variant="body1" color="textSecondary">
-            According to the 2024 Survey of Equipment Finance Activity (SEFA)
-            conducted by the Equipment Leasing and Finance Association (ELFA),
-            the small-ticket equipment financing market contributes roughly $300
-            billion annually to the $1 trillion equipment finance industry. In
-            2023, the small-ticket segment, defined as transactions up to
-            $250,000, saw significant growth, highlighting its importance in
-            supporting businesses of all sizes. For more details, visit{" "}
-            <Link
-              href="https://www.elfaonline.org/SEFA"
-              target="_blank"
-              rel="noopener"
-            >
-              ELFA's SEFA Report
-            </Link>
-            .
-          </Paragraph>
-        </Box>
-
-        {/* Platform Disruption Section */}
-        <Box
-          sx={{
-            textAlign: "center",
-            margin: "60px 0",
-            backgroundColor: MMMGreen,
-            color: MMMWhite,
-            padding: "60px",
-            borderRadius: "8px",
-          }}
-        >
-          <Typography variant="h5" component="h3" gutterBottom>
-            How We're Changing the Game
-          </Typography>
-          <Paragraph
-            variant="body1"
-            sx={{ color: MMMWhite, fontSize: "1.2rem", lineHeight: "1.75" }}
-          >
-            Our platform transforms the $300 billion small-ticket equipment
-            financing market by linking borrowers and lenders seamlessly.
-            Borrowers post their financing needs, while lenders access
-            pre-qualified deals instantly – without triggering multiple credit
-            checks. Whether launching or expanding, we simplify financing,
-            letting you focus on scaling your business.
-          </Paragraph>
-        </Box>
-
         {/* Team Section */}
         <Box sx={{ textAlign: "center", marginBottom: "60px" }}>
           <Typography
@@ -155,7 +96,7 @@ export default function AboutUs() {
             gutterBottom
             sx={{ marginBottom: "60px" }}
           >
-            The Team Behind MoneyMoneyMoney
+            Meet The Team Behind MoneyMoneyMoney
           </Typography>
           <Grid container spacing={10} justifyContent="center">
             {teamMembers.map((member, index) => (
@@ -199,44 +140,6 @@ export default function AboutUs() {
                 </TeamCard>
               </Grid>
             ))}
-          </Grid>
-        </Box>
-
-        {/* Why Choose Us Section */}
-        <Box sx={{ textAlign: "center", marginTop: "60px" }}>
-          <Typography variant="h5" component="h2" color={MMMGreen}>
-            Why Choose Us?
-          </Typography>
-          <Grid
-            container
-            spacing={10}
-            justifyContent="center"
-            sx={{ marginTop: "60px" }}
-          >
-            <Grid item xs={12} sm={4}>
-              <Box sx={{ textAlign: "center" }}>
-                <BusinessIcon sx={{ fontSize: 50, color: MMMGreen }} />
-                <Typography variant="body1" sx={{ marginTop: "10px" }}>
-                  Seamless Financing
-                </Typography>
-              </Box>
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <Box sx={{ textAlign: "center" }}>
-                <PeopleIcon sx={{ fontSize: 50, color: MMMGreen }} />
-                <Typography variant="body1" sx={{ marginTop: "10px" }}>
-                  Trusted Team
-                </Typography>
-              </Box>
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <Box sx={{ textAlign: "center" }}>
-                <CheckCircleIcon sx={{ fontSize: 50, color: MMMGreen }} />
-                <Typography variant="body1" sx={{ marginTop: "10px" }}>
-                  Real-Time Opportunities
-                </Typography>
-              </Box>
-            </Grid>
           </Grid>
         </Box>
       </Container>
