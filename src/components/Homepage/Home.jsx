@@ -9,12 +9,13 @@ import "slick-carousel/slick/slick-theme.css";
 
 export default function Home() {
   const equipmentItems = [
-    "Medical Equipment",
-    "POS Systems",
-    "Catering Equipment",
-    "Mining Equipment",
-    "Agri Machinery",
-    "Lab Equipment",
+    "Transportation",
+    "Agricultural",
+    "Construction",
+    "IT & Other Technology",
+    "Industrial",
+    "Manufacturing",
+    "Services",
   ];
 
   const settings = {
@@ -112,7 +113,7 @@ export default function Home() {
                   style={{ backgroundColor: "#00a250", marginTop: "60px" }}
                   fullWidth
                 >
-                  Get Started!
+                  Get Started Today!
                 </Button>
               </Link>
             </CardContent>
@@ -216,7 +217,7 @@ export default function Home() {
           <Grid item xs={6} sm={6} display="flex" justifyContent="center">
             <Link to="/lenders/signup">
               <img
-                src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1728583550/Add_a_heading_500_x_500_px_4_zs06zy.png"
+                src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1729438568/Add_a_heading_500_x_500_px_5_znsmck.png"
                 alt="Lenders"
                 style={{ width: 600, height: 600, borderRadius: 8 }}
               />
