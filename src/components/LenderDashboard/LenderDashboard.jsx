@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import LoansMarketplace from "./LoansMarketplace";
 import LoanProposals from "./LoanProposals";
-import { Paper, Typography, Grid } from "@mui/material";
+import { Paper, Typography, Grid, Box } from "@mui/material";
 
 const API = import.meta.env.VITE_BASE_URL;
 
@@ -31,12 +31,11 @@ const LenderDashboard = ({ user, token }) => {
     <div className="lender-dashboard" style={{ backgroundColor: "#f6f7f8" }}>
       {/* Welcome Section */}
       <Paper
-        elevation={3}
+        elevation={0}
         sx={{
           padding: "20px",
-          marginBottom: "20px",
+          marginBottom: "40px",
           backgroundColor: "#f6f7f8",
-          boxShadow: "0 0 20px rgba(255, 255, 255, 0.7)",
         }}
       >
         <Grid container justifyContent="space-between" alignItems="center">
@@ -56,19 +55,36 @@ const LenderDashboard = ({ user, token }) => {
         </Grid>
       </Paper>
 
-      <LoansMarketplace
-        user={user}
-        token={token}
-        loadLoanProposals={loadLoanProposals}
-      />
-      <LoanProposals
-        user={user}
-        token={token}
-        loanProposals={loanProposals}
-        loadLoanProposals={loadLoanProposals}
-        filteredLoanProposals={filteredLoanProposals}
-        setFilteredLoanProposals={setFilteredLoanProposals}
-      />
+      {/* Loans Marketplace */}
+      <Box sx={{ marginBottom: "80px" }}>
+        <LoansMarketplace
+          user={user}
+          token={token}
+          loadLoanProposals={loadLoanProposals}
+          sx={{
+            border: "none",
+            boxShadow: "none",
+            backgroundColor: "#f6f7f8",
+          }}
+        />
+      </Box>
+
+      {/* Loan Proposals */}
+      <Box sx={{ marginTop: "80px" }}>
+        <LoanProposals
+          user={user}
+          token={token}
+          loanProposals={loanProposals}
+          loadLoanProposals={loadLoanProposals}
+          filteredLoanProposals={filteredLoanProposals}
+          setFilteredLoanProposals={setFilteredLoanProposals}
+          sx={{
+            border: "none",
+            boxShadow: "none",
+            backgroundColor: "#f6f7f8",
+          }}
+        />
+      </Box>
     </div>
   );
 };

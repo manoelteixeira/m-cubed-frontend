@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import {
-  Paper,
   Typography,
   Table,
   TableBody,
@@ -170,7 +169,8 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
 
   return (
     <Grid item xs={12}>
-      <Paper elevation={3} sx={{ padding: 3, backgroundColor: "#f6f7f8" }}>
+      {/* Removed the Paper and added Box with no shadow */}
+      <Box sx={{ padding: 3, backgroundColor: "#f6f7f8", border: "none" }}>
         <Typography
           variant="h5"
           sx={{ color: "#00a250", marginBottom: 2, textAlign: "center" }}
@@ -595,7 +595,7 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
           }
           rowsPerPageOptions={[5, 10, 25, 50, 100]}
         />
-      </Paper>
+      </Box>
     </Grid>
   );
 }
