@@ -79,13 +79,13 @@ const NavBar = ({ setUser, setToken, isAuthenticated }) => {
             color: "#00a250",
             border: "2px solid #00a250",
             borderRadius: "50%",
-            padding: "8px",
+            padding: "12px",
             '&:hover': {
               backgroundColor: "#e6f7ef",
             },
           }}
         >
-          <MenuIcon />
+          <MenuIcon/>
         </IconButton>
       ) : (
         <>
@@ -119,7 +119,7 @@ const NavBar = ({ setUser, setToken, isAuthenticated }) => {
       );
     } else {
       return isMobile ? (
-        <div style={{ display: "flex", alignItems: "center" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 40 }}>
         <Typography
             variant="subtitle1"
             sx={{
@@ -203,14 +203,13 @@ const NavBar = ({ setUser, setToken, isAuthenticated }) => {
       }}
       elevation={0}
     >
-      <Toolbar>
+      <Toolbar sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
         <IconButton
           edge="start"
           aria-label="mmm logo"
           onClick={handleLogoClick}
           sx={{
             color: "#00a250",
-            marginRight: 2,
             borderRadius: 0,
             padding: 0,
           }}
@@ -227,118 +226,117 @@ const NavBar = ({ setUser, setToken, isAuthenticated }) => {
             variant="subtitle1"
             sx={{
               color: "#00a250",
-              marginLeft: 1,
               fontSize: "1rem",
               fontWeight: "bold",
-              marginRight: 2,
+              textAlign: 'center',
             }}
           >
             Here at MMM, we are obsessed with getting you funded.
           </Typography>
         )}
 
-        <Box sx={{ flexGrow: 1, gap: 3 }} />
-
-        {renderNavButtons()}
-
-        <Menu
-          anchorEl={anchorEl}
-          open={Boolean(anchorEl)}
-          onClose={handleCloseMenu}
-          PaperProps={{
-            elevation: 0,
-            sx: {
-              overflow: 'visible',
-              filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-              mt: 1.5,
-              '& .MuiAvatar-root': {
-                width: 32,
-                height: 32,
-                ml: -0.5,
-                mr: 1,
-              },
-              '&:before': {
-                content: '""',
-                display: 'block',
-                position: 'absolute',
-                top: 0,
-                right: 14,
-                width: 10,
-                height: 10,
-                bgcolor: 'background.paper',
-                transform: 'translateY(-50%) rotate(45deg)',
-                zIndex: 0,
-              },
-            },
-          }}
-          transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-          anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-        >
-          {isAuthenticated ? [
-            <MenuItem 
-              key="dashboard"
-              onClick={handleDashboardClick}
-              sx={{
-                '&:hover': {
-                  backgroundColor: '#d9d9d9',
-                  color: '#00a250',
-                },
-              }}
-            >
-              YOUR DASHBOARD
-            </MenuItem>,
-            <MenuItem 
-              key="logout"
-              onClick={handleLogoutClick}
-              sx={{
-                '&:hover': {
-                  backgroundColor: '#d9d9d9',
-                  color: '#00a250',
-                },
-              }}
-            >
-              LOG OUT
-            </MenuItem>
-          ] : [
-            <MenuItem 
-              key="borrower"
-              onClick={() => handleSignUpClick("borrower")}
-              sx={{
-                '&:hover': {
-                  backgroundColor: '#d9d9d9',
-                  color: '#00a250',
-                },
-              }}
-            >
-              Find a Lender
-            </MenuItem>,
-            <MenuItem 
-              key="lender"
-              onClick={() => handleSignUpClick("lender")}
-              sx={{
-                '&:hover': {
-                  backgroundColor: '#d9d9d9',
-                  color: '#00a250',
-                },
-              }}
-            >
-              Find a Borrower
-            </MenuItem>,
-            <MenuItem 
-              key="login"
-              onClick={handleLoginClick}
-              sx={{
-                '&:hover': {
-                  backgroundColor: '#d9d9d9',
-                  color: '#00a250',
-                },
-              }}
-            >
-              LOG IN
-            </MenuItem>
-          ]}
-        </Menu>
+        <Box>
+          {renderNavButtons()}
+        </Box>
       </Toolbar>
+
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleCloseMenu}
+        PaperProps={{
+          elevation: 0,
+          sx: {
+            overflow: 'visible',
+            filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+            mt: 1.5,
+            '& .MuiAvatar-root': {
+              width: 32,
+              height: 32,
+              ml: -0.5,
+              mr: 1,
+            },
+            '&:before': {
+              content: '""',
+              display: 'block',
+              position: 'absolute',
+              top: 0,
+              right: 14,
+              width: 10,
+              height: 10,
+              bgcolor: 'background.paper',
+              transform: 'translateY(-50%) rotate(45deg)',
+              zIndex: 0,
+            },
+          },
+        }}
+        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+      >
+        {isAuthenticated ? [
+          <MenuItem 
+            key="dashboard"
+            onClick={handleDashboardClick}
+            sx={{
+              '&:hover': {
+                backgroundColor: '#d9d9d9',
+                color: '#00a250',
+              },
+            }}
+          >
+            YOUR DASHBOARD
+          </MenuItem>,
+          <MenuItem 
+            key="logout"
+            onClick={handleLogoutClick}
+            sx={{
+              '&:hover': {
+                backgroundColor: '#d9d9d9',
+                color: '#00a250',
+              },
+            }}
+          >
+            LOG OUT
+          </MenuItem>
+        ] : [
+          <MenuItem 
+            key="borrower"
+            onClick={() => handleSignUpClick("borrower")}
+            sx={{
+              '&:hover': {
+                backgroundColor: '#d9d9d9',
+                color: '#00a250',
+              },
+            }}
+          >
+            Find a Lender
+          </MenuItem>,
+          <MenuItem 
+            key="lender"
+            onClick={() => handleSignUpClick("lender")}
+            sx={{
+              '&:hover': {
+                backgroundColor: '#d9d9d9',
+                color: '#00a250',
+              },
+            }}
+          >
+            Find a Borrower
+          </MenuItem>,
+          <MenuItem 
+            key="login"
+            onClick={handleLoginClick}
+            sx={{
+              '&:hover': {
+                backgroundColor: '#d9d9d9',
+                color: '#00a250',
+              },
+            }}
+          >
+            LOG IN
+          </MenuItem>
+        ]}
+      </Menu>
     </AppBar>
   );
 };
