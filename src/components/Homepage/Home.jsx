@@ -671,6 +671,7 @@ export default function Home() {
               border: "1px solid #e0e0e0",
               borderRadius: 2,
               backgroundColor: "fffff",
+              marginBottom: isMedium ? 3 : 0,
             }}
           >
             <Typography variant="h6" gutterBottom>
@@ -704,8 +705,8 @@ export default function Home() {
           />
         </Grid>
 
-        <Grid container justifyContent="center" spacing={2}>
-          <Grid item xs={6} sm={6} display="flex" justifyContent="center">
+        <Grid container justifyContent="center" spacing={isMobile ? 2 : 2}>
+          <Grid item xs={12} sm={6} display="flex" justifyContent="center">
             <Link to="/borrowers/signup">
               <img
                 src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1728581611/Add_a_heading_500_x_500_px_3_w06vz8.png"
@@ -714,7 +715,7 @@ export default function Home() {
               />
             </Link>
           </Grid>
-          <Grid item xs={6} sm={6} display="flex" justifyContent="center">
+          <Grid item xs={12} sm={6} display="flex" justifyContent="center">
             <Link to="/lenders/signup">
               <img
                 src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1728583550/Add_a_heading_500_x_500_px_4_zs06zy.png"
@@ -743,14 +744,14 @@ export default function Home() {
               style={{ width: 400, height: 400, borderRadius: 8 }}
             />
           </Grid>
-          <Grid item xs={4} sm={4} display="flex" justifyContent="center">
+          <Grid item xs={12} sm={4} display="flex" justifyContent="center">
             <img
               src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1727974117/Add_a_heading_500_x_500_px_1_hl4tvp.png"
               alt="How it works step 2"
               style={{ width: 400, height: 400, borderRadius: 8 }}
             />
           </Grid>
-          <Grid item xs={4} sm={4} display="flex" justifyContent="center">
+          <Grid item xs={12} sm={4} display="flex" justifyContent="center">
             <img
               src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1727974118/Add_a_heading_500_x_500_px_2_f3zlzp.png"
               alt="How it works step 3"
