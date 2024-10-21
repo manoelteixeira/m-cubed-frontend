@@ -68,7 +68,7 @@ export default function Home() {
               border: "none",
               borderRadius: 5,
               boxShadow: "none",
-              marginLeft: isMobile ? 0 : isMedium ? 5 : 10,
+              marginLeft: isMobile ? 5 : isMedium ? 5 : 10,
               marginRight: isMobile ? 0 : isMedium ? 5 : 10,
             }}
           >
@@ -122,6 +122,7 @@ export default function Home() {
                   textAlign: "justify",
                   mb: 1,
                   mt: isMobile ? 2 : isMedium ? 2.5 : 3,
+                  ml: isMobile ? 1 : isMedium ? 2 : 2.5,
                   fontSize: { xs: "0.9rem", sm: "1rem", md: "1.1rem" },
                   lineHeight: 1.5,
                 }}
@@ -143,6 +144,7 @@ export default function Home() {
                     backgroundColor: "#00a250",
                     marginTop: isMobile ? "20px" : isMedium ? "30px" : "40px",
                     padding: isMobile ? "8px" : isMedium ? "10px" : "12px",
+                    
                   }}
                   fullWidth
                 >
