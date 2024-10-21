@@ -224,7 +224,7 @@ export default function LoanProposals({
             sx={{
               padding: "20px",
               textAlign: "center",
-              backgroundColor: "#fff",
+              backgroundColor: "#f6f7f8",
             }}
           >
             <Typography variant="h6" sx={{ color: "#00a250" }}>
@@ -241,7 +241,7 @@ export default function LoanProposals({
             sx={{
               padding: "20px",
               textAlign: "center",
-              backgroundColor: "#fff",
+              backgroundColor: "#f6f7f8",
             }}
           >
             <Typography variant="h6" sx={{ color: "#00a250" }}>
@@ -261,7 +261,7 @@ export default function LoanProposals({
             sx={{
               padding: "20px",
               textAlign: "center",
-              backgroundColor: "#fff",
+              backgroundColor: "#f6f7f8",
             }}
           >
             <Typography variant="h6" sx={{ color: "#00a250" }}>
@@ -284,7 +284,7 @@ export default function LoanProposals({
             sx={{
               padding: "20px",
               textAlign: "center",
-              backgroundColor: "#fff",
+              backgroundColor: "#f6f7f8",
             }}
           >
             <Typography variant="h6" sx={{ color: "#00a250" }}>
@@ -301,7 +301,7 @@ export default function LoanProposals({
             sx={{
               padding: "20px",
               textAlign: "center",
-              backgroundColor: "#fff",
+              backgroundColor: "#f6f7f8",
             }}
           >
             <Typography variant="h6" sx={{ color: "#00a250" }}>
@@ -318,7 +318,7 @@ export default function LoanProposals({
             sx={{
               padding: "20px",
               textAlign: "center",
-              backgroundColor: "#fff",
+              backgroundColor: "#f6f7f8",
             }}
           >
             <Typography variant="h6" sx={{ color: "#00a250" }}>
