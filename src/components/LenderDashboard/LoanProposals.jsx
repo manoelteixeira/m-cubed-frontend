@@ -17,6 +17,7 @@ import {
   Checkbox,
   FormControlLabel,
   TablePagination,
+  TableSortLabel,
 } from "@mui/material";
 import PropTypes from "prop-types";
 
@@ -36,7 +37,6 @@ export default function LoanProposals({
   const [expandedRowId, setExpandedRowId] = useState(null);
   const [borrowerDetails, setBorrowerDetails] = useState({});
   const [creditReports, setCreditReports] = useState([]);
-
   const [lenderProposal, setLenderProposal] = useState({
     title: "",
     description: "",
@@ -49,6 +49,8 @@ export default function LoanProposals({
       others: false,
     },
   });
+  const [sortDirection, setSortDirection] = useState("asc");
+  const [sortBy, setSortBy] = useState("title");
 
   const totalProposals = filteredLoanProposals.length;
   const totalLoanParticipation = filteredLoanProposals.reduce(
@@ -181,6 +183,19 @@ export default function LoanProposals({
     setFilteredLoanProposals(filteredProposals);
   };
 
+  const handleSort = (property) => {
+    const isAsc = sortBy === property && sortDirection === "asc";
+    setSortDirection(isAsc ? "desc" : "asc");
+    setSortBy(property);
+    const sortedProposals = [...filteredLoanProposals].sort((a, b) => {
+      if (isAsc) {
+        return a[property] < b[property] ? -1 : 1;
+      }
+      return a[property] > b[property] ? -1 : 1;
+    });
+    setFilteredLoanProposals(sortedProposals);
+  };
+
   useEffect(() => {
     loadLoanProposals();
   }, [user]);
@@ -202,8 +217,16 @@ export default function LoanProposals({
 
       {/* KPI Section */}
       <Grid container spacing={3} sx={{ marginBottom: "20px" }}>
+        {/* KPI boxes */}
         <Grid item xs={12} sm={4}>
-          <Paper elevation={3} sx={{ padding: "20px", textAlign: "center" }}>
+          <Paper
+            elevation={0}
+            sx={{
+              padding: "20px",
+              textAlign: "center",
+              backgroundColor: "#fff",
+            }}
+          >
             <Typography variant="h6" sx={{ color: "#00a250" }}>
               Total Proposals
             </Typography>
@@ -213,7 +236,14 @@ export default function LoanProposals({
           </Paper>
         </Grid>
         <Grid item xs={12} sm={4}>
-          <Paper elevation={3} sx={{ padding: "20px", textAlign: "center" }}>
+          <Paper
+            elevation={0}
+            sx={{
+              padding: "20px",
+              textAlign: "center",
+              backgroundColor: "#fff",
+            }}
+          >
             <Typography variant="h6" sx={{ color: "#00a250" }}>
               Average Interest Rate
             </Typography>
@@ -226,7 +256,14 @@ export default function LoanProposals({
           </Paper>
         </Grid>
         <Grid item xs={12} sm={4}>
-          <Paper elevation={3} sx={{ padding: "20px", textAlign: "center" }}>
+          <Paper
+            elevation={0}
+            sx={{
+              padding: "20px",
+              textAlign: "center",
+              backgroundColor: "#fff",
+            }}
+          >
             <Typography variant="h6" sx={{ color: "#00a250" }}>
               Total Loan Participation
             </Typography>
@@ -242,7 +279,14 @@ export default function LoanProposals({
 
         {/* Second Row */}
         <Grid item xs={12} sm={4}>
-          <Paper elevation={3} sx={{ padding: "20px", textAlign: "center" }}>
+          <Paper
+            elevation={0}
+            sx={{
+              padding: "20px",
+              textAlign: "center",
+              backgroundColor: "#fff",
+            }}
+          >
             <Typography variant="h6" sx={{ color: "#00a250" }}>
               Accepted Proposals
             </Typography>
@@ -252,7 +296,14 @@ export default function LoanProposals({
           </Paper>
         </Grid>
         <Grid item xs={12} sm={4}>
-          <Paper elevation={3} sx={{ padding: "20px", textAlign: "center" }}>
+          <Paper
+            elevation={0}
+            sx={{
+              padding: "20px",
+              textAlign: "center",
+              backgroundColor: "#fff",
+            }}
+          >
             <Typography variant="h6" sx={{ color: "#00a250" }}>
               Proposals Pending Decision
             </Typography>
@@ -262,7 +313,14 @@ export default function LoanProposals({
           </Paper>
         </Grid>
         <Grid item xs={12} sm={4}>
-          <Paper elevation={3} sx={{ padding: "20px", textAlign: "center" }}>
+          <Paper
+            elevation={0}
+            sx={{
+              padding: "20px",
+              textAlign: "center",
+              backgroundColor: "#fff",
+            }}
+          >
             <Typography variant="h6" sx={{ color: "#00a250" }}>
               Rejected Proposals
             </Typography>
@@ -274,7 +332,7 @@ export default function LoanProposals({
       </Grid>
 
       {/* Table */}
-      <Paper elevation={3} sx={{ padding: 3, backgroundColor: "#f6f7f8" }}>
+      <Paper elevation={0} sx={{ padding: 3, backgroundColor: "#f6f7f8" }}>
         <Grid
           container
           justifyContent="space-between"
@@ -303,15 +361,41 @@ export default function LoanProposals({
             <TableHead>
               <TableRow>
                 {[
-                  { header: "Title", align: "left" },
-                  { header: "Description", align: "left" },
-                  { header: "Loan Amount", align: "right" },
-                  { header: "Interest Rate", align: "right" },
-                  { header: "Repayment Term", align: "center" },
-                  { header: "Status", align: "center" },
-                ].map(({ header, align }) => (
-                  <TableCell key={header} align={align}>
-                    {header}
+                  { header: "Title", sortKey: "title", align: "center" },
+                  {
+                    header: "Description",
+                    sortKey: "description",
+                    align: "center",
+                  },
+                  {
+                    header: "Loan Amount",
+                    sortKey: "loan_amount",
+                    align: "center",
+                  },
+                  {
+                    header: "Interest Rate",
+                    sortKey: "interest_rate",
+                    align: "center",
+                  },
+                  {
+                    header: "Repayment Term",
+                    sortKey: "repayment_term",
+                    align: "center",
+                  },
+                  { header: "Status", sortKey: "accepted", align: "center" },
+                ].map(({ header, sortKey, align }) => (
+                  <TableCell
+                    key={header}
+                    align={align}
+                    sx={{ color: "#00a250", fontWeight: "bold" }}
+                  >
+                    <TableSortLabel
+                      active={sortBy === sortKey}
+                      direction={sortDirection}
+                      onClick={() => handleSort(sortKey)}
+                    >
+                      {header}
+                    </TableSortLabel>
                   </TableCell>
                 ))}
               </TableRow>
@@ -336,13 +420,13 @@ export default function LoanProposals({
                         {loan.title}
                       </TableCell>
                       <TableCell align="left">{loan.description}</TableCell>
-                      <TableCell align="right">
+                      <TableCell align="center">
                         {parseFloat(loan.loan_amount).toLocaleString("en-US", {
                           style: "currency",
                           currency: "USD",
                         })}
                       </TableCell>
-                      <TableCell align="right">
+                      <TableCell align="center">
                         {parseFloat(loan.interest_rate).toFixed(2)}%
                       </TableCell>
                       <TableCell align="center">
