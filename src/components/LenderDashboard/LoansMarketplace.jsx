@@ -13,13 +13,13 @@ import {
   Collapse,
   Button,
   Link,
-  Checkbox,
-  FormControlLabel,
+  IconButton,
   TablePagination,
   Paper,
   TableSortLabel,
 } from "@mui/material";
 import PropTypes from "prop-types";
+import { AddCircle, RemoveCircle } from "@mui/icons-material";
 
 const API = import.meta.env.VITE_BASE_URL;
 
@@ -41,11 +41,8 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
     loan_amount: "",
     interest_rate: "",
     repayment_term: "",
-    additional_requirements: {
-      downpayment: false,
-      personal_guarantee: false,
-      others: false,
-    },
+    requirements: [""], // Array for storing requirements
+    expire_at: "",
     created_at: new Date().toLocaleDateString(),
   });
 
@@ -89,17 +86,27 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
   };
 
   const handleProposalChange = (e) => {
-    setLenderProposal({ ...lenderProposal, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setLenderProposal({ ...lenderProposal, [name]: value });
   };
 
-  const handleCheckboxChange = (e) => {
+  const handleRequirementsChange = (index, value) => {
+    const newRequirements = [...lenderProposal.requirements];
+    newRequirements[index] = value;
+    setLenderProposal((prev) => ({ ...prev, requirements: newRequirements }));
+  };
+
+  const addRequirement = () => {
     setLenderProposal((prev) => ({
       ...prev,
-      additional_requirements: {
-        ...prev.additional_requirements,
-        [e.target.name]: e.target.checked,
-      },
+      requirements: [...prev.requirements, ""],
     }));
+  };
+
+  const removeRequirement = (index) => {
+    const newRequirements = [...lenderProposal.requirements];
+    newRequirements.splice(index, 1);
+    setLenderProposal((prev) => ({ ...prev, requirements: newRequirements }));
   };
 
   const handleSendProposal = async () => {
@@ -108,6 +115,7 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
       loan_amount: parseFloat(lenderProposal.loan_amount.replace(/,/g, "")),
       interest_rate: parseFloat(lenderProposal.interest_rate),
       repayment_term: parseInt(lenderProposal.repayment_term, 10),
+      expire_at: new Date(lenderProposal.expire_at).toISOString(),
       created_at: new Date().toISOString(),
     };
 
@@ -491,6 +499,16 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
                                     sx={{ marginBottom: 2 }}
                                   />
                                   <TextField
+                                    label="Description"
+                                    fullWidth
+                                    name="description"
+                                    value={lenderProposal.description}
+                                    onChange={handleProposalChange}
+                                    multiline
+                                    rows={3}
+                                    sx={{ marginBottom: 2 }}
+                                  />
+                                  <TextField
                                     label="Loan Amount"
                                     fullWidth
                                     name="loan_amount"
@@ -514,76 +532,68 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
                                     onChange={handleProposalChange}
                                     sx={{ marginBottom: 2 }}
                                   />
-                                  <Typography variant="subtitle1">
-                                    Additional Requirements
-                                  </Typography>
-                                  <FormControlLabel
-                                    control={
-                                      <Checkbox
-                                        checked={
-                                          lenderProposal.additional_requirements
-                                            .downpayment
-                                        }
-                                        onChange={handleCheckboxChange}
-                                        name="downpayment"
-                                        sx={{
-                                          color: "#00a250",
-                                          "&.Mui-checked": {
-                                            color: "#00a250",
-                                          },
-                                        }}
-                                      />
-                                    }
-                                    label="Downpayment"
-                                  />
-                                  <FormControlLabel
-                                    control={
-                                      <Checkbox
-                                        checked={
-                                          lenderProposal.additional_requirements
-                                            .personal_guarantee
-                                        }
-                                        onChange={handleCheckboxChange}
-                                        name="personal_guarantee"
-                                        sx={{
-                                          color: "#00a250",
-                                          "&.Mui-checked": {
-                                            color: "#00a250",
-                                          },
-                                        }}
-                                      />
-                                    }
-                                    label="Personal Guarantee"
-                                  />
-                                  <FormControlLabel
-                                    control={
-                                      <Checkbox
-                                        checked={
-                                          lenderProposal.additional_requirements
-                                            .others
-                                        }
-                                        onChange={handleCheckboxChange}
-                                        name="others"
-                                        sx={{
-                                          color: "#00a250",
-                                          "&.Mui-checked": {
-                                            color: "#00a250",
-                                          },
-                                        }}
-                                      />
-                                    }
-                                    label="Others"
-                                  />
+
+                                  {/* Expiration Date Input */}
                                   <TextField
-                                    label="Description"
+                                    label="Expiration Date"
                                     fullWidth
-                                    name="description"
-                                    value={lenderProposal.description}
+                                    name="expire_at"
+                                    type="date"
+                                    value={lenderProposal.expire_at}
                                     onChange={handleProposalChange}
-                                    multiline
-                                    rows={3}
-                                    sx={{ marginTop: 2, marginBottom: 2 }}
+                                    InputLabelProps={{
+                                      shrink: true,
+                                    }}
+                                    sx={{ marginBottom: 2 }}
                                   />
+
+                                  {/* Requirements as array input */}
+                                  <Typography variant="subtitle1">
+                                    Requirements
+                                  </Typography>
+                                  {lenderProposal.requirements.map(
+                                    (requirement, index) => (
+                                      <Grid
+                                        container
+                                        key={index}
+                                        spacing={1}
+                                        alignItems="center"
+                                      >
+                                        <Grid item xs={10}>
+                                          <TextField
+                                            label={`Requirement ${index + 1}`}
+                                            fullWidth
+                                            value={requirement}
+                                            onChange={(e) =>
+                                              handleRequirementsChange(
+                                                index,
+                                                e.target.value
+                                              )
+                                            }
+                                            sx={{ marginBottom: 2 }}
+                                          />
+                                        </Grid>
+                                        <Grid item xs={2}>
+                                          <IconButton
+                                            color="error"
+                                            onClick={() =>
+                                              removeRequirement(index)
+                                            }
+                                          >
+                                            <RemoveCircle />
+                                          </IconButton>
+                                        </Grid>
+                                      </Grid>
+                                    )
+                                  )}
+                                  <Button
+                                    startIcon={<AddCircle />}
+                                    sx={{ marginBottom: 2 }}
+                                    onClick={addRequirement}
+                                  >
+                                    Add Requirement
+                                  </Button>
+
                                   <Box
                                     sx={{
                                       display: "flex",
@@ -634,7 +644,7 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
         </TableContainer>
         <TablePagination
           component="div"
-          count={loanListingsTotal}
+          count={loanListingsTotal || 0}
           page={loanListingsOffset}
           onPageChange={(event, newPage) => setLoanListingsOffset(newPage)}
           rowsPerPage={loanListingsLimit}

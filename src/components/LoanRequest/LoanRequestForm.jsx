@@ -12,8 +12,6 @@ import {
   createTheme,
   ThemeProvider,
   Grid,
-  Card,
-  CardContent,
 } from "@mui/material";
 import SaveIcon from "@mui/icons-material/Save";
 import SendIcon from "@mui/icons-material/Send";
@@ -43,6 +41,7 @@ const LoanRequestForm = ({ user, token }) => {
     title: "",
     description: "",
     value: "",
+    expire_at: "", // Added expire_at to formData
     borrower_id: id,
     driverLicense: null,
   });
@@ -68,6 +67,7 @@ const LoanRequestForm = ({ user, token }) => {
       title: formData.title,
       description: formData.description,
       value: parseFloat(formData.value),
+      expire_at: formData.expire_at, // Include expire_at in loanData
       created_at: new Date().toISOString(),
       borrower_id: id,
     };
@@ -206,6 +206,26 @@ const LoanRequestForm = ({ user, token }) => {
                     name="value"
                     type="number"
                     value={formData.value}
+                    onChange={handleChange}
+                    required
+                    fullWidth
+                    margin="normal"
+                    variant="outlined"
+                    InputLabelProps={{ style: { color: "#00a250" } }}
+                    InputProps={{
+                      style: {
+                        borderColor: "#00a250",
+                      },
+                    }}
+                  />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <TextField
+                    label="Request Valid Until"
+                    name="expire_at"
+                    type="date" // Input type for date
+                    value={formData.expire_at} // Bind to formData
                     onChange={handleChange}
                     required
                     fullWidth
