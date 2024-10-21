@@ -220,9 +220,9 @@ const LoanRequestForm = ({ user, token }) => {
                   />
                 </Grid>
 
+                {/* Expire_at input moved to the bottom and label removed */}
                 <Grid item xs={12}>
                   <TextField
-                    label="Request Valid Until"
                     name="expire_at"
                     type="date" // Input type for date
                     value={formData.expire_at} // Bind to formData
@@ -231,7 +231,6 @@ const LoanRequestForm = ({ user, token }) => {
                     fullWidth
                     margin="normal"
                     variant="outlined"
-                    InputLabelProps={{ style: { color: "#00a250" } }}
                     InputProps={{
                       style: {
                         borderColor: "#00a250",
