@@ -50,6 +50,27 @@ export default function LoanProposals({
     },
   });
 
+  const totalProposals = filteredLoanProposals.length;
+  const totalLoanParticipation = filteredLoanProposals.reduce(
+    (acc, loan) => acc + parseFloat(loan.loan_amount),
+    0
+  );
+  const averageInterestRate =
+    filteredLoanProposals.reduce(
+      (acc, loan) => acc + parseFloat(loan.interest_rate),
+      0
+    ) / filteredLoanProposals.length;
+
+  const acceptedProposals = filteredLoanProposals.filter(
+    (loan) => loan.accepted === true
+  ).length;
+  const pendingProposals = filteredLoanProposals.filter(
+    (loan) => loan.accepted === null || loan.accepted === undefined
+  ).length;
+  const rejectedProposals = filteredLoanProposals.filter(
+    (loan) => loan.accepted === false
+  ).length;
+
   const fetchBorrowerDetails = async (borrowerId) => {
     if (!borrowerId) return;
     try {
@@ -166,10 +187,94 @@ export default function LoanProposals({
 
   return (
     <Grid item xs={12}>
+      {/* Title */}
+      <Typography
+        variant="h4"
+        sx={{
+          color: "#00a250",
+          marginBottom: 2,
+          textAlign: "center",
+          fontWeight: "bold",
+        }}
+      >
+        Loan Proposals
+      </Typography>
+
+      {/* KPI Section */}
+      <Grid container spacing={3} sx={{ marginBottom: "20px" }}>
+        <Grid item xs={12} sm={4}>
+          <Paper elevation={3} sx={{ padding: "20px", textAlign: "center" }}>
+            <Typography variant="h6" sx={{ color: "#00a250" }}>
+              Total Proposals
+            </Typography>
+            <Typography variant="h4" sx={{ color: "#00a250" }}>
+              {totalProposals}
+            </Typography>
+          </Paper>
+        </Grid>
+        <Grid item xs={12} sm={4}>
+          <Paper elevation={3} sx={{ padding: "20px", textAlign: "center" }}>
+            <Typography variant="h6" sx={{ color: "#00a250" }}>
+              Average Interest Rate
+            </Typography>
+            <Typography variant="h4" sx={{ color: "#00a250" }}>
+              {isNaN(averageInterestRate)
+                ? "N/A"
+                : averageInterestRate.toFixed(2)}
+              %
+            </Typography>
+          </Paper>
+        </Grid>
+        <Grid item xs={12} sm={4}>
+          <Paper elevation={3} sx={{ padding: "20px", textAlign: "center" }}>
+            <Typography variant="h6" sx={{ color: "#00a250" }}>
+              Total Loan Participation
+            </Typography>
+            <Typography variant="h4" sx={{ color: "#00a250" }}>
+              $
+              {totalLoanParticipation.toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}
+            </Typography>
+          </Paper>
+        </Grid>
+
+        {/* Second Row */}
+        <Grid item xs={12} sm={4}>
+          <Paper elevation={3} sx={{ padding: "20px", textAlign: "center" }}>
+            <Typography variant="h6" sx={{ color: "#00a250" }}>
+              Accepted Proposals
+            </Typography>
+            <Typography variant="h4" sx={{ color: "#00a250" }}>
+              {acceptedProposals}
+            </Typography>
+          </Paper>
+        </Grid>
+        <Grid item xs={12} sm={4}>
+          <Paper elevation={3} sx={{ padding: "20px", textAlign: "center" }}>
+            <Typography variant="h6" sx={{ color: "#00a250" }}>
+              Proposals Pending Decision
+            </Typography>
+            <Typography variant="h4" sx={{ color: "#00a250" }}>
+              {pendingProposals}
+            </Typography>
+          </Paper>
+        </Grid>
+        <Grid item xs={12} sm={4}>
+          <Paper elevation={3} sx={{ padding: "20px", textAlign: "center" }}>
+            <Typography variant="h6" sx={{ color: "#00a250" }}>
+              Rejected Proposals
+            </Typography>
+            <Typography variant="h4" sx={{ color: "#00a250" }}>
+              {rejectedProposals}
+            </Typography>
+          </Paper>
+        </Grid>
+      </Grid>
+
+      {/* Table */}
       <Paper elevation={3} sx={{ padding: 3, backgroundColor: "#f6f7f8" }}>
-        <Typography variant="h5" sx={{ color: "#00a250", marginBottom: 2 }}>
-          Loan Proposals
-        </Typography>
         <Grid
           container
           justifyContent="space-between"
@@ -244,7 +349,7 @@ export default function LoanProposals({
                         {loan.repayment_term} months
                       </TableCell>
                       <TableCell align="center">
-                        {loan.accepted === null
+                        {loan.accepted === null || loan.accepted === undefined
                           ? "Pending"
                           : loan.accepted
                           ? "Accepted"
