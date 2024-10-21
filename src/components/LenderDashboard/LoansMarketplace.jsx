@@ -20,6 +20,7 @@ import {
   Link,
   Checkbox,
   FormControlLabel,
+  Paper,
 } from "@mui/material";
 import SortIcon from "@mui/icons-material/Sort";
 import PropTypes from "prop-types";
@@ -169,26 +170,71 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
 
   return (
     <Grid item xs={12}>
-      {/* Removed the Paper and added Box with no shadow */}
+      {/* KPI Section */}
+      <Box
+        sx={{
+          padding: 3,
+          backgroundColor: "#f6f7f8",
+          textAlign: "center",
+          marginBottom: "30px",
+        }}
+      >
+        <Typography
+          variant="h4"
+          sx={{ fontWeight: "bold", color: "#00a250", marginBottom: 3 }}
+        >
+          The Loans Marketplace
+        </Typography>
+
+        <Grid container spacing={3} sx={{ marginBottom: "20px" }}>
+          <Grid item xs={12} sm={4}>
+            <Paper elevation={0} sx={{ padding: "20px", textAlign: "center" }}>
+              <Typography variant="h6" sx={{ color: "#00A250" }}>
+                Total Loan Listings
+              </Typography>
+              <Typography variant="h4" sx={{ color: "#00A250" }}>
+                {loanListingsTotal}
+              </Typography>
+            </Paper>
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <Paper elevation={0} sx={{ padding: "20px", textAlign: "center" }}>
+              <Typography variant="h6" sx={{ color: "#00A250" }}>
+                Total Marketplace Volume
+              </Typography>
+              <Typography variant="h4" sx={{ color: "#00A250" }}>
+                {loanListingsValue.toLocaleString("en-US", {
+                  style: "currency",
+                  currency: "USD",
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
+              </Typography>
+            </Paper>
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <Paper elevation={0} sx={{ padding: "20px", textAlign: "center" }}>
+              <Typography variant="h6" sx={{ color: "#00A250" }}>
+                Average Loan Amount
+              </Typography>
+              <Typography variant="h4" sx={{ color: "#00A250" }}>
+                {(loanListingsValue / (loanListingsTotal || 1)).toLocaleString(
+                  "en-US",
+                  {
+                    style: "currency",
+                    currency: "USD",
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  }
+                )}
+              </Typography>
+            </Paper>
+          </Grid>
+        </Grid>
+      </Box>
+
+      {/* Loan Listings Table */}
       <Box sx={{ padding: 3, backgroundColor: "#f6f7f8", border: "none" }}>
-        <Typography
-          variant="h5"
-          sx={{ color: "#00a250", marginBottom: 2, textAlign: "center" }}
-        >
-          The MMM Loans Marketplace
-        </Typography>
-        <Typography
-          variant="h6"
-          sx={{ color: "#00a250", marginBottom: 2, textAlign: "center" }}
-        >
-          Current Marketplace Volume:
-          {loanListingsValue.toLocaleString("en-US", {
-            style: "currency",
-            currency: "USD",
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-          })}
-        </Typography>
         <Grid
           container
           justifyContent="space-between"
@@ -249,7 +295,11 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
               <TableRow>
                 {["Title", "Purpose of Loan", "Loan Amount", "Date"].map(
                   (header) => (
-                    <TableCell key={header} align="center">
+                    <TableCell
+                      key={header}
+                      align="center"
+                      sx={{ color: "#00a250" }}
+                    >
                       {header}
                     </TableCell>
                   )
