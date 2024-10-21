@@ -12,17 +12,13 @@ import {
   Box,
   Collapse,
   Button,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  TablePagination,
   Link,
   Checkbox,
   FormControlLabel,
+  TablePagination,
   Paper,
+  TableSortLabel,
 } from "@mui/material";
-import SortIcon from "@mui/icons-material/Sort";
 import PropTypes from "prop-types";
 
 const API = import.meta.env.VITE_BASE_URL;
@@ -153,20 +149,22 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
     setSearchTermLoanListings(event.target.value.toLowerCase());
   };
 
-  const handleSortChangeLoanListings = (event) => {
-    setSortByLoanListings(event.target.value);
-    loadLoanListings();
-  };
-
-  const handleSortOrderChangeLoanListings = () => {
-    const newOrder = sortOrderLoanListings === "asc" ? "desc" : "asc";
-    setSortOrderLoanListings(newOrder);
+  const handleSort = (sortKey) => {
+    const isAsc =
+      sortByLoanListings === sortKey && sortOrderLoanListings === "asc";
+    setSortByLoanListings(sortKey);
+    setSortOrderLoanListings(isAsc ? "desc" : "asc");
     loadLoanListings();
   };
 
   useEffect(() => {
     loadLoanListings();
-  }, [loanListingsLimit, loanListingsOffset]);
+  }, [
+    loanListingsLimit,
+    loanListingsOffset,
+    sortByLoanListings,
+    sortOrderLoanListings,
+  ]);
 
   return (
     <Grid item xs={12}>
@@ -188,7 +186,14 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
 
         <Grid container spacing={3} sx={{ marginBottom: "20px" }}>
           <Grid item xs={12} sm={4}>
-            <Paper elevation={0} sx={{ padding: "20px", textAlign: "center" }}>
+            <Paper
+              elevation={0}
+              sx={{
+                padding: "20px",
+                textAlign: "center",
+                backgroundColor: "#f6f7f8",
+              }}
+            >
               <Typography variant="h6" sx={{ color: "#00A250" }}>
                 Total Loan Listings
               </Typography>
@@ -198,7 +203,14 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
             </Paper>
           </Grid>
           <Grid item xs={12} sm={4}>
-            <Paper elevation={0} sx={{ padding: "20px", textAlign: "center" }}>
+            <Paper
+              elevation={0}
+              sx={{
+                padding: "20px",
+                textAlign: "center",
+                backgroundColor: "#f6f7f8",
+              }}
+            >
               <Typography variant="h6" sx={{ color: "#00A250" }}>
                 Total Marketplace Volume
               </Typography>
@@ -213,7 +225,14 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
             </Paper>
           </Grid>
           <Grid item xs={12} sm={4}>
-            <Paper elevation={0} sx={{ padding: "20px", textAlign: "center" }}>
+            <Paper
+              elevation={0}
+              sx={{
+                padding: "20px",
+                textAlign: "center",
+                backgroundColor: "#f6f7f8",
+              }}
+            >
               <Typography variant="h6" sx={{ color: "#00A250" }}>
                 Average Loan Amount
               </Typography>
@@ -257,53 +276,32 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
               }}
             />
           </Grid>
-          <Grid item>
-            <FormControl sx={{ minWidth: 120, marginRight: 2 }}>
-              <InputLabel id="sort-loan-listings-label">Sort By</InputLabel>
-              <Select
-                labelId="sort-loan-listings-label"
-                value={sortByLoanListings}
-                onChange={handleSortChangeLoanListings}
-                label="Sort By"
-              >
-                <MenuItem value="title">Title</MenuItem>
-                <MenuItem value="value">Loan Amount</MenuItem>
-                <MenuItem value="created_at">Date</MenuItem>
-                <MenuItem value="description">Purpose of Loan</MenuItem>
-              </Select>
-            </FormControl>
-            <Button
-              variant="contained"
-              onClick={handleSortOrderChangeLoanListings}
-              startIcon={<SortIcon />}
-              sx={{
-                backgroundColor: "#00a250",
-                color: "#fff",
-                "&:hover": {
-                  backgroundColor: "#007a3e",
-                },
-              }}
-            >
-              {sortOrderLoanListings === "asc" ? "Ascending" : "Descending"}
-            </Button>
-          </Grid>
         </Grid>
 
         <TableContainer>
           <Table>
             <TableHead>
               <TableRow>
-                {["Title", "Purpose of Loan", "Loan Amount", "Date"].map(
-                  (header) => (
-                    <TableCell
-                      key={header}
-                      align="center"
-                      sx={{ color: "#00a250" }}
+                {[
+                  { label: "Title", key: "title" },
+                  { label: "Purpose of Loan", key: "description" },
+                  { label: "Loan Amount", key: "value" },
+                  { label: "Date", key: "created_at" },
+                ].map(({ label, key }) => (
+                  <TableCell
+                    key={key}
+                    align="center"
+                    sx={{ color: "#00a250", fontWeight: "bold" }}
+                  >
+                    <TableSortLabel
+                      active={sortByLoanListings === key}
+                      direction={sortOrderLoanListings}
+                      onClick={() => handleSort(key)}
                     >
-                      {header}
-                    </TableCell>
-                  )
-                )}
+                      {label}
+                    </TableSortLabel>
+                  </TableCell>
+                ))}
               </TableRow>
             </TableHead>
             <TableBody>
