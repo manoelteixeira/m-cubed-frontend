@@ -231,7 +231,7 @@ export default function Home() {
           <Grid item xs={6} sm={6} display="flex" justifyContent="center">
             <Link to="/borrowers/signup">
               <img
-                src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1728581611/Add_a_heading_500_x_500_px_3_w06vz8.png"
+                src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1729523962/Add_a_heading_500_x_500_px_6_yzy8zi.png"
                 alt="Borrowers"
                 style={{ width: 600, height: 600, borderRadius: 8 }}
               />
@@ -240,7 +240,7 @@ export default function Home() {
           <Grid item xs={6} sm={6} display="flex" justifyContent="center">
             <Link to="/lenders/signup">
               <img
-                src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1729438568/Add_a_heading_500_x_500_px_5_znsmck.png"
+                src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1729523962/Add_a_heading_500_x_500_px_7_yoovqn.png"
                 alt="Lenders"
                 style={{ width: 600, height: 600, borderRadius: 8 }}
               />
