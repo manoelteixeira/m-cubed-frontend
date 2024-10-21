@@ -764,7 +764,7 @@ export default function LoanProposals({
                                             backgroundColor: "#b30000",
                                           },
                                         }}
-                                        onClick={handleDeleteProposal} // Added delete functionality
+                                        onClick={handleDeleteProposal}
                                       >
                                         Delete Proposal
                                       </Button>
@@ -797,7 +797,7 @@ export default function LoanProposals({
         </TableContainer>
         <TablePagination
           component="div"
-          count={filteredLoanProposals.length}
+          count={filteredLoanProposals.length || 0}
           page={pageLoanProposals}
           onPageChange={(event, newPage) => setPageLoanProposals(newPage)}
           rowsPerPage={rowsPerPageLoanProposals}
