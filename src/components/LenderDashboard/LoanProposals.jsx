@@ -26,9 +26,9 @@ const API = import.meta.env.VITE_BASE_URL;
 export default function LoanProposals({
   user,
   token,
-  loanProposals,
+  loanProposals = [],
   loadLoanProposals,
-  filteredLoanProposals,
+  filteredLoanProposals = [],
   setFilteredLoanProposals,
 }) {
   const [pageLoanProposals, setPageLoanProposals] = useState(0);
@@ -53,15 +53,19 @@ export default function LoanProposals({
   const [sortBy, setSortBy] = useState("title");
 
   const totalProposals = filteredLoanProposals.length;
-  const totalLoanParticipation = filteredLoanProposals.reduce(
-    (acc, loan) => acc + parseFloat(loan.loan_amount),
-    0
-  );
+  const totalLoanParticipation = Array.isArray(filteredLoanProposals)
+    ? filteredLoanProposals.reduce(
+        (acc, loan) => acc + parseFloat(loan.loan_amount),
+        0
+      )
+    : 0;
   const averageInterestRate =
-    filteredLoanProposals.reduce(
-      (acc, loan) => acc + parseFloat(loan.interest_rate),
-      0
-    ) / filteredLoanProposals.length;
+    Array.isArray(filteredLoanProposals) && filteredLoanProposals.length > 0
+      ? filteredLoanProposals.reduce(
+          (acc, loan) => acc + parseFloat(loan.interest_rate),
+          0
+        ) / filteredLoanProposals.length
+      : 0;
 
   const acceptedProposals = filteredLoanProposals.filter(
     (loan) => loan.accepted === true
@@ -194,6 +198,33 @@ export default function LoanProposals({
       return a[property] > b[property] ? -1 : 1;
     });
     setFilteredLoanProposals(sortedProposals);
+  };
+
+  // New delete proposal function
+  const handleDeleteProposal = async () => {
+    const endpoint = `${API}/lenders/${user.id}/proposals/${expandedRowId}`;
+    try {
+      const response = await fetch(endpoint, {
+        method: "DELETE",
+        headers: {
+          Authorization: token,
+        },
+      });
+
+      if (response.ok) {
+        alert("Proposal deleted successfully.");
+        // Remove the deleted proposal from the filteredLoanProposals state
+        setFilteredLoanProposals((prevProposals) =>
+          prevProposals.filter((proposal) => proposal.id !== expandedRowId)
+        );
+        setExpandedRowId(null);
+      } else {
+        const result = await response.json();
+        alert(result.error || "Error deleting proposal.");
+      }
+    } catch (error) {
+      alert(error.message || "Failed to delete the proposal.");
+    }
   };
 
   useEffect(() => {
@@ -723,6 +754,19 @@ export default function LoanProposals({
                                         onClick={handleResubmitProposal}
                                       >
                                         Resend Proposal
+                                      </Button>
+                                      <Button
+                                        variant="contained"
+                                        sx={{
+                                          backgroundColor: "darkred",
+                                          color: "#fff",
+                                          "&:hover": {
+                                            backgroundColor: "#b30000",
+                                          },
+                                        }}
+                                        onClick={handleDeleteProposal} // Added delete functionality
+                                      >
+                                        Delete Proposal
                                       </Button>
                                       <Button
                                         variant="contained"
