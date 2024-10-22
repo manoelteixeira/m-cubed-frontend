@@ -171,7 +171,7 @@ export default function Home() {
       <Grid container spacing={4} justifyContent="center" sx={{ padding: 18 }}>
         <Grid item xs={12} display="flex" justifyContent="center">
           <img
-            src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1727973657/How_This_Works_1_i0lklb.png"
+            src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1729626240/How_This_Works_al2y1c.png"
             alt="How This Works Image Placeholder"
             style={{ width: "100%", maxWidth: 1200, borderRadius: 8 }}
           />
@@ -203,7 +203,7 @@ export default function Home() {
 
         <Grid item xs={12} display="flex" justifyContent="center">
           <img
-            src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1729568944/Minimalist_Gradient_Pricing_Comparison_Chart_Table_Graph_r1zfll.png"
+            src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1729626011/Minimalist_Gradient_Pricing_Comparison_Chart_Table_Graph_5_wixfru.png"
             alt="Better Way"
             style={{
               width: "100%",
@@ -218,7 +218,7 @@ export default function Home() {
       <Grid container spacing={4} justifyContent="center" sx={{ padding: 5 }}>
         <Grid item xs={12} display="flex" justifyContent="center">
           <img
-            src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1728576656/How_This_Works_2_tg9j17.png"
+            src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1729626240/How_This_Works_3_dspdnb.png"
             alt="Why Choose MMM"
             style={{ width: "100%", maxWidth: 1200, borderRadius: 8 }}
           />
