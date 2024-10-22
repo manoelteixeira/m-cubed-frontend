@@ -143,7 +143,7 @@ export default function Home() {
           }}
         >
           <motion.img
-            src="src/assets/BorrowerDashboard.png"
+            src="src/assets/borrowerdashboard.jpeg"
             alt="Borrower Dashboard"
             style={{
               width: "90%",
@@ -155,7 +155,7 @@ export default function Home() {
             transition={{ type: "spring", stiffness: 300 }}
           />
           <motion.img
-            src="src/assets/LenderDashboards.png"
+            src="src/assets/lenderdashboard.jpeg"
             alt="Lender Dashboard"
             style={{
               width: "90%",
