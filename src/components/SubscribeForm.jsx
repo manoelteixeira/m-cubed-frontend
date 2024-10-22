@@ -10,7 +10,7 @@ const SubscribeForm = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch(`${API}/mail-list`, {  // Güncellenmiş endpoint
+      const response = await fetch(`${API}/mail-list`, {
         method: "POST",
         body: JSON.stringify({
           email,
