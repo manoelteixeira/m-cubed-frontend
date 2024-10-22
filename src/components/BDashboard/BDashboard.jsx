@@ -142,12 +142,14 @@ const BDashboard = ({ user, token }) => {
 
   return (
     <Box sx={{ padding: "20px", paddingTop: "50px", paddingBottom: "80px" }}>
+      {/* Header Section */}
       <Paper
-        elevation={0}
+        elevation={3}
         sx={{
           padding: "20px",
           marginBottom: "20px",
           backgroundColor: "#f6f7f8",
+          boxShadow: "0 0 20px rgba(255, 255, 255, 0.7)",
         }}
       >
         <Grid container justifyContent="space-between" alignItems="center">
@@ -186,16 +188,10 @@ const BDashboard = ({ user, token }) => {
         </Grid>
       </Paper>
 
+      {/* KPI Section */}
       <Grid container spacing={3} sx={{ marginBottom: "20px" }}>
         <Grid item xs={12} sm={4}>
-          <Paper
-            elevation={0}
-            sx={{
-              padding: "20px",
-              textAlign: "center",
-              backgroundColor: "#f6f7f8",
-            }}
-          >
+          <Paper elevation={3} sx={{ padding: "20px", textAlign: "center" }}>
             <Typography variant="h6" sx={{ color: "#00A250" }}>
               Total Loan Requests
             </Typography>
@@ -205,14 +201,7 @@ const BDashboard = ({ user, token }) => {
           </Paper>
         </Grid>
         <Grid item xs={12} sm={4}>
-          <Paper
-            elevation={0}
-            sx={{
-              padding: "20px",
-              textAlign: "center",
-              backgroundColor: "#f6f7f8",
-            }}
-          >
+          <Paper elevation={3} sx={{ padding: "20px", textAlign: "center" }}>
             <Typography variant="h6" sx={{ color: "#00A250" }}>
               Loan Requests with Proposals
             </Typography>
@@ -227,14 +216,7 @@ const BDashboard = ({ user, token }) => {
           </Paper>
         </Grid>
         <Grid item xs={12} sm={4}>
-          <Paper
-            elevation={0}
-            sx={{
-              padding: "20px",
-              textAlign: "center",
-              backgroundColor: "#f6f7f8",
-            }}
-          >
+          <Paper elevation={3} sx={{ padding: "20px", textAlign: "center" }}>
             <Typography variant="h6" sx={{ color: "#00A250" }}>
               Total Loan Amount Requested
             </Typography>
@@ -253,7 +235,8 @@ const BDashboard = ({ user, token }) => {
         </Grid>
       </Grid>
 
-      <TableContainer component={Paper} elevation={0}>
+      {/* Loan Requests Table */}
+      <TableContainer component={Paper} elevation={3}>
         <Table>
           <TableHead>
             <TableRow>
@@ -263,12 +246,8 @@ const BDashboard = ({ user, token }) => {
               <TableCell align="center" sx={{ color: "#00A250" }}>
                 Purpose of Loan
               </TableCell>
-              <TableCell align="center" sx={{ color: "#00A250" }}>
-                Loan Amount
-              </TableCell>
-              <TableCell align="center" sx={{ color: "#00A250" }}>
-                Status
-              </TableCell>
+              <TableCell sx={{ color: "#00A250" }}>Loan Amount</TableCell>
+              <TableCell sx={{ color: "#00A250" }}>Status</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -284,7 +263,7 @@ const BDashboard = ({ user, token }) => {
                   <TableCell align="left" sx={{ cursor: "pointer" }}>
                     {request.description}
                   </TableCell>
-                  <TableCell align="center" sx={{ cursor: "pointer" }}>
+                  <TableCell sx={{ cursor: "pointer" }}>
                     $
                     {request.value
                       ? parseFloat(request.value).toLocaleString("en-US", {
@@ -294,7 +273,6 @@ const BDashboard = ({ user, token }) => {
                       : "N/A"}
                   </TableCell>
                   <TableCell
-                    align="center"
                     sx={{
                       cursor: "pointer",
                       color: proposals[request.id]?.length
@@ -328,7 +306,6 @@ const BDashboard = ({ user, token }) => {
                               fontWeight: "bold",
                               color: "#056612",
                               marginBottom: "20px",
-                              fontSize: "1.5rem",
                             }}
                           >
                             LOAN PROPOSALS
@@ -338,10 +315,7 @@ const BDashboard = ({ user, token }) => {
                               <Table>
                                 <TableHead>
                                   <TableRow>
-                                    <TableCell
-                                      align="center"
-                                      sx={{ color: "#00A250" }}
-                                    >
+                                    <TableCell>
                                       <Tooltip title="Sort">
                                         <TableSortLabel
                                           active={
@@ -356,10 +330,7 @@ const BDashboard = ({ user, token }) => {
                                         </TableSortLabel>
                                       </Tooltip>
                                     </TableCell>
-                                    <TableCell
-                                      align="center"
-                                      sx={{ color: "#00A250" }}
-                                    >
+                                    <TableCell>
                                       <Tooltip title="Sort">
                                         <TableSortLabel
                                           active={
@@ -374,10 +345,7 @@ const BDashboard = ({ user, token }) => {
                                         </TableSortLabel>
                                       </Tooltip>
                                     </TableCell>
-                                    <TableCell
-                                      align="center"
-                                      sx={{ color: "#00A250" }}
-                                    >
+                                    <TableCell>
                                       <Tooltip title="Sort">
                                         <TableSortLabel
                                           active={
@@ -392,10 +360,7 @@ const BDashboard = ({ user, token }) => {
                                         </TableSortLabel>
                                       </Tooltip>
                                     </TableCell>
-                                    <TableCell
-                                      align="center"
-                                      sx={{ color: "#00A250" }}
-                                    >
+                                    <TableCell>
                                       <Tooltip title="Sort">
                                         <TableSortLabel
                                           active={
@@ -410,22 +375,23 @@ const BDashboard = ({ user, token }) => {
                                         </TableSortLabel>
                                       </Tooltip>
                                     </TableCell>
-                                    <TableCell
-                                      align="center"
-                                      sx={{ color: "#00A250" }}
-                                    >
-                                      Expiration Date
+                                    <TableCell>
+                                      <Tooltip title="Sort">
+                                        <TableSortLabel
+                                          active={
+                                            sortConfig.key ===
+                                            "totalInterestPaid"
+                                          }
+                                          direction={sortConfig.direction}
+                                          onClick={() =>
+                                            handleSort("totalInterestPaid")
+                                          }
+                                        >
+                                          Total Interest Paid
+                                        </TableSortLabel>
+                                      </Tooltip>
                                     </TableCell>
-                                    <TableCell
-                                      align="center"
-                                      sx={{ color: "#00A250" }}
-                                    >
-                                      Requirements
-                                    </TableCell>
-                                    <TableCell
-                                      align="center"
-                                      sx={{ color: "#00A250" }}
-                                    >
+                                    <TableCell align="center">
                                       Decision
                                     </TableCell>
                                   </TableRow>
@@ -437,6 +403,9 @@ const BDashboard = ({ user, token }) => {
                                         (offer.loan_amount *
                                           (1 + offer.interest_rate / 100)) /
                                         offer.repayment_term;
+                                      const totalInterestPaid =
+                                        monthlyPayment * offer.repayment_term -
+                                        offer.loan_amount;
 
                                       return (
                                         <TableRow key={offer.id}>
@@ -450,10 +419,7 @@ const BDashboard = ({ user, token }) => {
                                             })}
                                           </TableCell>
                                           <TableCell align="center">
-                                            {(
-                                              offer.interest_rate * 100
-                                            ).toFixed(2)}
-                                            %
+                                            {offer.interest_rate}%
                                           </TableCell>
                                           <TableCell align="center">
                                             {offer.repayment_term}
@@ -468,21 +434,15 @@ const BDashboard = ({ user, token }) => {
                                               }
                                             )}
                                           </TableCell>
-                                          {/* Expire_at column */}
                                           <TableCell align="center">
-                                            {new Date(
-                                              offer.expire_at
-                                            ).toLocaleDateString()}
-                                          </TableCell>
-                                          {/* Requirements column */}
-                                          <TableCell align="center">
-                                            <ul>
-                                              {offer.requirements.map(
-                                                (req, idx) => (
-                                                  <li key={idx}>{req}</li>
-                                                )
-                                              )}
-                                            </ul>
+                                            $
+                                            {totalInterestPaid.toLocaleString(
+                                              "en-US",
+                                              {
+                                                minimumFractionDigits: 2,
+                                                maximumFractionDigits: 2,
+                                              }
+                                            )}
                                           </TableCell>
                                           <TableCell align="center">
                                             <Button
@@ -552,7 +512,7 @@ const BDashboard = ({ user, token }) => {
               </li>
               <li>
                 <strong>Interest Rate:</strong>{" "}
-                {(selectedProposal?.interest_rate * 100).toFixed(2)}%
+                {selectedProposal?.interest_rate}%
               </li>
               <li>
                 <strong>Term Length:</strong> {selectedProposal?.repayment_term}{" "}
@@ -564,6 +524,19 @@ const BDashboard = ({ user, token }) => {
                   (selectedProposal?.loan_amount *
                     (1 + selectedProposal?.interest_rate / 100)) /
                   selectedProposal?.repayment_term
+                ).toLocaleString("en-US", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
+              </li>
+              <li>
+                <strong>Total Interest Paid:</strong> $
+                {(
+                  ((selectedProposal?.loan_amount *
+                    (1 + selectedProposal?.interest_rate / 100)) /
+                    selectedProposal?.repayment_term) *
+                    selectedProposal?.repayment_term -
+                  selectedProposal?.loan_amount
                 ).toLocaleString("en-US", {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
