@@ -686,7 +686,8 @@ import {
 } from "@mui/material";
 import PropTypes from "prop-types";
 import { AddCircle, RemoveCircle } from "@mui/icons-material";
-
+import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 const API = import.meta.env.VITE_BASE_URL;
 
 export default function LoansMarketplace({ user, token, loadLoanProposals }) {
@@ -714,9 +715,8 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
 
   // Load loan listings with cache-busting to prevent stale data
   const loadLoanListings = () => {
-    let url = `${API}/lenders/${
-      user.id
-    }/requests?limit=${loanListingsLimit}&offset=${loanListingsOffset}&sort=${sortByLoanListings}&order=${sortOrderLoanListings}&timestamp=${new Date().getTime()}`;
+    let url = `${API}/lenders/${user.id
+      }/requests?limit=${loanListingsLimit}&offset=${loanListingsOffset}&sort=${sortByLoanListings}&order=${sortOrderLoanListings}&timestamp=${new Date().getTime()}`;
     if (searchTermLoanListings.length >= 3) {
       url += `&search=${searchTermLoanListings}`;
     }
@@ -804,16 +804,17 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
       });
       const result = await response.json();
       if (response.ok) {
-        alert("Proposal sent successfully");
+        toast.success("Proposal sent successfully");
         setExpandedRowId(null);
-        loadLoanProposals(); // Reload proposals
-        loadLoanListings(); // Ensure marketplace reloads after sending proposal
+        loadLoanProposals();
+        loadLoanListings();
       } else {
-        alert(result.error || "Error sending proposal.");
+        toast.error(result.error || "Error sending proposal.");
       }
     } catch (error) {
-      alert(error.message || "Failed to send the proposal.");
+      toast.error(error.message || "Failed to send the proposal.");
     }
+
   };
 
   const toggleRowExpansion = (rowId, borrowerId, loanAmount) => {

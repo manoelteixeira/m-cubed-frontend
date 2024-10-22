@@ -854,6 +854,9 @@ import {
   TableSortLabel,
 } from "@mui/material";
 import PropTypes from "prop-types";
+import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const API = import.meta.env.VITE_BASE_URL;
 
@@ -887,16 +890,16 @@ export default function LoanProposals({
   const totalProposals = filteredLoanProposals.length;
   const totalLoanParticipation = Array.isArray(filteredLoanProposals)
     ? filteredLoanProposals.reduce(
-        (acc, loan) => acc + parseFloat(loan.loan_amount),
-        0
-      )
+      (acc, loan) => acc + parseFloat(loan.loan_amount),
+      0
+    )
     : 0;
   const averageInterestRate =
     Array.isArray(filteredLoanProposals) && filteredLoanProposals.length > 0
       ? filteredLoanProposals.reduce(
-          (acc, loan) => acc + parseFloat(loan.interest_rate),
-          0
-        ) / filteredLoanProposals.length
+        (acc, loan) => acc + parseFloat(loan.interest_rate),
+        0
+      ) / filteredLoanProposals.length
       : 0;
 
   const acceptedProposals = filteredLoanProposals.filter(
@@ -998,14 +1001,15 @@ export default function LoanProposals({
 
       const result = await response.json();
       if (response.ok) {
-        alert("Proposal resubmitted successfully.");
+        toast.success("Proposal resubmitted successfully.");
         setExpandedRowId(null);
       } else {
-        alert(result.error || "Error resubmitting proposal.");
+        toast.error(result.error || "Error resubmitting proposal.");
       }
     } catch (error) {
-      alert(error.message || "Failed to resubmit the proposal.");
+      toast.error(error.message || "Failed to resubmit the proposal.");
     }
+
   };
 
   const handleSearchChangeLoanProposals = (event) => {
@@ -1268,7 +1272,7 @@ export default function LoanProposals({
                 .slice(
                   pageLoanProposals * rowsPerPageLoanProposals,
                   pageLoanProposals * rowsPerPageLoanProposals +
-                    rowsPerPageLoanProposals
+                  rowsPerPageLoanProposals
                 )
                 .map((loan) => (
                   <React.Fragment key={loan.id}>
@@ -1299,8 +1303,8 @@ export default function LoanProposals({
                         {loan.accepted === null || loan.accepted === undefined
                           ? "Pending"
                           : loan.accepted
-                          ? "Accepted"
-                          : "Rejected"}
+                            ? "Accepted"
+                            : "Rejected"}
                       </TableCell>
                     </TableRow>
 
@@ -1579,13 +1583,13 @@ export default function LoanProposals({
                                       value={
                                         lenderProposal.expire_at
                                           ? new Date(
-                                              lenderProposal.expire_at
-                                            ).toLocaleDateString("en-US", {
-                                              weekday: "short",
-                                              year: "numeric",
-                                              month: "short",
-                                              day: "numeric",
-                                            })
+                                            lenderProposal.expire_at
+                                          ).toLocaleDateString("en-US", {
+                                            weekday: "short",
+                                            year: "numeric",
+                                            month: "short",
+                                            day: "numeric",
+                                          })
                                           : ""
                                       }
                                       onChange={handleProposalChange}
