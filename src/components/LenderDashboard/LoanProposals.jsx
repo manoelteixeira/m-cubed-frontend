@@ -1048,19 +1048,21 @@ export default function LoanProposals({
         },
       });
 
+
       if (response.ok) {
-        alert("Proposal deleted successfully.");
+        toast.success("Proposal deleted successfully.");
         setFilteredLoanProposals((prevProposals) =>
           prevProposals.filter((proposal) => proposal.id !== expandedRowId)
         );
         setExpandedRowId(null);
       } else {
         const result = await response.json();
-        alert(result.error || "Error deleting proposal.");
+        toast.error(result.error || "Error deleting proposal.");
       }
     } catch (error) {
-      alert(error.message || "Failed to delete the proposal.");
+      toast.error(error.message || "Failed to delete the proposal.");
     }
+
   };
 
   useEffect(() => {
