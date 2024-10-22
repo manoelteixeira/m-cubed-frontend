@@ -419,7 +419,7 @@ const BorrowerForm = ({ setUser, setToken }) => {
                       fullWidth
                       required
                       margin="normal"
-                      placeholder="e.g. 12-3456789"
+                      placeholder="e.g. 123456789"
                       InputProps={{
                         startAdornment: (
                           <InputAdornment position="start">
