@@ -253,7 +253,7 @@ export default function Home() {
               <Typography
                 sx={{
                   fontWeight: "bold",
-                  color: "#00a250",
+                  color: "black",
                   fontSize: "1.7rem",
                 }}
               >
@@ -306,7 +306,7 @@ export default function Home() {
               <Typography
                 sx={{
                   fontWeight: "bold",
-                  color: "#00a250",
+                  color: "#black",
                   fontSize: "1.7rem",
                 }}
               >
@@ -349,7 +349,7 @@ export default function Home() {
               <Typography
                 sx={{
                   fontWeight: "bold",
-                  color: "#00a250",
+                  color: "#black",
                   fontSize: "1.7rem",
                 }}
               >
@@ -434,7 +434,7 @@ export default function Home() {
               <Typography
                 sx={{
                   fontWeight: "bold",
-                  color: "#00a250",
+                  color: "#black",
                   fontSize: "1.7rem",
                 }}
               >
