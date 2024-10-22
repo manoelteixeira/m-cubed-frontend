@@ -42,7 +42,7 @@ const LenderDashboard = ({ user, token }) => {
           <Grid item>
             <Typography variant="h4" sx={{ color: "black", textAlign: "left" }}>
               Welcome,{" "}
-              <span style={{ color: "#00A250" }}>{user.business_name}</span>!
+              <span style={{ color: "#00A250" }}>{user.business_name}!</span>
             </Typography>
             <Typography
               variant="subtitle1"

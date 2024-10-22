@@ -39,6 +39,7 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
   const [expandedRowId, setExpandedRowId] = useState(null);
   const [borrowerDetails, setBorrowerDetails] = useState({});
   const [creditReports, setCreditReports] = useState([]);
+  const [submittedProposals, setSubmittedProposals] = useState([]); // Track submitted proposals
   const [lenderProposal, setLenderProposal] = useState({
     title: "",
     description: "",
@@ -50,6 +51,15 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
     created_at: new Date().toLocaleDateString(),
   });
 
+  // Load submitted proposals from local storage
+  useEffect(() => {
+    const storedProposals = localStorage.getItem("submittedProposals");
+    if (storedProposals) {
+      setSubmittedProposals(JSON.parse(storedProposals));
+    }
+  }, []);
+
+  // Function to load loan listings
   const loadLoanListings = () => {
     let url = `${API}/lenders/${user.id}/requests?limit=${loanListingsLimit}&offset=${loanListingsOffset}&sort=${sortByLoanListings}&order=${sortOrderLoanListings}`;
     if (searchTermLoanListings.length >= 3) {
@@ -137,12 +147,27 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
       if (response.ok) {
         alert("Proposal sent successfully");
 
-        // Remove the loan listing that was just proposed
+        // Add the loan ID to the submittedProposals list
+        const updatedSubmittedProposals = [
+          ...submittedProposals,
+          expandedRowId,
+        ];
+        setSubmittedProposals(updatedSubmittedProposals);
+
+        // Store the submitted proposals in localStorage
+        localStorage.setItem(
+          "submittedProposals",
+          JSON.stringify(updatedSubmittedProposals)
+        );
+
+        // Remove the loan listing that was just proposed from the frontend state
         setLoanListings((prev) =>
           prev.filter((loan) => loan.id !== expandedRowId)
         );
 
         setExpandedRowId(null);
+
+        // Load loan proposals to update the proposals table
         loadLoanProposals();
       } else {
         alert(result.error || "Error sending proposal.");
@@ -184,9 +209,13 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
     sortOrderLoanListings,
   ]);
 
+  // Filter out loans that have already had proposals submitted
+  const filteredLoanListings = loanListings.filter(
+    (loan) => !submittedProposals.includes(loan.id)
+  );
+
   return (
     <Grid item xs={12}>
-      {/* KPI Section */}
       <Box
         sx={{
           padding: 3,
@@ -270,7 +299,6 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
         </Grid>
       </Box>
 
-      {/* Loan Listings Table */}
       <Box sx={{ padding: 3, backgroundColor: "#f6f7f8", border: "none" }}>
         <Grid
           container
@@ -323,7 +351,7 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {loanListings.map((loan) => (
+              {filteredLoanListings.map((loan) => (
                 <React.Fragment key={loan.id}>
                   <TableRow
                     hover
@@ -578,7 +606,6 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
                                     }}
                                   />
 
-                                  {/* Expiration Date Input */}
                                   <TextField
                                     label="Expiration Date"
                                     fullWidth
@@ -599,7 +626,6 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
                                     }}
                                   />
 
-                                  {/* Requirements as dropdown input */}
                                   <Typography variant="subtitle1">
                                     Requirements
                                   </Typography>
