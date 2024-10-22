@@ -13,7 +13,7 @@ import NewBorrower from "./Pages/NewBorrower";
 import ListOfLenders from "./Pages/ListOfLenders";
 // import EditLenderForm from "./components/EditUserFolder/EditLenderInfo";
 import LoanRequestForm from "./components/LoanRequest/LoanRequestForm";
-//import EmailNewsletter from "./Pages/EmailNewsletter";
+import EmailNewsletter from "./Pages/EmailNewsletter";
 import EditBorrowerPage from "./Pages/EditBorrowerPage";
 import LenderProposalPage from "./Pages/LenderProposalPage";
 import EditLoanRequestForm from "./components/editLoanRequestForm/editLoanRequestForm";
@@ -149,7 +149,7 @@ function App() {
         />
         {/* <Route path="/borrowers/:id" element={<BDashboard />} /> */}
         <Route path="/disclaimer" element={<></>} />
-        {/* <Route path="/newsletter" element={<EmailNewsletter />}></Route> */}
+        <Route path="/newsletter" element={<EmailNewsletter />}></Route>
       </Routes>
       <ToastContainer />
 

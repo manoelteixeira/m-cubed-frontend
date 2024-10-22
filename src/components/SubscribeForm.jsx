@@ -5,11 +5,12 @@ import 'react-toastify/dist/ReactToastify.css';
 const SubscribeForm = () => {
   const [email, setEmail] = useState("");
   const API = import.meta.env.VITE_BASE_URL;
+
   const handleSubscribe = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await fetch(`${API}/mail-list`, {  // Updated endpoint
+      const response = await fetch(`${API}/mail-list`, {  // Güncellenmiş endpoint
         method: "POST",
         body: JSON.stringify({
           email,
@@ -18,14 +19,17 @@ const SubscribeForm = () => {
         headers: { "Content-Type": "application/json" },
       });
 
-      // Check for a successful response before parsing
-      if (!response.ok) {
-        throw new Error('Network response was not ok'); // This will handle 404 and other errors
+      if (response.status === 400) {
+        toast.error("Email exists in our database already.");
+        return;
       }
 
-      const data = await response.json(); // This will now be safe to call
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
 
-      console.log(data); // Log the response from the server
+      const data = await response.json();
+      console.log(data);
 
       toast.success("Successfully subscribed!");
     } catch (error) {

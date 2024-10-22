@@ -1,10 +1,10 @@
 import React from 'react'
-import EmailSubscriptionForm from '../components/SubscribeForm'
+import SubscribeForm from '../components/SubscribeForm'
 
 export default function EmailNewsletter() {
   return (
     <div>
-      <EmailSubscriptionForm />
+      <SubscribeForm />
     </div>
   )
 }
