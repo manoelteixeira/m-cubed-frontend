@@ -956,7 +956,7 @@ const BDashboard = ({ user, token }) => {
                                             handleSort("repayment_term")
                                           }
                                         >
-                                          Term Length (months)
+                                          Term Length (Months)
                                         </TableSortLabel>
                                       </Tooltip>
                                     </TableCell>
@@ -982,13 +982,13 @@ const BDashboard = ({ user, token }) => {
                                       align="center"
                                       sx={{ color: "#00A250" }}
                                     >
-                                      Expiration Date
+                                      Offer Valid Until
                                     </TableCell>
                                     <TableCell
                                       align="center"
                                       sx={{ color: "#00A250" }}
                                     >
-                                      Requirements
+                                      Additional Requirements
                                     </TableCell>
                                     <TableCell
                                       align="center"
