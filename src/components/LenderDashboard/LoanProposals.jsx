@@ -43,11 +43,9 @@ export default function LoanProposals({
     loan_amount: "",
     interest_rate: "",
     repayment_term: "",
-    additional_requirements: {
-      downpayment: false,
-      personal_guarantee: false,
-      others: false,
-    },
+    requirements: [], // Array of requirements
+    created_at: "",
+    expire_at: "",
   });
   const [sortDirection, setSortDirection] = useState("asc");
   const [sortBy, setSortBy] = useState("title");
@@ -117,9 +115,11 @@ export default function LoanProposals({
           title: proposal.title,
           description: proposal.description,
           loan_amount: proposal.loan_amount.toString(),
-          interest_rate: proposal.interest_rate.toString(),
+          interest_rate: proposal.interest_rate.toString(), // Initially store as string for form
           repayment_term: proposal.repayment_term.toString(),
-          additional_requirements: proposal.additional_requirements || {},
+          requirements: proposal.requirements || [],
+          created_at: proposal.created_at,
+          expire_at: proposal.expire_at,
         });
       }
     }
@@ -134,20 +134,20 @@ export default function LoanProposals({
   };
 
   const handleCheckboxChange = (event) => {
+    const { name } = event.target;
     setLenderProposal((prevProposal) => ({
       ...prevProposal,
-      additional_requirements: {
-        ...prevProposal.additional_requirements,
-        [event.target.name]: event.target.checked,
-      },
+      requirements: prevProposal.requirements.includes(name)
+        ? prevProposal.requirements.filter((req) => req !== name)
+        : [...prevProposal.requirements, name],
     }));
   };
 
   const handleResubmitProposal = async () => {
     const proposalData = {
       ...lenderProposal,
-      loan_amount: parseFloat(lenderProposal.loan_amount),
-      interest_rate: parseFloat(lenderProposal.interest_rate),
+      loan_amount: parseFloat(lenderProposal.loan_amount), // Convert back to float for API
+      interest_rate: parseFloat(lenderProposal.interest_rate), // Convert back to float for API
       repayment_term: parseInt(lenderProposal.repayment_term, 10),
     };
 
@@ -200,7 +200,6 @@ export default function LoanProposals({
     setFilteredLoanProposals(sortedProposals);
   };
 
-  // New delete proposal function
   const handleDeleteProposal = async () => {
     const endpoint = `${API}/lenders/${user.id}/proposals/${expandedRowId}`;
     try {
@@ -213,7 +212,6 @@ export default function LoanProposals({
 
       if (response.ok) {
         alert("Proposal deleted successfully.");
-        // Remove the deleted proposal from the filteredLoanProposals state
         setFilteredLoanProposals((prevProposals) =>
           prevProposals.filter((proposal) => proposal.id !== expandedRowId)
         );
@@ -648,9 +646,7 @@ export default function LoanProposals({
                                       label="Interest Rate"
                                       fullWidth
                                       name="interest_rate"
-                                      value={`${parseFloat(
-                                        lenderProposal.interest_rate
-                                      ).toFixed(2)}%`}
+                                      value={lenderProposal.interest_rate} // Editable interest rate
                                       onChange={handleProposalChange}
                                       sx={{ marginBottom: 2 }}
                                     />
@@ -668,11 +664,9 @@ export default function LoanProposals({
                                     <FormControlLabel
                                       control={
                                         <Checkbox
-                                          checked={
-                                            lenderProposal
-                                              .additional_requirements
-                                              .downpayment
-                                          }
+                                          checked={lenderProposal.requirements.includes(
+                                            "downpayment"
+                                          )}
                                           onChange={handleCheckboxChange}
                                           name="downpayment"
                                           sx={{
@@ -688,11 +682,9 @@ export default function LoanProposals({
                                     <FormControlLabel
                                       control={
                                         <Checkbox
-                                          checked={
-                                            lenderProposal
-                                              .additional_requirements
-                                              .personal_guarantee
-                                          }
+                                          checked={lenderProposal.requirements.includes(
+                                            "personal_guarantee"
+                                          )}
                                           onChange={handleCheckboxChange}
                                           name="personal_guarantee"
                                           sx={{
@@ -708,10 +700,9 @@ export default function LoanProposals({
                                     <FormControlLabel
                                       control={
                                         <Checkbox
-                                          checked={
-                                            lenderProposal
-                                              .additional_requirements.others
-                                          }
+                                          checked={lenderProposal.requirements.includes(
+                                            "others"
+                                          )}
                                           onChange={handleCheckboxChange}
                                           name="others"
                                           sx={{
@@ -733,6 +724,27 @@ export default function LoanProposals({
                                       multiline
                                       rows={3}
                                       sx={{ marginTop: 2, marginBottom: 2 }}
+                                    />
+                                    <TextField
+                                      label="Created At"
+                                      fullWidth
+                                      name="created_at"
+                                      value={new Date(
+                                        lenderProposal.created_at
+                                      ).toLocaleDateString()}
+                                      InputProps={{
+                                        readOnly: true,
+                                        sx: { color: "gray" },
+                                      }}
+                                      sx={{ marginBottom: 2 }}
+                                    />
+                                    <TextField
+                                      label="Expire At"
+                                      fullWidth
+                                      name="expire_at"
+                                      value={lenderProposal.expire_at}
+                                      onChange={handleProposalChange}
+                                      sx={{ marginBottom: 2 }}
                                     />
                                     <Box
                                       sx={{
