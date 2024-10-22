@@ -163,7 +163,7 @@ const NavBar = ({ setUser, setToken, isAuthenticated }) => {
             variant="subtitle1"
             sx={{
               color: "#00a250",
-              marginLeft: 1,
+              marginLeft: 2,
               fontSize: "1rem",
               fontWeight: "bold",
             }}
@@ -200,7 +200,7 @@ const NavBar = ({ setUser, setToken, isAuthenticated }) => {
               fontWeight: "bold",
             }}
           >
-            Find a Lender
+            Borrower SignUp
           </Button>
           <Button
             variant="outlined"
@@ -213,7 +213,7 @@ const NavBar = ({ setUser, setToken, isAuthenticated }) => {
               fontWeight: "bold",
             }}
           >
-            Find a Borrower
+            Lender SignUp
           </Button>
           <Button
             variant="outlined"
@@ -243,37 +243,35 @@ const NavBar = ({ setUser, setToken, isAuthenticated }) => {
       elevation={0}
     >
       <Toolbar sx={{ justifyContent: "space-between", alignItems: "center" }}>
-        <IconButton
-          edge="start"
-          aria-label="mmm logo"
-          onClick={handleLogoClick}
-          sx={{
-            color: "#00a250",
-            borderRadius: 0,
-            padding: 0,
-          }}
-        >
-          <img
-            src={MMMIcon}
-            alt="MMM Logo"
-            style={{ width: 40, height: 40, borderRadius: 0 }}
-          />
-        </IconButton>
-
-        {!isMobile && (
+        <Box display="flex" alignItems="center">
+          <IconButton
+            edge="start"
+            aria-label="mmm logo"
+            onClick={handleLogoClick}
+            sx={{
+              color: "#00a250",
+              borderRadius: 0,
+              padding: 0,
+            }}
+          >
+            <img
+              src={MMMIcon}
+              alt="MMM Logo"
+              style={{ width: 40, height: 40, borderRadius: 0 }}
+            />
+          </IconButton>
           <Typography
             variant="subtitle1"
             sx={{
               color: "#00a250",
               fontSize: "1rem",
               fontWeight: "bold",
-              textAlign: "center",
+              marginLeft: 2,
             }}
           >
             Here at MMM, we are obsessed with getting you funded.
           </Typography>
-        )}
-
+        </Box>
         <Box>{renderNavButtons()}</Box>
       </Toolbar>
 
