@@ -679,6 +679,7 @@ export default function Home() {
             </Typography>
             <Typography variant="h6" gutterBottom>
               Borrower Dashboard
+<<<<<<< HEAD
               <img
                 src={BorrowerDashboard}
                 alt="Product Placeholder"
@@ -692,6 +693,21 @@ export default function Home() {
                 alt="Product Placeholder"
                 style={{ width: "100%", borderRadius: 8, marginBottom: 16 }}
               />
+=======
+            <img
+              src={BorrowerDashboard}
+              alt="Product Placeholder"
+              style={{ width: "100%", borderRadius: 8, marginBottom: 16 }}
+            />
+            </Typography>
+            <Typography variant="h6" gutterBottom>
+              Lender Dashboard
+            <img
+              src={LenderDashboard}
+              alt="Product Placeholder"
+              style={{ width: "100%", borderRadius: 8, marginBottom: 16 }}
+            />
+>>>>>>> 2c51ccb (BorrowerForm updates)
             </Typography>
           </Card>
         </Grid>
