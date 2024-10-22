@@ -339,9 +339,8 @@ export default function Home() {
                   MMM
                 </span>{" "}
                 enables businesses to secure financing for transportation, IT,
-                industrial equipment, and more—all with competitive rates and
-                tailored solutions. We help businesses focus on growth, not
-                bureaucracy.
+                industrial equipment, and more—all with competitive rates! We
+                help businesses focus on growth, not bureaucracy.
               </Typography>
             </AccordionDetails>
           </Accordion>
@@ -397,8 +396,7 @@ export default function Home() {
                   fontSize: "1.7rem",
                 }}
               >
-                Our Mission: Empowering Businesses Everywhere with{" "}
-                <span style={{ color: "#00a250" }}>MMM</span>
+                Our Mission: GET YOU FUNDED.{" "}
               </Typography>
             </AccordionSummary>
             <AccordionDetails>
@@ -419,15 +417,15 @@ export default function Home() {
                 <span style={{ color: "#00a250", fontWeight: "bold" }}>
                   MMM
                 </span>{" "}
-                makes it happen. Our mission is simple: cut the fluff, get you
-                the funds, fast and clear.
+                makes it happen.
               </Typography>
               <Typography
                 variant="body1"
                 color="black"
                 sx={{ textAlign: "justify", mb: 2, fontWeight: "bold" }}
               >
-                More choices, more power to you. Let’s get you funded today!
+                Our mission is simple: More choices, more power to you. Let’s
+                get you funded today!
               </Typography>
             </AccordionDetails>
           </Accordion>
