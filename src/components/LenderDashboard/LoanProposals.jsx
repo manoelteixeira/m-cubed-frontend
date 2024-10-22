@@ -115,7 +115,7 @@ export default function LoanProposals({
           title: proposal.title,
           description: proposal.description,
           loan_amount: proposal.loan_amount.toString(),
-          interest_rate: proposal.interest_rate.toString(), // Editable interest rate as string
+          interest_rate: proposal.interest_rate.toString(),
           repayment_term: proposal.repayment_term.toString(),
           requirements: proposal.requirements || [],
           created_at: proposal.created_at,
