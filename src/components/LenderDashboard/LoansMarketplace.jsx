@@ -17,6 +17,10 @@ import {
   TablePagination,
   Paper,
   TableSortLabel,
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl,
 } from "@mui/material";
 import PropTypes from "prop-types";
 import { AddCircle, RemoveCircle } from "@mui/icons-material";
@@ -502,7 +506,14 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
                                     name="title"
                                     value={lenderProposal.title}
                                     onChange={handleProposalChange}
-                                    sx={{ marginBottom: 2 }}
+                                    sx={{
+                                      marginBottom: 2,
+                                      "& .MuiOutlinedInput-root": {
+                                        "& fieldset": {
+                                          borderColor: "#00a250",
+                                        },
+                                      },
+                                    }}
                                   />
                                   <TextField
                                     label="Description"
@@ -512,7 +523,14 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
                                     onChange={handleProposalChange}
                                     multiline
                                     rows={3}
-                                    sx={{ marginBottom: 2 }}
+                                    sx={{
+                                      marginBottom: 2,
+                                      "& .MuiOutlinedInput-root": {
+                                        "& fieldset": {
+                                          borderColor: "#00a250",
+                                        },
+                                      },
+                                    }}
                                   />
                                   <TextField
                                     label="Loan Amount"
@@ -520,7 +538,14 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
                                     name="loan_amount"
                                     value={lenderProposal.loan_amount}
                                     disabled
-                                    sx={{ marginBottom: 2 }}
+                                    sx={{
+                                      marginBottom: 2,
+                                      "& .MuiOutlinedInput-root": {
+                                        "& fieldset": {
+                                          borderColor: "#00a250",
+                                        },
+                                      },
+                                    }}
                                   />
                                   <TextField
                                     label="Interest Rate"
@@ -528,7 +553,14 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
                                     name="interest_rate"
                                     value={lenderProposal.interest_rate}
                                     onChange={handleProposalChange}
-                                    sx={{ marginBottom: 2 }}
+                                    sx={{
+                                      marginBottom: 2,
+                                      "& .MuiOutlinedInput-root": {
+                                        "& fieldset": {
+                                          borderColor: "#00a250",
+                                        },
+                                      },
+                                    }}
                                   />
                                   <TextField
                                     label="Repayment Term"
@@ -536,7 +568,14 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
                                     name="repayment_term"
                                     value={lenderProposal.repayment_term}
                                     onChange={handleProposalChange}
-                                    sx={{ marginBottom: 2 }}
+                                    sx={{
+                                      marginBottom: 2,
+                                      "& .MuiOutlinedInput-root": {
+                                        "& fieldset": {
+                                          borderColor: "#00a250",
+                                        },
+                                      },
+                                    }}
                                   />
 
                                   {/* Expiration Date Input */}
@@ -550,10 +589,17 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
                                     InputLabelProps={{
                                       shrink: true,
                                     }}
-                                    sx={{ marginBottom: 2 }}
+                                    sx={{
+                                      marginBottom: 2,
+                                      "& .MuiOutlinedInput-root": {
+                                        "& fieldset": {
+                                          borderColor: "#00a250",
+                                        },
+                                      },
+                                    }}
                                   />
 
-                                  {/* Requirements as array input */}
+                                  {/* Requirements as dropdown input */}
                                   <Typography variant="subtitle1">
                                     Requirements
                                   </Typography>
@@ -566,18 +612,41 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
                                         alignItems="center"
                                       >
                                         <Grid item xs={10}>
-                                          <TextField
-                                            label={`Requirement ${index + 1}`}
-                                            fullWidth
-                                            value={requirement}
-                                            onChange={(e) =>
-                                              handleRequirementsChange(
-                                                index,
-                                                e.target.value
-                                              )
-                                            }
-                                            sx={{ marginBottom: 2 }}
-                                          />
+                                          <FormControl fullWidth>
+                                            <InputLabel
+                                              id={`requirement-label-${index}`}
+                                            >
+                                              Select Requirement
+                                            </InputLabel>
+                                            <Select
+                                              labelId={`requirement-label-${index}`}
+                                              value={requirement}
+                                              onChange={(e) =>
+                                                handleRequirementsChange(
+                                                  index,
+                                                  e.target.value
+                                                )
+                                              }
+                                              sx={{
+                                                marginBottom: 2,
+                                                "& .MuiOutlinedInput-root": {
+                                                  "& fieldset": {
+                                                    borderColor: "#00a250",
+                                                  },
+                                                },
+                                              }}
+                                            >
+                                              <MenuItem value="None">
+                                                None
+                                              </MenuItem>
+                                              <MenuItem value="Downpayment">
+                                                Downpayment
+                                              </MenuItem>
+                                              <MenuItem value="Personal Guarantee">
+                                                Personal Guarantee
+                                              </MenuItem>
+                                            </Select>
+                                          </FormControl>
                                         </Grid>
                                         <Grid item xs={2}>
                                           <IconButton
@@ -593,8 +662,10 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
                                     )
                                   )}
                                   <Button
-                                    startIcon={<AddCircle />}
-                                    sx={{ marginBottom: 2 }}
+                                    startIcon={
+                                      <AddCircle sx={{ color: "#00a250" }} />
+                                    }
+                                    sx={{ marginBottom: 2, color: "#00a250" }}
                                     onClick={addRequirement}
                                   >
                                     Add Requirement
