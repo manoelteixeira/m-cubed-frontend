@@ -12,12 +12,15 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
+import { Avatar } from "@mui/material"
 import MenuIcon from "@mui/icons-material/Menu";
 import MMMIcon from "../../assets/MMMF6F7F8bground.png";
 import { useNavigate, useLocation } from "react-router-dom";
 
+
 const NavBar = ({ setUser, setToken, isAuthenticated }) => {
   const [anchorEl, setAnchorEl] = useState(null);
+  const [profileMenuAnchor, setProfileMenuAnchor] = useState(null); 
   const location = useLocation();
   const navigate = useNavigate();
   const theme = useTheme();
@@ -46,7 +49,7 @@ const NavBar = ({ setUser, setToken, isAuthenticated }) => {
     setToken(null);
     localStorage.removeItem("credentials");
     navigate("/");
-    handleCloseMenu();
+    handleCloseProfileMenu();
   };
 
   const handleDashboardClick = () => {
@@ -57,64 +60,100 @@ const NavBar = ({ setUser, setToken, isAuthenticated }) => {
     } else {
       navigate("/");
     }
-    handleCloseMenu();
+    handleCloseProfileMenu();
   };
 
+  const handleProfileClick = (event) => {
+    setProfileMenuAnchor(event.currentTarget);
+  };
+
+  const handleCloseProfileMenu = () => {
+    setProfileMenuAnchor(null);
+  };
+  const handleProfileEditClick = () => {
+    const credentials = JSON.parse(localStorage.getItem("credentials"));
+    const userType = credentials?.user_type;
+  
+    if (userType === "borrower") {
+      navigate("/borrowers/:id/edit");
+    } else if (userType === "lender") {
+      navigate("/lenders/:id/edit"); 
+    }
+    handleCloseProfileMenu();
+  };
+
+  
   const handleOpenMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
-
+  
   const handleCloseMenu = () => {
     setAnchorEl(null);
   };
+  
 
   const renderNavButtons = () => {
     if (isAuthenticated) {
-      return isMobile ? (
-        <IconButton
-          edge="end"
-          aria-label="menu"
-          onClick={handleOpenMenu}
-          sx={{
-            color: "#00a250",
-            border: "2px solid #00a250",
-            borderRadius: "50%",
-            padding: "12px",
-            "&:hover": {
-              backgroundColor: "#e6f7ef",
-            },
-          }}
-        >
-          <MenuIcon />
-        </IconButton>
-      ) : (
+      const credentials = JSON.parse(localStorage.getItem("credentials"));
+      const userType = credentials?.user_type;
+
+      return (
         <>
-          <Button
-            variant="outlined"
-            onClick={handleDashboardClick}
-            sx={{
-              borderColor: "#00a250",
-              color: "#00a250",
-              marginLeft: 2,
-              fontSize: "1rem",
-              fontWeight: "bold",
-            }}
+          {!isMobile && (
+            <Button
+              variant="outlined"
+              onClick={handleDashboardClick}
+              sx={{
+                borderColor: "#00a250",
+                color: "#00a250",
+                marginLeft: 2,
+                fontSize: "1rem",
+                fontWeight: "bold",
+              }}
+            >
+              YOUR DASHBOARD
+            </Button>
+          )}
+
+          
+          <IconButton
+            onClick={handleProfileClick}
+            sx={{ marginLeft: 2 }}
           >
-            YOUR DASHBOARD
-          </Button>
-          <Button
-            variant="outlined"
-            onClick={handleLogoutClick}
-            sx={{
-              borderColor: "#00a250",
-              color: "#00a250",
-              marginLeft: 2,
-              fontSize: "1rem",
-              fontWeight: "bold",
+            <Avatar alt="Profile Picture" src="Images/Aaron.jpeg" />
+          </IconButton>
+
+          
+          <Menu
+            anchorEl={profileMenuAnchor}
+            open={Boolean(profileMenuAnchor)}
+            onClose={handleCloseProfileMenu}
+            PaperProps={{
+              elevation: 0,
+              sx: {
+                mt: 1.5,
+                "&:before": {
+                  content: '""',
+                  display: "block",
+                  position: "absolute",
+                  top: 0,
+                  right: 14,
+                  width: 10,
+                  height: 10,
+                  bgcolor: "background.paper",
+                  transform: "translateY(-50%) rotate(45deg)",
+                  zIndex: 0,
+                },
+              },
             }}
+            transformOrigin={{ horizontal: "right", vertical: "top" }}
+            anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
           >
-            LOG OUT
-          </Button>
+           <MenuItem onClick={handleProfileEditClick}>
+            {userType === "borrower" ? "Update Borrower Profile" : "Update Lender Profile"}
+           </MenuItem>
+            <MenuItem onClick={handleLogoutClick}>Log Out</MenuItem>
+          </Menu>
         </>
       );
     } else {
@@ -339,12 +378,6 @@ const NavBar = ({ setUser, setToken, isAuthenticated }) => {
       </Menu>
     </AppBar>
   );
-};
-
-NavBar.propTypes = {
-  setUser: PropTypes.func.isRequired,
-  setToken: PropTypes.func.isRequired,
-  isAuthenticated: PropTypes.bool.isRequired,
 };
 
 export default NavBar;
