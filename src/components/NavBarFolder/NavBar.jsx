@@ -120,7 +120,7 @@ const NavBar = ({ setUser, setToken, isAuthenticated }) => {
             onClick={handleProfileClick}
             sx={{ marginLeft: 2 }}
           >
-            <Avatar alt="Profile Picture" src="Images/Aaron.jpeg" />
+            <Avatar alt="Profile Picture" src="https://picsum.photos/200" />
           </IconButton>
 
           
