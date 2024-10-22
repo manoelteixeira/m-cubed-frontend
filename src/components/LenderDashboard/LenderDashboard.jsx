@@ -36,6 +36,7 @@ const LenderDashboard = ({ user, token }) => {
           padding: "20px",
           marginBottom: "40px",
           backgroundColor: "#f6f7f8",
+          paddingTop: "40px",
         }}
       >
         <Grid container justifyContent="space-between" alignItems="center">
@@ -48,7 +49,7 @@ const LenderDashboard = ({ user, token }) => {
               variant="subtitle1"
               sx={{ color: "black", textAlign: "left" }}
             >
-              We’re excited to have you on board. Explore the latest loan
+              We’re excited to have you on board! Explore the latest loan
               requests from pre-qualified borrowers, ready for your review.
             </Typography>
           </Grid>
