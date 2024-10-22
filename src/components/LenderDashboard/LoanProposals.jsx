@@ -1573,7 +1573,7 @@ export default function LoanProposals({
                                       sx={{ marginBottom: 2 }}
                                     />
                                     <TextField
-                                      label="Expire At"
+                                      label="Proposal Valid Until"
                                       fullWidth
                                       name="expire_at"
                                       value={
