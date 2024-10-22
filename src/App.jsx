@@ -13,7 +13,7 @@ import NewBorrower from "./Pages/NewBorrower";
 import ListOfLenders from "./Pages/ListOfLenders";
 // import EditLenderForm from "./components/EditUserFolder/EditLenderInfo";
 import LoanRequestForm from "./components/LoanRequest/LoanRequestForm";
-import EmailNewsletter from "./Pages/EmailNewsletter";
+//import EmailNewsletter from "./Pages/EmailNewsletter";
 import EditBorrowerPage from "./Pages/EditBorrowerPage";
 import LenderProposalPage from "./Pages/LenderProposalPage";
 import EditLoanRequestForm from "./components/editLoanRequestForm/editLoanRequestForm";
@@ -25,8 +25,11 @@ import Footer from "./components/Footer/Footer";
 import EditLenderPage from "./Pages/EditLenderPage.jsx";
 import ShowBorrowerDetails from "./components/ShowDetailsForBorrower/ShowBorrowerDetails";
 import ShowBorrowerLoanDetails from "./components/ShowDetailsForBorrower/ShowBorrowerLoanDetails";
-
 import ApprovedDocuments from "./components/ApprovedDocuments";
+
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
+
 function App() {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
@@ -146,8 +149,9 @@ function App() {
         />
         {/* <Route path="/borrowers/:id" element={<BDashboard />} /> */}
         <Route path="/disclaimer" element={<></>} />
-        <Route path="/newsletter" element={<EmailNewsletter />}></Route>
+        {/* <Route path="/newsletter" element={<EmailNewsletter />}></Route> */}
       </Routes>
+      <ToastContainer />
 
       {/* Footer  */}
       <Footer />

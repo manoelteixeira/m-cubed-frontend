@@ -5,10 +5,9 @@ import {
   Link,
   Container,
   Grid,
-  TextField,
-  Button,
 } from "@mui/material";
 import QRCodeComponent from "../QRCodeComponent";
+import SubscribeForm from "../SubscribeForm";
 
 const Footer = () => {
   return (
@@ -47,24 +46,7 @@ const Footer = () => {
             <Typography variant="body2" sx={{ marginBottom: 2 }}>
               Stay updated about our launch and get the latest news.
             </Typography>
-            <TextField
-              variant="outlined"
-              placeholder="Enter your email"
-              sx={{ marginBottom: 1, backgroundColor: "#fff" }}
-              fullWidth
-            />
-            <Button
-              variant="contained"
-              sx={{
-                backgroundColor: "#008b3e",
-                color: "#fff",
-                "&:hover": {
-                  backgroundColor: "#007a2e",
-                },
-              }}
-            >
-              Subscribe
-            </Button>
+            <SubscribeForm /> {/* Burada SubscribeForm'u kullanıyoruz */}
           </Grid>
 
           {/* QR Code Section */}
