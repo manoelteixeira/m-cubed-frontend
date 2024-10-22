@@ -468,13 +468,11 @@ const BDashboard = ({ user, token }) => {
                                               }
                                             )}
                                           </TableCell>
-                                          {/* Expire_at column */}
                                           <TableCell align="center">
                                             {new Date(
                                               offer.expire_at
                                             ).toLocaleDateString()}
                                           </TableCell>
-                                          {/* Requirements column */}
                                           <TableCell align="center">
                                             <ul>
                                               {offer.requirements.map(
@@ -568,6 +566,18 @@ const BDashboard = ({ user, token }) => {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
                 })}
+              </li>
+              <li>
+                <strong>Offer Valid Until:</strong>{" "}
+                {new Date(selectedProposal?.expire_at).toLocaleDateString()}
+              </li>
+              <li>
+                <strong>Additional Requirements:</strong>
+                <ul>
+                  {selectedProposal?.requirements.map((req, idx) => (
+                    <li key={idx}>{req}</li>
+                  ))}
+                </ul>
               </li>
             </ul>
           </DialogContentText>
