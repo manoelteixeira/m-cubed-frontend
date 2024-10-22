@@ -6,7 +6,6 @@ const API = import.meta.env.VITE_BASE_URL;
 
 export default function QRCodeComponent() {
   return (
-<<<<<<< HEAD
     <Container maxWidth="sm" sx={{ mt: 5, textAlign: "center" }}>
       {/* <Typography variant='h4' gutterBottom>
             Join MMM Mailing List
@@ -24,19 +23,6 @@ export default function QRCodeComponent() {
         />
       </Box>
       {/* <Typography>
-=======
-    <Container maxWidth="sm" sx={{ mt: 5, textAlign: 'center' }}>   
-        {/* <Typography variant='h4' gutterBottom>
-            Join MMM Mailing List
-        </Typography> */}
-        <Typography variant='body1' gutterBottom>
-           Or Scan the QR code:
-        </Typography>
-        <Box >
-            <QRCode value={`${API}/newsletter`} size={100} bgColor={'#ffffff'} fgColor={'#000000'} level={'H'} />
-        </Box>
-        {/* <Typography>
->>>>>>> origin/dev
             Or visit: <Link href={`${API}/newsletter`} target="_blank" rel="noreferrer">{`${API}/newsletter`}</Link>
         </Typography> */}
     </Container>

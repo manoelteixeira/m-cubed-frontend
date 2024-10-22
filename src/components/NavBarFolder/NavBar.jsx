@@ -80,20 +80,12 @@ const NavBar = ({ setUser, setToken, isAuthenticated }) => {
             border: "2px solid #00a250",
             borderRadius: "50%",
             padding: "12px",
-<<<<<<< HEAD
             "&:hover": {
-=======
-            '&:hover': {
->>>>>>> origin/dev
               backgroundColor: "#e6f7ef",
             },
           }}
         >
-<<<<<<< HEAD
           <MenuIcon />
-=======
-          <MenuIcon/>
->>>>>>> origin/dev
         </IconButton>
       ) : (
         <>
@@ -128,11 +120,7 @@ const NavBar = ({ setUser, setToken, isAuthenticated }) => {
     } else {
       return isMobile ? (
         <div style={{ display: "flex", alignItems: "center", gap: 40 }}>
-<<<<<<< HEAD
           <Typography
-=======
-        <Typography
->>>>>>> origin/dev
             variant="subtitle1"
             sx={{
               color: "#00a250",
@@ -143,7 +131,6 @@ const NavBar = ({ setUser, setToken, isAuthenticated }) => {
           >
             Here at MMM, we are obsessed with getting you funded.
           </Typography>
-<<<<<<< HEAD
           <IconButton
             edge="end"
             aria-label="menu"
@@ -161,25 +148,6 @@ const NavBar = ({ setUser, setToken, isAuthenticated }) => {
             <MenuIcon />
           </IconButton>
         </div>
-=======
-        <IconButton
-          edge="end"
-          aria-label="menu"
-          onClick={handleOpenMenu}
-          sx={{
-            color: "#00a250",
-            border: "2px solid #00a250",
-            borderRadius: "50%",
-            padding: "8px",
-            '&:hover': {
-              backgroundColor: "#e6f7ef",
-            },
-          }}
-          >
-          <MenuIcon />
-        </IconButton>
-          </div>
->>>>>>> origin/dev
       ) : (
         <>
           <Button
@@ -235,11 +203,7 @@ const NavBar = ({ setUser, setToken, isAuthenticated }) => {
       }}
       elevation={0}
     >
-<<<<<<< HEAD
       <Toolbar sx={{ justifyContent: "space-between", alignItems: "center" }}>
-=======
-      <Toolbar sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
->>>>>>> origin/dev
         <IconButton
           edge="start"
           aria-label="mmm logo"
@@ -251,7 +215,7 @@ const NavBar = ({ setUser, setToken, isAuthenticated }) => {
           }}
         >
           <img
-            src={ MMMIcon }
+            src={MMMIcon}
             alt="MMM Logo"
             style={{ width: 40, height: 40, borderRadius: 0 }}
           />
@@ -264,24 +228,14 @@ const NavBar = ({ setUser, setToken, isAuthenticated }) => {
               color: "#00a250",
               fontSize: "1rem",
               fontWeight: "bold",
-<<<<<<< HEAD
               textAlign: "center",
-=======
-              textAlign: 'center',
->>>>>>> origin/dev
             }}
           >
             Here at MMM, we are obsessed with getting you funded.
           </Typography>
         )}
 
-<<<<<<< HEAD
         <Box>{renderNavButtons()}</Box>
-=======
-        <Box>
-          {renderNavButtons()}
-        </Box>
->>>>>>> origin/dev
       </Toolbar>
 
       <Menu
@@ -291,49 +245,29 @@ const NavBar = ({ setUser, setToken, isAuthenticated }) => {
         PaperProps={{
           elevation: 0,
           sx: {
-<<<<<<< HEAD
             overflow: "visible",
             filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
             mt: 1.5,
             "& .MuiAvatar-root": {
-=======
-            overflow: 'visible',
-            filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-            mt: 1.5,
-            '& .MuiAvatar-root': {
->>>>>>> origin/dev
               width: 32,
               height: 32,
               ml: -0.5,
               mr: 1,
             },
-<<<<<<< HEAD
             "&:before": {
               content: '""',
               display: "block",
               position: "absolute",
-=======
-            '&:before': {
-              content: '""',
-              display: 'block',
-              position: 'absolute',
->>>>>>> origin/dev
               top: 0,
               right: 14,
               width: 10,
               height: 10,
-<<<<<<< HEAD
               bgcolor: "background.paper",
               transform: "translateY(-50%) rotate(45deg)",
-=======
-              bgcolor: 'background.paper',
-              transform: 'translateY(-50%) rotate(45deg)',
->>>>>>> origin/dev
               zIndex: 0,
             },
           },
         }}
-<<<<<<< HEAD
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
@@ -402,74 +336,6 @@ const NavBar = ({ setUser, setToken, isAuthenticated }) => {
                 LOG IN
               </MenuItem>,
             ]}
-=======
-        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-      >
-        {isAuthenticated ? [
-          <MenuItem 
-            key="dashboard"
-            onClick={handleDashboardClick}
-            sx={{
-              '&:hover': {
-                backgroundColor: '#d9d9d9',
-                color: '#00a250',
-              },
-            }}
-          >
-            YOUR DASHBOARD
-          </MenuItem>,
-          <MenuItem 
-            key="logout"
-            onClick={handleLogoutClick}
-            sx={{
-              '&:hover': {
-                backgroundColor: '#d9d9d9',
-                color: '#00a250',
-              },
-            }}
-          >
-            LOG OUT
-          </MenuItem>
-        ] : [
-          <MenuItem 
-            key="borrower"
-            onClick={() => handleSignUpClick("borrower")}
-            sx={{
-              '&:hover': {
-                backgroundColor: '#d9d9d9',
-                color: '#00a250',
-              },
-            }}
-          >
-            Find a Lender
-          </MenuItem>,
-          <MenuItem 
-            key="lender"
-            onClick={() => handleSignUpClick("lender")}
-            sx={{
-              '&:hover': {
-                backgroundColor: '#d9d9d9',
-                color: '#00a250',
-              },
-            }}
-          >
-            Find a Borrower
-          </MenuItem>,
-          <MenuItem 
-            key="login"
-            onClick={handleLoginClick}
-            sx={{
-              '&:hover': {
-                backgroundColor: '#d9d9d9',
-                color: '#00a250',
-              },
-            }}
-          >
-            LOG IN
-          </MenuItem>
-        ]}
->>>>>>> origin/dev
       </Menu>
     </AppBar>
   );
