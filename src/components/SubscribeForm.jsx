@@ -103,26 +103,31 @@ const SubscribeForm = () => {
         onChange={(e) => setEmail(e.target.value)}
         required
         style={{
-          width: "100%", // Full width for input
+          width: "100%",
           padding: "10px",
-          marginBottom: "10px", // Margin below input for spacing
+          marginBottom: "10px",
           borderRadius: "4px",
-          border: "1px solid #00a250", // MMM green border
+          border: "1px solid #00a250",
+          fontFamily: "Arial, sans-serif",
+          fontSize: "16px",
+          fontWeight: "400",
         }}
       />
       <button
         type="submit"
         style={{
-          backgroundColor: "#f6f7f8", // MMM white background
-          color: "#00a250", // MMM green font color
-          padding: "8px 16px", // Smaller padding
+          backgroundColor: "#f6f7f8",
+          color: "#00a250",
+          padding: "8px 16px",
           borderRadius: "4px",
           border: "none",
-          fontWeight: "bold",
+          fontWeight: "400",
+          fontFamily: "Roboto, sans-serif",
+          fontSize: "16px",
           cursor: "pointer",
           textTransform: "uppercase",
           display: "block",
-          margin: "0 auto", // Center the button
+          margin: "left",
         }}
       >
         Subscribe
