@@ -722,7 +722,7 @@ const BDashboard = ({ user, token }) => {
           <Grid item>
             <Typography variant="h4" sx={{ color: "black", textAlign: "left" }}>
               Welcome,{" "}
-              <span style={{ color: "#00A250" }}>{user.business_name}!</span>
+              <span style={{ color: "#00A250" }}>{user.business_name}</span>
             </Typography>
             <Typography
               variant="subtitle1"
@@ -956,7 +956,7 @@ const BDashboard = ({ user, token }) => {
                                             handleSort("repayment_term")
                                           }
                                         >
-                                          Term Length (Months)
+                                          Term Length (months)
                                         </TableSortLabel>
                                       </Tooltip>
                                     </TableCell>
@@ -982,13 +982,13 @@ const BDashboard = ({ user, token }) => {
                                       align="center"
                                       sx={{ color: "#00A250" }}
                                     >
-                                      Offer Valid Until
+                                      Expiration Date
                                     </TableCell>
                                     <TableCell
                                       align="center"
                                       sx={{ color: "#00A250" }}
                                     >
-                                      Additional Requirements
+                                      Requirements
                                     </TableCell>
                                     <TableCell
                                       align="center"
@@ -1042,6 +1042,7 @@ const BDashboard = ({ user, token }) => {
                                               offer.expire_at
                                             ).toLocaleDateString()}
                                           </TableCell>
+                                          {/* Requirements column */}
                                           <TableCell align="center">
                                             <ul>
                                               {offer.requirements.map(
@@ -1136,21 +1137,6 @@ const BDashboard = ({ user, token }) => {
                   maximumFractionDigits: 2,
                 })}
               </li>
-<<<<<<< HEAD
-              <li>
-                <strong>Offer Valid Until:</strong>{" "}
-                {new Date(selectedProposal?.expire_at).toLocaleDateString()}
-              </li>
-              <li>
-                <strong>Additional Requirements:</strong>
-                <ul>
-                  {selectedProposal?.requirements.map((req, idx) => (
-                    <li key={idx}>{req}</li>
-                  ))}
-                </ul>
-              </li>
-=======
->>>>>>> b5aa2b2 (Merge conflicts)
             </ul>
           </DialogContentText>
         </DialogContent>
