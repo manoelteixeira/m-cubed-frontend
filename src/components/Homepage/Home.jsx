@@ -565,6 +565,41 @@ export default function Home() {
                     }
                   />
                 </ListItem>
+
+                {/* Additional Future Features */}
+                <ListItem sx={{ display: "list-item" }}>
+                  <ListItemText
+                    primary={
+                      <>
+                        <b>Second-hand marketplace:</b> A marketplace for
+                        buying/selling second-hand equipment and second-hand
+                        financing options.
+                      </>
+                    }
+                  />
+                </ListItem>
+                <ListItem sx={{ display: "list-item" }}>
+                  <ListItemText
+                    primary={
+                      <>
+                        <b>Live-streaming of equipment showcases:</b> Watch
+                        manufacturers demo their products live to promote
+                        financing and special lender offers.
+                      </>
+                    }
+                  />
+                </ListItem>
+                <ListItem sx={{ display: "list-item" }}>
+                  <ListItemText
+                    primary={
+                      <>
+                        <b>More ads for lender specials:</b> Promote special
+                        financing rates from lenders directly within the
+                        marketplace.
+                      </>
+                    }
+                  />
+                </ListItem>
               </List>
               <Typography
                 variant="body1"

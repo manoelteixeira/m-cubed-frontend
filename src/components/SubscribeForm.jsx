@@ -108,7 +108,7 @@ const SubscribeForm = () => {
           marginBottom: "10px",
           borderRadius: "4px",
           border: "1px solid #00a250",
-          fontFamily: "Arial, sans-serif",
+          fontFamily: "Roboto, sans-serif",
           fontSize: "16px",
           fontWeight: "400",
         }}
