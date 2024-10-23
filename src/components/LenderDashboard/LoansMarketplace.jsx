@@ -17,15 +17,11 @@ import {
   TablePagination,
   Paper,
   TableSortLabel,
-  Select,
-  MenuItem,
-  InputLabel,
-  FormControl,
 } from "@mui/material";
 import PropTypes from "prop-types";
 import { AddCircle, RemoveCircle } from "@mui/icons-material";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import 'react-toastify/dist/ReactToastify.css';
 const API = import.meta.env.VITE_BASE_URL;
 
 export default function LoansMarketplace({ user, token, loadLoanProposals }) {
@@ -34,13 +30,12 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
   const [loanListingsOffset, setLoanListingsOffset] = useState(0);
   const [loanListingsTotal, setLoanListingsTotal] = useState(null);
   const [loanListingsValue, setLoanListingsValue] = useState(0);
-  const [searchTermLoanListings, setSearchTermLoanListings] = useState(""); // Search term
+  const [searchTermLoanListings, setSearchTermLoanListings] = useState("");
   const [sortByLoanListings, setSortByLoanListings] = useState("created_at");
   const [sortOrderLoanListings, setSortOrderLoanListings] = useState("desc");
   const [expandedRowId, setExpandedRowId] = useState(null);
   const [borrowerDetails, setBorrowerDetails] = useState({});
   const [creditReports, setCreditReports] = useState([]);
-  const [submittedProposals, setSubmittedProposals] = useState([]); // Track submitted proposals
   const [lenderProposal, setLenderProposal] = useState({
     title: "",
     description: "",
@@ -52,21 +47,6 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
     created_at: new Date().toLocaleDateString(),
   });
 
-<<<<<<< HEAD
-  // Load submitted proposals from local storage
-  useEffect(() => {
-    const storedProposals = localStorage.getItem("submittedProposals");
-    if (storedProposals) {
-      setSubmittedProposals(JSON.parse(storedProposals));
-    }
-  }, []);
-
-  // Function to load loan listings
-  const loadLoanListings = () => {
-    let url = `${API}/lenders/${user.id}/requests?limit=${loanListingsLimit}&offset=${loanListingsOffset}&sort=${sortByLoanListings}&order=${sortOrderLoanListings}`;
-
-    // Include search term if it's longer than 2 characters
-=======
   const loadLoanListings = () => {
 <<<<<<< HEAD
     let url = `${API}/lenders/${user.id
@@ -74,7 +54,6 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
 =======
     let url = `${API}/lenders/${user.id}/requests?limit=${loanListingsLimit}&offset=${loanListingsOffset}&sort=${sortByLoanListings}&order=${sortOrderLoanListings}`;
 >>>>>>> ee6bacc (Fixed LoansMarketplace.jsx)
->>>>>>> b5aa2b2 (Merge conflicts)
     if (searchTermLoanListings.length >= 3) {
       url += `&search=${searchTermLoanListings}`;
     }
@@ -91,17 +70,6 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
       })
       .catch((err) => console.log(err));
   };
-
-  // Call `loadLoanListings` whenever the search term changes
-  useEffect(() => {
-    loadLoanListings();
-  }, [
-    searchTermLoanListings,
-    loanListingsLimit,
-    loanListingsOffset,
-    sortByLoanListings,
-    sortOrderLoanListings,
-  ]);
 
   const fetchBorrowerDetails = async (borrowerId) => {
     try {
@@ -170,35 +138,9 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
       const result = await response.json();
       if (response.ok) {
 <<<<<<< HEAD
-        alert("Proposal sent successfully");
-
-        const updatedSubmittedProposals = [
-          ...submittedProposals,
-          expandedRowId,
-        ];
-        setSubmittedProposals(updatedSubmittedProposals);
-
-        // Store submitted proposals in localStorage
-        localStorage.setItem(
-          "submittedProposals",
-          JSON.stringify(updatedSubmittedProposals)
-        );
-
-        // Remove the loan listing that was just proposed
-        setLoanListings((prev) =>
-          prev.filter((loan) => loan.id !== expandedRowId)
-        );
-
-=======
-<<<<<<< HEAD
         toast.success("Proposal sent successfully");
->>>>>>> b5aa2b2 (Merge conflicts)
         setExpandedRowId(null);
-
-        // Load loan proposals
         loadLoanProposals();
-<<<<<<< HEAD
-=======
         loadLoanListings();
 =======
         alert("Proposal sent successfully");
@@ -211,13 +153,13 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
         setExpandedRowId(null);
         loadLoanProposals();
 >>>>>>> ee6bacc (Fixed LoansMarketplace.jsx)
->>>>>>> b5aa2b2 (Merge conflicts)
       } else {
         toast.error(result.error || "Error sending proposal.");
       }
     } catch (error) {
       toast.error(error.message || "Failed to send the proposal.");
     }
+
   };
 
   const toggleRowExpansion = (rowId, borrowerId, loanAmount) => {
@@ -240,15 +182,21 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
       sortByLoanListings === sortKey && sortOrderLoanListings === "asc";
     setSortByLoanListings(sortKey);
     setSortOrderLoanListings(isAsc ? "desc" : "asc");
+    loadLoanListings();
   };
 
-  // Filter out loans with proposals already submitted
-  const filteredLoanListings = loanListings.filter(
-    (loan) => !submittedProposals.includes(loan.id)
-  );
+  useEffect(() => {
+    loadLoanListings();
+  }, [
+    loanListingsLimit,
+    loanListingsOffset,
+    sortByLoanListings,
+    sortOrderLoanListings,
+  ]);
 
   return (
     <Grid item xs={12}>
+      {/* KPI Section */}
       <Box
         sx={{
           padding: 3,
@@ -332,6 +280,7 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
         </Grid>
       </Box>
 
+      {/* Loan Listings Table */}
       <Box sx={{ padding: 3, backgroundColor: "#f6f7f8", border: "none" }}>
         <Grid
           container
@@ -384,7 +333,7 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {filteredLoanListings.map((loan) => (
+              {loanListings.map((loan) => (
                 <React.Fragment key={loan.id}>
                   <TableRow
                     hover
@@ -567,14 +516,7 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
                                     name="title"
                                     value={lenderProposal.title}
                                     onChange={handleProposalChange}
-                                    sx={{
-                                      marginBottom: 2,
-                                      "& .MuiOutlinedInput-root": {
-                                        "& fieldset": {
-                                          borderColor: "#00a250",
-                                        },
-                                      },
-                                    }}
+                                    sx={{ marginBottom: 2 }}
                                   />
                                   <TextField
                                     label="Description"
@@ -584,14 +526,7 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
                                     onChange={handleProposalChange}
                                     multiline
                                     rows={3}
-                                    sx={{
-                                      marginBottom: 2,
-                                      "& .MuiOutlinedInput-root": {
-                                        "& fieldset": {
-                                          borderColor: "#00a250",
-                                        },
-                                      },
-                                    }}
+                                    sx={{ marginBottom: 2 }}
                                   />
                                   <TextField
                                     label="Loan Amount"
@@ -599,14 +534,7 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
                                     name="loan_amount"
                                     value={lenderProposal.loan_amount}
                                     disabled
-                                    sx={{
-                                      marginBottom: 2,
-                                      "& .MuiOutlinedInput-root": {
-                                        "& fieldset": {
-                                          borderColor: "#00a250",
-                                        },
-                                      },
-                                    }}
+                                    sx={{ marginBottom: 2 }}
                                   />
                                   <TextField
                                     label="Interest Rate"
@@ -614,14 +542,7 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
                                     name="interest_rate"
                                     value={lenderProposal.interest_rate}
                                     onChange={handleProposalChange}
-                                    sx={{
-                                      marginBottom: 2,
-                                      "& .MuiOutlinedInput-root": {
-                                        "& fieldset": {
-                                          borderColor: "#00a250",
-                                        },
-                                      },
-                                    }}
+                                    sx={{ marginBottom: 2 }}
                                   />
                                   <TextField
                                     label="Repayment Term"
@@ -629,20 +550,10 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
                                     name="repayment_term"
                                     value={lenderProposal.repayment_term}
                                     onChange={handleProposalChange}
-                                    sx={{
-                                      marginBottom: 2,
-                                      "& .MuiOutlinedInput-root": {
-                                        "& fieldset": {
-                                          borderColor: "#00a250",
-                                        },
-                                      },
-                                    }}
+                                    sx={{ marginBottom: 2 }}
                                   />
 
-<<<<<<< HEAD
-=======
                                   {/* Expiration Date Input */}
->>>>>>> b5aa2b2 (Merge conflicts)
                                   <TextField
                                     label="Expiration Date"
                                     fullWidth
@@ -653,20 +564,10 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
                                     InputLabelProps={{
                                       shrink: true,
                                     }}
-<<<<<<< HEAD
-                                    sx={{
-                                      marginBottom: 2,
-                                      "& .MuiOutlinedInput-root": {
-                                        "& fieldset": {
-                                          borderColor: "#00a250",
-                                        },
-                                      },
-                                    }}
-=======
                                     sx={{ marginBottom: 2 }}
->>>>>>> b5aa2b2 (Merge conflicts)
                                   />
 
+                                  {/* Requirements as array input */}
                                   <Typography variant="subtitle1">
                                     Requirements
                                   </Typography>
@@ -679,41 +580,18 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
                                         alignItems="center"
                                       >
                                         <Grid item xs={10}>
-                                          <FormControl fullWidth>
-                                            <InputLabel
-                                              id={`requirement-label-${index}`}
-                                            >
-                                              Select Requirement
-                                            </InputLabel>
-                                            <Select
-                                              labelId={`requirement-label-${index}`}
-                                              value={requirement}
-                                              onChange={(e) =>
-                                                handleRequirementsChange(
-                                                  index,
-                                                  e.target.value
-                                                )
-                                              }
-                                              sx={{
-                                                marginBottom: 2,
-                                                "& .MuiOutlinedInput-root": {
-                                                  "& fieldset": {
-                                                    borderColor: "#00a250",
-                                                  },
-                                                },
-                                              }}
-                                            >
-                                              <MenuItem value="None">
-                                                None
-                                              </MenuItem>
-                                              <MenuItem value="Downpayment">
-                                                Downpayment
-                                              </MenuItem>
-                                              <MenuItem value="Personal Guarantee">
-                                                Personal Guarantee
-                                              </MenuItem>
-                                            </Select>
-                                          </FormControl>
+                                          <TextField
+                                            label={`Requirement ${index + 1}`}
+                                            fullWidth
+                                            value={requirement}
+                                            onChange={(e) =>
+                                              handleRequirementsChange(
+                                                index,
+                                                e.target.value
+                                              )
+                                            }
+                                            sx={{ marginBottom: 2 }}
+                                          />
                                         </Grid>
                                         <Grid item xs={2}>
                                           <IconButton
@@ -729,10 +607,8 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
                                     )
                                   )}
                                   <Button
-                                    startIcon={
-                                      <AddCircle sx={{ color: "#00a250" }} />
-                                    }
-                                    sx={{ marginBottom: 2, color: "#00a250" }}
+                                    startIcon={<AddCircle />}
+                                    sx={{ marginBottom: 2 }}
                                     onClick={addRequirement}
                                   >
                                     Add Requirement
