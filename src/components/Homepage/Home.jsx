@@ -1,13 +1,23 @@
 import React from "react";
 import "./Home.scss";
 import { Link } from "react-router-dom";
-import { CardContent, Button, Typography, Grid } from "@mui/material";
+import {
+  CardContent,
+  Button,
+  Typography,
+  Grid,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  List,
+  ListItem,
+  ListItemText,
+} from "@mui/material";
 import Slider from "react-slick";
 import { motion } from "framer-motion";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
-import { Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 export default function Home() {
   const equipmentItems = [
@@ -41,6 +51,7 @@ export default function Home() {
       }}
     >
       <Grid container spacing={1} justifyContent="center" sx={{ padding: 5 }}>
+        {/* Equipment Financing Section */}
         <Grid
           item
           xs={12}
@@ -66,7 +77,7 @@ export default function Home() {
                     variant="h5"
                     color="black"
                     sx={{
-                      mb: 2,
+                      mb: 1.5,
                       p: 2,
                       textAlign: "left",
                       fontWeight: "bold",
@@ -129,6 +140,7 @@ export default function Home() {
           </CardContent>
         </Grid>
 
+        {/* Images Section */}
         <Grid
           item
           xs={12}
@@ -168,6 +180,7 @@ export default function Home() {
         </Grid>
       </Grid>
 
+      {/* How This Works Section */}
       <Grid container spacing={4} justifyContent="center" sx={{ padding: 18 }}>
         <Grid item xs={12} display="flex" justifyContent="center">
           <img
@@ -203,7 +216,7 @@ export default function Home() {
 
         <Grid item xs={12} display="flex" justifyContent="center">
           <img
-            src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1729626011/Minimalist_Gradient_Pricing_Comparison_Chart_Table_Graph_5_wixfru.png"
+            src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1729648309/Minimalist_Gradient_Pricing_Comparison_Chart_Table_Graph_6_zjfgti.png"
             alt="Better Way"
             style={{
               width: "100%",
@@ -215,6 +228,7 @@ export default function Home() {
         </Grid>
       </Grid>
 
+      {/* Why Choose MMM Section */}
       <Grid container spacing={4} justifyContent="center" sx={{ padding: 5 }}>
         <Grid item xs={12} display="flex" justifyContent="center">
           <img
@@ -246,8 +260,10 @@ export default function Home() {
         </Grid>
       </Grid>
 
+      {/* Accordion Section */}
       <Grid container spacing={4} justifyContent="center" sx={{ padding: 5 }}>
         <Grid item xs={12} md={8} lg={7}>
+          {/* Accordion 1: Understanding the Small-Ticket Equipment Financing Industry */}
           <Accordion sx={{ maxWidth: "2400px", width: "100%" }}>
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
               <Typography
@@ -301,6 +317,8 @@ export default function Home() {
               </Typography>
             </AccordionDetails>
           </Accordion>
+
+          {/* Accordion 2: Transforming Borrowers’ Access to Equipment Financing */}
           <Accordion sx={{ maxWidth: "2400px", width: "100%" }}>
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
               <Typography
@@ -344,6 +362,8 @@ export default function Home() {
               </Typography>
             </AccordionDetails>
           </Accordion>
+
+          {/* Accordion 3: Powering New Lending Opportunities */}
           <Accordion sx={{ maxWidth: "2400px", width: "100%" }}>
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
               <Typography
@@ -387,6 +407,8 @@ export default function Home() {
               </Typography>
             </AccordionDetails>
           </Accordion>
+
+          {/* Accordion 4: Our Mission */}
           <Accordion sx={{ maxWidth: "2400px", width: "100%" }}>
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
               <Typography
@@ -429,6 +451,8 @@ export default function Home() {
               </Typography>
             </AccordionDetails>
           </Accordion>
+
+          {/* Accordion 5: Future Features */}
           <Accordion sx={{ maxWidth: "2400px", width: "100%" }}>
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
               <Typography
@@ -448,15 +472,106 @@ export default function Home() {
                 color="black"
                 sx={{ textAlign: "justify", mb: 2 }}
               >
-                We’re just getting started! Keep an eye out for exciting
-                features like real-time loan tracking, enhanced borrower-lender
-                messaging, AI-powered document verification, and more! Want to
-                shape the future of{" "}
+                We’re just getting started at{" "}
                 <span style={{ color: "#00a250", fontWeight: "bold" }}>
                   MMM
                 </span>
-                ? We’re inviting you to be a part of our journey as we roll out
-                these exciting updates. Stay tuned—big things are coming!
+                ! Exciting features are on the way, and we want you to be a part
+                of our journey as we roll them out:
+              </Typography>
+              <List sx={{ listStyleType: "decimal", pl: 4 }}>
+                <ListItem sx={{ display: "list-item" }}>
+                  <ListItemText
+                    primary={
+                      <>
+                        <b>AI-powered loan matching:</b> Speed up and improve
+                        how borrowers and lenders connect, with AI handling the
+                        matching process.
+                      </>
+                    }
+                  />
+                </ListItem>
+
+                <ListItem sx={{ display: "list-item" }}>
+                  <ListItemText
+                    primary={
+                      <>
+                        <b>Ratings and reviews:</b> Borrowers and lenders can
+                        build trust by reviewing and rating each other after
+                        transactions.
+                      </>
+                    }
+                  />
+                </ListItem>
+
+                <ListItem sx={{ display: "list-item" }}>
+                  <ListItemText
+                    primary={
+                      <>
+                        <b>Financial health dashboard:</b> Borrowers can track
+                        their creditworthiness and gain insights to improve
+                        their chances of approval.
+                      </>
+                    }
+                  />
+                </ListItem>
+
+                <ListItem sx={{ display: "list-item" }}>
+                  <ListItemText
+                    primary={
+                      <>
+                        <b>Automated repayment tracking:</b> Simplify loan
+                        management with auto-scheduled repayments and real-time
+                        tracking for both parties.
+                      </>
+                    }
+                  />
+                </ListItem>
+
+                <ListItem sx={{ display: "list-item" }}>
+                  <ListItemText
+                    primary={
+                      <>
+                        <b>Customizable lender search filters:</b> Lenders can
+                        easily find loans that match their specific criteria,
+                        from industry to loan size.
+                      </>
+                    }
+                  />
+                </ListItem>
+
+                <ListItem sx={{ display: "list-item" }}>
+                  <ListItemText
+                    primary={
+                      <>
+                        <b>Instant loan offers:</b> Pre-qualified borrowers will
+                        soon receive loan offers in minutes instead of days.
+                      </>
+                    }
+                  />
+                </ListItem>
+
+                <ListItem sx={{ display: "list-item" }}>
+                  <ListItemText
+                    primary={
+                      <>
+                        <b>Success stories:</b> Showcase how{" "}
+                        <span style={{ color: "#00a250", fontWeight: "bold" }}>
+                          MMM
+                        </span>{" "}
+                        is helping businesses grow, providing real examples of
+                        our impact.
+                      </>
+                    }
+                  />
+                </ListItem>
+              </List>
+              <Typography
+                variant="body1"
+                color="black"
+                sx={{ textAlign: "justify", mt: 2 }}
+              >
+                Big things are coming—stay tuned!
               </Typography>
             </AccordionDetails>
           </Accordion>
