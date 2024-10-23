@@ -739,10 +739,21 @@
 //                                       sx={{ marginBottom: 2 }}
 //                                     />
 //                                     <TextField
-//                                       label="Expire At"
+//                                       label="Proposal Valid Until"
 //                                       fullWidth
 //                                       name="expire_at"
-//                                       value={lenderProposal.expire_at}
+//                                       value={
+//                                         lenderProposal.expire_at
+//                                           ? new Date(
+//                                               lenderProposal.expire_at
+//                                             ).toLocaleDateString("en-US", {
+//                                               weekday: "short",
+//                                               year: "numeric",
+//                                               month: "short",
+//                                               day: "numeric",
+//                                             })
+//                                           : ""
+//                                       }
 //                                       onChange={handleProposalChange}
 //                                       sx={{ marginBottom: 2 }}
 //                                     />
@@ -877,7 +888,7 @@ export default function LoanProposals({
     loan_amount: "",
     interest_rate: "",
     repayment_term: "",
-    requirements: [], // Array of requirements
+    requirements: [],
     created_at: "",
     expire_at: "",
   });
@@ -949,7 +960,7 @@ export default function LoanProposals({
           title: proposal.title,
           description: proposal.description,
           loan_amount: proposal.loan_amount.toString(),
-          interest_rate: proposal.interest_rate.toString(), // Initially store as string for form
+          interest_rate: proposal.interest_rate.toString(),
           repayment_term: proposal.repayment_term.toString(),
           requirements: proposal.requirements || [],
           created_at: proposal.created_at,
@@ -980,8 +991,8 @@ export default function LoanProposals({
   const handleResubmitProposal = async () => {
     const proposalData = {
       ...lenderProposal,
-      loan_amount: parseFloat(lenderProposal.loan_amount), // Convert back to float for API
-      interest_rate: parseFloat(lenderProposal.interest_rate), // Convert back to float for API
+      loan_amount: parseFloat(lenderProposal.loan_amount),
+      interest_rate: parseFloat(lenderProposal.interest_rate),
       repayment_term: parseInt(lenderProposal.repayment_term, 10),
     };
 
@@ -1026,10 +1037,23 @@ export default function LoanProposals({
     setSortDirection(isAsc ? "desc" : "asc");
     setSortBy(property);
     const sortedProposals = [...filteredLoanProposals].sort((a, b) => {
-      if (isAsc) {
-        return a[property] < b[property] ? -1 : 1;
+      if (property === "expire_at") {
+        const dateA = new Date(a[property]);
+        const dateB = new Date(b[property]);
+        return isAsc ? dateA - dateB : dateB - dateA;
+      } else if (property === "requirements") {
+        const lengthA = a.requirements ? a.requirements.length : 0;
+        const lengthB = b.requirements ? b.requirements.length : 0;
+        return isAsc ? lengthA - lengthB : lengthB - lengthA;
+      } else {
+        return isAsc
+          ? a[property] < b[property]
+            ? -1
+            : 1
+          : a[property] > b[property]
+          ? -1
+          : 1;
       }
-      return a[property] > b[property] ? -1 : 1;
     });
     setFilteredLoanProposals(sortedProposals);
   };
@@ -1065,7 +1089,6 @@ export default function LoanProposals({
 
   return (
     <Grid item xs={12}>
-      {/* Title */}
       <Typography
         variant="h4"
         sx={{
@@ -1080,7 +1103,6 @@ export default function LoanProposals({
 
       {/* KPI Section */}
       <Grid container spacing={3} sx={{ marginBottom: "20px" }}>
-        {/* KPI boxes */}
         <Grid item xs={12} sm={4}>
           <Paper
             elevation={0}
@@ -1140,7 +1162,6 @@ export default function LoanProposals({
           </Paper>
         </Grid>
 
-        {/* Second Row */}
         <Grid item xs={12} sm={4}>
           <Paper
             elevation={0}
@@ -1246,6 +1267,16 @@ export default function LoanProposals({
                     align: "center",
                   },
                   { header: "Status", sortKey: "accepted", align: "center" },
+                  {
+                    header: "Offer Valid Until",
+                    sortKey: "expire_at",
+                    align: "center",
+                  },
+                  {
+                    header: "Additional Requirements",
+                    sortKey: "requirements",
+                    align: "center",
+                  },
                 ].map(({ header, sortKey, align }) => (
                   <TableCell
                     key={header}
@@ -1302,11 +1333,27 @@ export default function LoanProposals({
                           ? "Accepted"
                           : "Rejected"}
                       </TableCell>
+                      <TableCell align="center">
+                        {loan.expire_at
+                          ? new Date(loan.expire_at).toLocaleDateString(
+                              "en-US",
+                              {
+                                weekday: "short",
+                                year: "numeric",
+                                month: "short",
+                                day: "numeric",
+                              }
+                            )
+                          : "N/A"}
+                      </TableCell>
+                      <TableCell align="center">
+                        {loan.requirements.length}
+                      </TableCell>
                     </TableRow>
 
                     {expandedRowId === loan.id && (
                       <TableRow key={`${loan.id}-collapse`}>
-                        <TableCell colSpan={6}>
+                        <TableCell colSpan={8}>
                           <Collapse in={expandedRowId === loan.id}>
                             <Box
                               margin={2}
@@ -1480,7 +1527,7 @@ export default function LoanProposals({
                                       label="Interest Rate"
                                       fullWidth
                                       name="interest_rate"
-                                      value={lenderProposal.interest_rate} // Editable interest rate
+                                      value={lenderProposal.interest_rate}
                                       onChange={handleProposalChange}
                                       sx={{ marginBottom: 2 }}
                                     />

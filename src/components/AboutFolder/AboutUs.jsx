@@ -61,7 +61,7 @@ const teamMembers = [
   {
     name: "Manoel Alves Teixeira",
     role: "Software Engineer",
-    bio: "Placeholder for bio",
+    bio: "Hi, I’m Manoel! I am from Brazil, and I’ve been coding since I was a teenager, and what started as a hobby has turned into a passion for solving problems and building robots. My ultimate goal? To create innovative solutions that push the boundaries of technology.",
     imageUrl: "/images/jane.jpg",
     github: "https://github.com/manoelteixeira",
     linkedin: "https://www.linkedin.com/in/manoel-alves-teixeira/",
