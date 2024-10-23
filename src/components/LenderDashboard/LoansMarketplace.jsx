@@ -24,7 +24,8 @@ import {
 } from "@mui/material";
 import PropTypes from "prop-types";
 import { AddCircle, RemoveCircle } from "@mui/icons-material";
-
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const API = import.meta.env.VITE_BASE_URL;
 
 export default function LoansMarketplace({ user, token, loadLoanProposals }) {
@@ -182,10 +183,10 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
         // Load loan proposals
         loadLoanProposals();
       } else {
-        alert(result.error || "Error sending proposal.");
+        toast.error(result.error || "Error sending proposal.");
       }
     } catch (error) {
-      alert(error.message || "Failed to send the proposal.");
+      toast.error(error.message || "Failed to send the proposal.");
     }
   };
 
