@@ -21,7 +21,7 @@ import {
 import PropTypes from "prop-types";
 import { AddCircle, RemoveCircle } from "@mui/icons-material";
 import { toast } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 const API = import.meta.env.VITE_BASE_URL;
 
 export default function LoansMarketplace({ user, token, loadLoanProposals }) {
@@ -48,12 +48,9 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
   });
 
   const loadLoanListings = () => {
-<<<<<<< HEAD
-    let url = `${API}/lenders/${user.id
-      }/requests?limit=${loanListingsLimit}&offset=${loanListingsOffset}&sort=${sortByLoanListings}&order=${sortOrderLoanListings}&timestamp=${new Date().getTime()}`;
-=======
-    let url = `${API}/lenders/${user.id}/requests?limit=${loanListingsLimit}&offset=${loanListingsOffset}&sort=${sortByLoanListings}&order=${sortOrderLoanListings}`;
->>>>>>> ee6bacc (Fixed LoansMarketplace.jsx)
+    let url = `${API}/lenders/${
+      user.id
+    }/requests?limit=${loanListingsLimit}&offset=${loanListingsOffset}&sort=${sortByLoanListings}&order=${sortOrderLoanListings}&timestamp=${new Date().getTime()}`;
     if (searchTermLoanListings.length >= 3) {
       url += `&search=${searchTermLoanListings}`;
     }
@@ -137,29 +134,16 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
       });
       const result = await response.json();
       if (response.ok) {
-<<<<<<< HEAD
         toast.success("Proposal sent successfully");
         setExpandedRowId(null);
         loadLoanProposals();
         loadLoanListings();
-=======
-        alert("Proposal sent successfully");
-
-        // Remove the loan listing that was just proposed
-        setLoanListings((prev) =>
-          prev.filter((loan) => loan.id !== expandedRowId)
-        );
-
-        setExpandedRowId(null);
-        loadLoanProposals();
->>>>>>> ee6bacc (Fixed LoansMarketplace.jsx)
       } else {
         toast.error(result.error || "Error sending proposal.");
       }
     } catch (error) {
       toast.error(error.message || "Failed to send the proposal.");
     }
-
   };
 
   const toggleRowExpansion = (rowId, borrowerId, loanAmount) => {
