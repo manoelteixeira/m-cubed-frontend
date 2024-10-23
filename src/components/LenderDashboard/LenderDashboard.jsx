@@ -108,7 +108,7 @@ const API = import.meta.env.VITE_BASE_URL;
 const LenderDashboard = ({ user, token }) => {
   const [loanProposals, setLoanProposals] = useState([]);
   const [filteredLoanProposals, setFilteredLoanProposals] = useState([]);
-  const [activeTab, setActiveTab] = useState(0); // Track the active tab
+  const [activeTab, setActiveTab] = useState(0);
 
   const loadLoanProposals = () => {
     const options = {
@@ -127,14 +127,12 @@ const LenderDashboard = ({ user, token }) => {
     loadLoanProposals();
   }, []);
 
-  // Handle Tab Change
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
   };
 
   return (
     <div className="lender-dashboard" style={{ backgroundColor: "#f6f7f8" }}>
-      {/* Welcome Section */}
       <Paper
         elevation={0}
         sx={{
@@ -161,16 +159,44 @@ const LenderDashboard = ({ user, token }) => {
         </Grid>
       </Paper>
 
-      {/* Tabs for Loans Marketplace and Loan Proposals */}
-      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-        <Tabs value={activeTab} onChange={handleTabChange} centered>
+      {/* Horizontal Tabs */}
+      <Box
+        sx={{ borderBottom: 1, borderColor: "divider", marginBottom: "20px" }}
+      >
+        <Tabs
+          value={activeTab}
+          onChange={handleTabChange}
+          centered
+          sx={{
+            ".MuiTabs-flexContainer": {
+              justifyContent: "center",
+            },
+            ".MuiTab-root": {
+              minWidth: "auto",
+              padding: "12px 24px",
+              backgroundColor: "#f6f7f8",
+              "&.Mui-selected": {
+                backgroundColor: "#00A250",
+                color: "white",
+                borderTopLeftRadius: "8px",
+                borderTopRightRadius: "8px",
+              },
+              color: "#00A250",
+              fontWeight: "bold",
+              fontSize: "1.1rem",
+              marginRight: "4px",
+            },
+            ".MuiTabs-indicator": {
+              display: "none",
+            },
+          }}
+        >
           <Tab label="Loans Marketplace" />
           <Tab label="Loan Proposals" />
         </Tabs>
       </Box>
 
-      {/* Tab Panels */}
-      <Box>
+      <Box sx={{ padding: "20px" }}>
         {activeTab === 0 && (
           <Box sx={{ marginBottom: "80px" }}>
             <LoansMarketplace
@@ -187,7 +213,7 @@ const LenderDashboard = ({ user, token }) => {
         )}
 
         {activeTab === 1 && (
-          <Box sx={{ marginTop: "80px" }}>
+          <Box sx={{ marginTop: "20px" }}>
             <LoanProposals
               user={user}
               token={token}
