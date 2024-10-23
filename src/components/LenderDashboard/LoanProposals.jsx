@@ -960,7 +960,7 @@ export default function LoanProposals({
           title: proposal.title,
           description: proposal.description,
           loan_amount: proposal.loan_amount.toString(),
-          interest_rate: proposal.interest_rate.toString(),
+          interest_rate: proposal.interest_rate.toString(), // Initially store as string for form
           repayment_term: proposal.repayment_term.toString(),
           requirements: proposal.requirements || [],
           created_at: proposal.created_at,
@@ -991,8 +991,8 @@ export default function LoanProposals({
   const handleResubmitProposal = async () => {
     const proposalData = {
       ...lenderProposal,
-      loan_amount: parseFloat(lenderProposal.loan_amount),
-      interest_rate: parseFloat(lenderProposal.interest_rate),
+      loan_amount: parseFloat(lenderProposal.loan_amount), // Convert back to float for API
+      interest_rate: parseFloat(lenderProposal.interest_rate), // Convert back to float for API
       repayment_term: parseInt(lenderProposal.repayment_term, 10),
     };
 
@@ -1036,16 +1036,20 @@ export default function LoanProposals({
     const isAsc = sortBy === property && sortDirection === "asc";
     setSortDirection(isAsc ? "desc" : "asc");
     setSortBy(property);
+
     const sortedProposals = [...filteredLoanProposals].sort((a, b) => {
       if (property === "expire_at") {
-        const dateA = new Date(a[property]);
-        const dateB = new Date(b[property]);
+        // Handle date sorting
+        const dateA = new Date(a.expire_at);
+        const dateB = new Date(b.expire_at);
         return isAsc ? dateA - dateB : dateB - dateA;
       } else if (property === "requirements") {
-        const lengthA = a.requirements ? a.requirements.length : 0;
-        const lengthB = b.requirements ? b.requirements.length : 0;
-        return isAsc ? lengthA - lengthB : lengthB - lengthA;
+        // Sort based on the number of requirements
+        return isAsc
+          ? a.requirements.length - b.requirements.length
+          : b.requirements.length - a.requirements.length;
       } else {
+        // Default string/number sorting
         return isAsc
           ? a[property] < b[property]
             ? -1
@@ -1055,6 +1059,7 @@ export default function LoanProposals({
           : 1;
       }
     });
+
     setFilteredLoanProposals(sortedProposals);
   };
 
@@ -1089,6 +1094,7 @@ export default function LoanProposals({
 
   return (
     <Grid item xs={12}>
+      {/* Title */}
       <Typography
         variant="h4"
         sx={{
@@ -1103,6 +1109,7 @@ export default function LoanProposals({
 
       {/* KPI Section */}
       <Grid container spacing={3} sx={{ marginBottom: "20px" }}>
+        {/* KPI boxes */}
         <Grid item xs={12} sm={4}>
           <Paper
             elevation={0}
@@ -1162,6 +1169,7 @@ export default function LoanProposals({
           </Paper>
         </Grid>
 
+        {/* Second Row */}
         <Grid item xs={12} sm={4}>
           <Paper
             elevation={0}
@@ -1266,7 +1274,6 @@ export default function LoanProposals({
                     sortKey: "repayment_term",
                     align: "center",
                   },
-                  { header: "Status", sortKey: "accepted", align: "center" },
                   {
                     header: "Offer Valid Until",
                     sortKey: "expire_at",
@@ -1277,6 +1284,7 @@ export default function LoanProposals({
                     sortKey: "requirements",
                     align: "center",
                   },
+                  { header: "Status", sortKey: "accepted", align: "center" },
                 ].map(({ header, sortKey, align }) => (
                   <TableCell
                     key={header}
@@ -1327,13 +1335,6 @@ export default function LoanProposals({
                         {loan.repayment_term} months
                       </TableCell>
                       <TableCell align="center">
-                        {loan.accepted === null || loan.accepted === undefined
-                          ? "Pending"
-                          : loan.accepted
-                          ? "Accepted"
-                          : "Rejected"}
-                      </TableCell>
-                      <TableCell align="center">
                         {loan.expire_at
                           ? new Date(loan.expire_at).toLocaleDateString(
                               "en-US",
@@ -1347,13 +1348,22 @@ export default function LoanProposals({
                           : "N/A"}
                       </TableCell>
                       <TableCell align="center">
-                        {loan.requirements.length}
+                        {loan.requirements.length > 0
+                          ? loan.requirements.join(", ")
+                          : "N/A"}
+                      </TableCell>
+                      <TableCell align="center">
+                        {loan.accepted === null || loan.accepted === undefined
+                          ? "Pending"
+                          : loan.accepted
+                          ? "Accepted"
+                          : "Rejected"}
                       </TableCell>
                     </TableRow>
 
                     {expandedRowId === loan.id && (
                       <TableRow key={`${loan.id}-collapse`}>
-                        <TableCell colSpan={8}>
+                        <TableCell colSpan={6}>
                           <Collapse in={expandedRowId === loan.id}>
                             <Box
                               margin={2}
@@ -1527,7 +1537,7 @@ export default function LoanProposals({
                                       label="Interest Rate"
                                       fullWidth
                                       name="interest_rate"
-                                      value={lenderProposal.interest_rate}
+                                      value={lenderProposal.interest_rate} // Editable interest rate
                                       onChange={handleProposalChange}
                                       sx={{ marginBottom: 2 }}
                                     />
