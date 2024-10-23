@@ -52,6 +52,7 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
     created_at: new Date().toLocaleDateString(),
   });
 
+<<<<<<< HEAD
   // Load submitted proposals from local storage
   useEffect(() => {
     const storedProposals = localStorage.getItem("submittedProposals");
@@ -65,6 +66,15 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
     let url = `${API}/lenders/${user.id}/requests?limit=${loanListingsLimit}&offset=${loanListingsOffset}&sort=${sortByLoanListings}&order=${sortOrderLoanListings}`;
 
     // Include search term if it's longer than 2 characters
+=======
+  const loadLoanListings = () => {
+<<<<<<< HEAD
+    let url = `${API}/lenders/${user.id
+      }/requests?limit=${loanListingsLimit}&offset=${loanListingsOffset}&sort=${sortByLoanListings}&order=${sortOrderLoanListings}&timestamp=${new Date().getTime()}`;
+=======
+    let url = `${API}/lenders/${user.id}/requests?limit=${loanListingsLimit}&offset=${loanListingsOffset}&sort=${sortByLoanListings}&order=${sortOrderLoanListings}`;
+>>>>>>> ee6bacc (Fixed LoansMarketplace.jsx)
+>>>>>>> b5aa2b2 (Merge conflicts)
     if (searchTermLoanListings.length >= 3) {
       url += `&search=${searchTermLoanListings}`;
     }
@@ -159,6 +169,7 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
       });
       const result = await response.json();
       if (response.ok) {
+<<<<<<< HEAD
         alert("Proposal sent successfully");
 
         const updatedSubmittedProposals = [
@@ -178,10 +189,29 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
           prev.filter((loan) => loan.id !== expandedRowId)
         );
 
+=======
+<<<<<<< HEAD
+        toast.success("Proposal sent successfully");
+>>>>>>> b5aa2b2 (Merge conflicts)
         setExpandedRowId(null);
 
         // Load loan proposals
         loadLoanProposals();
+<<<<<<< HEAD
+=======
+        loadLoanListings();
+=======
+        alert("Proposal sent successfully");
+
+        // Remove the loan listing that was just proposed
+        setLoanListings((prev) =>
+          prev.filter((loan) => loan.id !== expandedRowId)
+        );
+
+        setExpandedRowId(null);
+        loadLoanProposals();
+>>>>>>> ee6bacc (Fixed LoansMarketplace.jsx)
+>>>>>>> b5aa2b2 (Merge conflicts)
       } else {
         toast.error(result.error || "Error sending proposal.");
       }
@@ -609,6 +639,10 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
                                     }}
                                   />
 
+<<<<<<< HEAD
+=======
+                                  {/* Expiration Date Input */}
+>>>>>>> b5aa2b2 (Merge conflicts)
                                   <TextField
                                     label="Expiration Date"
                                     fullWidth
@@ -619,6 +653,7 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
                                     InputLabelProps={{
                                       shrink: true,
                                     }}
+<<<<<<< HEAD
                                     sx={{
                                       marginBottom: 2,
                                       "& .MuiOutlinedInput-root": {
@@ -627,6 +662,9 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
                                         },
                                       },
                                     }}
+=======
+                                    sx={{ marginBottom: 2 }}
+>>>>>>> b5aa2b2 (Merge conflicts)
                                   />
 
                                   <Typography variant="subtitle1">
