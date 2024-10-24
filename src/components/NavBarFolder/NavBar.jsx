@@ -10,7 +10,9 @@ import {
   Box,
   Typography,
 } from "@mui/material";
-import MMMIcon from "../../assets/MMMF6F7F8bground.png";
+import { Avatar } from "@mui/material"
+import MenuIcon from "@mui/icons-material/Menu";
+import MMMIcon from "../../../public/MMMF6F7F8bground.png";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const NavBar = ({ setUser, setToken, isAuthenticated }) => {

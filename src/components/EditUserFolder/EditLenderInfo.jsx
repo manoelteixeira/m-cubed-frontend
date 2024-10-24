@@ -1,7 +1,7 @@
         import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { TextField, Button, Box, Typography, Paper, Grid } from "@mui/material";
-import MMMLogo from '../../assets/MMMLogo.png';
+import MMMLogo from '../../../public/MMMLogo.png';
 
 const API = import.meta.env.VITE_BASE_URL;
 

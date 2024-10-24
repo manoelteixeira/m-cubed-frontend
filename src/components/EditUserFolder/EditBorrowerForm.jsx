@@ -8,7 +8,7 @@ import {
   Paper,
 } from "@mui/material";
 import { useNavigate, useParams } from 'react-router-dom';
-import MMMLogo from '../../assets/MMMLogo.png';
+import MMMLogo from '../../../public/MMMLogo.png';
 const API = import.meta.env.VITE_BASE_URL;
 
 export default function EditBorrowerForm() {

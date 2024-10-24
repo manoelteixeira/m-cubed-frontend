@@ -1,5 +1,5 @@
 import React from 'react'
-import DriversLicense from '../../assets/MOCKDriverLicense.png'
+import DriversLicense from '../../../public/MOCKDriverLicense.png'
 export default function MockDriversLicense() {
   return (
     <>
