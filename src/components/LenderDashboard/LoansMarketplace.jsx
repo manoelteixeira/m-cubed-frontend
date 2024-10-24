@@ -72,14 +72,13 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
         setLoanListingsTotal(data.total);
         setLoanListingsValue(data.value);
 
-        // New logic to track new loans by their creation time
+        // New logic to track new loans created in the past 5 minutes
         const currentLoans = data.loan_requests;
         const newlyCreatedLoans = currentLoans.filter((loan) => {
           const createdAt = new Date(loan.created_at);
           const now = new Date();
-          const timeDiff = now - createdAt;
-          const daysDiff = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-          return daysDiff <= 0; // Adjust this condition as needed for "new"
+          const timeDiff = (now - createdAt) / 1000; // Difference in seconds
+          return timeDiff <= 300; // 5 minutes (300 seconds)
         });
 
         setNewLoans(newlyCreatedLoans.map((loan) => loan.id)); // Store only the IDs of new loans
