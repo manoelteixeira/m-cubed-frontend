@@ -18,8 +18,6 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  TableSortLabel,
-  Tooltip,
   Snackbar,
   IconButton,
   Chip,
@@ -42,9 +40,9 @@ const BDashboard = ({ user, token }) => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [acceptedProposals, setAcceptedProposals] = useState({});
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
-  const [notifications, setNotifications] = useState([]); // Track expiring proposals
-  const [noExpiringProposals, setNoExpiringProposals] = useState(false); // No expiring proposals
-  const [snackbarOpen, setSnackbarOpen] = useState(false); // Snackbar visibility
+  const [notifications, setNotifications] = useState([]);
+  const [noExpiringProposals, setNoExpiringProposals] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [viewedRows, setViewedRows] = useState(() => {
     const storedViewedRows = localStorage.getItem(
       "viewedRowsBorrowerDashboard"
@@ -79,14 +77,13 @@ const BDashboard = ({ user, token }) => {
         Promise.all(fetchPromises).then(() => {
           setRequests(data);
           setProposals(requestsProposals);
-          checkForExpiringProposals(requestsProposals); // Check for expiring proposals
+          checkForExpiringProposals(requestsProposals);
         });
       })
       .catch((err) => setError("Error fetching data: " + err.message))
       .finally(() => setLoading(false));
   }, [user, token]);
 
-  // Function to check for expiring proposals
   const checkForExpiringProposals = (requestsProposals) => {
     const expiringProposals = [];
     const today = new Date();
@@ -109,12 +106,11 @@ const BDashboard = ({ user, token }) => {
     });
 
     setNotifications(expiringProposals);
-    setNoExpiringProposals(expiringProposals.length === 0); // If no expiring proposals
-    setSnackbarOpen(expiringProposals.length > 0); // Show Snackbar if there are expiring proposals
+    setNoExpiringProposals(expiringProposals.length === 0);
+    setSnackbarOpen(expiringProposals.length > 0);
   };
 
   const handleRowClick = (rowId) => {
-    // Track row as viewed
     if (!viewedRows.includes(rowId)) {
       const updatedViewedRows = [...viewedRows, rowId];
       setViewedRows(updatedViewedRows);
@@ -124,7 +120,6 @@ const BDashboard = ({ user, token }) => {
       );
     }
 
-    // Toggle row expansion
     setExpandedRow(expandedRow === rowId ? null : rowId);
   };
 
@@ -193,27 +188,28 @@ const BDashboard = ({ user, token }) => {
     navigate(`/borrowers/new-request`);
   };
 
-  // Function to check if a proposal is new (e.g., added within 7 days)
-  const isNewProposal = (createdAt) => {
+  const isNewProposal = (createdAt, requestId) => {
     const today = new Date();
     const proposalDate = new Date(createdAt);
     const timeDiff = today - proposalDate;
     const daysSinceCreated = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
-    return daysSinceCreated <= 7; // Proposals created within the last 7 days are "New"
+
+    // Check if the proposal is new and the corresponding request has not been viewed
+    return daysSinceCreated <= 7 && !viewedRows.includes(requestId);
   };
 
-  // Function to check if a loan request is new
-  const isNewLoanRequest = (createdAt) => {
+  const isNewLoanRequest = (createdAt, requestId) => {
     const today = new Date();
     const requestDate = new Date(createdAt);
     const timeDiff = today - requestDate;
     const daysSinceCreated = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
-    return daysSinceCreated <= 7; // Loan requests created within the last 7 days are "New"
+
+    // Check if the loan request is new and has not been viewed
+    return daysSinceCreated <= 7 && !viewedRows.includes(requestId);
   };
 
   return (
     <Box sx={{ padding: "20px", paddingTop: "50px", paddingBottom: "80px" }}>
-      {/* Snackbar notification for expiring proposals */}
       <Snackbar
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
         open={snackbarOpen}
@@ -227,21 +223,30 @@ const BDashboard = ({ user, token }) => {
               color="inherit"
               onClick={() => setSnackbarOpen(false)}
             >
-              <CloseIcon fontSize="small" />
+              <CloseIcon fontSize="small" sx={{ color: "#00a250" }} />
             </IconButton>
           </>
         }
         sx={{
           "& .MuiSnackbarContent-root": {
-            backgroundColor: "#75D481",
+            backgroundColor: "transparent",
             color: "#fff",
           },
         }}
       />
 
-      {/* Notification Section */}
       {noExpiringProposals && (
-        <Alert severity="info" sx={{ marginBottom: 3 }}>
+        <Alert
+          severity="info"
+          sx={{
+            marginBottom: 3,
+            backgroundColor: "transparent",
+            color: "#00a250",
+            "& .MuiAlert-icon": {
+              color: "#00a250", // Change icon color to MMM green
+            },
+          }}
+        >
           No proposals are expiring in the next 5 days.
         </Alert>
       )}
@@ -324,8 +329,8 @@ const BDashboard = ({ user, token }) => {
                     onClick={() => handleRowClick(request.id)}
                     style={{
                       backgroundColor: viewedRows.includes(request.id)
-                        ? "#d3d3d3" // Light gray for viewed rows
-                        : "#fff", // White for unviewed rows
+                        ? "#d3d3d3"
+                        : "#fff",
                     }}
                   >
                     <TableCell
@@ -333,7 +338,6 @@ const BDashboard = ({ user, token }) => {
                       sx={{ cursor: "pointer", color: "#00A250" }}
                     >
                       {request.title}
-                      {/* Add New or Exp labels */}
                       {daysUntilExpire <= 5 && (
                         <Chip
                           label="Exp"
@@ -345,7 +349,7 @@ const BDashboard = ({ user, token }) => {
                           }}
                         />
                       )}
-                      {isNewLoanRequest(request.created_at) && (
+                      {isNewLoanRequest(request.created_at, request.id) && (
                         <Chip
                           label="New"
                           size="small"
@@ -486,7 +490,6 @@ const BDashboard = ({ user, token }) => {
                                                 minimumFractionDigits: 2,
                                                 maximumFractionDigits: 2,
                                               })}
-                                              {/* Add Exp or New Chips */}
                                               {daysUntilExpire <= 5 && (
                                                 <Chip
                                                   label="Exp"
@@ -499,7 +502,8 @@ const BDashboard = ({ user, token }) => {
                                                 />
                                               )}
                                               {isNewProposal(
-                                                offer.created_at
+                                                offer.created_at,
+                                                request.id
                                               ) && (
                                                 <Chip
                                                   label="New"
