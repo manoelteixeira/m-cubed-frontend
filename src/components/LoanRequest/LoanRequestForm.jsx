@@ -16,7 +16,6 @@ import {
 import SaveIcon from "@mui/icons-material/Save";
 import SendIcon from "@mui/icons-material/Send";
 import CloseIcon from "@mui/icons-material/Close";
-import UploadIcon from "@mui/icons-material/Upload";
 
 const theme = createTheme({
   palette: {
@@ -43,7 +42,6 @@ const LoanRequestForm = ({ user, token }) => {
     value: "",
     expire_at: "", // Added expire_at to formData
     borrower_id: id,
-    driverLicense: null,
   });
 
   const handleChange = (e) => {
@@ -51,13 +49,6 @@ const LoanRequestForm = ({ user, token }) => {
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
-    }));
-  };
-
-  const handleFileChange = (e) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      driverLicense: e.target.files[0],
     }));
   };
 
@@ -223,6 +214,7 @@ const LoanRequestForm = ({ user, token }) => {
                 {/* Expire_at input moved to the bottom and label removed */}
                 <Grid item xs={12}>
                   <TextField
+                    label="Valid Until"
                     name="expire_at"
                     type="date" // Input type for date
                     value={formData.expire_at} // Bind to formData
@@ -237,42 +229,6 @@ const LoanRequestForm = ({ user, token }) => {
                       },
                     }}
                   />
-                </Grid>
-
-                <Grid item xs={12}>
-                  <Typography variant="body1" sx={{ color: "#00a250" }}>
-                    Upload Driver's License
-                  </Typography>
-                  <Button
-                    variant="outlined"
-                    component="label"
-                    sx={{
-                      marginTop: "10px",
-                      borderColor: "#00a250",
-                      color: "#00a250",
-                      "&:hover": {
-                        borderColor: "#00a250",
-                        backgroundColor: "#def4df",
-                      },
-                    }}
-                    startIcon={<UploadIcon />}
-                  >
-                    Choose File
-                    <input
-                      type="file"
-                      hidden
-                      accept="image/*, .pdf"
-                      onChange={handleFileChange}
-                    />
-                  </Button>
-                  {formData.driverLicense && (
-                    <Typography
-                      variant="body2"
-                      sx={{ color: "#00a250", marginTop: "8px" }}
-                    >
-                      File Selected: {formData.driverLicense.name}
-                    </Typography>
-                  )}
                 </Grid>
               </Grid>
 
