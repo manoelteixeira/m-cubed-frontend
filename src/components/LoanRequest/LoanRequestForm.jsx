@@ -40,7 +40,7 @@ const LoanRequestForm = ({ user, token }) => {
     title: "",
     description: "",
     value: "",
-    expire_at: "", // Added expire_at to formData
+    expire_at: "",
     borrower_id: id,
   });
 
@@ -58,7 +58,7 @@ const LoanRequestForm = ({ user, token }) => {
       title: formData.title,
       description: formData.description,
       value: parseFloat(formData.value),
-      expire_at: formData.expire_at, // Include expire_at in loanData
+      expire_at: formData.expire_at,
       created_at: new Date().toISOString(),
       borrower_id: id,
     };
@@ -211,13 +211,12 @@ const LoanRequestForm = ({ user, token }) => {
                   />
                 </Grid>
 
-                {/* Expire_at input moved to the bottom and label removed */}
                 <Grid item xs={12}>
                   <TextField
                     label="Valid Until"
                     name="expire_at"
-                    type="date" // Input type for date
-                    value={formData.expire_at} // Bind to formData
+                    type="date"
+                    value={formData.expire_at}
                     onChange={handleChange}
                     required
                     fullWidth
@@ -225,7 +224,16 @@ const LoanRequestForm = ({ user, token }) => {
                     variant="outlined"
                     InputProps={{
                       style: {
-                        borderColor: "#00a250",
+                        borderColor: "#00a250", // Border color to MMM green
+                      },
+                      inputProps: {
+                        placeholder: "",
+                      },
+                    }}
+                    InputLabelProps={{
+                      shrink: true,
+                      style: {
+                        color: "#00a250", // Label color to MMM green
                       },
                     }}
                   />
