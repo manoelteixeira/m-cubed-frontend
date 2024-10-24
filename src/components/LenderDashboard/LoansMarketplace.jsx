@@ -13,15 +13,16 @@ import {
   Collapse,
   Button,
   Link,
-  IconButton,
+  Chip,
   TablePagination,
   Paper,
   TableSortLabel,
+  Alert,
 } from "@mui/material";
 import PropTypes from "prop-types";
-import { AddCircle, RemoveCircle } from "@mui/icons-material";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import CloseIcon from "@mui/icons-material/Close";
+
 const API = import.meta.env.VITE_BASE_URL;
 
 export default function LoansMarketplace({ user, token, loadLoanProposals }) {
@@ -52,6 +53,9 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
     created_at: new Date().toLocaleDateString(),
   });
 
+  const [newLoans, setNewLoans] = useState([]); // Track new loans
+  const [expiringLoans, setExpiringLoans] = useState([]); // Track expiring loans
+
   const loadLoanListings = () => {
     let url = `${API}/lenders/${
       user.id
@@ -69,6 +73,34 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
         setLoanListings(data.loan_requests);
         setLoanListingsTotal(data.total);
         setLoanListingsValue(data.value);
+
+        // Track new loans created within the last 7 days
+        const newLoansIds = data.loan_requests
+          .filter((loan) => {
+            const createdAt = new Date(loan.created_at);
+            const today = new Date();
+            const daysSinceCreated = Math.ceil(
+              (today - createdAt) / (1000 * 60 * 60 * 24)
+            );
+            return daysSinceCreated <= 7; // Check if the loan is new
+          })
+          .map((loan) => loan.id);
+
+        setNewLoans(newLoansIds);
+
+        // Track loans that are expiring in 5 days
+        const today = new Date();
+        const expiringLoansIds = data.loan_requests
+          .filter((loan) => {
+            const expireAt = new Date(loan.expire_at);
+            const daysUntilExpire = Math.ceil(
+              (expireAt - today) / (1000 * 60 * 60 * 24)
+            );
+            return daysUntilExpire <= 5 && daysUntilExpire >= 0; // Check if the loan expires within 5 days
+          })
+          .map((loan) => loan.id);
+
+        setExpiringLoans(expiringLoansIds);
       })
       .catch((err) => console.log(err));
   };
@@ -163,6 +195,9 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
         ...prev,
         loan_amount: parseFloat(loanAmount).toLocaleString("en-US"),
       }));
+
+      // Remove the "New" label when the row is clicked
+      setNewLoans((prev) => prev.filter((loanId) => loanId !== rowId));
     }
 
     // Toggle row expansion without clearing the form or data
@@ -206,6 +241,45 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
         >
           The Loans Marketplace
         </Typography>
+
+        {/* New Loans Notification */}
+        {newLoans.length > 0 && (
+          <Alert
+            severity="info"
+            sx={{
+              marginBottom: -3,
+              backgroundColor: "transparent",
+              color: "#00a250",
+            }}
+          >
+            You have {newLoans.length} new loan requests in the marketplace.
+          </Alert>
+        )}
+
+        {/* Expiring Loans Notification */}
+        {expiringLoans.length > 0 ? (
+          <Alert
+            severity="warning"
+            sx={{
+              marginBottom: 0,
+              backgroundColor: "transparent",
+              color: "#darkred",
+            }}
+          >
+            You have {expiringLoans.length} loan requests expiring in 5 days.
+          </Alert>
+        ) : (
+          <Alert
+            severity="info"
+            sx={{
+              marginBottom: 5,
+              backgroundColor: "transparent",
+              color: "#00a250",
+            }}
+          >
+            No loan requests are expiring in the next 5 days.
+          </Alert>
+        )}
 
         <Grid container spacing={3} sx={{ marginBottom: "20px" }}>
           <Grid item xs={12} sm={4}>
@@ -343,6 +417,18 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
                   >
                     <TableCell align="left" sx={{ color: "#00a250" }}>
                       {loan.title}
+                      {/* Show "New" label if the loan is new */}
+                      {newLoans.includes(loan.id) && (
+                        <Chip
+                          label="New"
+                          size="small"
+                          sx={{
+                            backgroundColor: "#00A250",
+                            color: "white",
+                            marginLeft: 1,
+                          }}
+                        />
+                      )}
                     </TableCell>
                     <TableCell align="left">{loan.description}</TableCell>
                     <TableCell align="right">
