@@ -36,6 +36,11 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
   const [expandedRowId, setExpandedRowId] = useState(null);
   const [borrowerDetails, setBorrowerDetails] = useState({});
   const [creditReports, setCreditReports] = useState([]);
+  const [viewedRows, setViewedRows] = useState(() => {
+    const storedViewedRows = localStorage.getItem("viewedRowsMarketplace");
+    return storedViewedRows ? JSON.parse(storedViewedRows) : [];
+  });
+
   const [lenderProposal, setLenderProposal] = useState({
     title: "",
     description: "",
@@ -93,12 +98,6 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
     setLenderProposal({ ...lenderProposal, [name]: value });
   };
 
-  const handleRequirementsChange = (index, value) => {
-    const newRequirements = [...lenderProposal.requirements];
-    newRequirements[index] = value;
-    setLenderProposal((prev) => ({ ...prev, requirements: newRequirements }));
-  };
-
   const addRequirement = () => {
     setLenderProposal((prev) => ({
       ...prev,
@@ -147,14 +146,27 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
   };
 
   const toggleRowExpansion = (rowId, borrowerId, loanAmount) => {
-    setExpandedRowId(expandedRowId === rowId ? null : rowId);
-    if (borrowerId && expandedRowId !== rowId) {
+    // Mark row as viewed and store in localStorage
+    if (!viewedRows.includes(rowId)) {
+      const newViewedRows = [...viewedRows, rowId];
+      setViewedRows(newViewedRows);
+      localStorage.setItem(
+        "viewedRowsMarketplace",
+        JSON.stringify(newViewedRows)
+      );
+    }
+
+    // If expanding a new row, fetch borrower details and set proposal data
+    if (expandedRowId !== rowId) {
       fetchBorrowerDetails(borrowerId);
       setLenderProposal((prev) => ({
         ...prev,
         loan_amount: parseFloat(loanAmount).toLocaleString("en-US"),
       }));
     }
+
+    // Toggle row expansion without clearing the form or data
+    setExpandedRowId(expandedRowId === rowId ? null : rowId);
   };
 
   const handleSearchChangeLoanListings = (event) => {
@@ -180,7 +192,6 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
 
   return (
     <Grid item xs={12}>
-      {/* KPI Section */}
       <Box
         sx={{
           padding: 3,
@@ -264,8 +275,7 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
         </Grid>
       </Box>
 
-      {/* Loan Listings Table */}
-      <Box sx={{ padding: 3, backgroundColor: "#f6f7f8", border: "none" }}>
+      <Box sx={{ padding: 3, backgroundColor: "#f6f7f8" }}>
         <Grid
           container
           justifyContent="space-between"
@@ -321,7 +331,12 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
                 <React.Fragment key={loan.id}>
                   <TableRow
                     hover
-                    style={{ cursor: "pointer" }}
+                    style={{
+                      cursor: "pointer",
+                      backgroundColor: viewedRows.includes(loan.id)
+                        ? "#d3d3d3"
+                        : "#fff", // Light gray for viewed rows
+                    }}
                     onClick={() =>
                       toggleRowExpansion(loan.id, loan.borrower_id, loan.value)
                     }
@@ -359,10 +374,7 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
                               <Grid item xs={6}>
                                 <Typography
                                   variant="h6"
-                                  sx={{
-                                    color: "#00a250",
-                                    marginBottom: 1,
-                                  }}
+                                  sx={{ color: "#00a250", marginBottom: 1 }}
                                 >
                                   Borrower Details
                                 </Typography>
@@ -382,7 +394,6 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
                                     {borrowerDetails.state}{" "}
                                     {borrowerDetails.zip_code}
                                   </Typography>
-
                                   <Typography
                                     variant="subtitle1"
                                     sx={{ mt: 2 }}
@@ -391,45 +402,30 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
                                   </Typography>
                                   {creditReports.length > 0 ? (
                                     <ul>
-                                      {creditReports.map((report, index) => {
-                                        const isExpired =
-                                          new Date(report.expire_at) <
-                                          new Date();
-                                        return (
-                                          <li
-                                            key={index}
-                                            style={{
-                                              color: isExpired
-                                                ? "red"
-                                                : "black",
-                                            }}
+                                      {creditReports.map((report, index) => (
+                                        <li key={index}>
+                                          Bureau: {report.credit_bureau}, Score:{" "}
+                                          <Link
+                                            href={
+                                              borrowerDetails.fico_score_link
+                                            }
+                                            target="_blank"
+                                            sx={{ color: "#00a250" }}
                                           >
-                                            Bureau: {report.credit_bureau},
-                                            Score:{" "}
-                                            <Link
-                                              href={
-                                                borrowerDetails.fico_score_link
-                                              }
-                                              target="_blank"
-                                              sx={{ color: "#00a250" }}
-                                            >
-                                              {report.score}
-                                            </Link>
-                                            , Expires on:{" "}
-                                            {new Date(
-                                              report.expire_at
-                                            ).toLocaleDateString()}{" "}
-                                            {isExpired && "(EXPIRED)"}
-                                          </li>
-                                        );
-                                      })}
+                                            {report.score}
+                                          </Link>
+                                          , Expires on:{" "}
+                                          {new Date(
+                                            report.expire_at
+                                          ).toLocaleDateString()}
+                                        </li>
+                                      ))}
                                     </ul>
                                   ) : (
                                     <Typography>
                                       No reports available
                                     </Typography>
                                   )}
-
                                   <Typography
                                     variant="subtitle1"
                                     sx={{ marginTop: 2 }}
@@ -437,24 +433,6 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
                                     Documents:
                                   </Typography>
                                   <ul>
-                                    <li
-                                      style={{
-                                        color: creditReports.some(
-                                          (report) =>
-                                            new Date(report.expire_at) <
-                                            new Date()
-                                        )
-                                          ? "red"
-                                          : "#00a250",
-                                      }}
-                                    >
-                                      Credit Score - Verified{" "}
-                                      {creditReports.some(
-                                        (report) =>
-                                          new Date(report.expire_at) <
-                                          new Date()
-                                      ) && "(EXPIRED)"}
-                                    </li>
                                     <li>
                                       <Link
                                         href={
@@ -486,10 +464,7 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
                               <Grid item xs={6}>
                                 <Typography
                                   variant="h6"
-                                  sx={{
-                                    color: "#00a250",
-                                    marginBottom: 1,
-                                  }}
+                                  sx={{ color: "#00a250", marginBottom: 1 }}
                                 >
                                   Loan Proposal Form
                                 </Typography>
@@ -536,8 +511,6 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
                                     onChange={handleProposalChange}
                                     sx={{ marginBottom: 2 }}
                                   />
-
-                                  {/* Expiration Date Input */}
                                   <TextField
                                     label="Expiration Date"
                                     fullWidth
@@ -545,94 +518,29 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
                                     type="date"
                                     value={lenderProposal.expire_at}
                                     onChange={handleProposalChange}
-                                    InputLabelProps={{
-                                      shrink: true,
-                                    }}
+                                    InputLabelProps={{ shrink: true }}
                                     sx={{ marginBottom: 2 }}
                                   />
-
-                                  {/* Requirements as array input */}
-                                  <Typography variant="subtitle1">
-                                    Requirements
-                                  </Typography>
-                                  {lenderProposal.requirements.map(
-                                    (requirement, index) => (
-                                      <Grid
-                                        container
-                                        key={index}
-                                        spacing={1}
-                                        alignItems="center"
-                                      >
-                                        <Grid item xs={10}>
-                                          <TextField
-                                            label={`Requirement ${index + 1}`}
-                                            fullWidth
-                                            value={requirement}
-                                            onChange={(e) =>
-                                              handleRequirementsChange(
-                                                index,
-                                                e.target.value
-                                              )
-                                            }
-                                            sx={{ marginBottom: 2 }}
-                                          />
-                                        </Grid>
-                                        <Grid item xs={2}>
-                                          <IconButton
-                                            color="error"
-                                            onClick={() =>
-                                              removeRequirement(index)
-                                            }
-                                          >
-                                            <RemoveCircle />
-                                          </IconButton>
-                                        </Grid>
-                                      </Grid>
-                                    )
-                                  )}
                                   <Button
-                                    startIcon={<AddCircle />}
-                                    sx={{ marginBottom: 2 }}
-                                    onClick={addRequirement}
-                                  >
-                                    Add Requirement
-                                  </Button>
-
-                                  <Box
+                                    variant="contained"
                                     sx={{
-                                      display: "flex",
-                                      justifyContent: "flex-start",
-                                      gap: "10px",
-                                      marginTop: 2,
+                                      backgroundColor: "#00a250",
+                                      color: "#fff",
                                     }}
+                                    onClick={handleSendProposal}
                                   >
-                                    <Button
-                                      variant="contained"
-                                      sx={{
-                                        backgroundColor: "#00a250",
-                                        color: "#fff",
-                                        "&:hover": {
-                                          backgroundColor: "#007a3e",
-                                        },
-                                      }}
-                                      onClick={handleSendProposal}
-                                    >
-                                      Send Proposal
-                                    </Button>
-                                    <Button
-                                      variant="contained"
-                                      sx={{
-                                        backgroundColor: "darkred",
-                                        color: "#fff",
-                                        "&:hover": {
-                                          backgroundColor: "#b30000",
-                                        },
-                                      }}
-                                      onClick={() => setExpandedRowId(null)}
-                                    >
-                                      Cancel
-                                    </Button>
-                                  </Box>
+                                    Send Proposal
+                                  </Button>
+                                  <Button
+                                    variant="contained"
+                                    sx={{
+                                      backgroundColor: "darkred",
+                                      color: "#fff",
+                                    }}
+                                    onClick={() => setExpandedRowId(null)}
+                                  >
+                                    Cancel
+                                  </Button>
                                 </Box>
                               </Grid>
                             </Grid>
