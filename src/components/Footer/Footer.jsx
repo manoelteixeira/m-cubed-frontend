@@ -116,13 +116,6 @@ const Footer = () => {
           </Grid>
         </Grid>
 
-        <Typography
-          variant="body2"
-          align="center"
-          sx={{ marginTop: "40px", fontSize: "14px" }}
-        >
-          © {new Date().getFullYear()} MoneyMoneyMoney. All rights reserved.
-        </Typography>
       </Container>
     </Box>
   );

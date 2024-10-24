@@ -1059,8 +1059,8 @@ export default function LoanProposals({
             ? -1
             : 1
           : a[property] > b[property]
-          ? -1
-          : 1;
+            ? -1
+            : 1;
       }
     });
 
@@ -1343,18 +1343,18 @@ export default function LoanProposals({
                       <TableCell align="center">
                         {loan.expire_at
                           ? new Date(loan.expire_at).toLocaleDateString(
-                              "en-US",
-                              {
-                                weekday: "short",
-                                year: "numeric",
-                                month: "short",
-                                day: "numeric",
-                              }
-                            )
+                            "en-US",
+                            {
+                              weekday: "short",
+                              year: "numeric",
+                              month: "short",
+                              day: "numeric",
+                            }
+                          )
                           : "N/A"}
                       </TableCell>
                       <TableCell align="center">
-                        {loan.requirements.length > 0
+                        {loan.requirements && loan.requirements.length > 0
                           ? loan.requirements.join(", ")
                           : "N/A"}
                       </TableCell>

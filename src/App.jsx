@@ -21,7 +21,7 @@ import EditLoanRequestForm from "./components/editLoanRequestForm/editLoanReques
 import EditLoanProposalPage from "./components/LoanProposals/EditLoanProposalForm";
 import SignInForm from "./Pages/LoginPage.jsx";
 import ForgotCredentials from "./components/ForgotCredentials/ForgotCredentials.jsx";
-import Footer from "./components/Footer/Footer";
+import FooterTwo from "./components/Footer/FooterTwo.jsx";
 import EditLenderPage from "./Pages/EditLenderPage.jsx";
 import ShowBorrowerDetails from "./components/ShowDetailsForBorrower/ShowBorrowerDetails";
 import ShowBorrowerLoanDetails from "./components/ShowDetailsForBorrower/ShowBorrowerLoanDetails";
@@ -153,8 +153,7 @@ function App() {
       </Routes>
       <ToastContainer />
 
-      {/* Footer  */}
-      <Footer />
+      <FooterTwo />
     </>
   );
 }
