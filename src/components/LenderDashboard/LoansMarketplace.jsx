@@ -25,7 +25,7 @@ const API = import.meta.env.VITE_BASE_URL;
 
 export default function LoansMarketplace({ user, token, loadLoanProposals }) {
   const [loanListings, setLoanListings] = useState([]);
-  const [loanListingsLimit, setLoanListingsLimit] = useState(5);
+  const [loanListingsLimit, setLoanListingsLimit] = useState(10);
   const [loanListingsOffset, setLoanListingsOffset] = useState(0);
   const [loanListingsTotal, setLoanListingsTotal] = useState(null);
   const [loanListingsValue, setLoanListingsValue] = useState(0);
@@ -72,21 +72,21 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
         setLoanListingsTotal(data.total);
         setLoanListingsValue(data.value);
 
-        const newLoansIds = data.loan_requests
-          .filter((loan) => {
-            const createdAt = new Date(loan.created_at);
-            const today = new Date();
-            const daysSinceCreated = Math.ceil(
-              (today - createdAt) / (1000 * 60 * 60 * 24)
-            );
-            return daysSinceCreated <= 7;
-          })
-          .map((loan) => loan.id);
+        // New logic to track new loans by their creation time
+        const currentLoans = data.loan_requests;
+        const newlyCreatedLoans = currentLoans.filter((loan) => {
+          const createdAt = new Date(loan.created_at);
+          const now = new Date();
+          const timeDiff = now - createdAt;
+          const daysDiff = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+          return daysDiff <= 0; // Adjust this condition as needed for "new"
+        });
 
-        setNewLoans(newLoansIds);
+        setNewLoans(newlyCreatedLoans.map((loan) => loan.id)); // Store only the IDs of new loans
+        console.log("New Loans Count:", newlyCreatedLoans.length); // Log the count for debugging
 
         const today = new Date();
-        const expiringLoansIds = data.loan_requests
+        const expiringLoansIds = currentLoans
           .filter((loan) => {
             const expireAt = new Date(loan.expire_at);
             const daysUntilExpire = Math.ceil(
@@ -189,7 +189,7 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
         ...prev,
         loan_amount: parseFloat(loanAmount).toLocaleString("en-US"),
       }));
-      setNewLoans((prev) => prev.filter((loanId) => loanId !== rowId));
+      setNewLoans((prev) => prev.filter((loanId) => loanId !== rowId)); // Remove the loan ID from the new loans array
     }
 
     setExpandedRowId(expandedRowId === rowId ? null : rowId);
@@ -255,9 +255,9 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
             sx={{
               marginBottom: 0,
               backgroundColor: "transparent",
-              color: "#darkred",
+              color: "darkred",
               "& .MuiAlert-icon": {
-                color: "#darkred",
+                color: "darkred",
               },
             }}
           >
@@ -646,7 +646,7 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
           onRowsPerPageChange={(event) =>
             setLoanListingsLimit(event.target.value)
           }
-          rowsPerPageOptions={[5, 10, 25, 50, 100]}
+          rowsPerPageOptions={[10, 25, 50, 100]}
         />
       </Box>
     </Grid>
