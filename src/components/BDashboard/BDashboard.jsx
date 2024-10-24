@@ -1183,9 +1183,10 @@ import {
   DialogTitle,
   TableSortLabel,
   Tooltip,
-  Alert,
   Snackbar,
   IconButton,
+  Chip,
+  Alert,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
@@ -1208,7 +1209,7 @@ const BDashboard = ({ user, token }) => {
   const [noExpiringProposals, setNoExpiringProposals] = useState(false); // No expiring proposals
   const [snackbarOpen, setSnackbarOpen] = useState(false); // Snackbar visibility
 
-  // Track viewed rows using localStorage
+  // State to track viewed rows using localStorage
   const [viewedRows, setViewedRows] = useState(() => {
     const storedViewedRows = localStorage.getItem(
       "viewedRowsBorrowerDashboard"
@@ -1353,12 +1354,26 @@ const BDashboard = ({ user, token }) => {
     setDialogOpen(false);
   };
 
-  const handleSnackbarClose = () => {
-    setSnackbarOpen(false);
-  };
-
   const openLoanApplicationForm = () => {
     navigate(`/borrowers/new-request`);
+  };
+
+  // Function to check if a proposal is new (e.g., added within 7 days)
+  const isNewProposal = (createdAt) => {
+    const today = new Date();
+    const proposalDate = new Date(createdAt);
+    const timeDiff = today - proposalDate;
+    const daysSinceCreated = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+    return daysSinceCreated <= 7; // Proposals created within the last 7 days are "New"
+  };
+
+  // Function to check if a loan request is new
+  const isNewLoanRequest = (createdAt) => {
+    const today = new Date();
+    const requestDate = new Date(createdAt);
+    const timeDiff = today - requestDate;
+    const daysSinceCreated = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+    return daysSinceCreated <= 7; // Loan requests created within the last 7 days are "New"
   };
 
   return (
@@ -1368,19 +1383,26 @@ const BDashboard = ({ user, token }) => {
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
         open={snackbarOpen}
         autoHideDuration={6000}
-        onClose={handleSnackbarClose}
+        onClose={() => setSnackbarOpen(false)}
         message={`You have ${notifications.length} proposals expiring within 5 days.`}
         action={
           <>
             <IconButton
               size="small"
               color="inherit"
-              onClick={handleSnackbarClose}
+              onClick={() => setSnackbarOpen(false)}
             >
               <CloseIcon fontSize="small" />
             </IconButton>
           </>
         }
+        // Custom background color for the notification
+        sx={{
+          "& .MuiSnackbarContent-root": {
+            backgroundColor: "#75D481", // Light green background
+            color: "#fff", // White text for visibility
+          },
+        }}
       />
 
       {/* Notification Section */}
@@ -1434,73 +1456,6 @@ const BDashboard = ({ user, token }) => {
         </Grid>
       </Paper>
 
-      <Grid container spacing={3} sx={{ marginBottom: "20px" }}>
-        <Grid item xs={12} sm={4}>
-          <Paper
-            elevation={0}
-            sx={{
-              padding: "20px",
-              textAlign: "center",
-              backgroundColor: "#f6f7f8",
-            }}
-          >
-            <Typography variant="h6" sx={{ color: "#00A250" }}>
-              Total Loan Requests
-            </Typography>
-            <Typography variant="h4" sx={{ color: "#00A250" }}>
-              {requests.length}
-            </Typography>
-          </Paper>
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <Paper
-            elevation={0}
-            sx={{
-              padding: "20px",
-              textAlign: "center",
-              backgroundColor: "#f6f7f8",
-            }}
-          >
-            <Typography variant="h6" sx={{ color: "#00A250" }}>
-              Loan Requests with Proposals
-            </Typography>
-            <Typography variant="h4" sx={{ color: "#00A250" }}>
-              {
-                requests.filter(
-                  (request) =>
-                    proposals[request.id] && proposals[request.id].length > 0
-                ).length
-              }
-            </Typography>
-          </Paper>
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <Paper
-            elevation={0}
-            sx={{
-              padding: "20px",
-              textAlign: "center",
-              backgroundColor: "#f6f7f8",
-            }}
-          >
-            <Typography variant="h6" sx={{ color: "#00A250" }}>
-              Total Loan Amount Requested
-            </Typography>
-            <Typography variant="h4" sx={{ color: "#00A250" }}>
-              $
-              {requests
-                .reduce((total, request) => {
-                  return total + (parseFloat(request.value) || 0);
-                }, 0)
-                .toLocaleString("en-US", {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}
-            </Typography>
-          </Paper>
-        </Grid>
-      </Grid>
-
       <TableContainer component={Paper} elevation={0}>
         <Table>
           <TableHead>
@@ -1520,273 +1475,285 @@ const BDashboard = ({ user, token }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {requests.map((request) => (
-              <React.Fragment key={request.id}>
-                <TableRow
-                  hover
-                  onClick={() => handleRowClick(request.id)}
-                  style={{
-                    backgroundColor: viewedRows.includes(request.id)
-                      ? "#d3d3d3" // Light gray for viewed rows
-                      : "#fff", // White for unviewed rows
-                  }}
-                >
-                  <TableCell
-                    align="left"
-                    sx={{ cursor: "pointer", color: "#00A250" }}
-                  >
-                    {request.title}
-                  </TableCell>
-                  <TableCell align="left" sx={{ cursor: "pointer" }}>
-                    {request.description}
-                  </TableCell>
-                  <TableCell align="center" sx={{ cursor: "pointer" }}>
-                    $
-                    {request.value
-                      ? parseFloat(request.value).toLocaleString("en-US", {
-                          minimumFractionDigits: 2,
-                          maximumFractionDigits: 2,
-                        })
-                      : "N/A"}
-                  </TableCell>
-                  <TableCell
-                    align="center"
-                    sx={{
-                      cursor: "pointer",
-                      color: proposals[request.id]?.length
-                        ? "#056612"
-                        : "#8B0000",
-                    }}
-                  >
-                    {proposals[request.id]?.length ? "Active" : "Pending"}
-                  </TableCell>
-                </TableRow>
+            {requests.map((request) => {
+              const today = new Date();
+              const expireDate = new Date(request.expire_at);
+              const timeDiff = expireDate - today;
+              const daysUntilExpire = Math.ceil(
+                timeDiff / (1000 * 60 * 60 * 24)
+              );
 
-                <TableRow>
-                  <TableCell colSpan={4} sx={{ padding: 0, border: 0 }}>
-                    <Collapse
-                      in={expandedRow === request.id}
-                      timeout="auto"
-                      unmountOnExit
+              return (
+                <React.Fragment key={request.id}>
+                  <TableRow hover onClick={() => handleRowClick(request.id)}>
+                    <TableCell
+                      align="left"
+                      sx={{ cursor: "pointer", color: "#00A250" }}
                     >
-                      <Card
-                        elevation={2}
-                        sx={{
-                          backgroundColor: "#fff",
-                          margin: 2,
-                          textAlign: "center",
-                        }}
-                      >
-                        <Box sx={{ padding: "20px" }}>
-                          <Typography
-                            variant="h5"
-                            sx={{
-                              fontWeight: "bold",
-                              color: "#056612",
-                              marginBottom: "20px",
-                              fontSize: "1.5rem",
-                            }}
-                          >
-                            LOAN PROPOSALS
-                          </Typography>
-                          {proposals[request.id]?.length > 0 ? (
-                            <TableContainer component={Paper}>
-                              <Table>
-                                <TableHead>
-                                  <TableRow>
-                                    <TableCell
-                                      align="center"
-                                      sx={{ color: "#00A250" }}
-                                    >
-                                      <Tooltip title="Sort">
-                                        <TableSortLabel
-                                          active={
-                                            sortConfig.key === "loan_amount"
-                                          }
-                                          direction={sortConfig.direction}
-                                          onClick={() =>
-                                            handleSort("loan_amount")
-                                          }
-                                        >
-                                          Loan Amount Offered
-                                        </TableSortLabel>
-                                      </Tooltip>
-                                    </TableCell>
-                                    <TableCell
-                                      align="center"
-                                      sx={{ color: "#00A250" }}
-                                    >
-                                      <Tooltip title="Sort">
-                                        <TableSortLabel
-                                          active={
-                                            sortConfig.key === "interest_rate"
-                                          }
-                                          direction={sortConfig.direction}
-                                          onClick={() =>
-                                            handleSort("interest_rate")
-                                          }
-                                        >
-                                          Interest Rate
-                                        </TableSortLabel>
-                                      </Tooltip>
-                                    </TableCell>
-                                    <TableCell
-                                      align="center"
-                                      sx={{ color: "#00A250" }}
-                                    >
-                                      <Tooltip title="Sort">
-                                        <TableSortLabel
-                                          active={
-                                            sortConfig.key === "repayment_term"
-                                          }
-                                          direction={sortConfig.direction}
-                                          onClick={() =>
-                                            handleSort("repayment_term")
-                                          }
-                                        >
-                                          Term Length (months)
-                                        </TableSortLabel>
-                                      </Tooltip>
-                                    </TableCell>
-                                    <TableCell
-                                      align="center"
-                                      sx={{ color: "#00A250" }}
-                                    >
-                                      <Tooltip title="Sort">
-                                        <TableSortLabel
-                                          active={
-                                            sortConfig.key === "monthlyPayment"
-                                          }
-                                          direction={sortConfig.direction}
-                                          onClick={() =>
-                                            handleSort("monthlyPayment")
-                                          }
-                                        >
-                                          Monthly Payment
-                                        </TableSortLabel>
-                                      </Tooltip>
-                                    </TableCell>
-                                    <TableCell
-                                      align="center"
-                                      sx={{ color: "#00A250" }}
-                                    >
-                                      Expiration Date
-                                    </TableCell>
-                                    <TableCell
-                                      align="center"
-                                      sx={{ color: "#00A250" }}
-                                    >
-                                      Requirements
-                                    </TableCell>
-                                    <TableCell
-                                      align="center"
-                                      sx={{ color: "#00A250" }}
-                                    >
-                                      Decision
-                                    </TableCell>
-                                  </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                  {sortProposals(proposals[request.id]).map(
-                                    (offer) => {
-                                      const monthlyPayment =
-                                        (offer.loan_amount *
-                                          (1 + offer.interest_rate / 100)) /
-                                        offer.repayment_term;
+                      {request.title}
+                      {/* Add New or Exp labels */}
+                      {daysUntilExpire <= 5 && (
+                        <Chip
+                          label="Exp"
+                          size="small"
+                          sx={{
+                            backgroundColor: "red",
+                            color: "white",
+                            marginLeft: 1,
+                          }}
+                        />
+                      )}
+                      {isNewLoanRequest(request.created_at) && (
+                        <Chip
+                          label="New"
+                          size="small"
+                          sx={{
+                            backgroundColor: "#00A250",
+                            color: "white",
+                            marginLeft: 1,
+                          }}
+                        />
+                      )}
+                    </TableCell>
+                    <TableCell align="left" sx={{ cursor: "pointer" }}>
+                      {request.description}
+                    </TableCell>
+                    <TableCell align="center" sx={{ cursor: "pointer" }}>
+                      $
+                      {request.value
+                        ? parseFloat(request.value).toLocaleString("en-US", {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          })
+                        : "N/A"}
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      sx={{
+                        cursor: "pointer",
+                        color: proposals[request.id]?.length
+                          ? "#056612"
+                          : "#8B0000",
+                      }}
+                    >
+                      {proposals[request.id]?.length ? "Active" : "Pending"}
+                    </TableCell>
+                  </TableRow>
 
-                                      return (
-                                        <TableRow key={offer.id}>
-                                          <TableCell align="center">
-                                            $
-                                            {parseFloat(
-                                              offer.loan_amount
-                                            ).toLocaleString("en-US", {
-                                              minimumFractionDigits: 2,
-                                              maximumFractionDigits: 2,
-                                            })}
-                                          </TableCell>
-                                          <TableCell align="center">
-                                            {(
-                                              offer.interest_rate * 100
-                                            ).toFixed(2)}
-                                            %
-                                          </TableCell>
-                                          <TableCell align="center">
-                                            {offer.repayment_term}
-                                          </TableCell>
-                                          <TableCell align="center">
-                                            $
-                                            {monthlyPayment.toLocaleString(
-                                              "en-US",
-                                              {
+                  <TableRow>
+                    <TableCell colSpan={4} sx={{ padding: 0, border: 0 }}>
+                      <Collapse
+                        in={expandedRow === request.id}
+                        timeout="auto"
+                        unmountOnExit
+                      >
+                        <Card
+                          elevation={2}
+                          sx={{
+                            backgroundColor: "#fff",
+                            margin: 2,
+                            textAlign: "center",
+                          }}
+                        >
+                          <Box sx={{ padding: "20px" }}>
+                            <Typography
+                              variant="h5"
+                              sx={{
+                                fontWeight: "bold",
+                                color: "#056612",
+                                marginBottom: "20px",
+                                fontSize: "1.5rem",
+                              }}
+                            >
+                              LOAN PROPOSALS
+                            </Typography>
+                            {proposals[request.id]?.length > 0 ? (
+                              <TableContainer component={Paper}>
+                                <Table>
+                                  <TableHead>
+                                    <TableRow>
+                                      <TableCell
+                                        align="center"
+                                        sx={{ color: "#00A250" }}
+                                      >
+                                        Loan Amount Offered
+                                      </TableCell>
+                                      <TableCell
+                                        align="center"
+                                        sx={{ color: "#00A250" }}
+                                      >
+                                        Interest Rate
+                                      </TableCell>
+                                      <TableCell
+                                        align="center"
+                                        sx={{ color: "#00A250" }}
+                                      >
+                                        Term Length (months)
+                                      </TableCell>
+                                      <TableCell
+                                        align="center"
+                                        sx={{ color: "#00A250" }}
+                                      >
+                                        Monthly Payment
+                                      </TableCell>
+                                      <TableCell
+                                        align="center"
+                                        sx={{ color: "#00A250" }}
+                                      >
+                                        Expiration Date
+                                      </TableCell>
+                                      <TableCell
+                                        align="center"
+                                        sx={{ color: "#00A250" }}
+                                      >
+                                        Requirements
+                                      </TableCell>
+                                      <TableCell
+                                        align="center"
+                                        sx={{ color: "#00A250" }}
+                                      >
+                                        Decision
+                                      </TableCell>
+                                    </TableRow>
+                                  </TableHead>
+                                  <TableBody>
+                                    {sortProposals(proposals[request.id]).map(
+                                      (offer) => {
+                                        const monthlyPayment =
+                                          (offer.loan_amount *
+                                            (1 + offer.interest_rate / 100)) /
+                                          offer.repayment_term;
+                                        const expireDate = new Date(
+                                          offer.expire_at
+                                        );
+                                        const today = new Date();
+                                        const timeDiff =
+                                          expireDate.getTime() -
+                                          today.getTime();
+                                        const daysUntilExpire = Math.ceil(
+                                          timeDiff / (1000 * 60 * 60 * 24)
+                                        );
+
+                                        return (
+                                          <TableRow key={offer.id}>
+                                            <TableCell align="center">
+                                              $
+                                              {parseFloat(
+                                                offer.loan_amount
+                                              ).toLocaleString("en-US", {
                                                 minimumFractionDigits: 2,
                                                 maximumFractionDigits: 2,
-                                              }
-                                            )}
-                                          </TableCell>
-                                          <TableCell align="center">
-                                            {new Date(
-                                              offer.expire_at
-                                            ).toLocaleDateString()}
-                                          </TableCell>
-                                          <TableCell align="center">
-                                            <ul>
-                                              {offer.requirements.map(
-                                                (req, idx) => (
-                                                  <li key={idx}>{req}</li>
-                                                )
+                                              })}
+                                              {/* Add Exp or New Chips */}
+                                              {daysUntilExpire <= 5 && (
+                                                <Chip
+                                                  label="Exp"
+                                                  size="small"
+                                                  sx={{
+                                                    backgroundColor: "red",
+                                                    color: "white",
+                                                    marginLeft: 1,
+                                                  }}
+                                                />
                                               )}
-                                            </ul>
-                                          </TableCell>
-                                          <TableCell align="center">
-                                            <Button
-                                              variant="contained"
-                                              sx={{
-                                                backgroundColor: "#00A250",
-                                                color: "#f6f7f8",
-                                              }}
-                                              onClick={() =>
-                                                handleAcceptProposal(
-                                                  offer.id,
+                                              {isNewProposal(
+                                                offer.created_at
+                                              ) && (
+                                                <Chip
+                                                  label="New"
+                                                  size="small"
+                                                  sx={{
+                                                    backgroundColor: "#00A250",
+                                                    color: "white",
+                                                    marginLeft: 1,
+                                                  }}
+                                                />
+                                              )}
+                                            </TableCell>
+                                            <TableCell align="center">
+                                              {(
+                                                offer.interest_rate * 100
+                                              ).toFixed(2)}
+                                              %
+                                            </TableCell>
+                                            <TableCell align="center">
+                                              {offer.repayment_term}
+                                            </TableCell>
+                                            <TableCell align="center">
+                                              $
+                                              {monthlyPayment.toLocaleString(
+                                                "en-US",
+                                                {
+                                                  minimumFractionDigits: 2,
+                                                  maximumFractionDigits: 2,
+                                                }
+                                              )}
+                                            </TableCell>
+                                            <TableCell align="center">
+                                              {expireDate.toLocaleDateString()}
+                                            </TableCell>
+                                            <TableCell align="center">
+                                              <ul>
+                                                {offer.requirements.map(
+                                                  (req, idx) => (
+                                                    <li key={idx}>{req}</li>
+                                                  )
+                                                )}
+                                              </ul>
+                                            </TableCell>
+                                            <TableCell align="center">
+                                              <Button
+                                                variant="contained"
+                                                sx={{
+                                                  backgroundColor: "#00A250",
+                                                  color: "#f6f7f8",
+                                                }}
+                                                onClick={() =>
+                                                  handleAcceptProposal(
+                                                    offer.id,
+                                                    request.id
+                                                  )
+                                                }
+                                                disabled={
+                                                  acceptedProposals[
+                                                    request.id
+                                                  ] !== undefined &&
+                                                  acceptedProposals[
+                                                    request.id
+                                                  ] !== offer.id
+                                                }
+                                              >
+                                                {acceptedProposals[
                                                   request.id
-                                                )
-                                              }
-                                              disabled={
-                                                acceptedProposals[
-                                                  request.id
-                                                ] !== undefined &&
-                                                acceptedProposals[
-                                                  request.id
-                                                ] !== offer.id
-                                              }
-                                            >
-                                              {acceptedProposals[request.id] ===
-                                              offer.id
-                                                ? "Accepted"
-                                                : acceptedProposals[request.id]
-                                                ? "Rejected"
-                                                : "Accept"}
-                                            </Button>
-                                          </TableCell>
-                                        </TableRow>
-                                      );
-                                    }
-                                  )}
-                                </TableBody>
-                              </Table>
-                            </TableContainer>
-                          ) : (
-                            <Typography variant="body2">
-                              No proposals available yet.
-                            </Typography>
-                          )}
-                        </Box>
-                      </Card>
-                    </Collapse>
-                  </TableCell>
-                </TableRow>
-              </React.Fragment>
-            ))}
+                                                ] === offer.id
+                                                  ? "Accepted"
+                                                  : acceptedProposals[
+                                                      request.id
+                                                    ]
+                                                  ? "Rejected"
+                                                  : "Accept"}
+                                              </Button>
+                                            </TableCell>
+                                          </TableRow>
+                                        );
+                                      }
+                                    )}
+                                  </TableBody>
+                                </Table>
+                              </TableContainer>
+                            ) : (
+                              <Typography variant="body2" sx={{ padding: 1 }}>
+                                No proposals available yet.
+                              </Typography>
+                            )}
+                          </Box>
+                        </Card>
+                      </Collapse>
+                    </TableCell>
+                  </TableRow>
+                </React.Fragment>
+              );
+            })}
           </TableBody>
         </Table>
       </TableContainer>
