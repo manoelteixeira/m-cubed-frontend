@@ -1208,8 +1208,6 @@ const BDashboard = ({ user, token }) => {
   const [notifications, setNotifications] = useState([]); // Track expiring proposals
   const [noExpiringProposals, setNoExpiringProposals] = useState(false); // No expiring proposals
   const [snackbarOpen, setSnackbarOpen] = useState(false); // Snackbar visibility
-
-  // State to track viewed rows using localStorage
   const [viewedRows, setViewedRows] = useState(() => {
     const storedViewedRows = localStorage.getItem(
       "viewedRowsBorrowerDashboard"
@@ -1396,11 +1394,10 @@ const BDashboard = ({ user, token }) => {
             </IconButton>
           </>
         }
-        // Custom background color for the notification
         sx={{
           "& .MuiSnackbarContent-root": {
-            backgroundColor: "#75D481", // Light green background
-            color: "#fff", // White text for visibility
+            backgroundColor: "#75D481",
+            color: "#fff",
           },
         }}
       />
@@ -1485,7 +1482,15 @@ const BDashboard = ({ user, token }) => {
 
               return (
                 <React.Fragment key={request.id}>
-                  <TableRow hover onClick={() => handleRowClick(request.id)}>
+                  <TableRow
+                    hover
+                    onClick={() => handleRowClick(request.id)}
+                    style={{
+                      backgroundColor: viewedRows.includes(request.id)
+                        ? "#d3d3d3" // Light gray for viewed rows
+                        : "#fff", // White for unviewed rows
+                    }}
+                  >
                     <TableCell
                       align="left"
                       sx={{ cursor: "pointer", color: "#00A250" }}
@@ -1742,7 +1747,7 @@ const BDashboard = ({ user, token }) => {
                                 </Table>
                               </TableContainer>
                             ) : (
-                              <Typography variant="body2" sx={{ padding: 1 }}>
+                              <Typography variant="body2">
                                 No proposals available yet.
                               </Typography>
                             )}
