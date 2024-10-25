@@ -1335,6 +1335,10 @@ const BDashboard = ({ user, token }) => {
     );
     return storedViewedRows ? JSON.parse(storedViewedRows) : [];
   });
+  const [notifications, setNotifications] = useState([]);
+  const [noExpiringProposals, setNoExpiringProposals] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [newProposalNotif, setNewProposalNotif] = useState(false);
 
   const navigate = useNavigate();
 
@@ -1358,9 +1362,57 @@ const BDashboard = ({ user, token }) => {
         Promise.all(fetchPromises).then(() => {
           setRequests(data);
           setProposals(requestsProposals);
+          checkForExpiringProposals(requestsProposals);
+          checkForNewProposals(requestsProposals);
         });
       });
   }, [user.id, token]);
+
+  const checkForExpiringProposals = (requestsProposals) => {
+    const expiringProposals = [];
+    const today = new Date();
+
+    Object.keys(requestsProposals).forEach((requestId) => {
+      requestsProposals[requestId].forEach((proposal) => {
+        const expireDate = new Date(proposal.expire_at);
+        const daysUntilExpire = Math.ceil(
+          (expireDate - today) / (1000 * 60 * 60 * 24)
+        );
+
+        if (daysUntilExpire <= 5 && daysUntilExpire > 0) {
+          expiringProposals.push({
+            requestId,
+            proposalId: proposal.id,
+            title: proposal.title,
+            expireDate: expireDate.toLocaleDateString(),
+          });
+        }
+      });
+    });
+
+    setNotifications(expiringProposals);
+    setNoExpiringProposals(expiringProposals.length === 0);
+    setSnackbarOpen(expiringProposals.length > 0);
+  };
+
+  const checkForNewProposals = (requestsProposals) => {
+    const today = new Date();
+    let hasNewProposal = false;
+
+    Object.keys(requestsProposals).forEach((requestId) => {
+      requestsProposals[requestId].forEach((proposal) => {
+        const proposalDate = new Date(proposal.created_at);
+        const daysSinceCreated = Math.ceil(
+          (today - proposalDate) / (1000 * 60 * 60 * 24)
+        );
+        if (daysSinceCreated <= 7) {
+          hasNewProposal = true;
+        }
+      });
+    });
+
+    setNewProposalNotif(hasNewProposal);
+  };
 
   const handleSort = (column) => {
     let direction = "asc";
@@ -1443,6 +1495,57 @@ const BDashboard = ({ user, token }) => {
 
   return (
     <Box sx={{ padding: "20px", paddingTop: "50px", paddingBottom: "80px" }}>
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={() => setSnackbarOpen(false)}
+        message={`You have ${notifications.length} proposals expiring within 5 days.`}
+        action={
+          <IconButton
+            size="small"
+            color="inherit"
+            onClick={() => setSnackbarOpen(false)}
+          >
+            <CloseIcon fontSize="small" sx={{ color: "#00a250" }} />
+          </IconButton>
+        }
+        sx={{
+          "& .MuiSnackbarContent-root": {
+            backgroundColor: "transparent",
+            color: "#fff",
+          },
+        }}
+      />
+
+      {newProposalNotif && (
+        <Alert
+          severity="info"
+          sx={{
+            marginBottom: 3,
+            backgroundColor: "transparent",
+            color: "#00a250",
+            "& .MuiAlert-icon": { color: "#00a250" },
+          }}
+        >
+          You have new proposals available.
+        </Alert>
+      )}
+
+      {!newProposalNotif && (
+        <Alert
+          severity="info"
+          sx={{
+            marginBottom: 3,
+            backgroundColor: "transparent",
+            color: "#00a250",
+            "& .MuiAlert-icon": { color: "#00a250" },
+          }}
+        >
+          No new proposals.
+        </Alert>
+      )}
+
       <Paper
         elevation={0}
         sx={{
