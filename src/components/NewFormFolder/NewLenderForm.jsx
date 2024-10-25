@@ -170,6 +170,25 @@ const LenderForm = ({ setUser, setToken }) => {
               <Grid container spacing={2}>
                 <Grid item xs={12}>
                   <TextField
+                    label="Business Name"
+                    name="business_name"
+                    value={newLender.business_name}
+                    onChange={handleChange}
+                    fullWidth
+                    required
+                    margin="normal"
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <Business />
+                        </InputAdornment>
+                      ),
+                      style: { backgroundColor: "white" },
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
                     label="Email"
                     name="email"
                     type="email"
@@ -222,25 +241,6 @@ const LenderForm = ({ setUser, setToken }) => {
                       startAdornment: (
                         <InputAdornment position="start">
                           <Lock />
-                        </InputAdornment>
-                      ),
-                      style: { backgroundColor: "white" },
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    label="Business Name"
-                    name="business_name"
-                    value={newLender.business_name}
-                    onChange={handleChange}
-                    fullWidth
-                    required
-                    margin="normal"
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <Business />
                         </InputAdornment>
                       ),
                       style: { backgroundColor: "white" },
