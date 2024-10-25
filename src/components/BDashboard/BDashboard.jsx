@@ -45,6 +45,7 @@ const BDashboard = ({ user, token }) => {
   const [notifications, setNotifications] = useState([]);
   const [noExpiringProposals, setNoExpiringProposals] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [newProposalNotif, setNewProposalNotif] = useState(false);
   const [viewedRows, setViewedRows] = useState(() => {
     const storedViewedRows = localStorage.getItem(
       "viewedRowsBorrowerDashboard"
@@ -80,6 +81,7 @@ const BDashboard = ({ user, token }) => {
           setRequests(data);
           setProposals(requestsProposals);
           checkForExpiringProposals(requestsProposals);
+          checkForNewProposals(requestsProposals);
         });
       })
       .catch((err) => setError("Error fetching data: " + err.message))
@@ -112,6 +114,25 @@ const BDashboard = ({ user, token }) => {
     setSnackbarOpen(expiringProposals.length > 0);
   };
 
+  const checkForNewProposals = (requestsProposals) => {
+    const today = new Date();
+    let hasNewProposal = false;
+
+    Object.keys(requestsProposals).forEach((requestId) => {
+      requestsProposals[requestId].forEach((proposal) => {
+        const proposalDate = new Date(proposal.created_at);
+        const daysSinceCreated = Math.ceil(
+          (today - proposalDate) / (1000 * 60 * 60 * 24)
+        );
+        if (daysSinceCreated <= 7) {
+          hasNewProposal = true;
+        }
+      });
+    });
+
+    setNewProposalNotif(hasNewProposal);
+  };
+
   const handleSort = (column) => {
     let direction = "asc";
     if (sortConfig.key === column && sortConfig.direction === "asc") {
@@ -126,7 +147,6 @@ const BDashboard = ({ user, token }) => {
     let aValue = a[sortConfig.key];
     let bValue = b[sortConfig.key];
 
-    // Ensure loan amount is treated as a number for accurate sorting
     if (sortConfig.key === "value") {
       aValue = parseFloat(aValue) || 0;
       bValue = parseFloat(bValue) || 0;
@@ -210,7 +230,7 @@ const BDashboard = ({ user, token }) => {
         }}
       />
 
-      {noExpiringProposals && (
+      {newProposalNotif && (
         <Alert
           severity="info"
           sx={{
@@ -220,7 +240,21 @@ const BDashboard = ({ user, token }) => {
             "& .MuiAlert-icon": { color: "#00a250" },
           }}
         >
-          No proposals are expiring in the next 5 days.
+          You have new proposals available.
+        </Alert>
+      )}
+
+      {!newProposalNotif && (
+        <Alert
+          severity="info"
+          sx={{
+            marginBottom: 3,
+            backgroundColor: "transparent",
+            color: "#00a250",
+            "& .MuiAlert-icon": { color: "#00a250" },
+          }}
+        >
+          No new proposals.
         </Alert>
       )}
 
@@ -272,7 +306,7 @@ const BDashboard = ({ user, token }) => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell align="left" sx={{ color: "#00A250" }}>
+              <TableCell align="center" sx={{ color: "#00A250" }}>
                 <Tooltip title="Sort">
                   <TableSortLabel
                     active={sortConfig.key === "title"}
@@ -283,10 +317,10 @@ const BDashboard = ({ user, token }) => {
                   </TableSortLabel>
                 </Tooltip>
               </TableCell>
-              <TableCell align="left" sx={{ color: "#00A250" }}>
+              <TableCell align="center" sx={{ color: "#00A250" }}>
                 Purpose of Loan
               </TableCell>
-              <TableCell align="right" sx={{ color: "#00A250" }}>
+              <TableCell align="center" sx={{ color: "#00A250" }}>
                 <Tooltip title="Sort">
                   <TableSortLabel
                     active={sortConfig.key === "value"}
@@ -362,7 +396,6 @@ const BDashboard = ({ user, token }) => {
                   </TableCell>
                 </TableRow>
 
-                {/* Expanded row for loan proposals */}
                 <TableRow>
                   <TableCell colSpan={4} sx={{ padding: 0, border: 0 }}>
                     <Collapse
