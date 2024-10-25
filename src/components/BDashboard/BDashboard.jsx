@@ -49,6 +49,9 @@ const BDashboard = ({ user, token }) => {
   const [noExpiringProposals, setNoExpiringProposals] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [newProposalNotif, setNewProposalNotif] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [selectedProposal, setSelectedProposal] = useState(null);
+  const [selectedRequestId, setSelectedRequestId] = useState(null);
 
   const navigate = useNavigate();
 
@@ -201,6 +204,43 @@ const BDashboard = ({ user, token }) => {
       );
     }
     setExpandedRow(expandedRow === rowId ? null : rowId);
+  };
+
+  const openConfirmationDialog = (proposal, requestId) => {
+    setSelectedProposal(proposal);
+    setSelectedRequestId(requestId);
+    setDialogOpen(true);
+  };
+
+  const confirmAcceptProposal = async () => {
+    if (!selectedProposal || !selectedRequestId) return;
+
+    const options = {
+      method: "PUT",
+      body: JSON.stringify({ proposal_id: selectedProposal.id }),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token,
+      },
+    };
+
+    try {
+      const response = await fetch(
+        `${API}/borrowers/${user.id}/requests/${selectedRequestId}/proposals/`,
+        options
+      );
+      if (response.ok) {
+        setAcceptedProposals((prev) => ({
+          ...prev,
+          [selectedRequestId]: selectedProposal.id,
+        }));
+        setDialogOpen(false);
+      } else {
+        throw new Error("Failed to accept proposal.");
+      }
+    } catch (error) {
+      console.error("Error:", error.message);
+    }
   };
 
   return (
@@ -606,8 +646,8 @@ const BDashboard = ({ user, token }) => {
                                             color: "#f6f7f8",
                                           }}
                                           onClick={() =>
-                                            handleAcceptProposal(
-                                              offer.id,
+                                            openConfirmationDialog(
+                                              offer,
                                               request.id
                                             )
                                           }
@@ -641,6 +681,57 @@ const BDashboard = ({ user, token }) => {
           </TableBody>
         </Table>
       </TableContainer>
+
+      {/* Confirmation Dialog */}
+      <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
+        <DialogTitle>Confirm Acceptance</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to accept this proposal with the following
+            terms?
+            <ul>
+              <li>
+                <strong>Loan Amount:</strong> $
+                {selectedProposal?.loan_amount.toLocaleString("en-US", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
+              </li>
+              <li>
+                <strong>Interest Rate:</strong>{" "}
+                {(selectedProposal?.interest_rate * 100).toFixed(2)}%
+              </li>
+              <li>
+                <strong>Term Length:</strong> {selectedProposal?.repayment_term}{" "}
+                months
+              </li>
+              <li>
+                <strong>Monthly Payment:</strong> $
+                {(
+                  (selectedProposal?.loan_amount *
+                    (1 + selectedProposal?.interest_rate)) /
+                  selectedProposal?.repayment_term
+                ).toLocaleString("en-US", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
+              </li>
+            </ul>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDialogOpen(false)} color="primary">
+            Cancel
+          </Button>
+          <Button
+            onClick={confirmAcceptProposal}
+            color="primary"
+            variant="contained"
+          >
+            Accept
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };
