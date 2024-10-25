@@ -19,8 +19,11 @@ import {
   TableSortLabel,
   Alert,
 } from "@mui/material";
+import { Link as ReactLink } from "react-router-dom";
 import PropTypes from "prop-types";
-
+import { AddCircle, RemoveCircle } from "@mui/icons-material";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const API = import.meta.env.VITE_BASE_URL;
 
 export default function LoansMarketplace({ user, token, loadLoanProposals }) {
@@ -114,6 +117,7 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
         drivers_license_link:
           borrower.drivers_license_link || "/mock-drivers-license.pdf",
       });
+      localStorage.setItem("borrowerInfo",JSON.stringify(borrower))
       setCreditReports(credit_reports);
     } catch (error) {
       console.error("Failed to fetch borrower details", error);
@@ -214,6 +218,7 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
     sortByLoanListings,
     sortOrderLoanListings,
   ]);
+  console.log(borrowerDetails)
 
   return (
     <Grid item xs={12}>
@@ -484,24 +489,40 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
                                   </Typography>
                                   {creditReports.length > 0 ? (
                                     <ul>
-                                      {creditReports.map((report, index) => (
-                                        <li key={index}>
-                                          Bureau: {report.credit_bureau}, Score:{" "}
-                                          <Link
-                                            href={
-                                              borrowerDetails.fico_score_link
-                                            }
-                                            target="_blank"
-                                            sx={{ color: "#00a250" }}
+                                      {creditReports.map((report, index) => {
+                                        const isExpired =
+                                          new Date(report.expire_at) <
+                                          new Date();
+                                        return (
+                                          <li
+                                            key={index}
+                                            style={{
+                                              color: isExpired
+                                                ? "red"
+                                                : "black",
+                                            }}
                                           >
-                                            {report.score}
-                                          </Link>
-                                          , Expires on:{" "}
-                                          {new Date(
-                                            report.expire_at
-                                          ).toLocaleDateString()}
-                                        </li>
-                                      ))}
+                                            Bureau: {report.credit_bureau},
+                                            Score:{" "}
+                                            <Link
+                                              component={ReactLink}
+                                              to={{
+                                                pathname: "/mock-fico-score",
+                                                state: { userInfo: borrowerDetails, borrowerId: loan.borrower_id } 
+                                              }}
+                                              target="_blank"
+                                              sx={{ color: "#00a250" }}
+                                            >
+                                              {report.score}
+                                            </Link>
+                                            , Expires on:{" "}
+                                            {new Date(
+                                              report.expire_at
+                                            ).toLocaleDateString()}{" "}
+                                            {isExpired && "(EXPIRED)"}
+                                          </li>
+                                        );
+                                      })}
                                     </ul>
                                   ) : (
                                     <Typography>
@@ -517,10 +538,11 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
                                   <ul>
                                     <li>
                                       <Link
-                                        href={
-                                          borrowerDetails.secretary_of_state_link
-                                        }
-                                        target="_blank"
+                                        component={ReactLink}
+                                        to={{
+                                          pathname: "/mock-sos-certificate",
+                                          state: { userInfo: borrowerDetails} 
+                                        }}
                                         rel="noopener"
                                         sx={{ color: "#00a250" }}
                                       >
@@ -529,16 +551,19 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
                                       </Link>
                                     </li>
                                     <li>
-                                      <Link
-                                        href={
-                                          borrowerDetails.drivers_license_link
-                                        }
+                                      <ReactLink
+                                        component={ReactLink}
+                                        to={{
+                                          pathname: "/mock-drivers-license",
+                                          state: { userInfo: borrowerDetails, borrowerId: loan.borrower_id } 
+                                        }}
                                         target="_blank"
                                         rel="noopener"
                                         sx={{ color: "#00a250" }}
                                       >
                                         Driver's License - Verified
-                                      </Link>
+                                      
+                                      </ReactLink>
                                     </li>
                                   </ul>
                                 </Box>

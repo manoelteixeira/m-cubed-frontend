@@ -25,11 +25,11 @@ import FooterTwo from "./components/Footer/FooterTwo.jsx";
 import EditLenderPage from "./Pages/EditLenderPage.jsx";
 import ShowBorrowerDetails from "./components/ShowDetailsForBorrower/ShowBorrowerDetails";
 import ShowBorrowerLoanDetails from "./components/ShowDetailsForBorrower/ShowBorrowerLoanDetails";
-import ApprovedDocuments from "./components/ApprovedDocuments";
-
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
-
+import MockFICO from "./components/MockData/MockFICO.jsx";
+import MOCKSOS from "./components/MockData/MOCKSOS.jsx";
+import MockDriversLicense from "./components/MockData/MockDriversLicense.jsx"
 function App() {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
@@ -106,10 +106,10 @@ function App() {
           path="/borrowers/:id/edit-request/:requestId"
           element={<EditLoanRequestForm />}
         />
-        <Route
+        {/* <Route
           path="/borrowers/:id/approved-documents"
           element={<ApprovedDocuments />}
-        />
+        /> */}
         <Route path="borrowers/:borrower_id/requests/:id" element={<></>} />
         <Route
           path="/borrowers/:borrower_id/borrowerloandetails/:id"
@@ -141,6 +141,10 @@ function App() {
             />
           }
         />
+        <Route path="/mock-fico-score" element={<MockFICO/>} />
+        <Route path="/mock-sos-certificate" element={<MOCKSOS />} />
+        <Route path="/mock-drivers-license" element={<MockDriversLicense />} />
+        
         <Route path="/borrowers/:id/edit" element={<EditBorrowerPage />} />
         <Route path="/borrowers/:id/new" element={<LoanRequestForm />} />
         <Route

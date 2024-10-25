@@ -1,9 +1,77 @@
-import React from 'react'
-import DriversLicense from '../../../public/MOCKDriverLicense.png'
+import {useEffect, useState} from 'react'
+import { Box, Typography, Grid, Dialog } from '@mui/material';
+
 export default function MockDriversLicense() {
+
+  const savedInfo = JSON.parse(localStorage.getItem("borrowerInfo"))
+  const [open, setOpen] = useState(false); 
+
+  useEffect(()=> {
+  console.log(savedInfo)  
+  },[])
+
+  const handleOpen = () => setOpen(true); 
+  const handleClose = () => setOpen(false); 
+
   return (
-    <>
-        <img src={DriversLicense} alt="DriversLicense" />
-    </>
+    <Box sx={{ margin: 10 }}>
+      <Typography
+        variant="h4"
+        align="center"
+        sx={{ width: '100%', color: 'green', backgroundColor: 'white', py: 2 }}
+      >
+        Borrower Driver's License Information
+      </Typography>
+
+      <Grid
+        container
+        spacing={2}
+        alignItems="center"
+        justifyContent="center"
+        display={'grid'}
+        sx={{ mt: 5 }}
+      >
+        <Grid item xs={12}>
+          <img
+            src="./MOCKDriverLicense.png"
+            alt="Drivers License"
+            style={{
+              width: '250px',
+              transition: 'transform 0.3s',
+              cursor: 'pointer',
+              marginLeft: '15%',
+            }}
+            onClick={handleOpen} 
+          />
+        </Grid>
+      </Grid>
+
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="dialog-title"
+        aria-describedby="dialog-description"
+      >
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            p: 4,
+          }}
+        >
+          <img
+            src="./MOCKDriverLicense.png"
+            alt="Drivers License"
+            style={{
+              width: '500px',
+              transition: 'transform 0.3s',
+              cursor: 'pointer',
+              transform: 'scale(1.2)',
+            }}
+          />
+        </Box>
+      </Dialog>
+    </Box>
   )
 }

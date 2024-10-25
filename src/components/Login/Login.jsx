@@ -54,6 +54,7 @@ const Login = ({ setUser, setToken }) => {
               user_type: userType,
             })
           );
+          
 
           navigate(`/${userType}`);
         }
@@ -112,7 +113,7 @@ const Login = ({ setUser, setToken }) => {
               objectFit: "cover",
             }}
           >
-            <source src="./loginvid.mp4" type="video/mp4" />
+            <source src="./CashRegister.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
         </Box>
