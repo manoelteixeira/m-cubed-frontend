@@ -22,6 +22,8 @@ import {
   IconButton,
   Chip,
   Alert,
+  TableSortLabel,
+  Tooltip,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
@@ -193,8 +195,6 @@ const BDashboard = ({ user, token }) => {
     const proposalDate = new Date(createdAt);
     const timeDiff = today - proposalDate;
     const daysSinceCreated = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
-
-    // Check if the proposal is new and the corresponding request has not been viewed
     return daysSinceCreated <= 7 && !viewedRows.includes(requestId);
   };
 
@@ -203,8 +203,6 @@ const BDashboard = ({ user, token }) => {
     const requestDate = new Date(createdAt);
     const timeDiff = today - requestDate;
     const daysSinceCreated = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
-
-    // Check if the loan request is new and has not been viewed
     return daysSinceCreated <= 7 && !viewedRows.includes(requestId);
   };
 
@@ -243,7 +241,7 @@ const BDashboard = ({ user, token }) => {
             backgroundColor: "transparent",
             color: "#00a250",
             "& .MuiAlert-icon": {
-              color: "#00a250", // Change icon color to MMM green
+              color: "#00a250",
             },
           }}
         >
@@ -300,13 +298,37 @@ const BDashboard = ({ user, token }) => {
           <TableHead>
             <TableRow>
               <TableCell align="center" sx={{ color: "#00A250" }}>
-                Title
+                <Tooltip title="Sort">
+                  <TableSortLabel
+                    active={sortConfig.key === "title"}
+                    direction={sortConfig.direction}
+                    onClick={() => handleSort("title")}
+                  >
+                    Title
+                  </TableSortLabel>
+                </Tooltip>
               </TableCell>
               <TableCell align="center" sx={{ color: "#00A250" }}>
-                Purpose of Loan
+                <Tooltip title="Sort">
+                  <TableSortLabel
+                    active={sortConfig.key === "description"}
+                    direction={sortConfig.direction}
+                    onClick={() => handleSort("description")}
+                  >
+                    Purpose of Loan
+                  </TableSortLabel>
+                </Tooltip>
               </TableCell>
               <TableCell align="center" sx={{ color: "#00A250" }}>
-                Loan Amount
+                <Tooltip title="Sort">
+                  <TableSortLabel
+                    active={sortConfig.key === "value"}
+                    direction={sortConfig.direction}
+                    onClick={() => handleSort("value")}
+                  >
+                    Loan Amount
+                  </TableSortLabel>
+                </Tooltip>
               </TableCell>
               <TableCell align="center" sx={{ color: "#00A250" }}>
                 Status
@@ -422,25 +444,75 @@ const BDashboard = ({ user, token }) => {
                                         align="center"
                                         sx={{ color: "#00A250" }}
                                       >
-                                        Loan Amount Offered
+                                        <Tooltip title="Sort">
+                                          <TableSortLabel
+                                            active={
+                                              sortConfig.key === "loan_amount"
+                                            }
+                                            direction={sortConfig.direction}
+                                            onClick={() =>
+                                              handleSort("loan_amount")
+                                            }
+                                          >
+                                            Loan Amount Offered
+                                          </TableSortLabel>
+                                        </Tooltip>
                                       </TableCell>
                                       <TableCell
                                         align="center"
                                         sx={{ color: "#00A250" }}
                                       >
-                                        Interest Rate
+                                        <Tooltip title="Sort">
+                                          <TableSortLabel
+                                            active={
+                                              sortConfig.key === "interest_rate"
+                                            }
+                                            direction={sortConfig.direction}
+                                            onClick={() =>
+                                              handleSort("interest_rate")
+                                            }
+                                          >
+                                            Interest Rate
+                                          </TableSortLabel>
+                                        </Tooltip>
                                       </TableCell>
                                       <TableCell
                                         align="center"
                                         sx={{ color: "#00A250" }}
                                       >
-                                        Term Length (months)
+                                        <Tooltip title="Sort">
+                                          <TableSortLabel
+                                            active={
+                                              sortConfig.key ===
+                                              "repayment_term"
+                                            }
+                                            direction={sortConfig.direction}
+                                            onClick={() =>
+                                              handleSort("repayment_term")
+                                            }
+                                          >
+                                            Term Length (months)
+                                          </TableSortLabel>
+                                        </Tooltip>
                                       </TableCell>
                                       <TableCell
                                         align="center"
                                         sx={{ color: "#00A250" }}
                                       >
-                                        Monthly Payment
+                                        <Tooltip title="Sort">
+                                          <TableSortLabel
+                                            active={
+                                              sortConfig.key ===
+                                              "monthlyPayment"
+                                            }
+                                            direction={sortConfig.direction}
+                                            onClick={() =>
+                                              handleSort("monthlyPayment")
+                                            }
+                                          >
+                                            Monthly Payment
+                                          </TableSortLabel>
+                                        </Tooltip>
                                       </TableCell>
                                       <TableCell
                                         align="center"
@@ -469,16 +541,6 @@ const BDashboard = ({ user, token }) => {
                                           (offer.loan_amount *
                                             (1 + offer.interest_rate / 100)) /
                                           offer.repayment_term;
-                                        const expireDate = new Date(
-                                          offer.expire_at
-                                        );
-                                        const today = new Date();
-                                        const timeDiff =
-                                          expireDate.getTime() -
-                                          today.getTime();
-                                        const daysUntilExpire = Math.ceil(
-                                          timeDiff / (1000 * 60 * 60 * 24)
-                                        );
 
                                         return (
                                           <TableRow key={offer.id}>
@@ -490,31 +552,6 @@ const BDashboard = ({ user, token }) => {
                                                 minimumFractionDigits: 2,
                                                 maximumFractionDigits: 2,
                                               })}
-                                              {daysUntilExpire <= 5 && (
-                                                <Chip
-                                                  label="Exp"
-                                                  size="small"
-                                                  sx={{
-                                                    backgroundColor: "red",
-                                                    color: "white",
-                                                    marginLeft: 1,
-                                                  }}
-                                                />
-                                              )}
-                                              {isNewProposal(
-                                                offer.created_at,
-                                                request.id
-                                              ) && (
-                                                <Chip
-                                                  label="New"
-                                                  size="small"
-                                                  sx={{
-                                                    backgroundColor: "#00A250",
-                                                    color: "white",
-                                                    marginLeft: 1,
-                                                  }}
-                                                />
-                                              )}
                                             </TableCell>
                                             <TableCell align="center">
                                               {(
@@ -536,7 +573,9 @@ const BDashboard = ({ user, token }) => {
                                               )}
                                             </TableCell>
                                             <TableCell align="center">
-                                              {expireDate.toLocaleDateString()}
+                                              {new Date(
+                                                offer.expire_at
+                                              ).toLocaleDateString()}
                                             </TableCell>
                                             <TableCell align="center">
                                               <ul>
