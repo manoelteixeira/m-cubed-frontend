@@ -21,9 +21,7 @@ import {
 } from "@mui/material";
 import { Link as ReactLink } from "react-router-dom";
 import PropTypes from "prop-types";
-import { AddCircle, RemoveCircle } from "@mui/icons-material";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+
 const API = import.meta.env.VITE_BASE_URL;
 
 export default function LoansMarketplace({ user, token, loadLoanProposals }) {
@@ -68,6 +66,7 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
     const options = {
       headers: { Authorization: token },
     };
+
     fetch(url, options)
       .then((res) => res.json())
       .then((data) => {
@@ -75,7 +74,7 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
         setLoanListingsTotal(data.total);
         setLoanListingsValue(data.value);
 
-        // New logic to track new loans created in the past 5 minutes
+        // Track new loans created in the past 5 minutes
         const currentLoans = data.loan_requests;
         const newlyCreatedLoans = currentLoans.filter((loan) => {
           const createdAt = new Date(loan.created_at);
@@ -117,7 +116,7 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
         drivers_license_link:
           borrower.drivers_license_link || "/mock-drivers-license.pdf",
       });
-      localStorage.setItem("borrowerInfo",JSON.stringify(borrower))
+      localStorage.setItem("borrowerInfo", JSON.stringify(borrower));
       setCreditReports(credit_reports);
     } catch (error) {
       console.error("Failed to fetch borrower details", error);
@@ -218,7 +217,6 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
     sortByLoanListings,
     sortOrderLoanListings,
   ]);
-  console.log(borrowerDetails)
 
   return (
     <Grid item xs={12}>
@@ -383,6 +381,9 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
                 {[
                   { label: "Title", key: "title" },
                   { label: "Purpose of Loan", key: "description" },
+                  { label: "State", key: "state" },
+                  { label: "Industry", key: "industry" },
+                  { label: "Credit Score", key: "credit_score" },
                   { label: "Loan Amount", key: "value" },
                   { label: "Date", key: "created_at" },
                 ].map(({ label, key }) => (
@@ -432,6 +433,9 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
                       )}
                     </TableCell>
                     <TableCell align="left">{loan.description}</TableCell>
+                    <TableCell align="center">{loan.state}</TableCell>
+                    <TableCell align="center">{loan.industry}</TableCell>
+                    <TableCell align="center">{loan.credit_score}</TableCell>
                     <TableCell align="right">
                       {parseFloat(loan.value).toLocaleString("en-US", {
                         style: "currency",
@@ -447,7 +451,7 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
 
                   {expandedRowId === loan.id && (
                     <TableRow key={`${loan.id}-collapse`}>
-                      <TableCell colSpan={4}>
+                      <TableCell colSpan={7}>
                         <Collapse in={expandedRowId === loan.id}>
                           <Box
                             margin={2}
@@ -508,7 +512,10 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
                                               component={ReactLink}
                                               to={{
                                                 pathname: "/mock-fico-score",
-                                                state: { userInfo: borrowerDetails, borrowerId: loan.borrower_id } 
+                                                state: {
+                                                  userInfo: borrowerDetails,
+                                                  borrowerId: loan.borrower_id,
+                                                },
                                               }}
                                               target="_blank"
                                               sx={{ color: "#00a250" }}
@@ -541,7 +548,7 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
                                         component={ReactLink}
                                         to={{
                                           pathname: "/mock-sos-certificate",
-                                          state: { userInfo: borrowerDetails} 
+                                          state: { userInfo: borrowerDetails },
                                         }}
                                         rel="noopener"
                                         sx={{ color: "#00a250" }}
@@ -555,14 +562,16 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
                                         component={ReactLink}
                                         to={{
                                           pathname: "/mock-drivers-license",
-                                          state: { userInfo: borrowerDetails, borrowerId: loan.borrower_id } 
+                                          state: {
+                                            userInfo: borrowerDetails,
+                                            borrowerId: loan.borrower_id,
+                                          },
                                         }}
                                         target="_blank"
                                         rel="noopener"
                                         sx={{ color: "#00a250" }}
                                       >
                                         Driver's License - Verified
-                                      
                                       </ReactLink>
                                     </li>
                                   </ul>
