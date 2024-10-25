@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import { Avatar } from "@mui/material"
 import MenuIcon from "@mui/icons-material/Menu";
-import MMMIcon from "../../../public/MMMF6F7F8bground.png";
+// import MMMIcon from "../../../public/MMMF6F7F8bground.png";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const NavBar = ({ setUser, setToken, isAuthenticated }) => {
@@ -196,7 +196,7 @@ const NavBar = ({ setUser, setToken, isAuthenticated }) => {
           }}
         >
           <img
-            src={MMMIcon}
+            src="./MMMF6F7F8bground.png"
             alt="MMM Logo"
             style={{ width: 40, height: 40, borderRadius: 0 }}
           />
