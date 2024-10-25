@@ -8,11 +8,11 @@ const FooterTwo = () => {
                 backgroundColor: "#00a250",
                 color: "#f6f7f8",
                 padding: "40px 0",
-                transition: "all 0.3s ease",
-                "&:hover": {
-                    padding: "60px 0",
-                    backgroundColor: "#008b3e",
-                },
+                // transition: "all 0.3s ease",
+                // "&:hover": {
+                //     padding: "60px 0",
+                //     backgroundColor: "#008b3e",
+                // },
             }}
         >
             <Typography
@@ -20,11 +20,11 @@ const FooterTwo = () => {
                 align="center"
                 sx={{
                     fontSize: "14px",
-                    transition: "color 0.3s ease",
-                    "&:hover": {
-                        color: "#ffeb3b",
-                        textDecoration: "underline",
-                    },
+                    // transition: "color 0.3s ease",
+                    // "&:hover": {
+                    //     color: "#ffeb3b",
+                    //     textDecoration: "underline",
+                    // },
                 }}
             >
                 © {new Date().getFullYear()} MoneyMoneyMoney. All rights reserved.
