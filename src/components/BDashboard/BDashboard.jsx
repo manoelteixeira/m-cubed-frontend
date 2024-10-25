@@ -29,6 +29,7 @@ import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
+import confetti from "canvas-confetti";
 
 const API = import.meta.env.VITE_BASE_URL;
 
@@ -49,9 +50,8 @@ const BDashboard = ({ user, token }) => {
   const [noExpiringProposals, setNoExpiringProposals] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [newProposalNotif, setNewProposalNotif] = useState(false);
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [selectedProposal, setSelectedProposal] = useState(null);
-  const [selectedRequestId, setSelectedRequestId] = useState(null);
+  const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
+  const [selectedProposalDetails, setSelectedProposalDetails] = useState(null);
 
   const navigate = useNavigate();
 
@@ -206,40 +206,23 @@ const BDashboard = ({ user, token }) => {
     setExpandedRow(expandedRow === rowId ? null : rowId);
   };
 
-  const openConfirmationDialog = (proposal, requestId) => {
-    setSelectedProposal(proposal);
-    setSelectedRequestId(requestId);
-    setDialogOpen(true);
+  const openConfirmationDialog = (proposal) => {
+    setSelectedProposalDetails(proposal);
+    setConfirmDialogOpen(true);
   };
 
-  const confirmAcceptProposal = async () => {
-    if (!selectedProposal || !selectedRequestId) return;
-
-    const options = {
-      method: "PUT",
-      body: JSON.stringify({ proposal_id: selectedProposal.id }),
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: token,
-      },
-    };
-
-    try {
-      const response = await fetch(
-        `${API}/borrowers/${user.id}/requests/${selectedRequestId}/proposals/`,
-        options
-      );
-      if (response.ok) {
-        setAcceptedProposals((prev) => ({
-          ...prev,
-          [selectedRequestId]: selectedProposal.id,
-        }));
-        setDialogOpen(false);
-      } else {
-        throw new Error("Failed to accept proposal.");
-      }
-    } catch (error) {
-      console.error("Error:", error.message);
+  const handleConfirmAccept = () => {
+    if (selectedProposalDetails) {
+      setAcceptedProposals((prev) => ({
+        ...prev,
+        [selectedProposalDetails.requestId]: selectedProposalDetails.id,
+      }));
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 },
+      });
+      setConfirmDialogOpen(false);
     }
   };
 
@@ -388,6 +371,29 @@ const BDashboard = ({ user, token }) => {
                 >
                   <TableCell align="left" sx={{ color: "#00A250" }}>
                     {request.title}
+                    {new Date(request.expire_at) - new Date() <=
+                      5 * 86400000 && (
+                      <Chip
+                        label="Exp"
+                        size="small"
+                        sx={{
+                          backgroundColor: "red",
+                          color: "white",
+                          marginLeft: 1,
+                        }}
+                      />
+                    )}
+                    {!viewedRows.includes(request.id) && (
+                      <Chip
+                        label="New"
+                        size="small"
+                        sx={{
+                          backgroundColor: "#00A250",
+                          color: "white",
+                          marginLeft: 1,
+                        }}
+                      />
+                    )}
                   </TableCell>
                   <TableCell align="left">{request.description}</TableCell>
                   <TableCell align="right">
@@ -646,10 +652,10 @@ const BDashboard = ({ user, token }) => {
                                             color: "#f6f7f8",
                                           }}
                                           onClick={() =>
-                                            openConfirmationDialog(
-                                              offer,
-                                              request.id
-                                            )
+                                            openConfirmationDialog({
+                                              ...offer,
+                                              requestId: request.id,
+                                            })
                                           }
                                           disabled={
                                             acceptedProposals[request.id] &&
@@ -682,56 +688,82 @@ const BDashboard = ({ user, token }) => {
         </Table>
       </TableContainer>
 
-      {/* Confirmation Dialog */}
-      <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
-        <DialogTitle>Confirm Acceptance</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Are you sure you want to accept this proposal with the following
-            terms?
-            <ul>
-              <li>
-                <strong>Loan Amount:</strong> $
-                {selectedProposal?.loan_amount.toLocaleString("en-US", {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}
-              </li>
-              <li>
-                <strong>Interest Rate:</strong>{" "}
-                {(selectedProposal?.interest_rate * 100).toFixed(2)}%
-              </li>
-              <li>
-                <strong>Term Length:</strong> {selectedProposal?.repayment_term}{" "}
-                months
-              </li>
-              <li>
-                <strong>Monthly Payment:</strong> $
-                {(
-                  (selectedProposal?.loan_amount *
-                    (1 + selectedProposal?.interest_rate)) /
-                  selectedProposal?.repayment_term
-                ).toLocaleString("en-US", {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}
-              </li>
-            </ul>
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setDialogOpen(false)} color="primary">
-            Cancel
-          </Button>
-          <Button
-            onClick={confirmAcceptProposal}
-            color="primary"
-            variant="contained"
+      {selectedProposalDetails && (
+        <Dialog
+          open={confirmDialogOpen}
+          onClose={() => setConfirmDialogOpen(false)}
+          fullWidth
+          maxWidth="sm"
+        >
+          <DialogTitle
+            sx={{ color: "#00A250", fontFamily: "Roboto", fontSize: "1.5rem" }}
           >
-            Accept
-          </Button>
-        </DialogActions>
-      </Dialog>
+            Confirm Proposal Acceptance
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText
+              sx={{
+                color: "#000",
+                textAlign: "left",
+                fontFamily: "Roboto",
+              }}
+            >
+              Are you sure you want to accept this proposal?
+            </DialogContentText>
+            <DialogContentText
+              sx={{
+                marginTop: 2,
+                color: "#000",
+                textAlign: "left",
+                fontFamily: "Roboto",
+              }}
+            >
+              <strong>Loan Amount Offered:</strong> $
+              {parseFloat(selectedProposalDetails.loan_amount).toLocaleString(
+                "en-US",
+                { minimumFractionDigits: 2, maximumFractionDigits: 2 }
+              )}
+              <br />
+              <strong>Interest Rate:</strong>{" "}
+              {(
+                parseFloat(selectedProposalDetails.interest_rate) * 100
+              ).toFixed(2)}
+              %<br />
+              <strong>Term Length:</strong>{" "}
+              {selectedProposalDetails.repayment_term} months
+              <br />
+              <strong>Monthly Payment:</strong> $
+              {(
+                (parseFloat(selectedProposalDetails.loan_amount) *
+                  (1 + parseFloat(selectedProposalDetails.interest_rate))) /
+                parseInt(selectedProposalDetails.repayment_term)
+              ).toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={() => setConfirmDialogOpen(false)}
+              sx={{ color: "#00A250", fontFamily: "Roboto" }}
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleConfirmAccept}
+              sx={{
+                backgroundColor: "#00A250",
+                color: "#fff",
+                fontFamily: "Roboto",
+              }}
+              autoFocus
+            >
+              Confirm
+            </Button>
+          </DialogActions>
+        </Dialog>
+      )}
     </Box>
   );
 };
