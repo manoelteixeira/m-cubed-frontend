@@ -41,10 +41,7 @@ const Login = ({ setUser, setToken }) => {
           const user = data.lender ? data.lender : data.borrower;
           setUser(user);
           setToken(data.token);
-
-          const userType = Object.keys(data).includes("lender")
-            ? "lender"
-            : "borrower";
+          const userType = data.lender ? "lender" : "borrower";
           localStorage.setItem(
             "credentials",
             JSON.stringify({
@@ -54,8 +51,6 @@ const Login = ({ setUser, setToken }) => {
               user_type: userType,
             })
           );
-          
-
           navigate(`/${userType}`);
         }
       })
@@ -94,7 +89,6 @@ const Login = ({ setUser, setToken }) => {
           backgroundColor: "#f6f7f8",
         }}
       >
-        {/* Video Background */}
         <Box
           sx={{
             width: "80%",
@@ -174,18 +168,23 @@ const Login = ({ setUser, setToken }) => {
                         <Email />
                       </InputAdornment>
                     ),
+                  }}
+                  InputLabelProps={{
                     sx: {
-                      backgroundColor: "#fff",
-                      "& .MuiOutlinedInput-root": {
-                        "& fieldset": {
-                          borderColor: "#00a250",
-                        },
-                        "&:hover fieldset": {
-                          borderColor: "#00a250",
-                        },
-                        "&.Mui-focused fieldset": {
-                          borderColor: "#00a250",
-                        },
+                      color: "#00a250",
+                      "&.Mui-focused": { color: "#00a250" },
+                    },
+                  }}
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      "& fieldset": {
+                        borderColor: "#00a250",
+                      },
+                      "&:hover fieldset": {
+                        borderColor: "#00a250",
+                      },
+                      "&.Mui-focused fieldset": {
+                        borderColor: "#00a250",
                       },
                     },
                   }}
@@ -206,20 +205,6 @@ const Login = ({ setUser, setToken }) => {
                         <Lock />
                       </InputAdornment>
                     ),
-                    sx: {
-                      backgroundColor: "#fff",
-                      "& .MuiOutlinedInput-root": {
-                        "& fieldset": {
-                          borderColor: "#00a250",
-                        },
-                        "&:hover fieldset": {
-                          borderColor: "#00a250",
-                        },
-                        "&.Mui-focused fieldset": {
-                          borderColor: "#00a250",
-                        },
-                      },
-                    },
                     endAdornment: (
                       <InputAdornment position="end">
                         <IconButton
@@ -231,6 +216,25 @@ const Login = ({ setUser, setToken }) => {
                         </IconButton>
                       </InputAdornment>
                     ),
+                  }}
+                  InputLabelProps={{
+                    sx: {
+                      color: "#00a250",
+                      "&.Mui-focused": { color: "#00a250" },
+                    },
+                  }}
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      "& fieldset": {
+                        borderColor: "#00a250",
+                      },
+                      "&:hover fieldset": {
+                        borderColor: "#00a250",
+                      },
+                      "&.Mui-focused fieldset": {
+                        borderColor: "#00a250",
+                      },
+                    },
                   }}
                 />
               </Grid>
