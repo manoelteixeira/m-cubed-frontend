@@ -8,7 +8,6 @@ import {
   Paper,
 } from "@mui/material";
 import { useNavigate, useParams } from 'react-router-dom';
-import MMMLogo from '../../../public/MMMLogo.png';
 const API = import.meta.env.VITE_BASE_URL;
 
 export default function EditBorrowerForm() {
@@ -125,7 +124,7 @@ export default function EditBorrowerForm() {
         alignItems: "center", 
         justifyContent: "space-between", 
          }}>
-        <img src={MMMLogo} alt="Product Placeholder" style={{ width: "30%", borderRadius: 8, marginBottom: 16 }} />
+        <img src="./MMMLogo.png" alt="Product Placeholder" style={{ width: "30%", borderRadius: 8, marginBottom: 16 }} />
       </Box>
       <Paper sx={{ p: '3em' }}>
         <Typography variant="h5" component="h2" sx={{ mb: 2, color: 'green' }}>

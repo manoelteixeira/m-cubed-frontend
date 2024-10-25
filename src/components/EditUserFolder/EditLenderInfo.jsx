@@ -1,7 +1,6 @@
         import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { TextField, Button, Box, Typography, Paper, Grid } from "@mui/material";
-import MMMLogo from '../../../public/MMMLogo.png';
 
 const API = import.meta.env.VITE_BASE_URL;
 
@@ -125,7 +124,7 @@ export default function EditLenderForm() {
                 alignItems: "center", 
                 justifyContent: "space-between", 
             }}>
-                <img src={MMMLogo} alt="MMM Logo" style={{ width: "30%", borderRadius: 8, marginBottom: 16 }} />
+                <img src="./MMMLogo.png" alt="MMM Logo" style={{ width: "30%", borderRadius: 8, marginBottom: 16 }} />
             </Box>
             <Paper sx={{ p: '3em' }}>
                 <Typography variant="h5" component="h2" sx={{ mb: 2, color: 'green' }}>

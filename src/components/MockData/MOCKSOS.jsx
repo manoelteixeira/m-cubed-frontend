@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Box, Typography, Dialog, Grid, Table,TableBody, TableHead, TableRow, TableCell } from '@mui/material';
+import { Box, Typography, Dialog, Grid, Table, TableBody, TableHead, TableRow, TableCell, Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 export default function MOCKSOS() {
   const savedInfo = JSON.parse(localStorage.getItem('borrowerInfo'));
   const [isExpanded, setIsExpanded] = useState(false);
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate(); 
 
   useEffect(() => {
     console.log(savedInfo);
@@ -12,6 +14,10 @@ export default function MOCKSOS() {
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const handleBackToDashboard = () => {
+    navigate('/lender'); 
+  };
 
   return (
     <Box sx={{ margin: 10 }}>
@@ -91,6 +97,16 @@ export default function MOCKSOS() {
           />
         </Box>
       </Dialog>
+
+      <Button variant="contained" onClick={handleBackToDashboard}
+      sx={{
+        mt: 2,
+        backgroundColor: "#00a250",
+        color: "#fff",
+        "&:hover": { backgroundColor: "#008f40" },
+      }}>
+        Back to Dashboard
+      </Button>
     </Box>
   );
 }

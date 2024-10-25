@@ -13,7 +13,6 @@ import {
   InputLabel,
   FormHelperText,
 } from "@mui/material";
-import MMMLogo from "./IMG/MMMlogo.png";
 
 const CreditApplicationForm = () => {
   return (
@@ -23,7 +22,7 @@ const CreditApplicationForm = () => {
           <Typography variant="h6" component="div">
             Credit Application
           </Typography>
-          <img src={MMMLogo} alt="MMM Logo" style={{ height: "40px" }} />
+          <img src="./MMMLogo.png" alt="MMM Logo" style={{ height: "40px" }} />
         </Toolbar>
       </AppBar>
 

@@ -1,7 +1,6 @@
 import React from "react";
 import { Box, Typography, Grid, TextField, Button, Paper } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import MMMLogo from "../../../../src/assets/MMMlogo.png";
 
 const theme = createTheme({
   palette: {
@@ -31,7 +30,7 @@ const LenderSignUpSideLayout = () => {
           }}
         >
           <img
-            src={MMMLogo}
+            src="./MMMLogo.png"
             alt="MMM Logo"
             className="rotate"
             style={{ width: "150px", marginBottom: "20px" }}
