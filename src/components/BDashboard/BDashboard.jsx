@@ -24,6 +24,11 @@ import {
   Alert,
   TableSortLabel,
   Tooltip,
+  TextField,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
@@ -32,6 +37,7 @@ import PropTypes from "prop-types";
 import confetti from "canvas-confetti";
 
 const API = import.meta.env.VITE_BASE_URL;
+const MMM_GREEN = "#00A250";
 
 const BDashboard = ({ user, token }) => {
   const [requests, setRequests] = useState([]);
@@ -52,6 +58,8 @@ const BDashboard = ({ user, token }) => {
   const [newProposalNotif, setNewProposalNotif] = useState(false);
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const [selectedProposalDetails, setSelectedProposalDetails] = useState(null);
+  const [acceptanceReason, setAcceptanceReason] = useState("");
+  const [otherReason, setOtherReason] = useState("");
 
   const navigate = useNavigate();
 
@@ -223,6 +231,29 @@ const BDashboard = ({ user, token }) => {
         origin: { y: 0.6 },
       });
       setConfirmDialogOpen(false);
+
+      const reason =
+        acceptanceReason === "Other" ? otherReason : acceptanceReason;
+      updateRequestStatusToFundingOngoing(
+        selectedProposalDetails.requestId,
+        reason
+      );
+    }
+  };
+
+  const updateRequestStatusToFundingOngoing = async (requestId, reason) => {
+    try {
+      await fetch(`${API}/borrowers/${user.id}/requests/${requestId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
+        body: JSON.stringify({ status: "Funding Ongoing", reason }),
+      });
+      console.log("Status updated to 'Funding Ongoing'");
+    } catch (error) {
+      console.error("Failed to update status:", error);
     }
   };
 
@@ -240,7 +271,7 @@ const BDashboard = ({ user, token }) => {
             color="inherit"
             onClick={() => setSnackbarOpen(false)}
           >
-            <CloseIcon fontSize="small" sx={{ color: "#00a250" }} />
+            <CloseIcon fontSize="small" sx={{ color: MMM_GREEN }} />
           </IconButton>
         }
         sx={{
@@ -257,25 +288,11 @@ const BDashboard = ({ user, token }) => {
           sx={{
             marginBottom: 3,
             backgroundColor: "transparent",
-            color: "#00a250",
-            "& .MuiAlert-icon": { color: "#00a250" },
+            color: MMM_GREEN,
+            "& .MuiAlert-icon": { color: MMM_GREEN },
           }}
         >
           You have new proposals available.
-        </Alert>
-      )}
-
-      {!newProposalNotif && (
-        <Alert
-          severity="info"
-          sx={{
-            marginBottom: 3,
-            backgroundColor: "transparent",
-            color: "#00a250",
-            "& .MuiAlert-icon": { color: "#00a250" },
-          }}
-        >
-          No new proposals.
         </Alert>
       )}
 
@@ -291,7 +308,7 @@ const BDashboard = ({ user, token }) => {
           <Grid item>
             <Typography variant="h4" sx={{ color: "black", textAlign: "left" }}>
               Welcome,{" "}
-              <span style={{ color: "#00A250" }}>{user.business_name}</span>
+              <span style={{ color: MMM_GREEN }}>{user.business_name}</span>
             </Typography>
             <Typography
               variant="subtitle1"
@@ -305,7 +322,7 @@ const BDashboard = ({ user, token }) => {
             <Button
               variant="contained"
               sx={{
-                backgroundColor: "#00A250",
+                backgroundColor: MMM_GREEN,
                 color: "#f6f7f8",
                 transition: "transform 0.3s ease, box-shadow 0.3s ease",
                 "&:hover": {
@@ -327,7 +344,7 @@ const BDashboard = ({ user, token }) => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell align="center" sx={{ color: "#00A250" }}>
+              <TableCell align="center" sx={{ color: MMM_GREEN }}>
                 <Tooltip title="Sort">
                   <TableSortLabel
                     active={sortConfig.key === "title"}
@@ -338,10 +355,10 @@ const BDashboard = ({ user, token }) => {
                   </TableSortLabel>
                 </Tooltip>
               </TableCell>
-              <TableCell align="center" sx={{ color: "#00A250" }}>
+              <TableCell align="center" sx={{ color: MMM_GREEN }}>
                 Purpose of Loan
               </TableCell>
-              <TableCell align="center" sx={{ color: "#00A250" }}>
+              <TableCell align="center" sx={{ color: MMM_GREEN }}>
                 <Tooltip title="Sort">
                   <TableSortLabel
                     active={sortConfig.key === "value"}
@@ -352,8 +369,11 @@ const BDashboard = ({ user, token }) => {
                   </TableSortLabel>
                 </Tooltip>
               </TableCell>
-              <TableCell align="center" sx={{ color: "#00A250" }}>
+              <TableCell align="center" sx={{ color: MMM_GREEN }}>
                 Status
+              </TableCell>
+              <TableCell align="center" sx={{ color: MMM_GREEN }}>
+                Days on Marketplace
               </TableCell>
             </TableRow>
           </TableHead>
@@ -369,31 +389,8 @@ const BDashboard = ({ user, token }) => {
                       : "#fff",
                   }}
                 >
-                  <TableCell align="left" sx={{ color: "#00A250" }}>
+                  <TableCell align="left" sx={{ color: MMM_GREEN }}>
                     {request.title}
-                    {new Date(request.expire_at) - new Date() <=
-                      5 * 86400000 && (
-                      <Chip
-                        label="Exp"
-                        size="small"
-                        sx={{
-                          backgroundColor: "red",
-                          color: "white",
-                          marginLeft: 1,
-                        }}
-                      />
-                    )}
-                    {!viewedRows.includes(request.id) && (
-                      <Chip
-                        label="New"
-                        size="small"
-                        sx={{
-                          backgroundColor: "#00A250",
-                          color: "white",
-                          marginLeft: 1,
-                        }}
-                      />
-                    )}
                   </TableCell>
                   <TableCell align="left">{request.description}</TableCell>
                   <TableCell align="right">
@@ -409,10 +406,17 @@ const BDashboard = ({ user, token }) => {
                   >
                     {proposals[request.id]?.length ? "Active" : "Pending"}
                   </TableCell>
+                  <TableCell align="center">
+                    {Math.floor(
+                      (new Date() - new Date(request.created_at)) /
+                        (1000 * 60 * 60 * 24)
+                    )}{" "}
+                    days
+                  </TableCell>
                 </TableRow>
 
                 <TableRow>
-                  <TableCell colSpan={4} sx={{ padding: 0, border: 0 }}>
+                  <TableCell colSpan={5} sx={{ padding: 0, border: 0 }}>
                     <Collapse
                       in={expandedRow === request.id}
                       timeout="auto"
@@ -444,7 +448,7 @@ const BDashboard = ({ user, token }) => {
                                 <TableRow>
                                   <TableCell
                                     align="center"
-                                    sx={{ color: "#00A250" }}
+                                    sx={{ color: MMM_GREEN }}
                                   >
                                     <Tooltip title="Sort">
                                       <TableSortLabel
@@ -469,7 +473,7 @@ const BDashboard = ({ user, token }) => {
                                   </TableCell>
                                   <TableCell
                                     align="center"
-                                    sx={{ color: "#00A250" }}
+                                    sx={{ color: MMM_GREEN }}
                                   >
                                     <Tooltip title="Sort">
                                       <TableSortLabel
@@ -494,7 +498,7 @@ const BDashboard = ({ user, token }) => {
                                   </TableCell>
                                   <TableCell
                                     align="center"
-                                    sx={{ color: "#00A250" }}
+                                    sx={{ color: MMM_GREEN }}
                                   >
                                     <Tooltip title="Sort">
                                       <TableSortLabel
@@ -519,7 +523,7 @@ const BDashboard = ({ user, token }) => {
                                   </TableCell>
                                   <TableCell
                                     align="center"
-                                    sx={{ color: "#00A250" }}
+                                    sx={{ color: MMM_GREEN }}
                                   >
                                     <Tooltip title="Sort">
                                       <TableSortLabel
@@ -544,136 +548,83 @@ const BDashboard = ({ user, token }) => {
                                   </TableCell>
                                   <TableCell
                                     align="center"
-                                    sx={{ color: "#00A250" }}
+                                    sx={{ color: MMM_GREEN }}
                                   >
                                     Expiration Date
                                   </TableCell>
                                   <TableCell
                                     align="center"
-                                    sx={{ color: "#00A250" }}
-                                  >
-                                    Requirements
-                                  </TableCell>
-                                  <TableCell
-                                    align="center"
-                                    sx={{ color: "#00A250" }}
+                                    sx={{ color: MMM_GREEN }}
                                   >
                                     Decision
                                   </TableCell>
                                 </TableRow>
                               </TableHead>
                               <TableBody>
-                                {getSortedProposals(request.id).map((offer) => {
-                                  const today = new Date();
-                                  const isExpiring =
-                                    new Date(offer.expire_at) - today <=
-                                    5 * 86400000;
-                                  const isNew =
-                                    Math.ceil(
-                                      (today - new Date(offer.created_at)) /
-                                        (1000 * 60 * 60 * 24)
-                                    ) <= 7;
-                                  const monthlyPayment =
-                                    (parseFloat(offer.loan_amount) *
-                                      (1 + parseFloat(offer.interest_rate))) /
-                                    parseInt(offer.repayment_term);
-
-                                  return (
-                                    <TableRow key={offer.id}>
-                                      <TableCell align="center">
-                                        $
-                                        {parseFloat(
-                                          offer.loan_amount
-                                        ).toLocaleString("en-US", {
-                                          minimumFractionDigits: 2,
-                                          maximumFractionDigits: 2,
-                                        })}
-                                        {isExpiring && (
-                                          <Chip
-                                            label="Exp"
-                                            size="small"
-                                            sx={{
-                                              backgroundColor: "red",
-                                              color: "white",
-                                              marginLeft: 1,
-                                            }}
-                                          />
-                                        )}
-                                        {isNew && (
-                                          <Chip
-                                            label="New"
-                                            size="small"
-                                            sx={{
-                                              backgroundColor: "#00A250",
-                                              color: "white",
-                                              marginLeft: 1,
-                                            }}
-                                          />
-                                        )}
-                                      </TableCell>
-                                      <TableCell align="center">
-                                        {(
-                                          parseFloat(offer.interest_rate) * 100
-                                        ).toFixed(2)}
-                                        %
-                                      </TableCell>
-                                      <TableCell align="center">
-                                        {parseInt(offer.repayment_term)}
-                                      </TableCell>
-                                      <TableCell align="center">
-                                        $
-                                        {monthlyPayment.toLocaleString(
-                                          "en-US",
-                                          {
-                                            minimumFractionDigits: 2,
-                                            maximumFractionDigits: 2,
-                                          }
-                                        )}
-                                      </TableCell>
-                                      <TableCell align="center">
-                                        {new Date(
-                                          offer.expire_at
-                                        ).toLocaleDateString()}
-                                      </TableCell>
-                                      <TableCell align="center">
-                                        <ul>
-                                          {offer.requirements.map(
-                                            (req, idx) => (
-                                              <li key={idx}>{req}</li>
-                                            )
-                                          )}
-                                        </ul>
-                                      </TableCell>
-                                      <TableCell align="center">
-                                        <Button
-                                          variant="contained"
-                                          sx={{
-                                            backgroundColor: "#00A250",
-                                            color: "#f6f7f8",
-                                          }}
-                                          onClick={() =>
-                                            openConfirmationDialog({
-                                              ...offer,
-                                              requestId: request.id,
-                                            })
-                                          }
-                                          disabled={
-                                            acceptedProposals[request.id] &&
-                                            acceptedProposals[request.id] !==
-                                              offer.id
-                                          }
-                                        >
-                                          {acceptedProposals[request.id] ===
-                                          offer.id
-                                            ? "Accepted"
-                                            : acceptedProposals[request.id]
-                                            ? "Rejected"
-                                            : "Accept"}
-                                        </Button>
-                                      </TableCell>
-                                    </TableRow>
-                                  );
-                                })}
+                                {getSortedProposals(request.id).map((offer) => (
+                                  <TableRow key={offer.id}>
+                                    <TableCell align="center">
+                                      $
+                                      {parseFloat(
+                                        offer.loan_amount
+                                      ).toLocaleString("en-US", {
+                                        minimumFractionDigits: 2,
+                                        maximumFractionDigits: 2,
+                                      })}
+                                    </TableCell>
+                                    <TableCell align="center">
+                                      {(
+                                        parseFloat(offer.interest_rate) * 100
+                                      ).toFixed(2)}
+                                      %
+                                    </TableCell>
+                                    <TableCell align="center">
+                                      {parseInt(offer.repayment_term)}
+                                    </TableCell>
+                                    <TableCell align="center">
+                                      $
+                                      {(
+                                        (parseFloat(offer.loan_amount) *
+                                          (1 +
+                                            parseFloat(offer.interest_rate))) /
+                                        parseInt(offer.repayment_term)
+                                      ).toLocaleString("en-US", {
+                                        minimumFractionDigits: 2,
+                                        maximumFractionDigits: 2,
+                                      })}
+                                    </TableCell>
+                                    <TableCell align="center">
+                                      {new Date(
+                                        offer.expire_at
+                                      ).toLocaleDateString()}
+                                    </TableCell>
+                                    <TableCell align="center">
+                                      <Button
+                                        variant="contained"
+                                        sx={{
+                                          backgroundColor: MMM_GREEN,
+                                          color: "#f6f7f8",
+                                        }}
+                                        onClick={() =>
+                                          openConfirmationDialog({
+                                            ...offer,
+                                            requestId: request.id,
+                                          })
+                                        }
+                                        disabled={
+                                          acceptedProposals[request.id] &&
+                                          acceptedProposals[request.id] !==
+                                            offer.id
+                                        }
+                                      >
+                                        {acceptedProposals[request.id] ===
+                                        offer.id
+                                          ? "Funding in Progress"
+                                          : "Accept"}
+                                      </Button>
+                                    </TableCell>
+                                  </TableRow>
+                                ))}
                               </TableBody>
                             </Table>
                           </TableContainer>
@@ -696,17 +647,13 @@ const BDashboard = ({ user, token }) => {
           maxWidth="sm"
         >
           <DialogTitle
-            sx={{ color: "#00A250", fontFamily: "Roboto", fontSize: "1.5rem" }}
+            sx={{ color: MMM_GREEN, fontFamily: "Roboto", fontSize: "1.5rem" }}
           >
             Confirm Proposal Acceptance
           </DialogTitle>
           <DialogContent>
             <DialogContentText
-              sx={{
-                color: "#000",
-                textAlign: "left",
-                fontFamily: "Roboto",
-              }}
+              sx={{ color: "#000", textAlign: "left", fontFamily: "Roboto" }}
             >
               Are you sure you want to accept this proposal?
             </DialogContentText>
@@ -742,24 +689,87 @@ const BDashboard = ({ user, token }) => {
                 maximumFractionDigits: 2,
               })}
             </DialogContentText>
+
+            <FormControl fullWidth sx={{ marginTop: 2 }}>
+              <InputLabel
+                sx={{
+                  color: MMM_GREEN,
+                  "&.Mui-focused": { color: MMM_GREEN },
+                }}
+                shrink
+              >
+                Reason for Choosing this Proposal
+              </InputLabel>
+              <Select
+                value={acceptanceReason}
+                onChange={(e) => setAcceptanceReason(e.target.value)}
+                sx={{
+                  color: MMM_GREEN,
+                  "& .MuiOutlinedInput-notchedOutline": {
+                    borderColor: MMM_GREEN,
+                  },
+                  "&:hover .MuiOutlinedInput-notchedOutline": {
+                    borderColor: MMM_GREEN,
+                  },
+                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                    borderColor: MMM_GREEN,
+                  },
+                }}
+              >
+                <MenuItem value="Lowest Interest Rate">
+                  Lowest Interest Rate
+                </MenuItem>
+                <MenuItem value="Longest Term Repayment">
+                  Longest Term Repayment
+                </MenuItem>
+                <MenuItem value="Lowest Monthly Payment">
+                  Lowest Monthly Payment
+                </MenuItem>
+                <MenuItem value="Other">Other</MenuItem>
+              </Select>
+            </FormControl>
+            {acceptanceReason === "Other" && (
+              <TextField
+                margin="dense"
+                fullWidth
+                variant="outlined"
+                value={otherReason}
+                onChange={(e) => setOtherReason(e.target.value)}
+                placeholder="Specify your reason"
+                sx={{
+                  "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+                    borderColor: MMM_GREEN,
+                  },
+                  "&:hover .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline":
+                    { borderColor: MMM_GREEN },
+                  "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
+                    { borderColor: MMM_GREEN },
+                  "& .MuiOutlinedInput-input": { color: MMM_GREEN },
+                  "&::placeholder": { color: MMM_GREEN, opacity: 1 },
+                }}
+              />
+            )}
           </DialogContent>
           <DialogActions>
             <Button
               onClick={() => setConfirmDialogOpen(false)}
-              sx={{ color: "#00A250", fontFamily: "Roboto" }}
+              sx={{ color: MMM_GREEN, fontFamily: "Roboto" }}
             >
               Cancel
             </Button>
             <Button
               onClick={handleConfirmAccept}
               sx={{
-                backgroundColor: "#00A250",
+                backgroundColor: MMM_GREEN,
                 color: "#fff",
                 fontFamily: "Roboto",
               }}
               autoFocus
+              disabled={!!acceptedProposals[selectedProposalDetails.requestId]}
             >
-              Confirm
+              {acceptedProposals[selectedProposalDetails.requestId]
+                ? "Funding in Progress"
+                : "Accept"}
             </Button>
           </DialogActions>
         </Dialog>
