@@ -27,6 +27,7 @@ import {
   MenuItem,
   FormControl,
   InputLabel,
+  Chip, // Added for chips
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
@@ -36,6 +37,7 @@ import confetti from "canvas-confetti";
 
 const API = import.meta.env.VITE_BASE_URL;
 const MMM_GREEN = "#00A250";
+const RED = "#8B0000"; // Define red color for expiring proposals
 
 const BDashboard = ({ user, token }) => {
   const [requests, setRequests] = useState([]);
@@ -448,6 +450,39 @@ const BDashboard = ({ user, token }) => {
                 >
                   <TableCell align="left" sx={{ color: MMM_GREEN }}>
                     {request.title}
+                    {proposals[request.id]?.some((proposal) => {
+                      const daysSinceCreated = Math.ceil(
+                        (new Date() - new Date(proposal.created_at)) /
+                          (1000 * 60 * 60 * 24)
+                      );
+                      return (
+                        daysSinceCreated <= 7 &&
+                        !viewedRows.includes(request.id)
+                      );
+                    }) && (
+                      <Chip
+                        label="New"
+                        color="success"
+                        size="small"
+                        sx={{ marginLeft: 1 }}
+                      />
+                    )}
+                    {proposals[request.id]?.some((proposal) => {
+                      const expireDate = new Date(proposal.expire_at);
+                      const daysUntilExpire = Math.ceil(
+                        (expireDate - new Date()) / (1000 * 60 * 60 * 24)
+                      );
+                      return (
+                        daysUntilExpire <= 5 && !viewedRows.includes(request.id)
+                      );
+                    }) && (
+                      <Chip
+                        label="Expiring"
+                        color="error"
+                        size="small"
+                        sx={{ marginLeft: 1 }}
+                      />
+                    )}
                   </TableCell>
                   <TableCell align="left">{request.description}</TableCell>
                   <TableCell align="right">
@@ -628,6 +663,38 @@ const BDashboard = ({ user, token }) => {
                                         minimumFractionDigits: 2,
                                         maximumFractionDigits: 2,
                                       })}
+                                      {proposals[request.id]?.some(
+                                        (prop) =>
+                                          prop.id === offer.id &&
+                                          Math.ceil(
+                                            (new Date() -
+                                              new Date(prop.created_at)) /
+                                              (1000 * 60 * 60 * 24)
+                                          ) <= 7
+                                      ) && (
+                                        <Chip
+                                          label="New"
+                                          color="success"
+                                          size="small"
+                                          sx={{ marginLeft: 1 }}
+                                        />
+                                      )}
+                                      {proposals[request.id]?.some(
+                                        (prop) =>
+                                          prop.id === offer.id &&
+                                          Math.ceil(
+                                            (new Date(prop.expire_at) -
+                                              new Date()) /
+                                              (1000 * 60 * 60 * 24)
+                                          ) <= 5
+                                      ) && (
+                                        <Chip
+                                          label="Expiring"
+                                          color="error"
+                                          size="small"
+                                          sx={{ marginLeft: 1 }}
+                                        />
+                                      )}
                                     </TableCell>
                                     <TableCell align="center">
                                       {(
