@@ -262,11 +262,11 @@ const BDashboard = ({ user, token }) => {
           sx={{
             marginBottom: -3,
             backgroundColor: "transparent",
-            color: MMM_GREEN,
-            "& .MuiAlert-icon": { color: MMM_GREEN },
+            color: "#8B0000",
+            "& .MuiAlert-icon": { color: "#8B0000" },
           }}
         >
-          You have {notifications.length} proposals expiring within 5 days.
+          You have {notifications.length} proposal/s expiring within 5 days.
         </Alert>
       )}
 
