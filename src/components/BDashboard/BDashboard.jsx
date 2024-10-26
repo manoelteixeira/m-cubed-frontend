@@ -18,9 +18,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Snackbar,
   IconButton,
-  Chip,
   Alert,
   TableSortLabel,
   Tooltip,
@@ -53,8 +51,6 @@ const BDashboard = ({ user, token }) => {
     return storedViewedRows ? JSON.parse(storedViewedRows) : [];
   });
   const [notifications, setNotifications] = useState([]);
-  const [noExpiringProposals, setNoExpiringProposals] = useState(false);
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [newProposalNotif, setNewProposalNotif] = useState(false);
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const [selectedProposalDetails, setSelectedProposalDetails] = useState(null);
@@ -112,8 +108,6 @@ const BDashboard = ({ user, token }) => {
     });
 
     setNotifications(expiringProposals);
-    setNoExpiringProposals(expiringProposals.length === 0);
-    setSnackbarOpen(expiringProposals.length > 0);
   };
 
   const checkForNewProposals = (requestsProposals) => {
@@ -259,29 +253,22 @@ const BDashboard = ({ user, token }) => {
 
   return (
     <Box sx={{ padding: "20px", paddingTop: "50px", paddingBottom: "80px" }}>
-      <Snackbar
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        open={snackbarOpen}
-        autoHideDuration={6000}
-        onClose={() => setSnackbarOpen(false)}
-        message={`You have ${notifications.length} proposals expiring within 5 days.`}
-        action={
-          <IconButton
-            size="small"
-            color="inherit"
-            onClick={() => setSnackbarOpen(false)}
-          >
-            <CloseIcon fontSize="small" sx={{ color: MMM_GREEN }} />
-          </IconButton>
-        }
-        sx={{
-          "& .MuiSnackbarContent-root": {
+      {/* Expiring Proposals Alert */}
+      {notifications.length > 0 && (
+        <Alert
+          severity="warning"
+          sx={{
+            marginBottom: -3,
             backgroundColor: "transparent",
-            color: "#fff",
-          },
-        }}
-      />
+            color: MMM_GREEN,
+            "& .MuiAlert-icon": { color: MMM_GREEN },
+          }}
+        >
+          You have {notifications.length} proposals expiring within 5 days.
+        </Alert>
+      )}
 
+      {/* New Proposals Alert */}
       {newProposalNotif && (
         <Alert
           severity="info"
@@ -296,6 +283,7 @@ const BDashboard = ({ user, token }) => {
         </Alert>
       )}
 
+      {/* Welcome Section */}
       <Paper
         elevation={0}
         sx={{
@@ -340,6 +328,75 @@ const BDashboard = ({ user, token }) => {
         </Grid>
       </Paper>
 
+      {/* KPIs Section */}
+      <Grid container spacing={3} sx={{ marginBottom: "20px" }}>
+        <Grid item xs={12} sm={4}>
+          <Paper
+            elevation={0}
+            sx={{
+              padding: "20px",
+              textAlign: "center",
+              backgroundColor: "#f6f7f8",
+            }}
+          >
+            <Typography variant="h6" sx={{ color: MMM_GREEN }}>
+              Total Loan Requests
+            </Typography>
+            <Typography variant="h4" sx={{ color: MMM_GREEN }}>
+              {requests.length}
+            </Typography>
+          </Paper>
+        </Grid>
+        <Grid item xs={12} sm={4}>
+          <Paper
+            elevation={0}
+            sx={{
+              padding: "20px",
+              textAlign: "center",
+              backgroundColor: "#f6f7f8",
+            }}
+          >
+            <Typography variant="h6" sx={{ color: MMM_GREEN }}>
+              Loan Requests with Proposals
+            </Typography>
+            <Typography variant="h4" sx={{ color: MMM_GREEN }}>
+              {
+                requests.filter(
+                  (request) =>
+                    proposals[request.id] && proposals[request.id].length > 0
+                ).length
+              }
+            </Typography>
+          </Paper>
+        </Grid>
+        <Grid item xs={12} sm={4}>
+          <Paper
+            elevation={0}
+            sx={{
+              padding: "20px",
+              textAlign: "center",
+              backgroundColor: "#f6f7f8",
+            }}
+          >
+            <Typography variant="h6" sx={{ color: MMM_GREEN }}>
+              Total Loan Amount Requested
+            </Typography>
+            <Typography variant="h4" sx={{ color: MMM_GREEN }}>
+              $
+              {requests
+                .reduce((total, request) => {
+                  return total + (parseFloat(request.value) || 0);
+                }, 0)
+                .toLocaleString("en-US", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
+            </Typography>
+          </Paper>
+        </Grid>
+      </Grid>
+
+      {/* Loan Requests Table */}
       <TableContainer component={Paper} elevation={0}>
         <Table>
           <TableHead>
