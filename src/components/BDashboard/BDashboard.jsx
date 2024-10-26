@@ -860,6 +860,7 @@ const BDashboard = ({ user, token }) => {
                   "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
                     borderColor: MMM_GREEN,
                   },
+                  marginTop: "8px",
                 }}
               >
                 <MenuItem value="Lowest Interest Rate">
