@@ -602,24 +602,46 @@ const BDashboard = ({ user, token }) => {
                                       <Button
                                         variant="contained"
                                         sx={{
-                                          backgroundColor: MMM_GREEN,
-                                          color: "#f6f7f8",
+                                          backgroundColor:
+                                            acceptedProposals[request.id] ===
+                                            offer.id
+                                              ? MMM_GREEN
+                                              : acceptedProposals[request.id]
+                                              ? "#d3d3d3"
+                                              : MMM_GREEN,
+                                          color:
+                                            acceptedProposals[request.id] ===
+                                            offer.id
+                                              ? "#fff"
+                                              : "#f6f7f8",
+                                          "&.Mui-disabled": {
+                                            backgroundColor:
+                                              acceptedProposals[request.id] ===
+                                              offer.id
+                                                ? MMM_GREEN
+                                                : "#d3d3d3",
+                                            color:
+                                              acceptedProposals[request.id] ===
+                                              offer.id
+                                                ? "#fff"
+                                                : "#8B8B8B",
+                                          },
                                         }}
+                                        disabled={
+                                          !!acceptedProposals[request.id]
+                                        }
                                         onClick={() =>
                                           openConfirmationDialog({
                                             ...offer,
                                             requestId: request.id,
                                           })
                                         }
-                                        disabled={
-                                          acceptedProposals[request.id] &&
-                                          acceptedProposals[request.id] !==
-                                            offer.id
-                                        }
                                       >
                                         {acceptedProposals[request.id] ===
                                         offer.id
                                           ? "Funding in Progress"
+                                          : acceptedProposals[request.id]
+                                          ? "Rejected"
                                           : "Accept"}
                                       </Button>
                                     </TableCell>
