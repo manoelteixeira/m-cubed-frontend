@@ -159,7 +159,6 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
         });
 
         setNewLoans(newlyCreatedLoans.map((loan) => loan.id)); // Store only the IDs of new loans
-        console.log("New Loans Count:", newlyCreatedLoans.length); // Log the count for debugging
 
         const today = new Date();
         const expiringLoansIds = currentLoans
@@ -301,18 +300,6 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
       sortByLoanListings === sortKey && sortOrderLoanListings === "asc";
     setSortByLoanListings(sortKey);
     setSortOrderLoanListings(isAsc ? "desc" : "asc");
-
-    // Sort logic for valid_until column
-    if (sortKey === "expire_at") {
-      const sortedLoans = [...loanListings].sort((a, b) => {
-        return isAsc
-          ? new Date(a.expire_at) - new Date(b.expire_at)
-          : new Date(b.expire_at) - new Date(a.expire_at);
-      });
-      setLoanListings(sortedLoans);
-    } else {
-      loadLoanListings();
-    }
   };
 
   const handleFilterChange = (e) => {
@@ -347,6 +334,20 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
       matchesExpireAt &&
       matchesSearch
     );
+  });
+
+  const sortedLoanListings = filteredLoanListings.sort((a, b) => {
+    if (sortByLoanListings === "expire_at") {
+      return sortOrderLoanListings === "asc"
+        ? new Date(a.expire_at) - new Date(b.expire_at)
+        : new Date(b.expire_at) - new Date(a.expire_at);
+    } else {
+      const aValue = a[sortByLoanListings];
+      const bValue = b[sortByLoanListings];
+      return sortOrderLoanListings === "asc"
+        ? aValue - bValue
+        : bValue - aValue;
+    }
   });
 
   useEffect(() => {
@@ -647,369 +648,391 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {filteredLoanListings.map((loan) => (
-                <React.Fragment key={loan.id}>
-                  <TableRow
-                    hover
-                    style={{
-                      cursor: "pointer",
-                      backgroundColor: viewedRows.includes(loan.id)
-                        ? "#d3d3d3"
-                        : "#fff",
-                    }}
-                    onClick={() =>
-                      toggleRowExpansion(loan.id, loan.borrower_id, loan.value)
-                    }
-                  >
-                    <TableCell align="left" sx={{ color: "#00a250" }}>
-                      {loan.title}
-                      {newLoans.includes(loan.id) && (
-                        <Chip
-                          label="New"
-                          size="small"
-                          sx={{
-                            backgroundColor: "#00A250",
-                            color: "white",
-                            marginLeft: 1,
-                          }}
-                        />
-                      )}
-                      {expiringLoans.includes(loan.id) && (
-                        <Chip
-                          label="Expiring"
-                          size="small"
-                          sx={{
-                            backgroundColor: "darkred",
-                            color: "white",
-                            marginLeft: 1,
-                          }}
-                        />
-                      )}
-                    </TableCell>
-                    <TableCell align="left">{loan.description}</TableCell>
-                    <TableCell align="center">
-                      {stateAbbreviations[loan.state] || loan.state}
-                    </TableCell>
-                    <TableCell align="center">{loan.industry}</TableCell>
-                    <TableCell align="center">{loan.credit_score}</TableCell>
-                    <TableCell align="right">
-                      {parseFloat(loan.value).toLocaleString("en-US", {
-                        style: "currency",
-                        currency: "USD",
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                      })}
-                    </TableCell>
-                    <TableCell align="center">
-                      {new Date(loan.expire_at).toLocaleDateString()}
-                    </TableCell>
-                  </TableRow>
-
-                  {expandedRowId === loan.id && (
-                    <TableRow key={`${loan.id}-collapse`}>
-                      <TableCell colSpan={7}>
-                        <Collapse in={expandedRowId === loan.id}>
-                          <Box
-                            margin={2}
+              {sortedLoanListings.length > 0 ? (
+                sortedLoanListings.map((loan) => (
+                  <React.Fragment key={loan.id}>
+                    <TableRow
+                      hover
+                      style={{
+                        cursor: "pointer",
+                        backgroundColor: viewedRows.includes(loan.id)
+                          ? "#d3d3d3"
+                          : "#fff",
+                      }}
+                      onClick={() =>
+                        toggleRowExpansion(
+                          loan.id,
+                          loan.borrower_id,
+                          loan.value
+                        )
+                      }
+                    >
+                      <TableCell align="left" sx={{ color: "#00a250" }}>
+                        {loan.title}
+                        {newLoans.includes(loan.id) && (
+                          <Chip
+                            label="New"
+                            size="small"
                             sx={{
-                              backgroundColor: "#fff",
-                              padding: 2,
-                              borderRadius: 2,
+                              backgroundColor: "#00A250",
+                              color: "white",
+                              marginLeft: 1,
                             }}
-                          >
-                            <Grid container spacing={2}>
-                              <Grid item xs={6}>
-                                <Typography
-                                  variant="h6"
-                                  sx={{ color: "#00a250", marginBottom: 1 }}
-                                >
-                                  Borrower Details
-                                </Typography>
-                                <Box sx={{ marginTop: 2 }}>
-                                  <Typography>
-                                    <strong>Legal Name:</strong>{" "}
-                                    {borrowerDetails.business_name}
-                                  </Typography>
-                                  <Typography>
-                                    <strong>Industry:</strong>{" "}
-                                    {borrowerDetails.industry}
-                                  </Typography>
-                                  <Typography>
-                                    <strong>Location:</strong>{" "}
-                                    {borrowerDetails.street},{" "}
-                                    {borrowerDetails.city},{" "}
-                                    {borrowerDetails.state}{" "}
-                                    {borrowerDetails.zip_code}
-                                  </Typography>
-                                  <Typography
-                                    variant="subtitle1"
-                                    sx={{ mt: 2 }}
-                                  >
-                                    Credit Reports:
-                                  </Typography>
-                                  {creditReports.length > 0 ? (
-                                    <ul>
-                                      {creditReports.map((report, index) => {
-                                        const isExpired =
-                                          new Date(report.expire_at) <
-                                          new Date();
-                                        return (
-                                          <li
-                                            key={index}
-                                            style={{
-                                              color: isExpired
-                                                ? "red"
-                                                : "black",
-                                            }}
-                                          >
-                                            Bureau: {report.credit_bureau},
-                                            Score:{" "}
-                                            <Link
-                                              component={ReactLink}
-                                              to={{
-                                                pathname: "/mock-fico-score",
-                                                state: {
-                                                  userInfo: borrowerDetails,
-                                                  borrowerId: loan.borrower_id,
-                                                },
-                                              }}
-                                              target="_blank"
-                                              sx={{ color: "#00a250" }}
-                                            >
-                                              {report.score}
-                                            </Link>
-                                            , Expires on:{" "}
-                                            {new Date(
-                                              report.expire_at
-                                            ).toLocaleDateString()}{" "}
-                                            {isExpired && "(EXPIRED)"}
-                                          </li>
-                                        );
-                                      })}
-                                    </ul>
-                                  ) : (
-                                    <Typography>
-                                      No reports available
-                                    </Typography>
-                                  )}
-                                  <Typography
-                                    variant="subtitle1"
-                                    sx={{ marginTop: 2 }}
-                                  >
-                                    Documents:
-                                  </Typography>
-                                  <ul>
-                                    <li>
-                                      <Link
-                                        component={ReactLink}
-                                        to={{
-                                          pathname: "/mock-sos-certificate",
-                                          state: { userInfo: borrowerDetails },
-                                        }}
-                                        rel="noopener"
-                                        sx={{ color: "#00a250" }}
-                                      >
-                                        Secretary of State Certificate -
-                                        Verified
-                                      </Link>
-                                    </li>
-                                    <li>
-                                      <ReactLink
-                                        component={ReactLink}
-                                        to={{
-                                          pathname: "/mock-drivers-license",
-                                          state: {
-                                            userInfo: borrowerDetails,
-                                            borrowerId: loan.borrower_id,
-                                          },
-                                        }}
-                                        target="_blank"
-                                        rel="noopener"
-                                        sx={{ color: "#00a250" }}
-                                      >
-                                        Driver's License - Verified
-                                      </ReactLink>
-                                    </li>
-                                  </ul>
-                                </Box>
-                              </Grid>
-                              <Grid item xs={6}>
-                                <Typography
-                                  variant="h6"
-                                  sx={{ color: "#00a250", marginBottom: 1 }}
-                                >
-                                  Loan Proposal Form
-                                </Typography>
-                                <Box sx={{ marginTop: 2 }}>
-                                  <TextField
-                                    label="Title"
-                                    fullWidth
-                                    name="title"
-                                    value={lenderProposal.title}
-                                    onChange={handleProposalChange}
-                                    sx={{ marginBottom: 2 }}
-                                  />
-                                  <TextField
-                                    label="Description"
-                                    fullWidth
-                                    name="description"
-                                    value={lenderProposal.description}
-                                    onChange={handleProposalChange}
-                                    multiline
-                                    rows={3}
-                                    sx={{ marginBottom: 2 }}
-                                  />
-                                  <TextField
-                                    label="Loan Amount"
-                                    fullWidth
-                                    name="loan_amount"
-                                    value={lenderProposal.loan_amount}
-                                    disabled
-                                    sx={{ marginBottom: 2 }}
-                                  />
-                                  <TextField
-                                    label="Interest Rate"
-                                    fullWidth
-                                    name="interest_rate"
-                                    value={lenderProposal.interest_rate}
-                                    onChange={handleProposalChange}
-                                    sx={{ marginBottom: 2 }}
-                                  />
-                                  <TextField
-                                    label="Repayment Term"
-                                    fullWidth
-                                    name="repayment_term"
-                                    value={lenderProposal.repayment_term}
-                                    onChange={handleProposalChange}
-                                    sx={{ marginBottom: 2 }}
-                                  />
-                                  <TextField
-                                    label="Expiration Date"
-                                    fullWidth
-                                    name="expire_at"
-                                    type="date"
-                                    value={lenderProposal.expire_at}
-                                    onChange={handleProposalChange}
-                                    InputLabelProps={{ shrink: true }}
-                                    sx={{ marginBottom: 2 }}
-                                  />
-
-                                  <Typography
-                                    variant="subtitle1"
-                                    sx={{ marginBottom: 1 }}
-                                  >
-                                    Additional Requirements Requested
-                                  </Typography>
-                                  {lenderProposal.requirements.map(
-                                    (req, index) => (
-                                      <Grid container spacing={2} key={index}>
-                                        <Grid item xs={8}>
-                                          <Select
-                                            variant="outlined"
-                                            name="requirement"
-                                            value={req}
-                                            onChange={(e) => {
-                                              const newRequirements = [
-                                                ...lenderProposal.requirements,
-                                              ];
-                                              newRequirements[index] =
-                                                e.target.value;
-                                              setLenderProposal((prev) => ({
-                                                ...prev,
-                                                requirements: newRequirements,
-                                              }));
-                                            }}
-                                            displayEmpty
-                                            sx={{
-                                              width: "100%",
-                                              backgroundColor: "#fff",
-                                              "& .MuiOutlinedInput-root": {
-                                                "& fieldset": {
-                                                  borderColor: "#00a250",
-                                                },
-                                                "&:hover fieldset": {
-                                                  borderColor: "#00a250",
-                                                },
-                                                "&.Mui-focused fieldset": {
-                                                  borderColor: "#00a250",
-                                                },
-                                              },
-                                            }}
-                                          >
-                                            <MenuItem value="">
-                                              <em>Select an option</em>
-                                            </MenuItem>
-                                            <MenuItem value="Downpayment">
-                                              Downpayment
-                                            </MenuItem>
-                                            <MenuItem value="Personal Guarantee">
-                                              Personal Guarantee
-                                            </MenuItem>
-                                            <MenuItem value="Other">
-                                              Other
-                                            </MenuItem>
-                                          </Select>
-                                        </Grid>
-                                        <Grid item xs={4}>
-                                          <Button
-                                            variant="contained"
-                                            color="error"
-                                            onClick={() =>
-                                              removeRequirement(index)
-                                            }
-                                            sx={{ height: "100%" }}
-                                          >
-                                            Remove
-                                          </Button>
-                                        </Grid>
-                                      </Grid>
-                                    )
-                                  )}
-
-                                  <Button
-                                    variant="outlined"
-                                    color="primary"
-                                    onClick={addRequirement}
-                                    sx={{ marginTop: 2 }}
-                                  >
-                                    Add Requirement
-                                  </Button>
-
-                                  <Box sx={{ marginTop: 3 }}>
-                                    <Button
-                                      variant="contained"
-                                      sx={{
-                                        backgroundColor: "#00a250",
-                                        color: "#fff",
-                                        marginTop: "12px",
-                                      }}
-                                      onClick={() => setOpenDialog(true)} // Open confirmation dialog
-                                    >
-                                      Send Proposal
-                                    </Button>
-                                    <Button
-                                      variant="contained"
-                                      sx={{
-                                        backgroundColor: "darkred",
-                                        color: "#fff",
-                                        marginLeft: 1,
-                                        marginTop: "12px",
-                                      }}
-                                      onClick={() => setExpandedRowId(null)}
-                                    >
-                                      Cancel
-                                    </Button>
-                                  </Box>
-                                </Box>
-                              </Grid>
-                            </Grid>
-                          </Box>
-                        </Collapse>
+                          />
+                        )}
+                        {expiringLoans.includes(loan.id) && (
+                          <Chip
+                            label="Expiring"
+                            size="small"
+                            sx={{
+                              backgroundColor: "darkred",
+                              color: "white",
+                              marginLeft: 1,
+                            }}
+                          />
+                        )}
+                      </TableCell>
+                      <TableCell align="left">{loan.description}</TableCell>
+                      <TableCell align="center">
+                        {stateAbbreviations[loan.state] || loan.state}
+                      </TableCell>
+                      <TableCell align="center">{loan.industry}</TableCell>
+                      <TableCell align="center">{loan.credit_score}</TableCell>
+                      <TableCell align="right">
+                        {parseFloat(loan.value).toLocaleString("en-US", {
+                          style: "currency",
+                          currency: "USD",
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })}
+                      </TableCell>
+                      <TableCell align="center">
+                        {new Date(loan.expire_at).toLocaleDateString()}
                       </TableCell>
                     </TableRow>
-                  )}
-                </React.Fragment>
-              ))}
+
+                    {expandedRowId === loan.id && (
+                      <TableRow key={`${loan.id}-collapse`}>
+                        <TableCell colSpan={7}>
+                          <Collapse in={expandedRowId === loan.id}>
+                            <Box
+                              margin={2}
+                              sx={{
+                                backgroundColor: "#fff",
+                                padding: 2,
+                                borderRadius: 2,
+                              }}
+                            >
+                              <Grid container spacing={2}>
+                                <Grid item xs={6}>
+                                  <Typography
+                                    variant="h6"
+                                    sx={{ color: "#00a250", marginBottom: 1 }}
+                                  >
+                                    Borrower Details
+                                  </Typography>
+                                  <Box sx={{ marginTop: 2 }}>
+                                    <Typography>
+                                      <strong>Legal Name:</strong>{" "}
+                                      {borrowerDetails.business_name}
+                                    </Typography>
+                                    <Typography>
+                                      <strong>Industry:</strong>{" "}
+                                      {borrowerDetails.industry}
+                                    </Typography>
+                                    <Typography>
+                                      <strong>Location:</strong>{" "}
+                                      {borrowerDetails.street},{" "}
+                                      {borrowerDetails.city},{" "}
+                                      {borrowerDetails.state}{" "}
+                                      {borrowerDetails.zip_code}
+                                    </Typography>
+                                    <Typography
+                                      variant="subtitle1"
+                                      sx={{ mt: 2 }}
+                                    >
+                                      Credit Reports:
+                                    </Typography>
+                                    {creditReports.length > 0 ? (
+                                      <ul>
+                                        {creditReports.map((report, index) => {
+                                          const isExpired =
+                                            new Date(report.expire_at) <
+                                            new Date();
+                                          return (
+                                            <li
+                                              key={index}
+                                              style={{
+                                                color: isExpired
+                                                  ? "red"
+                                                  : "black",
+                                              }}
+                                            >
+                                              Bureau: {report.credit_bureau},
+                                              Score:{" "}
+                                              <Link
+                                                component={ReactLink}
+                                                to={{
+                                                  pathname: "/mock-fico-score",
+                                                  state: {
+                                                    userInfo: borrowerDetails,
+                                                    borrowerId:
+                                                      loan.borrower_id,
+                                                  },
+                                                }}
+                                                target="_blank"
+                                                sx={{ color: "#00a250" }}
+                                              >
+                                                {report.score}
+                                              </Link>
+                                              , Expires on:{" "}
+                                              {new Date(
+                                                report.expire_at
+                                              ).toLocaleDateString()}{" "}
+                                              {isExpired && "(EXPIRED)"}
+                                            </li>
+                                          );
+                                        })}
+                                      </ul>
+                                    ) : (
+                                      <Typography>
+                                        No reports available
+                                      </Typography>
+                                    )}
+                                    <Typography
+                                      variant="subtitle1"
+                                      sx={{ marginTop: 2 }}
+                                    >
+                                      Documents:
+                                    </Typography>
+                                    <ul>
+                                      <li>
+                                        <Link
+                                          component={ReactLink}
+                                          to={{
+                                            pathname: "/mock-sos-certificate",
+                                            state: {
+                                              userInfo: borrowerDetails,
+                                            },
+                                          }}
+                                          rel="noopener"
+                                          sx={{ color: "#00a250" }}
+                                        >
+                                          Secretary of State Certificate -
+                                          Verified
+                                        </Link>
+                                      </li>
+                                      <li>
+                                        <ReactLink
+                                          component={ReactLink}
+                                          to={{
+                                            pathname: "/mock-drivers-license",
+                                            state: {
+                                              userInfo: borrowerDetails,
+                                              borrowerId: loan.borrower_id,
+                                            },
+                                          }}
+                                          target="_blank"
+                                          rel="noopener"
+                                          sx={{ color: "#00a250" }}
+                                        >
+                                          Driver's License - Verified
+                                        </ReactLink>
+                                      </li>
+                                    </ul>
+                                  </Box>
+                                </Grid>
+                                <Grid item xs={6}>
+                                  <Typography
+                                    variant="h6"
+                                    sx={{ color: "#00a250", marginBottom: 1 }}
+                                  >
+                                    Loan Proposal Form
+                                  </Typography>
+                                  <Box sx={{ marginTop: 2 }}>
+                                    <TextField
+                                      label="Title"
+                                      fullWidth
+                                      name="title"
+                                      value={lenderProposal.title}
+                                      onChange={handleProposalChange}
+                                      sx={{ marginBottom: 2 }}
+                                      required
+                                    />
+                                    <TextField
+                                      label="Description"
+                                      fullWidth
+                                      name="description"
+                                      value={lenderProposal.description}
+                                      onChange={handleProposalChange}
+                                      multiline
+                                      rows={3}
+                                      sx={{ marginBottom: 2 }}
+                                      required
+                                    />
+                                    <TextField
+                                      label="Loan Amount"
+                                      fullWidth
+                                      name="loan_amount"
+                                      value={lenderProposal.loan_amount}
+                                      disabled
+                                      sx={{ marginBottom: 2 }}
+                                    />
+                                    <TextField
+                                      label="Interest Rate"
+                                      fullWidth
+                                      name="interest_rate"
+                                      value={lenderProposal.interest_rate}
+                                      onChange={handleProposalChange}
+                                      sx={{ marginBottom: 2 }}
+                                      required
+                                    />
+                                    <TextField
+                                      label="Repayment Term"
+                                      fullWidth
+                                      name="repayment_term"
+                                      value={lenderProposal.repayment_term}
+                                      onChange={handleProposalChange}
+                                      sx={{ marginBottom: 2 }}
+                                      required
+                                    />
+                                    <TextField
+                                      label="Expiration Date"
+                                      fullWidth
+                                      name="expire_at"
+                                      type="date"
+                                      value={lenderProposal.expire_at}
+                                      onChange={handleProposalChange}
+                                      InputLabelProps={{ shrink: true }}
+                                      sx={{ marginBottom: 2 }}
+                                      required
+                                    />
+
+                                    <Typography
+                                      variant="subtitle1"
+                                      sx={{ marginBottom: 1 }}
+                                    >
+                                      Additional Requirements Requested
+                                    </Typography>
+                                    {lenderProposal.requirements.map(
+                                      (req, index) => (
+                                        <Grid container spacing={2} key={index}>
+                                          <Grid item xs={8}>
+                                            <Select
+                                              variant="outlined"
+                                              name="requirement"
+                                              value={req}
+                                              onChange={(e) => {
+                                                const newRequirements = [
+                                                  ...lenderProposal.requirements,
+                                                ];
+                                                newRequirements[index] =
+                                                  e.target.value;
+                                                setLenderProposal((prev) => ({
+                                                  ...prev,
+                                                  requirements: newRequirements,
+                                                }));
+                                              }}
+                                              displayEmpty
+                                              sx={{
+                                                width: "100%",
+                                                backgroundColor: "#fff",
+                                                "& .MuiOutlinedInput-root": {
+                                                  "& fieldset": {
+                                                    borderColor: "#00a250",
+                                                  },
+                                                  "&:hover fieldset": {
+                                                    borderColor: "#00a250",
+                                                  },
+                                                  "&.Mui-focused fieldset": {
+                                                    borderColor: "#00a250",
+                                                  },
+                                                },
+                                              }}
+                                            >
+                                              <MenuItem value="">
+                                                <em>Select an option</em>
+                                              </MenuItem>
+                                              <MenuItem value="Downpayment">
+                                                Downpayment
+                                              </MenuItem>
+                                              <MenuItem value="Personal Guarantee">
+                                                Personal Guarantee
+                                              </MenuItem>
+                                              <MenuItem value="Other">
+                                                Other
+                                              </MenuItem>
+                                            </Select>
+                                          </Grid>
+                                          <Grid item xs={4}>
+                                            <Button
+                                              variant="contained"
+                                              color="error"
+                                              onClick={() =>
+                                                removeRequirement(index)
+                                              }
+                                              sx={{ height: "100%" }}
+                                            >
+                                              Remove
+                                            </Button>
+                                          </Grid>
+                                        </Grid>
+                                      )
+                                    )}
+
+                                    <Button
+                                      variant="outlined"
+                                      color="primary"
+                                      onClick={addRequirement}
+                                      sx={{ marginTop: 2 }}
+                                    >
+                                      Add Requirement
+                                    </Button>
+
+                                    <Box sx={{ marginTop: 3 }}>
+                                      <Button
+                                        variant="contained"
+                                        sx={{
+                                          backgroundColor: "#00a250",
+                                          color: "#fff",
+                                          marginTop: "12px",
+                                        }}
+                                        onClick={() => setOpenDialog(true)} // Open confirmation dialog
+                                      >
+                                        Send Proposal
+                                      </Button>
+                                      <Button
+                                        variant="contained"
+                                        sx={{
+                                          backgroundColor: "darkred",
+                                          color: "#fff",
+                                          marginLeft: 1,
+                                          marginTop: "12px",
+                                        }}
+                                        onClick={() => setExpandedRowId(null)}
+                                      >
+                                        Cancel
+                                      </Button>
+                                    </Box>
+                                  </Box>
+                                </Grid>
+                              </Grid>
+                            </Box>
+                          </Collapse>
+                        </TableCell>
+                      </TableRow>
+                    )}
+                  </React.Fragment>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={7} align="center">
+                    <Typography>
+                      No matching results for the applied filters.
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
         </TableContainer>
