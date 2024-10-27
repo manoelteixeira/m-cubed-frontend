@@ -298,7 +298,7 @@ const BDashboard = ({ user, token }) => {
           <Grid item>
             <Typography variant="h4" sx={{ color: "black", textAlign: "left" }}>
               Welcome,{" "}
-              <span style={{ color: MMM_GREEN }}>{user.business_name}</span>
+              <span style={{ color: MMM_GREEN }}>{user.business_name}!</span>
             </Typography>
             <Typography
               variant="subtitle1"
