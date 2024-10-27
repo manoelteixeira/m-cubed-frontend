@@ -20,6 +20,10 @@ import {
   Alert,
   MenuItem,
   Select,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
 } from "@mui/material";
 import { Link as ReactLink } from "react-router-dom";
 import PropTypes from "prop-types";
@@ -111,6 +115,10 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
   const [newLoans, setNewLoans] = useState([]);
   const [expiringLoans, setExpiringLoans] = useState([]);
 
+  // Confirmation dialog state
+  const [openDialog, setOpenDialog] = useState(false);
+  const [selectedLoanId, setSelectedLoanId] = useState(null); // New state to track which loan is selected for proposal
+
   // State for filters
   const [filters, setFilters] = useState({
     state: "",
@@ -138,7 +146,14 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
         return res.json();
       })
       .then((data) => {
-        setLoanListings(data.loan_requests || []);
+        // Filter out loans that have already been proposed
+        const proposedLoans =
+          JSON.parse(localStorage.getItem("proposedLoans")) || [];
+        const filteredLoans = data.loan_requests.filter(
+          (loan) => !proposedLoans.includes(loan.id)
+        );
+
+        setLoanListings(filteredLoans);
         setLoanListingsTotal(data.total || 0);
         setLoanListingsValue(data.value || 0);
 
@@ -219,7 +234,7 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
       created_at: new Date().toISOString(),
     };
 
-    const endpoint = `${API}/lenders/${user.id}/requests/${expandedRowId}`;
+    const endpoint = `${API}/lenders/${user.id}/requests/${selectedLoanId}`;
     try {
       const response = await fetch(endpoint, {
         method: "POST",
@@ -232,6 +247,14 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
       const result = await response.json();
       if (response.ok) {
         alert("Proposal sent successfully");
+
+        // Add the proposed loan ID to local storage
+        const proposedLoans =
+          JSON.parse(localStorage.getItem("proposedLoans")) || [];
+        proposedLoans.push(selectedLoanId);
+        localStorage.setItem("proposedLoans", JSON.stringify(proposedLoans));
+
+        // Reload listings
         setExpandedRowId(null);
         loadLoanProposals();
         loadLoanListings();
@@ -241,6 +264,11 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
     } catch (error) {
       alert(error.message || "Failed to send the proposal.");
     }
+  };
+
+  const handleConfirmation = () => {
+    setOpenDialog(false);
+    handleSendProposal();
   };
 
   const toggleRowExpansion = (rowId, borrowerId, loanAmount) => {
@@ -260,6 +288,7 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
         loan_amount: parseFloat(loanAmount).toLocaleString("en-US"),
       }));
       setNewLoans((prev) => prev.filter((loanId) => loanId !== rowId)); // Remove the loan ID from the new loans array
+      setSelectedLoanId(rowId); // Store the loan ID for proposal submission
     }
 
     setExpandedRowId(expandedRowId === rowId ? null : rowId);
@@ -872,7 +901,7 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
                                       backgroundColor: "#00a250",
                                       color: "#fff",
                                     }}
-                                    onClick={handleSendProposal}
+                                    onClick={() => setOpenDialog(true)} // Open confirmation dialog
                                   >
                                     Send Proposal
                                   </Button>
@@ -911,6 +940,40 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
           rowsPerPageOptions={[10, 25, 50, 100]}
         />
       </Box>
+
+      {/* Confirmation Dialog */}
+      <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
+        <DialogTitle>Confirm Proposal Submission</DialogTitle>
+        <DialogContent>
+          <Typography variant="body1">
+            Are you sure you want to send this proposal?
+          </Typography>
+          <Typography variant="body2">
+            <strong>Title:</strong> {lenderProposal.title}
+          </Typography>
+          <Typography variant="body2">
+            <strong>Description:</strong> {lenderProposal.description}
+          </Typography>
+          <Typography variant="body2">
+            <strong>Loan Amount:</strong> {lenderProposal.loan_amount}
+          </Typography>
+          <Typography variant="body2">
+            <strong>Interest Rate:</strong> {lenderProposal.interest_rate}
+          </Typography>
+          <Typography variant="body2">
+            <strong>Repayment Term:</strong> {lenderProposal.repayment_term}
+          </Typography>
+          <Typography variant="body2">
+            <strong>Expiration Date:</strong> {lenderProposal.expire_at}
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenDialog(false)}>Cancel</Button>
+          <Button onClick={handleConfirmation} color="primary">
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Grid>
   );
 }
