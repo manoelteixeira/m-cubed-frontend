@@ -107,7 +107,7 @@ const Login = ({ setUser, setToken }) => {
               objectFit: "cover",
             }}
           >
-            <source src="./CashRegister.mp4" type="video/mp4" />
+            <source src="./CashRegister2.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
         </Box>
