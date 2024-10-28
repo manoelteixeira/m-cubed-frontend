@@ -604,7 +604,7 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
           </Grid>
           <Grid item xs={12} sm={2}>
             <TextField
-              label="Valid Until"
+              label="Expiring On"
               variant="outlined"
               type="date"
               name="expireAt"
@@ -634,7 +634,7 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
                   { label: "Industry", key: "industry" },
                   { label: "Credit Score", key: "credit_score" },
                   { label: "Loan Amount", key: "value" },
-                  { label: "Valid Until", key: "expire_at" },
+                  { label: "Expiring On", key: "expire_at" },
                 ].map(({ label, key }) => (
                   <TableCell
                     key={key}
