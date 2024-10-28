@@ -418,7 +418,7 @@ export default function Home() {
                   fontSize: "1.7rem",
                 }}
               >
-                Our Mission: GET YOU FUNDED.{" "}
+                Our Mission: TO GET YOU FUNDED.{" "}
               </Typography>
             </AccordionSummary>
             <AccordionDetails>
