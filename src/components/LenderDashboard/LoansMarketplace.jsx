@@ -130,7 +130,7 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
   const loadLoanListings = () => {
     let url = `${API}/lenders/${
       user.id
-    }/requests?limit=${loanListingsLimit}&offset=${loanListingsOffset}&sort=${sortByLoanListings}&order=${sortOrderLoanListings}&timestamp=${new Date().getTime()}`;
+    }/requests?offset=${loanListingsOffset}&sort=${sortByLoanListings}&order=${sortOrderLoanListings}&timestamp=${new Date().getTime()}`;
     if (searchTermLoanListings.length >= 3) {
       url += `&search=${searchTermLoanListings}`;
     }
@@ -305,6 +305,7 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     setFilters((prev) => ({ ...prev, [name]: value }));
+    console.log(filters);
   };
 
   const filteredLoanListings = loanListings.filter((loan) => {
@@ -314,10 +315,9 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
       !filters.industry ||
       loan.industry.toLowerCase().includes(filters.industry.toLowerCase());
     const matchesCreditScore =
-      !filters.creditScore ||
-      loan.credit_score >= parseFloat(filters.creditScore);
+      !filters.creditScore || loan.credit_score >= +filters.creditScore;
     const matchesLoanAmount =
-      !filters.loanAmount || loan.value <= parseFloat(filters.loanAmount);
+      !filters.loanAmount || loan.value <= +filters.loanAmount;
     const matchesExpireAt =
       !filters.expireAt ||
       new Date(loan.expire_at) <= new Date(filters.expireAt);
@@ -335,6 +335,7 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
       matchesSearch
     );
   });
+  console.log(loanListings, filteredLoanListings);
 
   const sortedLoanListings = [...filteredLoanListings].sort((a, b) => {
     if (sortByLoanListings === "expire_at") {
@@ -357,7 +358,7 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
   useEffect(() => {
     loadLoanListings();
   }, [
-    loanListingsLimit,
+    //loanListingsLimit,
     loanListingsOffset,
     sortByLoanListings,
     sortOrderLoanListings,
