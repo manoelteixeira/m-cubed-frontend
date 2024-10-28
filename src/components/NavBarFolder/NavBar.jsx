@@ -8,7 +8,6 @@ import {
   Box,
   Typography,
 } from "@mui/material";
-import MMMIcon from "../../../public/MMMF6F7F8bground.png";
 import { useNavigate, useLocation } from "react-router-dom";
 import ProfileMenuIcon from "./ProfileMenuIcon.jsx";
 
@@ -88,7 +87,7 @@ const NavBar = ({ setUser, setToken, isAuthenticated }) => {
     <AppBar position="static" sx={{ backgroundColor: "#f6f7f8", padding: "0 16px" }} elevation={0}>
       <Toolbar>
         <IconButton edge="start" aria-label="mmm logo" onClick={handleLogoClick} sx={{ color: "#00a250", marginRight: 2, padding: 0 }}>
-          <img src={MMMIcon} alt="MMM Logo" style={{ width: 40, height: 40 }} />
+          <img src="./MMMF6F7F8bground.png" alt="MMM Logo" style={{ width: 40, height: 40 }} />
         </IconButton>
         <Typography variant="subtitle1" sx={{ color: "#00a250", marginLeft: 1, fontSize: "1rem", fontWeight: "bold" }}>
           Here at MMM, we&apos;re obsessed with getting you funded.
