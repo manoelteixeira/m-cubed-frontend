@@ -23,9 +23,10 @@ const ProfileMenuIcon = ({ setUser, setToken }) => {
   }, [localUser]);
 
   const handleUpdateProfileClick = () => {
-    const route =
-      userType === "borrower" ? "/borrowers/:id/edit" : "/lenders/:id/edit";
-    navigate(route);
+    // const route =
+    //   userType === "borrower" ? "/borrowers/:id/edit" : "/lenders/:id/edit";
+    navigate(`${localUser.user_type}s/profile`);
+
     handleMenuClose();
   };
 
@@ -47,7 +48,7 @@ const ProfileMenuIcon = ({ setUser, setToken }) => {
         open={Boolean(anchorEl)}
         onClose={handleMenuClose}
       >
-        <MenuItem onClick={handleUpdateProfileClick}>Update Profile</MenuItem>
+        <MenuItem onClick={handleUpdateProfileClick}>Profile</MenuItem>
         <MenuItem onClick={handleLogoutClick}>Log Out</MenuItem>
       </Menu>
     </>

@@ -44,13 +44,13 @@ const NavBar = ({ setUser, setToken, isAuthenticated }) => {
             >
               DASHBOARD
             </Button>
-            <Button
+            {/* <Button
               variant="outlined"
               onClick={handleLogoutClick}
               sx={buttonStyles}
             >
               LOG OUT
-            </Button>
+            </Button> */}
           </>
         ) : (
           <>

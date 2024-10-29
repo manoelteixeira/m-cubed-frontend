@@ -194,6 +194,9 @@ import { ToastContainer } from "react-toastify";
 import MockFICO from "./components/MockData/MockFICO.jsx";
 import MOCKSOS from "./components/MockData/MOCKSOS.jsx";
 import MockDriversLicense from "./components/MockData/MockDriversLicense.jsx";
+// import LenderProfile from "./Pages/LenderProfile.jsx";
+import BorrowerProfile from "./Pages/borrowerProfile.jsx";
+import LenderProfile from "./Pages/lenderProfile.jsx";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -352,6 +355,28 @@ function App() {
         />
         <Route path="/disclaimer" element={<></>} />
         <Route path="/newsletter" element={<EmailNewsletter />}></Route>
+        <Route
+          path="/borrowers/profile"
+          element={
+            <ProtectedRoute
+              element={BorrowerProfile}
+              isAuthenticated={!!user && !!token}
+              user={user}
+              token={token}
+            />
+          }
+        />
+        <Route
+          path="/lenders/profile"
+          element={
+            <ProtectedRoute
+              element={LenderProfile}
+              isAuthenticated={!!user && !!token}
+              user={user}
+              token={token}
+            />
+          }
+        />
       </Routes>
 
       <Footer />
