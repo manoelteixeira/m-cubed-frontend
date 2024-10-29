@@ -121,7 +121,7 @@ const NavBar = ({ setUser, setToken, isAuthenticated }) => {
           sx={{ color: "#00a250", marginRight: 2, padding: 0 }}
         >
           <img
-            src="/MMMicon.png"
+            src="/MMMF6F7F8bground.png"
             alt="MMM Logo"
             style={{ width: 40, height: 40 }}
           />
