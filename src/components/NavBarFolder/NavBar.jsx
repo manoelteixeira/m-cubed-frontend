@@ -37,22 +37,42 @@ const NavBar = ({ setUser, setToken, isAuthenticated }) => {
       setNavButtons(
         isAuthenticated ? (
           <>
-            <Button variant="outlined" onClick={handleDashboardClick} sx={buttonStyles}>
+            <Button
+              variant="outlined"
+              onClick={handleDashboardClick}
+              sx={buttonStyles}
+            >
               DASHBOARD
             </Button>
-            <Button variant="outlined" onClick={handleLogoutClick} sx={buttonStyles}>
+            <Button
+              variant="outlined"
+              onClick={handleLogoutClick}
+              sx={buttonStyles}
+            >
               LOG OUT
             </Button>
           </>
         ) : (
           <>
-            <Button variant="outlined" onClick={() => handleSignUpClick("borrower")} sx={buttonStyles}>
+            <Button
+              variant="outlined"
+              onClick={() => handleSignUpClick("borrower")}
+              sx={buttonStyles}
+            >
               SIGN UP BORROWER
             </Button>
-            <Button variant="outlined" onClick={() => handleSignUpClick("lender")} sx={buttonStyles}>
+            <Button
+              variant="outlined"
+              onClick={() => handleSignUpClick("lender")}
+              sx={buttonStyles}
+            >
               SIGN UP LENDER
             </Button>
-            <Button variant="outlined" onClick={handleLoginClick} sx={buttonStyles}>
+            <Button
+              variant="outlined"
+              onClick={handleLoginClick}
+              sx={buttonStyles}
+            >
               LOG IN
             </Button>
           </>
@@ -66,7 +86,11 @@ const NavBar = ({ setUser, setToken, isAuthenticated }) => {
       );
     } else if (pathname.includes("dashboard")) {
       setNavButtons(
-        <Button variant="outlined" onClick={handleLogoutClick} sx={buttonStyles}>
+        <Button
+          variant="outlined"
+          onClick={handleLogoutClick}
+          sx={buttonStyles}
+        >
           LOG OUT
         </Button>
       );
@@ -84,17 +108,36 @@ const NavBar = ({ setUser, setToken, isAuthenticated }) => {
   };
 
   return (
-    <AppBar position="static" sx={{ backgroundColor: "#f6f7f8", padding: "0 16px" }} elevation={0}>
+    <AppBar
+      position="static"
+      sx={{ backgroundColor: "#f6f7f8", padding: "0 16px" }}
+      elevation={0}
+    >
       <Toolbar>
-        <IconButton edge="start" aria-label="mmm logo" onClick={handleLogoClick} sx={{ color: "#00a250", marginRight: 2, padding: 0 }}>
-          <img src="./MMMF6F7F8bground.png" alt="MMM Logo" style={{ width: 40, height: 40 }} />
+        <IconButton
+          edge="start"
+          aria-label="mmm logo"
+          onClick={handleLogoClick}
+          sx={{ color: "#00a250", marginRight: 2, padding: 0 }}
+        >
+          <img src={MMMIcon} alt="MMM Logo" style={{ width: 40, height: 40 }} />
         </IconButton>
-        <Typography variant="subtitle1" sx={{ color: "#00a250", marginLeft: 1, fontSize: "1rem", fontWeight: "bold" }}>
+        <Typography
+          variant="subtitle1"
+          sx={{
+            color: "#00a250",
+            marginLeft: 1,
+            fontSize: "1rem",
+            fontWeight: "bold",
+          }}
+        >
           Here at MMM, we&apos;re obsessed with getting you funded.
         </Typography>
         <Box sx={{ flexGrow: 1 }} />
         {navButtons}
-        {isAuthenticated && <ProfileMenuIcon setUser={setUser} setToken={setToken} />}
+        {isAuthenticated && (
+          <ProfileMenuIcon setUser={setUser} setToken={setToken} />
+        )}
       </Toolbar>
     </AppBar>
   );

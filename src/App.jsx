@@ -154,7 +154,7 @@ function App() {
         <Route path="/disclaimer" element={<></>} />
         <Route path="/newsletter" element={<EmailNewsletter />}></Route>
       </Routes>
-      <ToastContainer />
+      {/* <ToastContainer /> */}
 
       <Footer />
     </>
