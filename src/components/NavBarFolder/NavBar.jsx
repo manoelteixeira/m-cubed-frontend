@@ -120,7 +120,11 @@ const NavBar = ({ setUser, setToken, isAuthenticated }) => {
           onClick={handleLogoClick}
           sx={{ color: "#00a250", marginRight: 2, padding: 0 }}
         >
-          <img src={MMMIcon} alt="MMM Logo" style={{ width: 40, height: 40 }} />
+          <img
+            src="/MMMicon.png"
+            alt="MMM Logo"
+            style={{ width: 40, height: 40 }}
+          />
         </IconButton>
         <Typography
           variant="subtitle1"
