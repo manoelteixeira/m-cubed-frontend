@@ -33,7 +33,7 @@ const NavBar = ({ setUser, setToken, isAuthenticated }) => {
 
   useEffect(() => {
     const { pathname } = location;
-    if (pathname === "/") {
+    if (pathname === "/" || pathname.includes("profile")) {
       setNavButtons(
         isAuthenticated ? (
           <>
