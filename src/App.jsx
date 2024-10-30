@@ -195,8 +195,8 @@ import MockFICO from "./components/MockData/MockFICO.jsx";
 import MOCKSOS from "./components/MockData/MOCKSOS.jsx";
 import MockDriversLicense from "./components/MockData/MockDriversLicense.jsx";
 // import LenderProfile from "./Pages/LenderProfile.jsx";
-import BorrowerProfile from "./Pages/borrowerProfile.jsx";
-import LenderProfile from "./Pages/lenderProfile.jsx";
+import BorrowerProfile from "./Pages/BorrowerProfile.jsx";
+import LenderProfile from "./Pages/LenderProfile.jsx";
 
 function App() {
   const [user, setUser] = useState(null);

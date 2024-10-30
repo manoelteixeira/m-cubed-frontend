@@ -56,14 +56,14 @@ const NavBar = ({ setUser, setToken, isAuthenticated }) => {
           <>
             <Button
               variant="outlined"
-              onClick={() => handleSignUpClick("borrower")}
+              onClick={() => handleSignUpClick("borrowers")}
               sx={buttonStyles}
             >
               SIGN UP BORROWER
             </Button>
             <Button
               variant="outlined"
-              onClick={() => handleSignUpClick("lender")}
+              onClick={() => handleSignUpClick("lenders")}
               sx={buttonStyles}
             >
               SIGN UP LENDER
