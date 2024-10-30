@@ -149,6 +149,7 @@ export default function LoansMarketplace({ user, token, loadLoanProposals }) {
         setLoanListingsTotal(data.total || 0);
         setLoanListingsValue(data.value || 0);
 
+        console.log(data);
         // Track new loans created in the past 5 minutes
         const currentLoans = data.loan_requests || [];
         const newlyCreatedLoans = currentLoans.filter((loan) => {
