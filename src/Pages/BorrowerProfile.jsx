@@ -7,13 +7,30 @@ import {
   Box,
   Grid,
 } from "@mui/material";
+import { Gauge, gaugeClasses } from "@mui/x-charts/Gauge";
+import Paper from "@mui/material/Paper";
+import Stack from "@mui/material/Stack";
+import { styled } from "@mui/material/styles";
+
 import { useState } from "react";
 
 const API = import.meta.env.VITE_BASE_URL;
 
+const Item = styled(Paper)(({ theme }) => ({
+  backgroundColor: "#fff",
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: "center",
+  color: theme.palette.text.secondary,
+  ...theme.applyStyles("dark", {
+    backgroundColor: "#1A2027",
+  }),
+}));
+
 export default function BorrowerProfile({ user, token }) {
   const [profile, setProfile] = useState(null);
   const [creditReport, setCreditReport] = useState(null);
+
   useState(() => {
     const options = {
       headers: { Authorization: token },
@@ -21,9 +38,11 @@ export default function BorrowerProfile({ user, token }) {
     fetch(`${API}/borrowers/${user.id}`, options)
       .then((res) => res.json())
       .then((data) => {
-        setProfile(data.borrower);
-        setCreditReport(data.credit_report);
+        const { borrower, credit_reports } = data;
+        setProfile(borrower);
+        setCreditReport(credit_reports[0]);
       })
+
       .catch((err) => console.log(err));
   }, [user]);
 
@@ -33,78 +52,151 @@ export default function BorrowerProfile({ user, token }) {
     return (
       <div className="borrower-profile">
         <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          minHeight="100vh"
-          bgcolor="#f5f5f5"
+          sx={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}
         >
-          <Card sx={{ width: 1000, padding: 2 }}>
-            <Box display="flex" alignItems="center">
-              {/* Left side: Profile Picture */}
-              <Avatar
-                src={profile.image_url} // Replace with actual image URL
-                alt="Profile Picture"
-                sx={{ width: 200, height: 200, marginRight: 2 }}
-              />
-
-              {/* Right side: Business Information */}
-              <CardContent sx={{ flex: 1 }}>
-                <Typography variant="h3" textAlign={"center"} gutterBottom>
-                  {profile.business_name}
+          <Grid container spacing={5} sx={{ p: 10 }}>
+            {/* Profile Picture and Name */}
+            <Grid item xs={12} md={3}>
+              <Card
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  p: 3,
+                }}
+              >
+                <Avatar
+                  src={profile.image_url}
+                  alt={profile.business_name}
+                  sx={{ width: 120, height: 120, mb: 2 }}
+                />
+                <Typography variant="h5" gutterBottom>
+                  <strong>{profile.business_name}</strong>
                 </Typography>
+              </Card>
+            </Grid>
 
-                {/* Additional Information in a Grid layout */}
-                <Grid container spacing={1}>
-                  <Grid item xs={6}>
-                    <Typography variant="body1">
-                      <strong>City:</strong> {profile.city}
-                    </Typography>
+            {/* Business Information */}
+            <Grid item xs={12} md={8}>
+              <Card>
+                <CardContent>
+                  <Typography variant="h4" textAlign={"center"} gutterBottom>
+                    Business Information
+                  </Typography>
+                  <Grid container spacing={1}>
+                    <Grid item xs={6}>
+                      <Typography variant="body1">
+                        <strong>City:</strong> {profile.city}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={6}>
+                      <Typography variant="body1">
+                        <strong>Street:</strong> {profile.street}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={6}>
+                      <Typography variant="body1">
+                        <strong>State:</strong> {profile.state}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={6}>
+                      <Typography variant="body1">
+                        <strong>Zip Code:</strong> {profile.zip_code}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={6}>
+                      <Typography variant="body1">
+                        <strong>Phone:</strong> {profile.phone}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={6}>
+                      <Typography variant="body1">
+                        <strong>EIN:</strong> {profile.ein}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={6}>
+                      <Typography variant="body1">
+                        <strong>Start Date:</strong>{" "}
+                        {new Date(profile.start_date).toLocaleDateString()}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={6}>
+                      <Typography variant="body1">
+                        <strong>Industry:</strong> {profile.industry}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={6}>
+                      <Typography variant="body1">
+                        <strong>Email:</strong> {profile.email}
+                      </Typography>
+                    </Grid>
                   </Grid>
-                  <Grid item xs={6}>
+                </CardContent>
+              </Card>
+            </Grid>
+            {/* Credit Report */}
+            <Grid item xs={15} md={5}>
+              <Card sx={{ padding: 5 }}>
+                <Typography variant="h4" textAlign={"center"} gutterBottom>
+                  Credit Report
+                </Typography>
+                <Box display="flex" alignItems="center">
+                  <Gauge
+                    width={200}
+                    height={200}
+                    value={creditReport.score}
+                    startAngle={-110}
+                    endAngle={110}
+                    valueMin={300}
+                    valueMax={850}
+                    sx={{
+                      [`& .${gaugeClasses.valueText}`]: {
+                        fontSize: 25,
+                        transform: "translate(0px, -10px)",
+                      },
+                    }}
+                    text={({ value, valueMax }) => `${value} / ${valueMax}`}
+                  />
+
+                  <CardContent>
                     <Typography variant="body1">
-                      <strong>Street:</strong> {profile.street}
+                      <strong>Credit Bureau:</strong>{" "}
+                      {creditReport.credit_bureau}
                     </Typography>
-                  </Grid>
-                  <Grid item xs={6}>
+
                     <Typography variant="body1">
-                      <strong>State:</strong> {profile.state}
+                      <strong>Report ID:</strong> #{creditReport.report_id}
                     </Typography>
-                  </Grid>
-                  <Grid item xs={6}>
+
                     <Typography variant="body1">
-                      <strong>Zip Code:</strong> {profile.zip_code}
+                      <strong>Created At:</strong>{" "}
+                      {new Date(creditReport.created_at).toLocaleDateString()}
                     </Typography>
-                  </Grid>
-                  <Grid item xs={6}>
+
                     <Typography variant="body1">
-                      <strong>Phone:</strong> {profile.phone}
+                      <strong>Expire At:</strong>{" "}
+                      {new Date(creditReport.expire_at).toLocaleDateString()}
                     </Typography>
-                  </Grid>
-                  <Grid item xs={6}>
-                    <Typography variant="body1">
-                      <strong>EIN:</strong> {profile.ein}
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={6}>
-                    <Typography variant="body1">
-                      <strong>Start Date:</strong> {profile.start_date}
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={6}>
-                    <Typography variant="body1">
-                      <strong>Industry:</strong> {profile.industry}
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={6}>
-                    <Typography variant="body1">
-                      <strong>Email:</strong> {profile.email}
-                    </Typography>
-                  </Grid>
-                </Grid>
-              </CardContent>
-            </Box>
-          </Card>
+                  </CardContent>
+                </Box>
+              </Card>
+            </Grid>
+            {/* Documents */}
+            <Grid item xs={15} md={5}>
+              <Card sx={{ padding: 5 }}>
+                <Typography variant="h4" textAlign={"center"} gutterBottom>
+                  Documents
+                </Typography>
+                <Box display="flex" alignItems="center">
+                  <Stack spacing={2}>
+                    <Item>Item 1</Item>
+                    <Item>Item 2</Item>
+                    <Item>Item 3</Item>
+                  </Stack>
+                </Box>
+              </Card>
+            </Grid>
+          </Grid>
         </Box>
       </div>
     );
