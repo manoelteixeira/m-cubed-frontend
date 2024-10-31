@@ -187,8 +187,8 @@ export default function Home() {
             style={{ width: "100%", maxWidth: 1200, borderRadius: 8 }}
           />
         </Grid>
-
-      {/* How This Works Section */}
+      
+        {/* How This Works Section */}
       <Grid container spacing={4} justifyContent="center" sx={{ padding: 18 }}>
         <Grid item xs={12} display="flex" justifyContent="center">
           <img
@@ -235,8 +235,8 @@ export default function Home() {
             }}
           />
         </Grid>
+        </Grid>
       </Grid>
-
       {/* Why Choose MMM Section */}
       <Grid container spacing={4} justifyContent="center" sx={{ padding: 5 }}>
         <Grid item xs={12} display="flex" justifyContent="center">
