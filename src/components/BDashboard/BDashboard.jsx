@@ -31,6 +31,7 @@ import {
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
+import MailIcon from "@mui/icons-material/Mail";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import confetti from "canvas-confetti";
@@ -58,6 +59,8 @@ const BDashboard = ({ user, token }) => {
   const [selectedProposalDetails, setSelectedProposalDetails] = useState(null);
   const [acceptanceReason, setAcceptanceReason] = useState("");
   const [otherReason, setOtherReason] = useState("");
+  const [messageBoxOpen, setMessageBoxOpen] = useState(false); // State for message box
+  const [newMessage, setNewMessage] = useState(""); // State for new message input
 
   const navigate = useNavigate();
 
@@ -251,6 +254,32 @@ const BDashboard = ({ user, token }) => {
       console.log("Status updated to 'Funding Ongoing'");
     } catch (error) {
       console.error("Failed to update status:", error);
+    }
+  };
+
+  const handleSendMessage = async (proposalId) => {
+    const data = {
+      sender: user.business_name,
+      message: newMessage,
+    };
+    try {
+      const response = await fetch(`${API}/messages/${proposalId}/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
+        body: JSON.stringify(data),
+      });
+      if (response.ok) {
+        setNewMessage(""); // Clear the message input
+        setMessageBoxOpen(false); // Close the message box
+        // Optionally, refresh messages or do any other actions
+      } else {
+        console.error("Error sending message:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error sending message:", error);
     }
   };
 
@@ -806,6 +835,20 @@ const BDashboard = ({ user, token }) => {
                                           ? "Rejected"
                                           : "Accept"}
                                       </Button>
+                                      {acceptedProposals[request.id] ===
+                                        offer.id && (
+                                        <IconButton
+                                          onClick={() =>
+                                            setMessageBoxOpen(true)
+                                          }
+                                          sx={{
+                                            marginLeft: 1,
+                                            color: MMM_GREEN,
+                                          }}
+                                        >
+                                          <MailIcon />
+                                        </IconButton>
+                                      )}
                                     </TableCell>
                                   </TableRow>
                                 ))}
@@ -963,6 +1006,58 @@ const BDashboard = ({ user, token }) => {
           </DialogActions>
         </Dialog>
       )}
+
+      {/* Messaging Dialog */}
+      <Dialog
+        open={messageBoxOpen}
+        onClose={() => setMessageBoxOpen(false)}
+        fullWidth
+        maxWidth="sm"
+      >
+        <DialogTitle>Send a Message</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            label="Your Message"
+            type="text"
+            fullWidth
+            variant="outlined"
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
+            sx={{
+              "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+                borderColor: MMM_GREEN,
+              },
+              "&:hover .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline":
+                {
+                  borderColor: MMM_GREEN,
+                },
+              "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
+                {
+                  borderColor: MMM_GREEN,
+                },
+            }}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => setMessageBoxOpen(false)}
+            sx={{ color: MMM_GREEN }}
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={() => handleSendMessage(selectedProposalDetails.id)}
+            sx={{
+              backgroundColor: MMM_GREEN,
+              color: "#fff",
+            }}
+          >
+            Send
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };
