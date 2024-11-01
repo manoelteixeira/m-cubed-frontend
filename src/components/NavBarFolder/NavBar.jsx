@@ -42,7 +42,7 @@ const NavBar = ({ setUser, setToken, isAuthenticated }) => {
               onClick={handleDashboardClick}
               sx={buttonStyles}
             >
-              DASHBOARD
+              YOUR DASHBOARD
             </Button>
             {/* <Button
               variant="outlined"
