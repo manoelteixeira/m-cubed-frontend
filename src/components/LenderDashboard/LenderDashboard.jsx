@@ -117,8 +117,10 @@ const LenderDashboard = ({ user, token }) => {
     fetch(`${API}/lenders/${user.id}/proposals`, options)
       .then((res) => res.json())
       .then((data) => {
-        setLoanProposals(data);
-        setFilteredLoanProposals(data);
+        if (Array.isArray(data)) {
+          setLoanProposals(data);
+          setFilteredLoanProposals(data);
+        }
       })
       .catch((err) => console.log(err));
   };
