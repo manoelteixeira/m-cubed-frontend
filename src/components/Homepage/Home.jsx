@@ -155,7 +155,7 @@ export default function Home() {
           }}
         >
           <motion.img
-            src="./borrowerdashboard.jpeg"
+            src="./borrower.jpeg"
             alt="Borrower Dashboard"
             style={{
               width: "90%",
@@ -167,7 +167,7 @@ export default function Home() {
             transition={{ type: "spring", stiffness: 300 }}
           />
           <motion.img
-            src="./lenderdashboard.jpeg"
+            src="./lender.jpeg"
             alt="Lender Dashboard"
             style={{
               width: "90%",
@@ -187,54 +187,58 @@ export default function Home() {
             style={{ width: "100%", maxWidth: 1200, borderRadius: 8 }}
           />
         </Grid>
-      
+
         {/* How This Works Section */}
-      <Grid container spacing={4} justifyContent="center" sx={{ padding: 18 }}>
-        <Grid item xs={12} display="flex" justifyContent="center">
-          <img
-            src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1729626240/How_This_Works_al2y1c.png"
-            alt="How This Works Image Placeholder"
-            style={{ width: "100%", maxWidth: 1200, borderRadius: 8 }}
-          />
-        </Grid>
-        
+        <Grid
+          container
+          spacing={4}
+          justifyContent="center"
+          sx={{ padding: 18 }}
+        >
+          <Grid item xs={12} display="flex" justifyContent="center">
+            <img
+              src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1729626240/How_This_Works_al2y1c.png"
+              alt="How This Works Image Placeholder"
+              style={{ width: "100%", maxWidth: 1200, borderRadius: 8 }}
+            />
+          </Grid>
 
-        <Grid container justifyContent="center" spacing={2}>
-          <Grid item xs={4} sm={4} display="flex" justifyContent="center">
-            <img
-              src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1727974119/Add_a_heading_500_x_500_px_u3hahd.png"
-              alt="How it works step 1"
-              style={{ width: 400, height: 400, borderRadius: 8 }}
-            />
+          <Grid container justifyContent="center" spacing={2}>
+            <Grid item xs={4} sm={4} display="flex" justifyContent="center">
+              <img
+                src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1727974119/Add_a_heading_500_x_500_px_u3hahd.png"
+                alt="How it works step 1"
+                style={{ width: 400, height: 400, borderRadius: 8 }}
+              />
+            </Grid>
+            <Grid item xs={4} sm={4} display="flex" justifyContent="center">
+              <img
+                src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1727974117/Add_a_heading_500_x_500_px_1_hl4tvp.png"
+                alt="How it works step 2"
+                style={{ width: 400, height: 400, borderRadius: 8 }}
+              />
+            </Grid>
+            <Grid item xs={4} sm={4} display="flex" justifyContent="center">
+              <img
+                src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1727974118/Add_a_heading_500_x_500_px_2_f3zlzp.png"
+                alt="How it works step 3"
+                style={{ width: 400, height: 400, borderRadius: 8 }}
+              />
+            </Grid>
           </Grid>
-          <Grid item xs={4} sm={4} display="flex" justifyContent="center">
-            <img
-              src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1727974117/Add_a_heading_500_x_500_px_1_hl4tvp.png"
-              alt="How it works step 2"
-              style={{ width: 400, height: 400, borderRadius: 8 }}
-            />
-          </Grid>
-          <Grid item xs={4} sm={4} display="flex" justifyContent="center">
-            <img
-              src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1727974118/Add_a_heading_500_x_500_px_2_f3zlzp.png"
-              alt="How it works step 3"
-              style={{ width: 400, height: 400, borderRadius: 8 }}
-            />
-          </Grid>
-        </Grid>
 
-        <Grid item xs={12} display="flex" justifyContent="center">
-          <img
-            src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1729648309/Minimalist_Gradient_Pricing_Comparison_Chart_Table_Graph_6_zjfgti.png"
-            alt="Better Way"
-            style={{
-              width: "100%",
-              maxWidth: 1200,
-              borderRadius: 8,
-              marginTop: "40px",
-            }}
-          />
-        </Grid>
+          <Grid item xs={12} display="flex" justifyContent="center">
+            <img
+              src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1729648309/Minimalist_Gradient_Pricing_Comparison_Chart_Table_Graph_6_zjfgti.png"
+              alt="Better Way"
+              style={{
+                width: "100%",
+                maxWidth: 1200,
+                borderRadius: 8,
+                marginTop: "40px",
+              }}
+            />
+          </Grid>
         </Grid>
       </Grid>
       {/* Why Choose MMM Section */}
