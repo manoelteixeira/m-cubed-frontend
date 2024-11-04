@@ -1,96 +1,4 @@
-// import { useEffect, useState } from "react";
-// import { Box, Typography, Grid, Dialog, Button } from "@mui/material";
-// import { useNavigate } from "react-router-dom";
-
-// export default function MockDriversLicense() {
-//   const savedInfo = JSON.parse(localStorage.getItem("borrowerInfo"));
-//   const [open, setOpen] = useState(false);
-//   const navigate = useNavigate();
-
-//   useEffect(() => {
-//     console.log(savedInfo);
-//   }, []);
-
-//   const handleOpen = () => setOpen(true);
-//   const handleClose = () => setOpen(false);
-
-//   const handleBackToDashboard = () => {
-//     navigate("/lender");
-//   };
-
-//   return (
-//     <Box sx={{ margin: 10 }}>
-//       <Typography
-//         variant="h4"
-//         align="center"
-//         sx={{ width: "100%", color: "green", backgroundColor: "white", py: 2 }}
-//       >
-//         Borrower Driver's License Information
-//       </Typography>
-
-//       <Grid
-//         container
-//         spacing={2}
-//         alignItems="center"
-//         justifyContent="center"
-//         display={"grid"}
-//         sx={{ mt: 5 }}
-//       >
-//         <Grid item xs={12}>
-//           <img
-//             src="./MOCKDriverLicense.png"
-//             alt="Drivers License"
-//             style={{
-//               width: "250px",
-//               transition: "transform 0.3s",
-//               cursor: "pointer",
-//               marginLeft: "15%",
-//             }}
-//             onClick={handleOpen}
-//           />
-//         </Grid>
-//       </Grid>
-
-//       <Dialog
-//         open={open}
-//         onClose={handleClose}
-//         aria-labelledby="dialog-title"
-//         aria-describedby="dialog-description"
-//       >
-//         <Box
-//           sx={{
-//             display: "flex",
-//             justifyContent: "center",
-//             alignItems: "center",
-//             p: 4,
-//           }}
-//         >
-//           <img
-//             src="./MOCKDriverLicense.png"
-//             alt="Drivers License"
-//             style={{
-//               width: "500px",
-//               transition: "transform 0.3s",
-//               cursor: "pointer",
-//               transform: "scale(1.2)",
-//             }}
-//           />
-//         </Box>
-//       </Dialog>
-//       <Button variant="contained" onClick={handleBackToDashboard}
-//       sx={{
-//         mt: 2,
-//         backgroundColor: "#00a250",
-//         color: "#fff",
-//         "&:hover": { backgroundColor: "#008f40" },
-//       }}>
-//         Back to Dashboard
-//       </Button>
-//     </Box>
-//   );
-// }
-
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Box,
   Typography,
@@ -99,6 +7,8 @@ import {
   Avatar,
   Paper,
   Button,
+  Card,
+  CardContent,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
@@ -112,6 +22,14 @@ export default function MOCKDriversLicense() {
 
   const handleBackToDashboard = () => {
     navigate("/lender");
+  };
+
+  const handleGoToCreditReport = () => {
+    navigate("/mock-fico-score");
+  };
+
+  const handleGoToSOS = () => {
+    navigate("/mock-sos-certificate");
   };
 
   return (
@@ -146,16 +64,18 @@ export default function MOCKDriversLicense() {
         {/* Display Business Info and Driver's License */}
         <Grid container spacing={2} justifyContent="center" sx={{ mt: 5 }}>
           <Grid item xs={12} sm={8}>
-            <Box display="flex" flexDirection="column" alignItems="center">
-              <Typography variant="h6">Business Name</Typography>
-              <Typography>{savedInfo.business_name}</Typography>
+            <Card sx={{ boxShadow: 3, padding: 2 }}>
+              <CardContent>
+                <Typography variant="h6">Business Name</Typography>
+                <Typography>{savedInfo.business_name}</Typography>
 
-              <Typography variant="h6" sx={{ mt: 2 }}>
-                License Info
-              </Typography>
-              <Typography>Issued by: {savedInfo.state}</Typography>
-              <Typography>Expiration Date: [Mock Expiration]</Typography>
-            </Box>
+                <Typography variant="h6" sx={{ mt: 2 }}>
+                  License Info
+                </Typography>
+                <Typography>Issued by: {savedInfo.state}</Typography>
+                <Typography>Expiration Date: [Mock Expiration]</Typography>
+              </CardContent>
+            </Card>
           </Grid>
 
           {/* License Image */}
@@ -193,19 +113,55 @@ export default function MOCKDriversLicense() {
           </Box>
         </Dialog>
 
-        <Button
-          variant="contained"
-          onClick={handleBackToDashboard}
-          sx={{
-            mt: 3,
-            backgroundColor: "#00a250",
-            color: "#fff",
-            fontWeight: "bold",
-            "&:hover": { backgroundColor: "#008f40" },
-          }}
-        >
-          Back to Dashboard
-        </Button>
+        {/* Action Buttons */}
+        <Grid container spacing={3} justifyContent="center" sx={{ mt: 3 }}>
+          <Grid item>
+            <Button
+              variant="contained"
+              onClick={handleGoToCreditReport}
+              sx={{
+                backgroundColor: "#00a250",
+                color: "#fff",
+                "&:hover": { backgroundColor: "#008f40" },
+              }}
+            >
+              View Credit Report
+            </Button>
+          </Grid>
+          <Grid item>
+            <Button
+              variant="contained"
+              onClick={handleGoToSOS}
+              sx={{
+                backgroundColor: "#00a250",
+                color: "#fff",
+                "&:hover": { backgroundColor: "#008f40" },
+              }}
+            >
+              View Secretary of State Certificate
+            </Button>
+          </Grid>
+        </Grid>
+
+        {/* Back to Dashboard Button */}
+        <Box sx={{ mt: 5 }}>
+          {" "}
+          {/* Increased margin-top for spacing */}
+          <Button
+            variant="contained"
+            onClick={handleBackToDashboard}
+            sx={{
+              backgroundColor: "#00a250",
+              color: "#fff",
+              fontWeight: "bold",
+              "&:hover": { backgroundColor: "#008f40" },
+              display: "block",
+              margin: "0 auto",
+            }}
+          >
+            Back to Dashboard
+          </Button>
+        </Box>
       </Paper>
     </Box>
   );

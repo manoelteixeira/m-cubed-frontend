@@ -59,8 +59,9 @@ export default function MockFICO() {
                   : "No Business Name Available"}
               </Typography>
             </CardContent>
+
             <CardContent>
-              <Typography variant="h6" gutterBottom>
+              <Typography variant="h6" gutterBottom sx={{ color: "#00a250" }}>
                 Credit Report
               </Typography>
               <img
@@ -107,6 +108,7 @@ export default function MockFICO() {
                 }}
               />
             </CardContent>
+
             <CardActions>
               <Button
                 variant="contained"
@@ -135,23 +137,26 @@ export default function MockFICO() {
                 View Secretary of State Certificate
               </Button>
             </CardActions>
+
+            {/* Centered Back to Dashboard Button */}
+            <CardContent>
+              <Box display="flex" justifyContent="center" mt={2}>
+                <Button
+                  variant="contained"
+                  onClick={handleBackToDashboard}
+                  sx={{
+                    backgroundColor: "#00a250",
+                    color: "#fff",
+                    "&:hover": { backgroundColor: "#008f40" },
+                  }}
+                >
+                  Back to Dashboard
+                </Button>
+              </Box>
+            </CardContent>
           </Card>
         </Grid>
       </Grid>
-
-      {/* Back to Dashboard Button */}
-      <Button
-        variant="contained"
-        onClick={handleBackToDashboard}
-        sx={{
-          mt: 4,
-          backgroundColor: "#00a250",
-          color: "#fff",
-          "&:hover": { backgroundColor: "#008f40" },
-        }}
-      >
-        Back to Dashboard
-      </Button>
     </Box>
   );
 }
@@ -297,6 +302,7 @@ export default function MockFICO() {
 //         </Grid>
 //       </Grid>
 
+//       {/* Back to Dashboard Button */}
 //       <Button
 //         variant="contained"
 //         onClick={handleBackToDashboard}
