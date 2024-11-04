@@ -35,7 +35,7 @@ export default function MOCKDriversLicense() {
   return (
     <Box sx={{ margin: "40px auto", maxWidth: "800px", textAlign: "center" }}>
       <Paper elevation={3} sx={{ padding: 3, position: "relative" }}>
-        <Avatar
+        {/* <Avatar
           src="./avatar.png"
           alt="Avatar"
           sx={{
@@ -46,7 +46,7 @@ export default function MOCKDriversLicense() {
             transform: "translateX(-50%) translateY(-50%)",
             top: 0,
           }}
-        />
+        /> */}
         <Typography
           variant="h4"
           align="center"
