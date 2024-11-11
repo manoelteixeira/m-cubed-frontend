@@ -130,7 +130,7 @@ const LoanRequestForm = ({ user, token }) => {
               },
             }}
             alt="Next Steps Placeholder"
-            src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1729188220/moneymoneymoney_4_dkxska.png"
+            src="https://res.cloudinary.com/dxeoesm7e/image/upload/v1731347193/moneymoneymoney_2_bsxg5g.png"
           />
 
           <Box
